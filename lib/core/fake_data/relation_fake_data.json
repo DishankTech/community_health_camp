@@ -1,0 +1,116 @@
+{
+    "code": 0,
+    "status": "Success",
+    "data": [
+        {
+            "lookupDetId": 423,
+            "lookupDetValue": "HUS",
+            "lookupDetDescEn": "HUSBAND",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        },
+        {
+            "lookupDetId": 18,
+            "lookupDetValue": "SELF",
+            "lookupDetDescEn": "SELF",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        },
+        {
+            "lookupDetId": 12,
+            "lookupDetValue": "SON",
+            "lookupDetDescEn": "SON",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        },
+        {
+            "lookupDetId": 19,
+            "lookupDetValue": "DAO",
+            "lookupDetDescEn": "DAUGHTER",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        },
+        {
+            "lookupDetId": 13,
+            "lookupDetValue": "FAO",
+            "lookupDetDescEn": "FATHER",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        },
+        {
+            "lookupDetId": 14,
+            "lookupDetValue": "UNC",
+            "lookupDetDescEn": "UNCLE",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        },
+        {
+            "lookupDetId": 15,
+            "lookupDetValue": "AUN",
+            "lookupDetDescEn": "AUNTY",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        },
+        {
+            "lookupDetId": 16,
+            "lookupDetValue": "FRN",
+            "lookupDetDescEn": "FRIEND",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        },
+        {
+            "lookupDetId": 17,
+            "lookupDetValue": "OTH",
+            "lookupDetDescEn": "OTHER",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        },
+        {
+            "lookupDetId": 443,
+            "lookupDetValue": "WIO",
+            "lookupDetDescEn": "WIFE",
+            "lookupDetDescRg": null,
+            "lookupDetParentId": null,
+            "lookupDetParentLevel": null,
+            "lookupDetParentName": "",
+            "lookupDetList": null,
+            "ulbId": null
+        }
+    ]
+}
