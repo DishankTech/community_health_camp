@@ -9,6 +9,7 @@ import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/themes/app_theme.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/navigator_observer.dart';
+import 'package:get/get.dart';
 import 'screens/splash_screen.dart';
 
 void main() {
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Community Health',
       navigatorObservers: [MyNavigatorObserver()],
       theme: AppTheme.lightTheme,

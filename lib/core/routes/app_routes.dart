@@ -3,6 +3,10 @@ import 'package:community_health_app/screens/patient_registration/registered_pat
 import 'package:community_health_app/screens/patient_registration/registered_user_master.dart';
 import 'package:community_health_app/screens/patient_registration/stakeholder_master.dart';
 import 'package:community_health_app/screens/patient_registration/user_master.dart';
+import 'package:community_health_app/user_auths/createnewpassword_view.dart';
+import 'package:community_health_app/user_auths/enterpin_view.dart';
+import 'package:community_health_app/user_auths/forgotpassword_view.dart';
+import 'package:community_health_app/user_auths/login.dart';
 import 'package:flutter/material.dart';
 
 import 'package:community_health_app/screens/splash_screen.dart';
@@ -39,6 +43,8 @@ class AppRoutes {
   static const String userMasterScreen = "/userMasterScreen";
   static const String stakeholderMasterScreen = "/stakeholderMasterScreen";
   static const String registeredUserMaster = "/registeredUserMaster";
+  static const String pinValidationPage = "/PinValidationPage";
+  static const String updatePasswordPage = "/UpdatePasswordPage";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -65,6 +71,24 @@ class AppRoutes {
       case registeredUserMaster:
         return MaterialPageRoute(
           builder: (_) => const RegisteredUserMasterScreen(),
+        );
+      case loginScreen:
+        return MaterialPageRoute(
+          builder: (_) => const LoginPage(
+            title: "Login",
+          ),
+        );
+      case forgotScreen:
+        return MaterialPageRoute(
+          builder: (_) => const ForgotPasswordPage(),
+        );
+      case pinValidationPage:
+        return MaterialPageRoute(
+          builder: (_) => const PinValidationPage(),
+        );
+      case updatePasswordPage:
+        return MaterialPageRoute(
+          builder: (_) => const UpdatePasswordPage(),
         );
 
       default:

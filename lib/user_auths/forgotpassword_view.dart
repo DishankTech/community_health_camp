@@ -1,4 +1,7 @@
-import 'package:community_camp_app/user_auths/enterpin_view.dart';
+import 'package:community_health_app/core/common_widgets/app_button.dart';
+import 'package:community_health_app/core/routes/app_routes.dart';
+import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/user_auths/enterpin_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -40,7 +43,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 fit: BoxFit.cover,
               )),
           Stack(children: [
-           /* Container(
+            /* Container(
               margin: EdgeInsets.only(top: 30,left: 10),
               child: IconButton(
                 color: Colors.white,
@@ -53,9 +56,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),*/
             Form(
               key: _formKey,
-              child: Stack(
-                children:[
-                 /* Container(
+              child: Stack(children: [
+                /* Container(
                     margin: EdgeInsets.only(top: 30, left: 10),
                     width: 50,
                     height: 50,
@@ -72,7 +74,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),*/
 
-                  SingleChildScrollView(
+                SingleChildScrollView(
                   child: Container(
                     height: MediaQuery.of(context).size.height,
                     child: Center(
@@ -81,10 +83,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 100,
                           ),
-                          Text(
+                          const Text(
                             "Forgot Password ",
                             style: TextStyle(
                               color: Colors.black,
@@ -92,33 +94,42 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               fontSize: 20,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 20,
                           ),
                           Container(
                             width: MediaQuery.sizeOf(context).width * 0.9,
-                            child: Text(
+                            child: const Text(
                               "Enter your Mobile number for the verification process and we will send you OTP to your Email or Number",
-                              style: TextStyle(color: Colors.black54, fontWeight: FontWeight.normal, fontSize: 14),
+                              style: TextStyle(
+                                  color: Colors.black54,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 14),
                               textAlign: TextAlign.center,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 40,
                           ),
                           Container(
-                            margin: EdgeInsets.only(left: 30, right: 30),
+                            margin: const EdgeInsets.only(left: 30, right: 30),
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                                FilteringTextInputFormatter.allow(
+                                    RegExp("[0-9a-zA-Z]")),
                               ],
                               controller: _mobileNoController,
                               decoration: InputDecoration(
                                 errorMaxLines: 3,
-                                label: Text.rich(TextSpan(children: [
+                                label: const Text.rich(TextSpan(children: [
                                   TextSpan(text: 'Mobile Number'),
-                                  TextSpan(text: ' *', style: TextStyle(fontSize: 14, fontFamily: 'Montserrat', color: Colors.red)),
+                                  TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'Montserrat',
+                                          color: Colors.red)),
                                 ])),
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30.0),
@@ -139,83 +150,117 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               },
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 70,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [BoxShadow(color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)],
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    stops: [0.0, 1.0],
-                                    colors: [
-                                      Colors.orange,
-                                      Colors.lightBlue,
-                                    ],
-                                  ),
-                                  color: Colors.deepPurple.shade300,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                width: Get.width * 0.7,
-                                height: Get.height * 1 / 21,
-                                child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20.0),
-                                      ),
+                          AppButton(
+                            title: "Send OTP",
+                            iconData: Icon(
+                              Icons.arrow_forward,
+                              size: responsiveHeight(24),
+                              color: Colors.white,
+                            ),
+                            onTap: () {
+                              if (_formKey.currentState!.validate()) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Validation Successfull',
                                     ),
-                                    minimumSize: MaterialStateProperty.all(Size(MediaQuery.sizeOf(context).width, 50)),
-                                    backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                                    // elevation: MaterialStateProperty.all(3),
-                                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                                    backgroundColor: Colors.green,
                                   ),
-                                  onPressed: () async {
-                                    print("object");
+                                );
 
-                                    if (_formKey.currentState!.validate()) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Validation Successfull',
-                                          ),
-                                          backgroundColor: Colors.green,
-                                        ),
-                                      );
-
-                                      Get.to(PinValidationPage());
-                                    }
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        'Send OTP',
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Icon(
-                                        Icons.arrow_right_alt_rounded,
-                                        color: Colors.white,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
+                                Navigator.pushNamed(
+                                    context, AppRoutes.pinValidationPage);
+                              }
+                            },
                           )
+                          // Row(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: [
+                          //     Container(
+                          //       decoration: BoxDecoration(
+                          //         boxShadow: [
+                          //           const BoxShadow(
+                          //               color: Colors.black26,
+                          //               offset: Offset(0, 4),
+                          //               blurRadius: 5.0)
+                          //         ],
+                          //         gradient: const LinearGradient(
+                          //           begin: Alignment.topLeft,
+                          //           end: Alignment.bottomRight,
+                          //           stops: [0.0, 1.0],
+                          //           colors: [
+                          //             Colors.orange,
+                          //             Colors.lightBlue,
+                          //           ],
+                          //         ),
+                          //         color: Colors.deepPurple.shade300,
+                          //         borderRadius: BorderRadius.circular(20),
+                          //       ),
+                          //       width: Get.width * 0.7,
+                          //       height: Get.height * 1 / 21,
+                          //       child: ElevatedButton(
+                          //         style: ButtonStyle(
+                          //           shape: MaterialStateProperty.all<
+                          //               RoundedRectangleBorder>(
+                          //             RoundedRectangleBorder(
+                          //               borderRadius:
+                          //                   BorderRadius.circular(20.0),
+                          //             ),
+                          //           ),
+                          //           minimumSize: MaterialStateProperty.all(Size(
+                          //               MediaQuery.sizeOf(context).width, 50)),
+                          //           backgroundColor: MaterialStateProperty.all(
+                          //               Colors.transparent),
+                          //           // elevation: MaterialStateProperty.all(3),
+                          //           shadowColor: MaterialStateProperty.all(
+                          //               Colors.transparent),
+                          //         ),
+                          //         onPressed: () async {
+                          //           print("object");
+
+                          //           if (_formKey.currentState!.validate()) {
+                          //             ScaffoldMessenger.of(context)
+                          //                 .showSnackBar(
+                          //               const SnackBar(
+                          //                 content: Text(
+                          //                   'Validation Successfull',
+                          //                 ),
+                          //                 backgroundColor: Colors.green,
+                          //               ),
+                          //             );
+
+                          //             Get.to(const PinValidationPage());
+                          //           }
+                          //         },
+                          //         child: const Row(
+                          //           children: [
+                          //             Text(
+                          //               'Send OTP',
+                          //               style: TextStyle(
+                          //                 fontSize: 14,
+                          //                 color: Colors.white,
+                          //               ),
+                          //             ),
+                          //             Spacer(),
+                          //             Icon(
+                          //               Icons.arrow_right_alt_rounded,
+                          //               color: Colors.white,
+                          //             )
+                          //           ],
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // )
                         ],
                       ),
                     ),
                   ),
-                ),]
-              ),
+                ),
+              ]),
             ),
           ]),
         ],

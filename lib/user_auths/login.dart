@@ -1,7 +1,10 @@
 import 'dart:convert';
 
-import 'package:community_camp_app/SizeConfig.dart';
-import 'package:community_camp_app/user_auths/forgotpassword_view.dart';
+// import 'package:community_health_app/SizeConfig.dart';
+import 'package:community_health_app/core/common_widgets/app_button.dart';
+import 'package:community_health_app/core/routes/app_routes.dart';
+import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/user_auths/forgotpassword_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
@@ -9,42 +12,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // TRY THIS: Try running your application with "flutter run". You'll see
-          // the application has a purple toolbar. Then, without quitting the app,
-          // try changing the seedColor in the colorScheme below to Colors.green
-          // and then invoke "hot reload" (save your changes or press the "hot
-          // reload" button in a Flutter-supported IDE, or press "r" if you used
-          // the command line to start the app).
-          //
-          // Notice that the counter didn't reset back to zero; the application
-          // state is not lost during the reload. To reset the state, use hot
-          // restart instead.
-          //
-          // This works for code too, not just values: Most code changes can be
-          // tested with just a hot reload.
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-          fontFamily: "Montserrat"),
-      home: const LoginPage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -79,12 +46,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
+    SizeConfig().init(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: Stack(
@@ -101,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Container(
+              SizedBox(
                 width: MediaQuery.sizeOf(context).width,
                 child: Image.asset(
                   "assets/loginlogo.png",
@@ -110,49 +72,60 @@ class _LoginPageState extends State<LoginPage> {
                   height: MediaQuery.sizeOf(context).width * 0.4,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               ),
-              Text(
+              const Text(
                 "Community Health Camp ",
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
-              Text(
+              const Text(
                 "LOGIN",
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              _isLoading?
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    color: Colors.red,
-                  ),
-                  const Text(
-                    'Please wait..',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'NotoSans',
-                    ),
-                  ),
-                ],
-              )
+              _isLoading
+                  ? const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: Colors.red,
+                        ),
+                        Text(
+                          'Please wait..',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'NotoSans',
+                          ),
+                        ),
+                      ],
+                    )
                   : Column(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(left: 30, right: 30),
+                          margin: const EdgeInsets.only(left: 30, right: 30),
                           child: TextField(
                             controller: _usernameController,
                             decoration: InputDecoration(
-                              label: Text.rich(TextSpan(children: [
+                              label: const Text.rich(TextSpan(children: [
                                 TextSpan(text: 'Username'),
-                                TextSpan(text: ' *', style: TextStyle(fontSize: 14, fontFamily: 'Montserrat', color: Colors.red)),
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'Montserrat',
+                                        color: Colors.red)),
                               ])),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
@@ -164,17 +137,22 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 30, right: 30),
+                          margin: const EdgeInsets.only(left: 30, right: 30),
                           child: TextField(
                             controller: _passwordController,
                             decoration: InputDecoration(
-                              label: Text.rich(TextSpan(children: [
+                              label: const Text.rich(TextSpan(children: [
                                 TextSpan(text: 'Password'),
-                                TextSpan(text: ' *', style: TextStyle(fontSize: 14, fontFamily: 'NatoSans', color: Colors.red)),
+                                TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        fontFamily: 'NatoSans',
+                                        color: Colors.red)),
                               ])),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0),
@@ -186,7 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
@@ -200,71 +178,30 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(margin: EdgeInsets.only(left: 30), child: Text("Reset Password "))),*/
                             InkWell(
                                 onTap: () {
-                                  Get.to(const ForgotPasswordPage());
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.forgotScreen);
                                 },
-                                child: Container(margin: EdgeInsets.only(right: 30), child: Text("Forgot Password ?"))),
+                                child: Container(
+                                    margin: const EdgeInsets.only(right: 30),
+                                    child: const Text("Forgot Password ?"))),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 40,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [BoxShadow(color: Colors.black26, offset: Offset(0, 4), blurRadius: 5.0)],
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              stops: [0.0, 1.0],
-                              colors: [
-                                Colors.orange,
-                                Colors.lightBlue,
-                              ],
-                            ),
-                            color: Colors.deepPurple.shade300,
-                            borderRadius: BorderRadius.circular(20),
+                        AppButton(
+                          mWidth: responsiveWidth(260),
+                          mHeight: responsiveHeight(50),
+                          iconData: Icon(
+                            Icons.arrow_forward,
+                            size: responsiveHeight(24),
+                            color: Colors.white,
                           ),
-                          width: Get.width / 1.2,
-                          height: Get.height * 1 / 20,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                              ),
-                              minimumSize: MaterialStateProperty.all(Size(MediaQuery.sizeOf(context).width, 50)),
-                              backgroundColor: MaterialStateProperty.all(Colors.transparent),
-                              // elevation: MaterialStateProperty.all(3),
-                              shadowColor: MaterialStateProperty.all(Colors.transparent),
-                            ),
-                            onPressed: () async {
-                              print("object");
-                              validateFields();
-                            },
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Container(
-                                  width: MediaQuery.sizeOf(context).width * 0.6,
-                                  child: Text(
-                                    'LOGIN',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  width: MediaQuery.sizeOf(context).width * 0.1,
-                                  child: Icon(
-                                    Icons.arrow_right_alt_rounded,
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
+                          title: "Login",
+                          onTap: () async {
+                            validateFields();
+                          },
+                        )
                       ],
                     ),
             ],
@@ -277,9 +214,21 @@ class _LoginPageState extends State<LoginPage> {
 
   void validateFields() {
     if (_usernameController.value.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Enter Username", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, textColor: Colors.white, fontSize: 16.0);
+      Fluttertoast.showToast(
+          msg: "Enter Username",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.white,
+          fontSize: 16.0);
     } else if (_passwordController.value.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Enter Password", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, textColor: Colors.white, fontSize: 16.0);
+      Fluttertoast.showToast(
+          msg: "Enter Password",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.white,
+          fontSize: 16.0);
     } else {
       loginAPI();
     }
@@ -291,8 +240,12 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse('http://210.89.42.117:8085/api/public/account/login'));
-    request.body = json.encode({"username": _usernameController.text.toString().trim(), "password": _passwordController.text.toString().trim()});
+    var request = http.Request('POST',
+        Uri.parse('http://210.89.42.117:8085/api/public/account/login'));
+    request.body = json.encode({
+      "username": _usernameController.text.toString().trim(),
+      "password": _passwordController.text.toString().trim()
+    });
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -302,25 +255,33 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _isLoading = false;
 
-
         // Hide loader
       });
 
       var responseBody = json.decode(finalResponse.body);
       // Get the status code as a string
       String statusCode = responseBody['status_code'].toString();
-      if(statusCode=="200")
-        {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Login Successfull',),backgroundColor: Colors.green,),
-          );
-        }else{
+      if (statusCode == "200") {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login Failed',),backgroundColor: Colors.red,),
+          const SnackBar(
+            content: Text(
+              'Login Successfull',
+            ),
+            backgroundColor: Colors.green,
+          ),
+        );
+
+        Navigator.pushNamed(context, AppRoutes.patientRegListScreen);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Login Failed',
+            ),
+            backgroundColor: Colors.red,
+          ),
         );
       }
-
-
 
       //navigate to dashboard page
     } else {
@@ -328,7 +289,12 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = false; // Hide loader
       });
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Something went wrong',),backgroundColor: Colors.red,),
+        const SnackBar(
+          content: Text(
+            'Something went wrong',
+          ),
+          backgroundColor: Colors.red,
+        ),
       );
       print(response.reasonPhrase);
     }

@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (DataProvider().isLoggedIn()) {
         Navigator.of(context).popAndPushNamed(AppRoutes.dashboard);
       } else {
-        Navigator.of(context).popAndPushNamed(AppRoutes.patientRegListScreen);
+        Navigator.of(context).popAndPushNamed(AppRoutes.loginScreen);
       }
     });
   }
