@@ -35,7 +35,7 @@ PreferredSize? mAppBar(
                     color: kBlackColor),
               )
             : null,
-        backgroundColor: kWhiteColor,
+        backgroundColor: Colors.transparent,
         iconTheme: const IconThemeData(color: kBlackColor),
         elevation: elevation ?? 0,
         actions: showActions! ? actions : null,

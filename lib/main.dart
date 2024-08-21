@@ -30,10 +30,10 @@ void main() {
       ], child: const MyApp())));
   // Set the status bar color
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarColor: Colors.white, // Change to your desired color
-    statusBarBrightness: Brightness.dark,
+    statusBarColor: Colors.transparent, // Change to your desired color
+    statusBarBrightness: Brightness.light,
     statusBarIconBrightness:
-        Brightness.dark, // For light text/icons on the status bar
+        Brightness.light, // For light text/icons on the status bar
   ));
 }
 

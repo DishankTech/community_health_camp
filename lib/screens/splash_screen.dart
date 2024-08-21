@@ -35,11 +35,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Future.delayed(const Duration(milliseconds: 3000), () {
+    Future.delayed(const Duration(milliseconds: 2000), () {
       if (DataProvider().isLoggedIn()) {
         Navigator.of(context).popAndPushNamed(AppRoutes.dashboard);
       } else {
-        Navigator.of(context).popAndPushNamed(AppRoutes.patientRegScreen);
+        Navigator.of(context).popAndPushNamed(AppRoutes.patientRegListScreen);
       }
     });
   }

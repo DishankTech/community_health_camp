@@ -1,4 +1,7 @@
 import 'package:community_health_app/screens/patient_registration/patient_registration.dart';
+import 'package:community_health_app/screens/patient_registration/registered_patients.dart';
+import 'package:community_health_app/screens/patient_registration/registered_user_master.dart';
+import 'package:community_health_app/screens/patient_registration/stakeholder_master.dart';
 import 'package:community_health_app/screens/patient_registration/user_master.dart';
 import 'package:flutter/material.dart';
 
@@ -31,8 +34,11 @@ class AppRoutes {
   static const String idCardList = "/idCardList";
   static const String idCard = "/idCard";
 
+  static const String patientRegListScreen = "/patientRegListScreen";
   static const String patientRegScreen = "/patientRegScreen";
   static const String userMasterScreen = "/userMasterScreen";
+  static const String stakeholderMasterScreen = "/stakeholderMasterScreen";
+  static const String registeredUserMaster = "/registeredUserMaster";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -47,6 +53,18 @@ class AppRoutes {
       case userMasterScreen:
         return MaterialPageRoute(
           builder: (_) => const UserMasterScreen(),
+        );
+      case stakeholderMasterScreen:
+        return MaterialPageRoute(
+          builder: (_) => const StakeHolderMasterScreen(),
+        );
+      case patientRegListScreen:
+        return MaterialPageRoute(
+          builder: (_) => const RegisteredPatientsScreen(),
+        );
+      case registeredUserMaster:
+        return MaterialPageRoute(
+          builder: (_) => const RegisteredUserMasterScreen(),
         );
 
       default:

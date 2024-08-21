@@ -1,5 +1,5 @@
 const String logo = "assets/images/logo.jpeg";
-const String splashImg = 'assets/images/splash_img.png';
+const String splashImg = 'assets/images/splash.jpg';
 const String smallLogo = "assets/images/small_logo.png";
 const String background = "assets/images/background1.png";
 const String dialysis = "assets/images/dialysis.png";
@@ -11,6 +11,9 @@ const String introBg = "assets/images/intro_bg.png";
 const String imgFemale = "assets/images/img_female.png";
 const String imgQr = "assets/images/img_qr.png";
 const String patRegBg = "assets/images/pat_bg_img.png";
+const String pat1 = "assets/images/pat1.png";
+const String pat2 = "assets/images/pat2.png";
+const String pat3 = "assets/images/pat3.png";
 
 //Icons
 const String icMobileNumber = "assets/icons/ic_mobile.png";
@@ -59,6 +62,15 @@ const String icDoc = "assets/icons/ic_doc.png";
 const String icPersonGroup = "assets/icons/ic_person_group.png";
 const String icMyAppointments = "assets/icons/ic_my_appointments.png";
 const String icIdCard = "assets/icons/ic_id_card.png";
+const String icSquareClose = "assets/icons/ic_square_close.png";
+const String icCircle = "assets/icons/circle.png";
+const String icCircleDot = "assets/icons/circle-dot.png";
+const String icCircleCheck = "assets/icons/circle-check.png";
+const String icArrowBack = "assets/icons/arrow-left-line.png";
+const String icDelete1 = "assets/icons/ic_delete1.png";
+const String icEdit = "assets/icons/ic_edit1.png";
+const String icEye = "assets/icons/eye.png";
+const String icSquarePlus = "assets/icons/square-rounded-plus.png";
 
 //Dashboard
 const String icTotalRegPat = "assets/icons/ic_total_reg_pat.png";
