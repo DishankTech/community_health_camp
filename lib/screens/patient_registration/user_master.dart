@@ -8,6 +8,7 @@ import 'package:community_health_app/core/common_widgets/app_round_textfield.dar
 import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/images.dart';
+import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +41,9 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
         appBar: mAppBar(
           scTitle: "User Master",
           leadingIcon: icBackArrowGreen,
-          onLeadingIconClick: () {},
+          onLeadingIconClick: () {
+            Navigator.pop(context);
+          },
         ),
         body: Stack(children: [
           Image.asset(
@@ -285,6 +288,10 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                               Flexible(
                                 flex: 1,
                                 child: AppButton(
+                                  onTap: (){
+                                    Navigator.pushNamed(
+                                        context, AppRoutes.locationMaster);
+                                  },
                                   title: "Save",
                                   iconData: Icon(
                                     Icons.arrow_forward,

@@ -1,3 +1,5 @@
+import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
+import 'package:community_health_app/screens/location_master/location_master.dart';
 import 'package:community_health_app/screens/patient_registration/patient_registration.dart';
 import 'package:community_health_app/screens/patient_registration/user_master.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +32,8 @@ class AppRoutes {
   static const String updateFamilyMemberScreen = "/updateFamilyMemberScreen";
   static const String idCardList = "/idCardList";
   static const String idCard = "/idCard";
-
+  static const String locationMaster = "/locationMaster";
+  static const String campCreation = "/campCreation";
   static const String patientRegScreen = "/patientRegScreen";
   static const String userMasterScreen = "/userMasterScreen";
 
@@ -47,6 +50,15 @@ class AppRoutes {
       case userMasterScreen:
         return MaterialPageRoute(
           builder: (_) => const UserMasterScreen(),
+        );
+
+      case locationMaster:
+        return MaterialPageRoute(
+          builder: (_) => const LocationMaster(),
+        );
+      case campCreation:
+        return MaterialPageRoute(
+          builder: (_) => const CampCreation(),
         );
 
       default:

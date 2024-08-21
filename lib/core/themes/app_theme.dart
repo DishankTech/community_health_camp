@@ -110,8 +110,9 @@ class AppTheme {
 
   static TextTheme textTheme() {
     return const TextTheme(
-      bodyText1: TextStyle(color: Colors.black),
-      bodyText2: TextStyle(color: Colors.black),
+      bodyLarge: TextStyle(color: Colors.black),
+      bodyMedium: TextStyle(color: Colors.black),
+      bodySmall: TextStyle(color: Colors.black),
     );
   }
 

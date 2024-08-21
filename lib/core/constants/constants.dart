@@ -44,6 +44,7 @@ const kInstaColor = Color(0xFFcd486b);
 const kTextFieldBorder = Color(0xFFE1E1E1);
 const kRegistrationBgColor = Color(0xFFF8F8F8);
 const kLabelTextColor = Color(0xFF515151);
+const kContainerBack = Color(0xFFF5F5F5);
 
 // final headingStyle = TextStyle(
 //   fontSize: getProportionateScreenWidth(28),
