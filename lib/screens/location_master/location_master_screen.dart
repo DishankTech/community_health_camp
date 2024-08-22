@@ -33,6 +33,7 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
     locationMasterController.update();
     if (locationMasterController.hasInternet) {
       await locationMasterController.getDivisionList();
+      await locationMasterController.getCountry();
     }
     // setState(() {});
     locationMasterController.update();
@@ -193,10 +194,10 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             onTap: () {
                                               commonBottomSheet(
                                                   context,
-                                                  (p0) => {
+                                                  (p0) async => {
                                                         locationMasterController
                                                                 .selectedCountryVal =
-                                                            p0.lookupDetDescEn,
+                                                            p0.lookupDetHierDescEn,
                                                         locationMasterController
                                                             .selectedCountry = p0,
                                                         locationMasterController
@@ -205,14 +206,19 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                                             locationMasterController
                                                                     .selectedCountryVal ??
                                                                 "",
+                                                       await locationMasterController.getState(
+                                                            locationMasterController
+                                                                .selectedCountry
+                                                                ?.lookupDetHierId.toString()),
                                                         locationMasterController
                                                             .update()
                                                       },
                                                   "Country",
                                                   locationMasterController
-                                                          .divisinModel
-                                                          ?.details?[0]
-                                                          .lookupDet ??
+                                                          .countryModel
+                                                          ?.details
+                                                          ?.first
+                                                          .lookupDetHierarchical ??
                                                       []);
                                             },
                                             maxLength: 12,
@@ -253,12 +259,12 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             inputType: TextInputType.number,
                                             onChange: (p0) {},
                                             onTap: () {
-                                              commonBottomSheet(
+                                              commonBottomSheet1(
                                                   context,
-                                                  (p0) => {
+                                                  (p0) async => {
                                                         locationMasterController
                                                                 .selectedStateVal =
-                                                            p0.lookupDetDescEn,
+                                                            p0.lookupDetHierDescEn,
                                                         locationMasterController
                                                             .selectedState = p0,
                                                         locationMasterController
@@ -267,14 +273,17 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                                             locationMasterController
                                                                     .selectedStateVal ??
                                                                 "",
+                                                    await locationMasterController.getState(
+                                                        locationMasterController
+                                                            .selectedState
+                                                            ?.lookupDetHierId.toString()),
                                                         locationMasterController
                                                             .update()
                                                       },
                                                   "State",
                                                   locationMasterController
-                                                          .divisinModel
-                                                          ?.details?[0]
-                                                          .lookupDet ??
+                                                          .subLocationModel
+                                                          ?.details ??
                                                       []);
                                             },
                                             maxLength: 12,
@@ -319,20 +328,12 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             inputType: TextInputType.number,
                                             onChange: (p0) {},
                                             onTap: () {
-                                              // List<Map<String, dynamic>> list =
-                                              //     [
-                                              //   {"title": "Hospital", "id": 1},
-                                              //   {"title": "NGO", "id": 2},
-                                              //   {"title": "STEM", "id": 3},
-                                              //   {"title": "USER", "id": 4}
-                                              // ];
-
-                                              commonBottomSheet(
+                                              commonBottomSheet1(
                                                   context,
-                                                  (p0) => {
+                                                  (p0) async => {
                                                         locationMasterController
                                                                 .selectedDistVal =
-                                                            p0.lookupDetDescEn,
+                                                            p0.lookupDetHierDescEn,
                                                         locationMasterController
                                                             .selectedDist = p0,
                                                         locationMasterController
@@ -341,14 +342,17 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                                             locationMasterController
                                                                     .selectedDistVal ??
                                                                 "",
+                                                    await locationMasterController.getState(
+                                                        locationMasterController
+                                                            .selectedDist
+                                                            ?.lookupDetHierId.toString()),
                                                         locationMasterController
                                                             .update()
                                                       },
                                                   "District",
                                                   locationMasterController
-                                                          .divisinModel
-                                                          ?.details?[0]
-                                                          .lookupDet ??
+                                                          .subLocationModel
+                                                          ?.details ??
                                                       []);
                                             },
                                             maxLength: 12,
@@ -391,10 +395,10 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             onTap: () {
                                               commonBottomSheet(
                                                   context,
-                                                  (p0) => {
+                                                  (p0) async => {
                                                         locationMasterController
                                                                 .selectedTalukaVal =
-                                                            p0.lookupDetDescEn,
+                                                            p0.lookupDetHierDescEn,
                                                         locationMasterController
                                                             .selectedTaluka = p0,
                                                         locationMasterController
@@ -403,14 +407,17 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                                             locationMasterController
                                                                     .selectedTalukaVal ??
                                                                 "",
+                                                    await locationMasterController.getState(
+                                                        locationMasterController
+                                                            .selectedTaluka
+                                                            ?.lookupDetHierId.toString()),
                                                         locationMasterController
                                                             .update()
                                                       },
                                                   "Taluka",
                                                   locationMasterController
-                                                          .divisinModel
-                                                          ?.details?[0]
-                                                          .lookupDet ??
+                                                          .subLocationModel
+                                                          ?.details ??
                                                       []);
                                             },
                                             maxLength: 12,
@@ -457,7 +464,7 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             (p0) => {
                                                   locationMasterController
                                                           .selectedCityVal =
-                                                      p0.lookupDetDescEn,
+                                                      p0.lookupDetHierDescEn,
                                                   locationMasterController
                                                       .selectedCity = p0,
                                                   locationMasterController
@@ -470,9 +477,8 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                                 },
                                             "City",
                                             locationMasterController
-                                                    .divisinModel
-                                                    ?.details?[0]
-                                                    .lookupDet ??
+                                                    .subLocationModel
+                                                    ?.details ??
                                                 []);
                                       },
                                       maxLength: 12,
