@@ -102,9 +102,6 @@ class _CampCreationState extends State<CampCreation> {
                       children: [
                         AppRoundTextField(
                           controller: TextEditingController(),
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           onTap: () {
@@ -119,8 +116,18 @@ class _CampCreationState extends State<CampCreation> {
                           },
                           maxLength: 12,
                           readOnly: true,
-                          label: const Text(""),
-                          hint: "Stakeholder type*",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Stakeholder Type',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
                             height: getProportionateScreenHeight(20),
                             width: getProportionateScreenHeight(20),
@@ -138,9 +145,6 @@ class _CampCreationState extends State<CampCreation> {
                         ),
                         AppRoundTextField(
                           controller: TextEditingController(),
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           onTap: () {
@@ -154,8 +158,18 @@ class _CampCreationState extends State<CampCreation> {
                           },
                           maxLength: 12,
                           readOnly: true,
-                          label: const Text(""),
-                          hint: "Location name*",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Location Name',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
                             height: getProportionateScreenHeight(20),
                             width: getProportionateScreenHeight(20),
@@ -173,9 +187,6 @@ class _CampCreationState extends State<CampCreation> {
                         ),
                         AppRoundTextField(
                           controller: TextEditingController(),
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           onTap: () {
@@ -187,10 +198,19 @@ class _CampCreationState extends State<CampCreation> {
                             commonBottonSheet(
                                 context, (p0) => null, "Camp name", list);
                           },
-                          maxLength: 12,
                           readOnly: true,
-                          label: const Text(""),
-                          hint: "Camp name*",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Camp Name',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
                             height: getProportionateScreenHeight(20),
                             width: getProportionateScreenHeight(20),
@@ -208,14 +228,20 @@ class _CampCreationState extends State<CampCreation> {
                         ),
                         AppRoundTextField(
                           controller: TextEditingController(),
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
-                          maxLength: 12,
-                          label: const Text(""),
-                          hint: "Proposed camp date & Time *",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Proposed camp date & time',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
                             height: getProportionateScreenHeight(20),
                             width: getProportionateScreenHeight(20),

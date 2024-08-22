@@ -11,11 +11,13 @@ import 'package:community_health_app/screens/patient_registration/ui/registered_
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/location_master/location_master_screen.dart';
+import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_edit.dart';
+import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_list.dart';
 
-import 'package:community_health_app/screens/patient_registration/registered_user_master.dart';
-import 'package:community_health_app/screens/patient_registration/stakeholder_master.dart';
-import 'package:community_health_app/screens/patient_registration/user_master.dart';
-import 'package:community_health_app/screens/patient_registration/user_master_edit.dart';
+import 'package:community_health_app/screens/user_master/ui/registered_user_master.dart';
+import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master.dart';
+import 'package:community_health_app/screens/user_master/ui/user_master.dart';
+import 'package:community_health_app/screens/user_master/ui/user_master_edit.dart';
 import 'package:community_health_app/user_auths/createnewpassword_view.dart';
 import 'package:community_health_app/user_auths/enterpin_view.dart';
 import 'package:community_health_app/user_auths/forgotpassword_view.dart';
@@ -58,6 +60,10 @@ class AppRoutes {
   static const String userMasterScreen = "/userMasterScreen";
   static const String userMasterEditScreen = "/userMasterEditScreen";
   static const String stakeholderMasterScreen = "/stakeholderMasterScreen";
+  static const String stakeholderMasterEditScreen =
+      "/stakeholderMasterEditScreen";
+  static const String stakeholderMasterListScreen =
+      "/stakeholderMasterListScreen";
   static const String registeredUserMaster = "/registeredUserMaster";
   static const String pinValidationPage = "/PinValidationPage";
   static const String updatePasswordPage = "/UpdatePasswordPage";
@@ -82,7 +88,7 @@ class AppRoutes {
         );
       case userMasterEditScreen:
         return MaterialPageRoute(
-          builder: (_) => const UserMasterEdtiScreen(),
+          builder: (_) => const UserMasterEditScreen(),
         );
       case stakeholderMasterScreen:
         return MaterialPageRoute(
@@ -146,6 +152,14 @@ class AppRoutes {
       case campApproval:
         return MaterialPageRoute(
           builder: (_) => const CampApprovalScreen(),
+        );
+      case stakeholderMasterListScreen:
+        return MaterialPageRoute(
+          builder: (_) => const StakeholderMasterList(),
+        );
+      case stakeholderMasterEditScreen:
+        return MaterialPageRoute(
+          builder: (_) => const StakeHolderMasterEditScreen(),
         );
 
       default:

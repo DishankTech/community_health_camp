@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/common_bloc/repository/master_repository.dart';
+import 'package:community_health_app/user_auths/cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +25,7 @@ void main() {
         RepositoryProvider(create: (context) => MasterDataRepository())
       ],
       child: MultiBlocProvider(providers: [
+        BlocProvider(create: (context) => ProfileCubit()),
         BlocProvider(
             create: (context) => MasterDataBloc(
                 masterDataRepository:

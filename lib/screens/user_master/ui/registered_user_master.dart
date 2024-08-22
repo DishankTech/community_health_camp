@@ -55,6 +55,7 @@ class _RegisteredUserMasterScreenState
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     return Scaffold(
         body: Container(
       decoration: const BoxDecoration(
@@ -241,7 +242,10 @@ class _RegisteredUserMasterScreenState
                             color: Colors.transparent,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(5),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.userMasterEditScreen);
+                              },
                               child: Ink(
                                 child: Image.asset(
                                   icEdit,

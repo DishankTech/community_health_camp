@@ -15,14 +15,14 @@ import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class UserMasterEdtiScreen extends StatefulWidget {
-  const UserMasterEdtiScreen({super.key});
+class UserMasterEditScreen extends StatefulWidget {
+  const UserMasterEditScreen({super.key});
 
   @override
-  State<UserMasterEdtiScreen> createState() => _UserMasterEdtiScreenState();
+  State<UserMasterEditScreen> createState() => _UserMasterEditScreenState();
 }
 
-class _UserMasterEdtiScreenState extends State<UserMasterEdtiScreen> {
+class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
   XFile? capturedFile;
 
   late TextEditingController _stakeholderTypeTextController;

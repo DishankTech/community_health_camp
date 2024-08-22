@@ -128,8 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                               text: const TextSpan(
                                   text: 'Username',
                                   style: TextStyle(
-                                    color: kHintColor,
-                                  ),
+                                      color: kHintColor,
+                                      fontFamily: Montserrat),
                                   children: [
                                     TextSpan(
                                         text: "*",
@@ -165,8 +165,8 @@ class _LoginPageState extends State<LoginPage> {
                               text: const TextSpan(
                                   text: 'Password',
                                   style: TextStyle(
-                                    color: kHintColor,
-                                  ),
+                                      color: kHintColor,
+                                      fontFamily: Montserrat),
                                   children: [
                                     TextSpan(
                                         text: "*",
@@ -211,8 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           title: "Login",
                           onTap: () async {
-                            Navigator.pushNamed(context, AppRoutes.dashboard);
-                            // validateFields();
+                            validateFields();
                           },
                         )
                       ],
@@ -277,7 +276,7 @@ class _LoginPageState extends State<LoginPage> {
       String details = responseBody['details'].toString();
       String token = responseBody['details'][0]['token'].toString();
       if (statusCode == "200") {
-        DataProvider().storeUserData(token);
+        DataProvider().storeUserData(finalResponse.body);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -287,8 +286,8 @@ class _LoginPageState extends State<LoginPage> {
             backgroundColor: Colors.green,
           ),
         );
-
-        Navigator.pushNamed(context, AppRoutes.dashboard);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

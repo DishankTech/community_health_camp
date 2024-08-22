@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:community_health_app/user_auths/models/login_response_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -43,16 +44,16 @@ class DataProvider {
     }
   }
 
-  // LoginResponseModel? getParsedUserData() {
-  //   print('user Data');
-  //   print(_prefs.getString("userData"));
-  //   if (_prefs.getString("userData") != null) {
-  //     return LoginResponseModel.fromJson(
-  //         jsonDecode(_prefs.getString("userData")!));
-  //   } else {
-  //     return null;
-  //   }
-  // }
+  LoginResponseModel? getParsedUserData() {
+    print('user Data');
+    print(_prefs.getString("userData"));
+    if (_prefs.getString("userData") != null) {
+      var res = jsonDecode(_prefs.getString("userData")!);
+      return LoginResponseModel.fromJson(res);
+    } else {
+      return null;
+    }
+  }
 
   bool isLoggedIn() {
     return _prefs.getBool("isLoggedIn") ?? false;

@@ -3,6 +3,7 @@ import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
 import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/constants/constants.dart';
+import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
@@ -98,8 +99,20 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       inputType: TextInputType.text,
                                       onChange: (p0) {},
                                       maxLength: 12,
-                                      label: const Text(""),
-                                      hint: "Location Name*",
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Location Name',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
                                     ),
                                     SizedBox(
                                       height: responsiveHeight(20),
@@ -113,8 +126,20 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       inputType: TextInputType.number,
                                       onChange: (p0) {},
                                       maxLength: 12,
-                                      label: const Text(""),
-                                      hint: "Contact No",
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Contact No',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
                                     ),
                                     SizedBox(
                                       height: responsiveHeight(30),
@@ -128,8 +153,20 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       inputType: TextInputType.text,
                                       onChange: (p0) {},
                                       maxLength: 12,
-                                      label: const Text(""),
-                                      hint: "Contact Person Name",
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Contact Person Name',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
                                     ),
                                     SizedBox(
                                       height: responsiveHeight(30),
@@ -143,8 +180,20 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       inputType: TextInputType.emailAddress,
                                       onChange: (p0) {},
                                       maxLength: 12,
-                                      label: const Text(""),
-                                      hint: "Email ID",
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Email Id',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
                                     ),
                                     SizedBox(
                                       height: responsiveHeight(30),
@@ -158,8 +207,20 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       inputType: TextInputType.streetAddress,
                                       onChange: (p0) {},
                                       maxLength: 12,
-                                      label: const Text(""),
-                                      hint: "Address1",
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Address 1',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
                                     ),
                                     SizedBox(
                                       height: responsiveHeight(30),
@@ -173,8 +234,20 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       inputType: TextInputType.streetAddress,
                                       onChange: (p0) {},
                                       maxLength: 12,
-                                      label: const Text(""),
-                                      hint: "Address2",
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Address 2',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
                                     ),
                                     SizedBox(
                                       height: responsiveHeight(30),
@@ -217,24 +290,28 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             },
                                             maxLength: 12,
                                             readOnly: true,
-                                            label: const Text(""),
-                                            hint: "Country*",
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Country',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
                                             suffix: SizedBox(
-                                              height:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                              width:
-                                                  getProportionateScreenHeight(
-                                                      20),
+                                              height: responsiveHeight(20),
+                                              width: responsiveHeight(20),
                                               child: Center(
                                                 child: Image.asset(
                                                   icArrowDownOrange,
-                                                  height:
-                                                      getProportionateScreenHeight(
-                                                          20),
-                                                  width:
-                                                      getProportionateScreenHeight(
-                                                          20),
+                                                  height: responsiveHeight(20),
+                                                  width: responsiveHeight(20),
                                                 ),
                                               ),
                                             ),
@@ -279,24 +356,28 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             },
                                             maxLength: 12,
                                             readOnly: true,
-                                            label: const Text(""),
-                                            hint: "State*",
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'State',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
                                             suffix: SizedBox(
-                                              height:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                              width:
-                                                  getProportionateScreenHeight(
-                                                      20),
+                                              height: responsiveHeight(20),
+                                              width: responsiveHeight(20),
                                               child: Center(
                                                 child: Image.asset(
                                                   icArrowDownOrange,
-                                                  height:
-                                                      getProportionateScreenHeight(
-                                                          20),
-                                                  width:
-                                                      getProportionateScreenHeight(
-                                                          20),
+                                                  height: responsiveHeight(20),
+                                                  width: responsiveHeight(20),
                                                 ),
                                               ),
                                             ),
@@ -353,24 +434,28 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             },
                                             maxLength: 12,
                                             readOnly: true,
-                                            label: const Text(""),
-                                            hint: "District*",
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'District',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
                                             suffix: SizedBox(
-                                              height:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                              width:
-                                                  getProportionateScreenHeight(
-                                                      20),
+                                              height: responsiveHeight(20),
+                                              width: responsiveHeight(20),
                                               child: Center(
                                                 child: Image.asset(
                                                   icArrowDownOrange,
-                                                  height:
-                                                      getProportionateScreenHeight(
-                                                          20),
-                                                  width:
-                                                      getProportionateScreenHeight(
-                                                          20),
+                                                  height: responsiveHeight(20),
+                                                  width: responsiveHeight(20),
                                                 ),
                                               ),
                                             ),
@@ -415,24 +500,28 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             },
                                             maxLength: 12,
                                             readOnly: true,
-                                            label: const Text(""),
-                                            hint: "Taluka*",
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Taluka',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
                                             suffix: SizedBox(
-                                              height:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                              width:
-                                                  getProportionateScreenHeight(
-                                                      20),
+                                              height: responsiveHeight(20),
+                                              width: responsiveHeight(20),
                                               child: Center(
                                                 child: Image.asset(
                                                   icArrowDownOrange,
-                                                  height:
-                                                      getProportionateScreenHeight(
-                                                          20),
-                                                  width:
-                                                      getProportionateScreenHeight(
-                                                          20),
+                                                  height: responsiveHeight(20),
+                                                  width: responsiveHeight(20),
                                                 ),
                                               ),
                                             ),
@@ -477,20 +566,28 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       },
                                       maxLength: 12,
                                       readOnly: true,
-                                      label: const Text(""),
-                                      hint: "City*",
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'City',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
                                       suffix: SizedBox(
-                                        height:
-                                            getProportionateScreenHeight(20),
-                                        width: getProportionateScreenHeight(20),
+                                        height: responsiveHeight(20),
+                                        width: responsiveHeight(20),
                                         child: Center(
                                           child: Image.asset(
                                             icArrowDownOrange,
-                                            height:
-                                                getProportionateScreenHeight(
-                                                    20),
-                                            width: getProportionateScreenHeight(
-                                                20),
+                                            height: responsiveHeight(20),
+                                            width: responsiveHeight(20),
                                           ),
                                         ),
                                       ),

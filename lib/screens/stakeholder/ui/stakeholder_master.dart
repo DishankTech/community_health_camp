@@ -38,6 +38,16 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
   late TextEditingController _talukaTextController;
   late TextEditingController _cityTextController;
   late TextEditingController _divisionTextController;
+  Map? _selectedStakeholderType;
+  Map? _selectedStakeholderSubType;
+  Map? _selectedStakeholderName;
+  Map? _selectedMobile;
+  Map? _selectedEmailId;
+  Map? _selectedDistrict;
+  Map? _selectedTaluka;
+  Map? _selectedCity;
+  Map? _selectedDivision;
+  Map? _selectedStatus;
   bool _isObscure = true;
 
   void _toggleObscure() {
@@ -48,7 +58,6 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _stakeholderTypeTextController = TextEditingController();
     _stakeholderSubTypeTextController = TextEditingController();
@@ -124,12 +133,20 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                           inputType: TextInputType.text,
                           onChange: (p0) {},
                           onTap: () {
-                            stakeholderBottomSheet(context, (p0) => null);
+                            stakeholderBottomSheet(context, (p0) {
+                              setState(() {
+                                _selectedStakeholderType = p0;
+                                _stakeholderTypeTextController.text =
+                                    p0['title'];
+                              });
+
+                              Navigator.pop(context);
+                            });
                           },
                           readOnly: true,
                           label: RichText(
                             text: const TextSpan(
-                                text: 'Stakeholder Tye',
+                                text: 'Stakeholder Type',
                                 style: TextStyle(
                                     color: kHintColor, fontFamily: Montserrat),
                                 children: [
@@ -532,10 +549,7 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                             Flexible(
                               flex: 1,
                               child: AppButton(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.campCreation);
-                                },
+                                onTap: () {},
                                 title: "Save",
                                 iconData: Icon(
                                   Icons.arrow_forward,
