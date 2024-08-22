@@ -77,30 +77,20 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
           mAppBarV1(
             title: "Registered Patients",
             context: context,
-            suffix: Row(
-              children: [
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(5),
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.patientRegScreen);
-                    },
-                    child: Ink(
-                      child: Image.asset(
-                        icSquarePlus,
-                        height: responsiveHeight(24),
-                      ),
-                    ),
+            suffix: Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(5),
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.patientRegScreen);
+                },
+                child: Ink(
+                  child: Image.asset(
+                    icSquarePlus,
+                    height: responsiveHeight(24),
                   ),
                 ),
-                IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                          context, AppRoutes.locationMaster);
-                    },
-                    icon: const Icon(Icons.location_on_outlined,color: kWhiteColor,))
-              ],
+              ),
             ),
           ),
           Expanded(
