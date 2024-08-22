@@ -86,7 +86,7 @@ class _CampCreationState extends State<CampCreation> {
                               {"title": "STEM", "id": 3},
                               {"title": "USER", "id": 4}
                             ];
-                            commonBottonSheet(context, (p0) => null,
+                            commonBottomSheet(context, (p0) => null,
                                 "Stakeholder Type", list);
                           },
                           maxLength: 12,
@@ -121,7 +121,7 @@ class _CampCreationState extends State<CampCreation> {
                               {"title": "Mumbai", "id": 2},
                               {"title": "Nagpur", "id": 2},
                             ];
-                            commonBottonSheet(
+                            commonBottomSheet(
                                 context, (p0) => null, "Location name", list);
                           },
                           maxLength: 12,
@@ -156,7 +156,7 @@ class _CampCreationState extends State<CampCreation> {
                               {"title": "Mumbai", "id": 2},
                               {"title": "Nagpur", "id": 2},
                             ];
-                            commonBottonSheet(
+                            commonBottomSheet(
                                 context, (p0) => null, "Camp name", list);
                           },
                           maxLength: 12,
@@ -321,7 +321,7 @@ class _CampCreationState extends State<CampCreation> {
                     {"title": "Admin", "id": 2},
                     {"title": "Scrutiny", "id": 2},
                   ];
-                  commonBottonSheet(
+                  commonBottomSheet(
                       context, (p0) => null, "Designation/Member Type", list);
                 },
                 maxLength: 12,

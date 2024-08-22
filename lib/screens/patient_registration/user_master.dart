@@ -318,8 +318,7 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                             flex: 1,
                             child: AppButton(
                               onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppRoutes.locationMaster);
+
                               },
                               title: "Save",
                               iconData: Icon(

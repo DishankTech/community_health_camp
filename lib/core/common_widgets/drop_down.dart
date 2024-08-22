@@ -2,7 +2,7 @@ import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:community_health_app/screens/location_master/model/division/division_details.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -351,91 +351,147 @@ Future<dynamic> stakeholderStatusBottomSheet(
           ));
 }
 
-Future<dynamic> commonBottonSheet(
-    BuildContext context,
-    Function(Map<String, dynamic>) onItemSelected,
-    String bottomSheetTitle,
-    List<Map<String, dynamic>> list) {
+
+Future<dynamic> commonBottomSheet(
+  BuildContext context,
+  Function(dynamic) onItemSelected,
+  String bottomSheetTitle,
+  List<dynamic> list,
+) {
   return showModalBottomSheet(
-      context: context,
-      isScrollControlled: false,
-      builder: (c) => Container(
-            width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(responsiveHeight(50)),
-                    topRight: Radius.circular(responsiveHeight(50)))),
-            child: Column(
+    context: context,
+    isScrollControlled: false,
+    builder: (c) => _CommonBottomSheetContent(
+      onItemSelected: onItemSelected,
+      bottomSheetTitle: bottomSheetTitle,
+      list: list,
+    ),
+  );
+}
+
+class _CommonBottomSheetContent extends StatefulWidget {
+  final Function(dynamic) onItemSelected;
+  final String bottomSheetTitle;
+  final List<dynamic> list;
+
+  const _CommonBottomSheetContent({
+    required this.onItemSelected,
+    required this.bottomSheetTitle,
+    required this.list,
+  });
+
+  @override
+  State<_CommonBottomSheetContent> createState() =>
+      _CommonBottomSheetContentState();
+}
+
+class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
+  int? selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth,
+      decoration: BoxDecoration(
+        color: kWhiteColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(responsiveHeight(50)),
+          topRight: Radius.circular(responsiveHeight(50)),
+        ),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        bottomSheetTitle,
-                        style: TextStyle(
-                            fontSize: responsiveFont(17),
-                            fontWeight: FontWeight.bold,
-                            color: kPrimaryColor),
-                      ),
-                      IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: const Icon(Icons.cancel_presentation))
-                    ],
+                Text(
+                  widget.bottomSheetTitle,
+                  style: TextStyle(
+                    fontSize: responsiveFont(17),
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
                   ),
                 ),
-                SizedBox(
-                  height: SizeConfig.screenHeight * 0.3,
-                  child: BlocBuilder<MasterDataBloc, MasterDataState>(
-                    builder: (context, state) {
-                      return list != null
-                          ? ListView.builder(
-                              itemCount: list.length,
-                              shrinkWrap: true,
-                              itemBuilder: (c, i) => Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 6, horizontal: 12),
-                                  child: InkWell(
-                                    onTap: onItemSelected(list[i]),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: kContainerBack,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Row(
-                                          children: [
-                                            const Icon(Icons.circle_outlined),
-                                            SizedBox(
-                                              width: responsiveWidth(6),
-                                            ),
-                                            Text(list[i]['title']),
-                                            const Spacer(),
-                                            const Icon(
-                                              Icons.check_circle,
-                                              color: kPrimaryColor,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            )
-                          : const Center(child: Text("Data Not Available"));
-                    },
-                  ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.cancel_presentation),
                 ),
               ],
             ),
-          ));
+          ),
+          SizedBox(
+            height: SizeConfig.screenHeight * 0.3,
+            child: ListView.builder(
+              itemCount: widget.list.length,
+              shrinkWrap: true,
+              itemBuilder: (c, i) => Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 12,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex = i;
+                      });
+
+                      widget.onItemSelected(widget.list[i]);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            selectedIndex == i
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
+                                : Icon(
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Text(
+                              widget.list[i].lookupDetDescEn ?? "",
+                              style: TextStyle(
+                                  fontSize: responsiveFont(14.0),
+                                  fontWeight: selectedIndex == i
+                                      ? FontWeight.bold
+                                      : FontWeight.w500),
+                            ),
+                            const Spacer(),
+                            if (selectedIndex == i)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

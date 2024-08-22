@@ -1,5 +1,6 @@
+import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
-import 'package:community_health_app/screens/location_master/location_master.dart';
+import 'package:community_health_app/screens/location_master/location_master_screen.dart';
 import 'package:community_health_app/screens/patient_registration/patient_registration.dart';
 import 'package:community_health_app/screens/patient_registration/registered_patients.dart';
 import 'package:community_health_app/screens/patient_registration/registered_user_master.dart';
@@ -48,6 +49,7 @@ class AppRoutes {
   static const String registeredUserMaster = "/registeredUserMaster";
   static const String pinValidationPage = "/PinValidationPage";
   static const String updatePasswordPage = "/UpdatePasswordPage";
+  static const String campApproval = "/campApproval";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -96,11 +98,15 @@ class AppRoutes {
 
       case locationMaster:
         return MaterialPageRoute(
-          builder: (_) => const LocationMaster(),
+          builder: (_) => const LocationMasterScreen(),
         );
       case campCreation:
         return MaterialPageRoute(
           builder: (_) => const CampCreation(),
+        );
+      case campApproval:
+        return MaterialPageRoute(
+          builder: (_) => const CampApprovalScreen(),
         );
 
       default:
