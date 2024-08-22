@@ -146,7 +146,9 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                     padding: EdgeInsets.zero,
                     itemBuilder: (context, index) {
                       return InkWell(
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.campWiseRegisteredPatients);
+                        },
                         child: Container(
                           margin: EdgeInsets.all(5),
                           decoration: BoxDecoration(

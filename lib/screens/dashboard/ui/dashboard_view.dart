@@ -22,12 +22,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
 
-    _homepageslist.addAll([DashboardPagesModel(pageName: "CampCalendar"), DashboardPagesModel(pageName: "CampCreation")]);
+    _homepageslist.addAll([DashboardPagesModel(pageName: "CampCalendar",image: ""), DashboardPagesModel(pageName: "CampCreation",image: "")]);
   }
 
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+
 
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Change to your desired color
@@ -94,4 +95,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
   }
+
+
 }
