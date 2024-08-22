@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:flutter/services.dart';
 
 class AppRoundTextField extends StatelessWidget {
   AppRoundTextField(
@@ -22,7 +24,8 @@ class AppRoundTextField extends StatelessWidget {
       this.errorText,
       this.onChange,
       this.isFloatingLabelEnable,
-      this.borderRaius});
+      this.borderRaius,
+      this.inputFormatter});
 
   Widget label;
   TextEditingController controller;
@@ -42,6 +45,7 @@ class AppRoundTextField extends StatelessWidget {
   String? errorText;
   Function(String)? onChange;
   double? borderRaius;
+  TextInputFormatter? inputFormatter;
 
   @override
   Widget build(BuildContext context) {

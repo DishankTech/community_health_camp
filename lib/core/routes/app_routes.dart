@@ -1,3 +1,6 @@
+import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view.dart';
+import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.dart';
+import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camps.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/location_master/location_master.dart';
@@ -23,6 +26,7 @@ class AppRoutes {
   static const String splash = "/";
   static const String loginScreen = "/loginScreen";
   static const String introScreen = "/introScreen";
+  static const String dashboard = "/dashboard_view";
   static const String mobileOTP = "/mobileOTP";
   static const String setOTP = "/setOTP";
   static const String homeScreen = "/homeScreen";
@@ -52,7 +56,9 @@ class AppRoutes {
   static const String registeredUserMaster = "/registeredUserMaster";
   static const String pinValidationPage = "/PinValidationPage";
   static const String updatePasswordPage = "/UpdatePasswordPage";
-  static const String dashboard = "/dashboard";
+  static const String campCalendar = "/CampCalendarPage";
+  static const String dateWiseCamps = "/DateWiseCampsScreen";
+  static const String districtWiseCamps = "/DistrictWiseCampsScreen";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -118,6 +124,18 @@ class AppRoutes {
       case dashboard:
         return MaterialPageRoute(
           builder: (_) => const DashboardScreen(),
+        );
+      case campCalendar:
+        return MaterialPageRoute(
+          builder: (_) => const CampCalendarPage(),
+        );
+      case dateWiseCamps:
+        return MaterialPageRoute(
+          builder: (_) => const DateWiseCampsScreen(),
+        );
+      case districtWiseCamps:
+        return MaterialPageRoute(
+          builder: (_) => const DistrictWiseCampsScreen(),
         );
 
       default:
