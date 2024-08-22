@@ -1,4 +1,3 @@
-import 'package:community_health_app/core/common_widgets/app_bar.dart';
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
@@ -7,7 +6,9 @@ import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CampCreation extends StatefulWidget {
@@ -20,8 +21,34 @@ class CampCreation extends StatefulWidget {
 class _CampCreationState extends State<CampCreation> {
   XFile? capturedFile;
   List<CardData> carbonCommentsList = [];
-  TextEditingController _passwordTextController = TextEditingController();
-  bool _isObscure = false;
+
+  TextEditingController stakHolderController = TextEditingController();
+
+  Map<String, dynamic>? selectedStak;
+
+  TextEditingController locationNameController = TextEditingController();
+
+  Map<String, dynamic>? selectedLocationName;
+
+  TextEditingController campNameController = TextEditingController();
+
+  Map<String, dynamic>? selectedCampName;
+
+  TextEditingController userNameController = TextEditingController();
+
+  TextEditingController loginNameController = TextEditingController();
+
+  TextEditingController designationType = TextEditingController();
+
+  Map<String, dynamic>? selectedDesignationType;
+
+  TextEditingController countryCodeController = TextEditingController();
+
+  Map<String, dynamic>? selectedCountryCode;
+
+  TextEditingController mobileController = TextEditingController();
+
+  Map<String, dynamic>? selectedMobile;
 
   @override
   void initState() {
@@ -34,22 +61,22 @@ class _CampCreationState extends State<CampCreation> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent, // Change to your desired color
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness:
+          Brightness.light, // For light text/icons on the status bar
+    ));
     return Scaffold(
-        body: Stack(children: [
-      Image.asset(
-        patRegBg,
-        width: SizeConfig.screenWidth,
-        fit: BoxFit.fill,
-      ),
-      SingleChildScrollView(
-        child: Center(
+      body: Container(
+        decoration: const BoxDecoration(
+            image:
+                DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
+        child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               mAppBarV1(title: "Camp Creation", context: context),
-              SizedBox(
-                height: responsiveHeight(40),
-              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -75,6 +102,9 @@ class _CampCreationState extends State<CampCreation> {
                       children: [
                         AppRoundTextField(
                           controller: TextEditingController(),
+                          inputStyle: TextStyle(
+                              fontSize: responsiveFont(14),
+                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           onTap: () {
@@ -89,26 +119,16 @@ class _CampCreationState extends State<CampCreation> {
                           },
                           maxLength: 12,
                           readOnly: true,
-                          label: RichText(
-                            text: const TextSpan(
-                                text: 'Stakeholder Type',
-                                style: TextStyle(
-                                    color: kHintColor, fontFamily: Montserrat),
-                                children: [
-                                  TextSpan(
-                                      text: "*",
-                                      style: TextStyle(color: Colors.red))
-                                ]),
-                          ),
-                          hint: "",
+                          label: const Text(""),
+                          hint: "Stakeholder type*",
                           suffix: SizedBox(
-                            height: responsiveHeight(20),
-                            width: responsiveHeight(20),
+                            height: getProportionateScreenHeight(20),
+                            width: getProportionateScreenHeight(20),
                             child: Center(
                               child: Image.asset(
                                 icArrowDownOrange,
-                                height: responsiveHeight(20),
-                                width: responsiveHeight(20),
+                                height: getProportionateScreenHeight(20),
+                                width: getProportionateScreenHeight(20),
                               ),
                             ),
                           ),
@@ -118,6 +138,9 @@ class _CampCreationState extends State<CampCreation> {
                         ),
                         AppRoundTextField(
                           controller: TextEditingController(),
+                          inputStyle: TextStyle(
+                              fontSize: responsiveFont(14),
+                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           onTap: () {
@@ -129,27 +152,18 @@ class _CampCreationState extends State<CampCreation> {
                             commonBottonSheet(
                                 context, (p0) => null, "Location name", list);
                           },
+                          maxLength: 12,
                           readOnly: true,
-                          label: RichText(
-                            text: const TextSpan(
-                                text: 'Location Name',
-                                style: TextStyle(
-                                    color: kHintColor, fontFamily: Montserrat),
-                                children: [
-                                  TextSpan(
-                                      text: "*",
-                                      style: TextStyle(color: Colors.red))
-                                ]),
-                          ),
-                          hint: "",
+                          label: const Text(""),
+                          hint: "Location name*",
                           suffix: SizedBox(
-                            height: responsiveHeight(20),
-                            width: responsiveHeight(20),
+                            height: getProportionateScreenHeight(20),
+                            width: getProportionateScreenHeight(20),
                             child: Center(
                               child: Image.asset(
                                 icArrowDownOrange,
-                                height: responsiveHeight(20),
-                                width: responsiveHeight(20),
+                                height: getProportionateScreenHeight(20),
+                                width: getProportionateScreenHeight(20),
                               ),
                             ),
                           ),
@@ -159,6 +173,9 @@ class _CampCreationState extends State<CampCreation> {
                         ),
                         AppRoundTextField(
                           controller: TextEditingController(),
+                          inputStyle: TextStyle(
+                              fontSize: responsiveFont(14),
+                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           onTap: () {
@@ -170,27 +187,18 @@ class _CampCreationState extends State<CampCreation> {
                             commonBottonSheet(
                                 context, (p0) => null, "Camp name", list);
                           },
+                          maxLength: 12,
                           readOnly: true,
-                          label: RichText(
-                            text: const TextSpan(
-                                text: 'Camp Name',
-                                style: TextStyle(
-                                    color: kHintColor, fontFamily: Montserrat),
-                                children: [
-                                  TextSpan(
-                                      text: "*",
-                                      style: TextStyle(color: Colors.red))
-                                ]),
-                          ),
-                          hint: "",
+                          label: const Text(""),
+                          hint: "Camp name*",
                           suffix: SizedBox(
-                            height: responsiveHeight(20),
-                            width: responsiveHeight(20),
+                            height: getProportionateScreenHeight(20),
+                            width: getProportionateScreenHeight(20),
                             child: Center(
                               child: Image.asset(
                                 icArrowDownOrange,
-                                height: responsiveHeight(20),
-                                width: responsiveHeight(20),
+                                height: getProportionateScreenHeight(20),
+                                width: getProportionateScreenHeight(20),
                               ),
                             ),
                           ),
@@ -200,29 +208,22 @@ class _CampCreationState extends State<CampCreation> {
                         ),
                         AppRoundTextField(
                           controller: TextEditingController(),
+                          inputStyle: TextStyle(
+                              fontSize: responsiveFont(14),
+                              color: kTextBlackColor),
                           inputType: TextInputType.number,
-                          readOnly: true,
                           onChange: (p0) {},
-                          label: RichText(
-                            text: const TextSpan(
-                                text: 'Proposed camp date & time',
-                                style: TextStyle(
-                                    color: kHintColor, fontFamily: Montserrat),
-                                children: [
-                                  TextSpan(
-                                      text: "*",
-                                      style: TextStyle(color: Colors.red))
-                                ]),
-                          ),
-                          hint: "",
+                          maxLength: 12,
+                          label: const Text(""),
+                          hint: "Proposed camp date & Time *",
                           suffix: SizedBox(
-                            height: responsiveHeight(20),
-                            width: responsiveHeight(20),
+                            height: getProportionateScreenHeight(20),
+                            width: getProportionateScreenHeight(20),
                             child: Center(
                               child: Image.asset(
                                 icCalendar,
-                                height: responsiveHeight(20),
-                                width: responsiveHeight(20),
+                                height: getProportionateScreenHeight(20),
+                                width: getProportionateScreenHeight(20),
                               ),
                             ),
                           ),
@@ -282,7 +283,7 @@ class _CampCreationState extends State<CampCreation> {
           ),
         ),
       ),
-    ]));
+    );
   }
 
   Widget campCard(int index, CardData card) {
@@ -312,6 +313,8 @@ class _CampCreationState extends State<CampCreation> {
               ),
               AppRoundTextField(
                 controller: TextEditingController(),
+                inputStyle: TextStyle(
+                    fontSize: responsiveFont(14), color: kTextBlackColor),
                 inputType: TextInputType.number,
                 onChange: (p0) {},
                 label: RichText(
@@ -330,6 +333,8 @@ class _CampCreationState extends State<CampCreation> {
               ),
               AppRoundTextField(
                 controller: TextEditingController(),
+                inputStyle: TextStyle(
+                    fontSize: responsiveFont(14), color: kTextBlackColor),
                 inputType: TextInputType.number,
                 onChange: (p0) {},
                 label: RichText(
@@ -348,6 +353,8 @@ class _CampCreationState extends State<CampCreation> {
               ),
               AppRoundTextField(
                 controller: TextEditingController(),
+                inputStyle: TextStyle(
+                    fontSize: responsiveFont(14), color: kTextBlackColor),
                 inputType: TextInputType.number,
                 onChange: (p0) {},
                 onTap: () {
@@ -357,7 +364,16 @@ class _CampCreationState extends State<CampCreation> {
                     {"title": "Scrutiny", "id": 2},
                   ];
                   commonBottonSheet(
-                      context, (p0) => null, "Designation/Member Type", list);
+                      context,
+                      (p0) => {
+                            setState(() {
+                              selectedDesignationType = p0;
+                              designationType.text =
+                                  selectedDesignationType!['title'];
+                            })
+                          },
+                      "Designation/Member Type",
+                      list);
                 },
                 readOnly: true,
                 label: RichText(
@@ -390,10 +406,27 @@ class _CampCreationState extends State<CampCreation> {
                   Expanded(
                     child: AppRoundTextField(
                       controller: TextEditingController(),
+                      inputStyle: TextStyle(
+                          fontSize: responsiveFont(14), color: kTextBlackColor),
                       inputType: TextInputType.number,
                       onChange: (p0) {},
                       onTap: () {
-                        genderBottomSheet(context, (p0) => null);
+                        List<Map<String, dynamic>> list = [
+                          {"title": "+91", "id": 1},
+                          {"title": "+11", "id": 2},
+                          {"title": "+43", "id": 2},
+                        ];
+                        commonBottonSheet(
+                            context,
+                            (p0) => {
+                                  setState(() {
+                                    selectedCountryCode = p0;
+                                    countryCodeController.text =
+                                        selectedCountryCode!['title'];
+                                  })
+                                },
+                            "Country Code",
+                            list);
                       },
                       maxLength: 12,
                       readOnly: true,
@@ -427,13 +460,28 @@ class _CampCreationState extends State<CampCreation> {
                   ),
                   Expanded(
                     child: AppRoundTextField(
-                      controller: TextEditingController(),
+                      controller: mobileController,
                       inputStyle: TextStyle(
                           fontSize: responsiveFont(14), color: kTextBlackColor),
                       inputType: TextInputType.number,
                       onChange: (p0) {},
                       onTap: () {
-                        genderBottomSheet(context, (p0) => null);
+                        List<Map<String, dynamic>> list = [
+                          {"title": "987547869", "id": 1},
+                          {"title": "2456784653", "id": 2},
+                          {"title": "8976543456", "id": 2},
+                        ];
+                        commonBottonSheet(
+                            context,
+                            (p0) => {
+                                  setState(() {
+                                    selectedMobile = p0;
+                                    mobileController.text =
+                                        selectedMobile!['title'];
+                                  })
+                                },
+                            "Mobile no",
+                            list);
                       },
                       maxLength: 10,
                       label: RichText(

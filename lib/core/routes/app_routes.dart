@@ -1,12 +1,17 @@
 import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camps.dart';
+import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/location_master/location_master.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration_edit.dart';
 import 'package:community_health_app/screens/patient_registration/ui/registered_patients.dart';
+import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
+import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
+import 'package:community_health_app/screens/location_master/location_master_screen.dart';
+
 import 'package:community_health_app/screens/patient_registration/registered_user_master.dart';
 import 'package:community_health_app/screens/patient_registration/stakeholder_master.dart';
 import 'package:community_health_app/screens/patient_registration/user_master.dart';
@@ -59,6 +64,7 @@ class AppRoutes {
   static const String campCalendar = "/CampCalendarPage";
   static const String dateWiseCamps = "/DateWiseCampsScreen";
   static const String districtWiseCamps = "/DistrictWiseCampsScreen";
+  static const String campApproval = "/campApproval";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -115,7 +121,7 @@ class AppRoutes {
 
       case locationMaster:
         return MaterialPageRoute(
-          builder: (_) => const LocationMaster(),
+          builder: (_) => const LocationMasterScreen(),
         );
       case campCreation:
         return MaterialPageRoute(
@@ -136,6 +142,10 @@ class AppRoutes {
       case districtWiseCamps:
         return MaterialPageRoute(
           builder: (_) => const DistrictWiseCampsScreen(),
+        );
+      case campApproval:
+        return MaterialPageRoute(
+          builder: (_) => const CampApprovalScreen(),
         );
 
       default:

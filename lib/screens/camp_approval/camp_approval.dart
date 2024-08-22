@@ -1,22 +1,20 @@
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/images.dart';
-import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
-import 'package:community_health_app/screens/patient_registration/models/registered_patient_model.dart';
+import 'package:community_health_app/screens/camp_approval/camp_approval_modal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class RegisteredPatientsScreen extends StatefulWidget {
-  const RegisteredPatientsScreen({super.key});
+class CampApprovalScreen extends StatefulWidget {
+  const CampApprovalScreen({super.key});
 
   @override
-  State<RegisteredPatientsScreen> createState() =>
-      _RegisteredPatientsScreenState();
+  State<CampApprovalScreen> createState() => _CampApprovalScreenState();
 }
 
-class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
-  List<RegisteredPatientModel> _list = [];
+class _CampApprovalScreenState extends State<CampApprovalScreen> {
+  List<CampApprovalModal> _list = [];
 
   @override
   void initState() {
@@ -24,38 +22,30 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
     super.initState();
 
     _list.addAll([
-      RegisteredPatientModel(
-          address:
-              "Address : R-603, Midc, Thane Belapur Rd, Rabale,Navi Mumbai, 400701",
-          campDate: "21 Aug 2024",
-          campName: "Health Camp",
-          mobile: "+91 5630178450",
-          name: "Abhinandan Vohra",
-          image: pat1),
-      RegisteredPatientModel(
-          address:
-              "Address : R-603, Midc, Thane Belapur Rd, Rabale,Navi Mumbai, 400701",
-          campDate: "19 Aug 2024",
-          campName: "Health Camp",
-          mobile: "+91 6398740210",
-          name: "Anaya Mehra",
-          image: pat2),
-      RegisteredPatientModel(
-          address:
-              "Address : R-603, Midc, Thane Belapur Rd, Rabale,Navi Mumbai, 400701",
-          campDate: "18 Aug 2024",
-          campName: "Health Camp",
-          mobile: "+91 3210456008",
-          name: "Imran Siddiqui",
-          image: pat3),
-      RegisteredPatientModel(
-          address:
-              "Address : Shop 13, C, Shyam Kamal Bldg, Opp Parle Intl Hotel, Vile Parle (east), 400057",
-          campDate: "10 Aug 2024",
-          campName: "Health Camp",
-          mobile: "+91 6541026874",
-          name: "Sanjay Desai",
-          image: pat1),
+      CampApprovalModal(
+          campReqId: '865304',
+          locationName: '32/2, Erandwane, Near Mehendale Garage, Pune 411004',
+          district: 'Pune',
+          stakeHodlerType: 'Hospital',
+          campDateTime: '21 Aug 2024  |  8.00 am to 6.00 pm'),
+      CampApprovalModal(
+          campReqId: '521049',
+          locationName: 'Opposite Kamala Nehru Park, 778, Shivajinagar, Pune 411004',
+          district: 'Pune',
+          stakeHodlerType: 'NGO',
+          campDateTime: '14 Aug 2024  |  9.00 am to 4.00 pm'),
+      CampApprovalModal(
+          campReqId: '365410',
+          locationName: '163, DP Road, Aundh, Pune 411007',
+          district: 'Pune',
+          stakeHodlerType: 'STEM',
+          campDateTime: '14 Aug 2024  |  9.00 am to 4.00 pm'),
+      CampApprovalModal(
+          campReqId: '987413',
+          locationName: 'D.A.V. In front of School, Aundh, Pune 411007',
+          district: 'Pune',
+          stakeHodlerType: 'User',
+          campDateTime: '5 Aug 2024  |  8.30 am to 5.30 pm')
     ]);
   }
 
@@ -75,23 +65,9 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
       child: Column(
         children: [
           mAppBarV1(
-            title: "Registered Patients",
+            title: "Camp Approval",
             context: context,
-            suffix:Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(5),
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.patientRegScreen);
-                },
-                child: Ink(
-                  child: Image.asset(
-                    icSquarePlus,
-                    height: responsiveHeight(24),
-                  ),
-                ),
-              ),
-            ),
+
           ),
           Expanded(
             child: ListView.builder(
@@ -118,23 +94,7 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Flexible(
-                                flex: 1,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: Colors.blue),
-                                      borderRadius: BorderRadius.circular(
-                                          responsiveHeight(10))),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(1.0),
-                                    child: Image.asset(
-                                      _list[i].image,
-                                      height: responsiveHeight(54),
-                                      width: responsiveWidth(54),
-                                    ),
-                                  ),
-                                ),
-                              ),
+
                               SizedBox(
                                 width: responsiveWidth(16),
                               ),
@@ -143,24 +103,17 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(_list[i].name,
-                                        style: TextStyle(
-                                            fontSize: responsiveFont(14),
-                                            color: kBlackColor,
-                                            fontWeight: FontWeight.w500)),
-                                    SizedBox(
-                                      height: responsiveHeight(10),
-                                    ),
+
                                     RichText(
                                       text: TextSpan(
-                                        text: "Mobile No: ",
+                                        text: "Camp Request ID : ",
                                         style: TextStyle(
                                             color: kTextColor,
                                             fontSize: responsiveFont(12),
                                             fontWeight: FontWeight.bold),
                                         children: [
                                           TextSpan(
-                                              text: _list[i].mobile,
+                                              text: _list[i].campReqId,
                                               style: TextStyle(
                                                   fontSize: responsiveFont(12),
                                                   color: kTextColor,
@@ -174,14 +127,14 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                     ),
                                     RichText(
                                       text: TextSpan(
-                                        text: "Address: ",
+                                        text: "Location Name: ",
                                         style: TextStyle(
                                             color: kTextColor,
                                             fontSize: responsiveFont(12),
                                             fontWeight: FontWeight.bold),
                                         children: [
                                           TextSpan(
-                                              text: _list[i].address,
+                                              text: _list[i].locationName,
                                               style: TextStyle(
                                                   fontSize: responsiveFont(12),
                                                   color: kTextColor,
@@ -195,14 +148,14 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                     ),
                                     RichText(
                                       text: TextSpan(
-                                        text: "Camp Name: ",
+                                        text: "District: ",
                                         style: TextStyle(
                                             color: kTextColor,
                                             fontSize: responsiveFont(12),
                                             fontWeight: FontWeight.bold),
                                         children: [
                                           TextSpan(
-                                              text: _list[i].campName,
+                                              text: _list[i].district,
                                               style: TextStyle(
                                                   fontSize: responsiveFont(12),
                                                   color: kTextColor,
@@ -216,19 +169,40 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                     ),
                                     RichText(
                                       text: TextSpan(
-                                        text: "Camp Date: ",
+                                        text: "Stakeholder Type: ",
                                         style: TextStyle(
                                             color: kTextColor,
                                             fontSize: responsiveFont(12),
                                             fontWeight: FontWeight.bold),
                                         children: [
                                           TextSpan(
-                                              text: _list[i].campDate,
+                                              text: _list[i].stakeHodlerType,
                                               style: TextStyle(
                                                   fontSize: responsiveFont(12),
                                                   color: kTextColor,
                                                   fontWeight:
                                                       FontWeight.normal))
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: responsiveHeight(10),
+                                    ),
+                                    RichText(
+                                      text: TextSpan(
+                                        text: "Proposed Camp date-time: ",
+                                        style: TextStyle(
+                                            color: kTextColor,
+                                            fontSize: responsiveFont(12),
+                                            fontWeight: FontWeight.bold),
+                                        children: [
+                                          TextSpan(
+                                              text: _list[i].campDateTime,
+                                              style: TextStyle(
+                                                  fontSize: responsiveFont(12),
+                                                  color: kTextColor,
+                                                  fontWeight:
+                                                  FontWeight.normal))
                                         ],
                                       ),
                                     ),
@@ -246,41 +220,18 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                     Positioned(
                       top: 20,
                       right: 20,
-                      child: Row(
-                        children: [
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(5),
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppRoutes.patientRegEditScreen);
-                              },
-                              child: Ink(
-                                child: Image.asset(
-                                  icEdit,
-                                  height: responsiveHeight(24),
-                                ),
-                              ),
+                      child:  Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(5),
+                          onTap: () {},
+                          child: Ink(
+                            child: Image.asset(
+                              icEye,
+                              height: responsiveHeight(24),
                             ),
                           ),
-                          SizedBox(
-                            width: responsiveHeight(10),
-                          ),
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(5),
-                              onTap: () {},
-                              child: Ink(
-                                child: Image.asset(
-                                  icEye,
-                                  height: responsiveHeight(24),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ]);
