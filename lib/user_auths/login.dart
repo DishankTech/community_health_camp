@@ -68,11 +68,11 @@ class _LoginPageState extends State<LoginPage> {
                 fit: BoxFit.cover,
               )),
           Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              /*SizedBox(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                /*SizedBox(
                 width: MediaQuery.sizeOf(context).width,
                 child: Image.asset(
                   "assets/loginlogo.png",
@@ -81,149 +81,155 @@ class _LoginPageState extends State<LoginPage> {
                   height: MediaQuery.sizeOf(context).width * 0.4,
                 ),
               ),*/
-              const SizedBox(
-                height: 5,
-              ),
-              const Text(
-                "Community Health Camp ",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
-              ),
-              const SizedBox(
-                height: 50,
-              ),
-              const Text(
-                "LOGIN",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Center(
-                child: _isLoading
-                    ? const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(
-                            color: Colors.red,
-                          ),
-                          Text(
-                            'Please wait..',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontFamily: Lato,
-                            ),
-                          ),
-                        ],
-                      )
-                    : Column(
-                        children: [
-                          Container(
-                            margin: const EdgeInsets.only(left: 30, right: 30),
-                            child: AppRoundTextField(
-                              controller: _usernameController,
-                              inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
-                              onChange: (p0) {},
-                              maxLength: 12,
-                              label: RichText(
-                                text: const TextSpan(
-                                    text: 'Username',
-                                    style: TextStyle(
-                                      color: kHintColor,
-                                      fontFamily: Montserrat),
-                                  children: [
-                                    TextSpan(
-                                        text: "*",
-                                        style: TextStyle(color: Colors.red))
-                                  ]),
-                            ),
-                            hint: "",
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          margin: const EdgeInsets.only(left: 30, right: 30),
-                          child: AppRoundTextField(
-                            obscureText: true,
-                            suffix: IconButton(
-                              icon: Icon(
-                                _obscureText
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  _obscureText =
-                                      !_obscureText; // Toggle password visibility
-                                });
-                              },
-                            ),
-                            controller: _passwordController,
-                            onChange: (p0) {},
-                            label: RichText(
-                              text: const TextSpan(
-                                  text: 'Password',
-                                  style: TextStyle(
-                                      color: kHintColor,
-                                      fontFamily: Montserrat),
-                                  children: [
-                                    TextSpan(
-                                        text: "*",
-                                        style: TextStyle(color: Colors.red))
-                                  ]),
-                            ),
-                            hint: "",
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisAlignment: MainAxisAlignment.end,
+                const SizedBox(
+                  height: 5,
+                ),
+                const Text(
+                  "Community Health Camp ",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+                const SizedBox(
+                  height: 50,
+                ),
+                const Text(
+                  "LOGIN",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: _isLoading
+                      ? const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            /*  InkWell(
+                            CircularProgressIndicator(
+                              color: Colors.red,
+                            ),
+                            Text(
+                              'Please wait..',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: Montserrat,
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(left: 30, right: 30),
+                              child: AppRoundTextField(
+                                controller: _usernameController,
+                                inputStyle: TextStyle(
+                                    fontSize: responsiveFont(14),
+                                    color: kTextBlackColor),
+                                onChange: (p0) {},
+                                maxLength: 12,
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Username',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: [
+                                        TextSpan(
+                                            text: "*",
+                                            style: TextStyle(color: Colors.red))
+                                      ]),
+                                ),
+                                hint: "",
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              margin:
+                                  const EdgeInsets.only(left: 30, right: 30),
+                              child: AppRoundTextField(
+                                obscureText: true,
+                                suffix: IconButton(
+                                  icon: Icon(
+                                    _obscureText
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscureText =
+                                          !_obscureText; // Toggle password visibility
+                                    });
+                                  },
+                                ),
+                                controller: _passwordController,
+                                onChange: (p0) {},
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Password',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: [
+                                        TextSpan(
+                                            text: "*",
+                                            style: TextStyle(color: Colors.red))
+                                      ]),
+                                ),
+                                hint: "",
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                /*  InkWell(
                       onTap: () {
                         Get.to(const ResetPasswordPage());
                       },
                       child: Container(margin: EdgeInsets.only(left: 30), child: Text("Reset Password "))),*/
-                            InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.forgotScreen);
-                                },
-                                child: Container(
-                                    margin: const EdgeInsets.only(right: 30),
-                                    child: const Text("Forgot Password ?"))),
+                                InkWell(
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, AppRoutes.forgotScreen);
+                                    },
+                                    child: Container(
+                                        margin:
+                                            const EdgeInsets.only(right: 30),
+                                        child:
+                                            const Text("Forgot Password ?"))),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 40,
+                            ),
+                            AppButton(
+                              mWidth: responsiveWidth(260),
+                              mHeight: responsiveHeight(50),
+                              iconData: Icon(
+                                Icons.arrow_forward,
+                                size: responsiveHeight(24),
+                                color: Colors.white,
+                              ),
+                              title: "Login",
+                              onTap: () async {
+                                validateFields();
+                              },
+                            )
                           ],
                         ),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                        AppButton(
-                          mWidth: responsiveWidth(260),
-                          mHeight: responsiveHeight(50),
-                          iconData: Icon(
-                            Icons.arrow_forward,
-                            size: responsiveHeight(24),
-                            color: Colors.white,
-                          ),
-                          title: "Login",
-                          onTap: () async {
-                            validateFields();
-                          },
-                        )
-                      ],
-                    ),
-            ],
-          ),
+                ),
+              ]),
         ],
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
@@ -258,8 +264,11 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse(kBaseUrl+userLogin));
-    request.body = json.encode({"username": _usernameController.text.toString().trim(), "password": _passwordController.text.toString().trim()});
+    var request = http.Request('POST', Uri.parse(kBaseUrl + userLogin));
+    request.body = json.encode({
+      "username": _usernameController.text.toString().trim(),
+      "password": _passwordController.text.toString().trim()
+    });
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -280,10 +289,10 @@ class _LoginPageState extends State<LoginPage> {
       if (statusCode == "200") {
         DataProvider().storeUserData(finalResponse.body);
 
-
-       LoginResponseModel loginResponseModel=  LoginResponseModel.fromJson(responseBody);
-        List<Detail>? detailsList = loginResponseModel.details;
-        print(detailsList);
+        // LoginResponseModel loginResponseModel =
+        //     LoginResponseModel.fromJson(responseBody);
+        // List<Detail>? detailsList = loginResponseModel.details;
+        // print(detailsList);
 
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
