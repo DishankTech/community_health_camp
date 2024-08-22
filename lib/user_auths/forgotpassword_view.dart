@@ -122,7 +122,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               inputType: TextInputType.number,
                               onChange: (p0) {},
                               maxLength: 12,
-                              label: const Text(""),
+                                label: const Text.rich(TextSpan(children: [
+                                  TextSpan(text: 'Mobile Number'),
+                                  TextSpan(
+                                      text: ' *',
+                                      style: TextStyle(
+                                          fontSize: 14,
+                                          fontFamily: 'Montserrat',
+                                          color: Colors.red)),
+                                ])),
                               hint: "Mobile Number *",
                                 validators: (value) {
                                   if (value == null || value.isEmpty) {

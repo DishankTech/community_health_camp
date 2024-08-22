@@ -71,6 +71,7 @@ const String icDelete1 = "assets/icons/ic_delete1.png";
 const String icEdit = "assets/icons/ic_edit1.png";
 const String icEye = "assets/icons/eye.png";
 const String icSquarePlus = "assets/icons/square-rounded-plus.png";
+const String icRoundFilter = "assets/icons/square-rounded-plus.png";
 
 //Dashboard
 const String icTotalRegPat = "assets/icons/ic_total_reg_pat.png";

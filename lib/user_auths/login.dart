@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(
+              /*SizedBox(
                 width: MediaQuery.sizeOf(context).width,
                 child: Image.asset(
                   "assets/loginlogo.png",
@@ -78,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: MediaQuery.sizeOf(context).width * 0.4,
                   height: MediaQuery.sizeOf(context).width * 0.4,
                 ),
-              ),
+              ),*/
               const SizedBox(
                 height: 5,
               ),
