@@ -6,15 +6,15 @@ import 'package:community_health_app/core/constants/fonts.dart';
 class AppTheme {
   const AppTheme._();
   static final lightTheme = ThemeData(
-      fontFamily: Lato,
+      fontFamily: Montserrat,
       primaryColor: kPrimaryColor,
       colorScheme: _shrineColorScheme,
       scaffoldBackgroundColor: kScaffoldColor,
       textTheme: const TextTheme(
-          titleLarge: TextStyle(fontFamily: Lato),
-          displayLarge: TextStyle(fontFamily: Lato),
-          displayMedium: TextStyle(fontFamily: Lato),
-          displaySmall: TextStyle(fontFamily: Lato)),
+          titleLarge: TextStyle(fontFamily: Montserrat),
+          displayLarge: TextStyle(fontFamily: Montserrat),
+          displayMedium: TextStyle(fontFamily: Montserrat),
+          displaySmall: TextStyle(fontFamily: Montserrat)),
       visualDensity: VisualDensity.adaptivePlatformDensity,
       appBarTheme: const AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -33,10 +33,10 @@ class AppTheme {
       primaryColor: kPrimaryColor,
       colorScheme: _shrineColorScheme,
       textTheme: const TextTheme(
-          titleLarge: TextStyle(fontFamily: Lato),
-          displayLarge: TextStyle(fontFamily: Lato),
-          displayMedium: TextStyle(fontFamily: Lato),
-          displaySmall: TextStyle(fontFamily: Lato)),
+          titleLarge: TextStyle(fontFamily: Montserrat),
+          displayLarge: TextStyle(fontFamily: Montserrat),
+          displayMedium: TextStyle(fontFamily: Montserrat),
+          displaySmall: TextStyle(fontFamily: Montserrat)),
       visualDensity: VisualDensity.adaptivePlatformDensity,
       appBarTheme: const AppBarTheme(
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -53,7 +53,7 @@ class AppTheme {
     return ThemeData(
       scaffoldBackgroundColor: kWhiteColor,
       colorScheme: _shrineColorScheme,
-      fontFamily: Lato,
+      fontFamily: Montserrat,
       appBarTheme: appBarTheme(),
       textTheme: textTheme(),
       // inputDecorationTheme: inputDecorationTheme(),
@@ -80,14 +80,14 @@ class AppTheme {
     brightness: Brightness.light,
   );
 
-  static Color shrinePink50 = Color(0xFFFEEAE6);
-  static Color shrinePink100 = Color(0xFFFEDBD0);
-  static Color shrinePink300 = Color(0xFFFBB8AC);
-  static Color shrinePink400 = Color(0xFFEAA4A4);
-  static Color shrineBrown900 = Color(0xFF442B2D);
-  static Color shrineBrown600 = Color(0xFF7D4F52);
-  static Color shrineErrorRed = Color(0xFFC5032B);
-  static Color shrineSurfaceWhite = Color(0xFFFFFBFA);
+  static Color shrinePink50 = const Color(0xFFFEEAE6);
+  static Color shrinePink100 = const Color(0xFFFEDBD0);
+  static Color shrinePink300 = const Color(0xFFFBB8AC);
+  static Color shrinePink400 = const Color(0xFFEAA4A4);
+  static Color shrineBrown900 = const Color(0xFF442B2D);
+  static Color shrineBrown600 = const Color(0xFF7D4F52);
+  static Color shrineErrorRed = const Color(0xFFC5032B);
+  static Color shrineSurfaceWhite = const Color(0xFFFFFBFA);
   static Color shrineBackgroundWhite = Colors.white;
 
   static InputDecorationTheme inputDecorationTheme() {

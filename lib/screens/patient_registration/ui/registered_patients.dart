@@ -254,7 +254,10 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                             color: Colors.transparent,
                             child: InkWell(
                               borderRadius: BorderRadius.circular(5),
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, AppRoutes.patientRegEditScreen);
+                              },
                               child: Ink(
                                 child: Image.asset(
                                   icEdit,

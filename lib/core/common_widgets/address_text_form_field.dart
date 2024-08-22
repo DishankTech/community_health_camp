@@ -80,7 +80,8 @@ class AppAddressRoundTextField extends StatelessWidget {
                     : BoxConstraints(
                         maxHeight: getProportionateScreenHeight(40)),
                 contentPadding: EdgeInsets.symmetric(
-                    vertical: 0, horizontal: getProportionateScreenHeight(10)),
+                    vertical: responsiveHeight(17),
+                    horizontal: getProportionateScreenHeight(18)),
                 fillColor: kWhiteColor,
                 filled: true,
                 hintText: hint,

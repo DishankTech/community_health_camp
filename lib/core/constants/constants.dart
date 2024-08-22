@@ -28,7 +28,6 @@ const kTextOpacityColor = Color(0xB3E4E4E4);
 const kTextDarkBlueColor = Color(0xFF2C3F6E);
 const kWhiteColor = Color(0xFFFFFFFF);
 const offWhite = Color(0xFFB1B1B1);
-const kHintColor = Color(0xFF2856FB);
 //profile
 const kActiveBtnColor = Color(0xFF700033);
 const kInActiveBtnColor = Color(0xFF970045);
@@ -46,7 +45,7 @@ const kRegistrationBgColor = Color(0xFFF8F8F8);
 const kLabelTextColor = Color(0xFF515151);
 const kListBGColor = Color(0xFFF5F5F5);
 const kContainerBack = Color(0xFFF5F5F5);
-
+const kHintColor = Color(0xFF666666);
 // final headingStyle = TextStyle(
 //   fontSize: getProportionateScreenWidth(28),
 //   fontWeight: FontWeight.bold,

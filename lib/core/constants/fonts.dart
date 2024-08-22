@@ -1,1 +1,1 @@
-const String Lato = "Montserrat";
+const String Montserrat = "Montserrat";

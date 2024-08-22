@@ -6,7 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 PreferredSize mAppBarV1(
-    {required String title, required BuildContext context, Widget? suffix}) {
+    {required String title,
+    required BuildContext context,
+    Widget? suffix,
+    Widget? leading}) {
   return PreferredSize(
     preferredSize: Size.fromHeight(responsiveHeight(60)),
     child: Padding(
@@ -22,15 +25,16 @@ PreferredSize mAppBarV1(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              GestureDetector(
-                onTap: () {
-                  Navigator.pop(context);
-                },
-                child: Image.asset(
-                  icArrowBack,
-                  height: responsiveHeight(30),
-                ),
-              ),
+              leading ??
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Image.asset(
+                      icArrowBack,
+                      height: responsiveHeight(30),
+                    ),
+                  ),
               SizedBox(
                 width: responsiveWidth(20),
               ),

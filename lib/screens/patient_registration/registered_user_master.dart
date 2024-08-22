@@ -112,13 +112,13 @@ class _RegisteredUserMasterScreenState
                                   text: "Stakeholder Type: ",
                                   style: TextStyle(
                                       color: kTextColor,
-                                      fontSize: responsiveFont(14),
+                                      fontSize: responsiveFont(12),
                                       fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
                                         text: _list[i].stakeholderType,
                                         style: TextStyle(
-                                            fontSize: responsiveFont(14),
+                                            fontSize: responsiveFont(12),
                                             color: kTextColor,
                                             fontWeight: FontWeight.normal))
                                   ],
@@ -132,13 +132,13 @@ class _RegisteredUserMasterScreenState
                                   text: "Stakeholder Name: ",
                                   style: TextStyle(
                                       color: kTextColor,
-                                      fontSize: responsiveFont(14),
+                                      fontSize: responsiveFont(12),
                                       fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
                                         text: _list[i].stakeholderName,
                                         style: TextStyle(
-                                            fontSize: responsiveFont(14),
+                                            fontSize: responsiveFont(12),
                                             color: kTextColor,
                                             fontWeight: FontWeight.normal))
                                   ],
@@ -152,13 +152,13 @@ class _RegisteredUserMasterScreenState
                                   text: "Full Name: ",
                                   style: TextStyle(
                                       color: kTextColor,
-                                      fontSize: responsiveFont(14),
+                                      fontSize: responsiveFont(12),
                                       fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
                                         text: _list[i].name,
                                         style: TextStyle(
-                                            fontSize: responsiveFont(14),
+                                            fontSize: responsiveFont(12),
                                             color: kTextColor,
                                             fontWeight: FontWeight.normal))
                                   ],
@@ -172,13 +172,13 @@ class _RegisteredUserMasterScreenState
                                   text: "Designation/Member Type : ",
                                   style: TextStyle(
                                       color: kTextColor,
-                                      fontSize: responsiveFont(14),
+                                      fontSize: responsiveFont(12),
                                       fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
                                         text: _list[i].designationType,
                                         style: TextStyle(
-                                            fontSize: responsiveFont(14),
+                                            fontSize: responsiveFont(12),
                                             color: kTextColor,
                                             fontWeight: FontWeight.normal))
                                   ],
@@ -192,13 +192,13 @@ class _RegisteredUserMasterScreenState
                                   text: "Mobile No : ",
                                   style: TextStyle(
                                       color: kTextColor,
-                                      fontSize: responsiveFont(14),
+                                      fontSize: responsiveFont(12),
                                       fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
                                         text: _list[i].mobileNo,
                                         style: TextStyle(
-                                            fontSize: responsiveFont(14),
+                                            fontSize: responsiveFont(12),
                                             color: kTextColor,
                                             fontWeight: FontWeight.normal))
                                   ],
@@ -212,13 +212,13 @@ class _RegisteredUserMasterScreenState
                                   text: "Email : ",
                                   style: TextStyle(
                                       color: kTextColor,
-                                      fontSize: responsiveFont(14),
+                                      fontSize: responsiveFont(12),
                                       fontWeight: FontWeight.bold),
                                   children: [
                                     TextSpan(
                                         text: _list[i].email,
                                         style: TextStyle(
-                                            fontSize: responsiveFont(14),
+                                            fontSize: responsiveFont(12),
                                             color: kTextColor,
                                             fontWeight: FontWeight.normal))
                                   ],

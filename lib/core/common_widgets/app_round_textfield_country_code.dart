@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 
-class AppRoundTextField extends StatelessWidget {
-  AppRoundTextField(
+class AppRoundTextFieldCountryCode extends StatelessWidget {
+  AppRoundTextFieldCountryCode(
       {super.key,
       required this.label,
       required this.controller,
@@ -21,8 +22,7 @@ class AppRoundTextField extends StatelessWidget {
       this.validators,
       this.errorText,
       this.onChange,
-      this.isFloatingLabelEnable,
-      this.borderRaius});
+      this.isFloatingLabelEnable});
 
   Widget label;
   TextEditingController controller;
@@ -41,7 +41,6 @@ class AppRoundTextField extends StatelessWidget {
   String? Function(String?)? validators;
   String? errorText;
   Function(String)? onChange;
-  double? borderRaius;
 
   @override
   Widget build(BuildContext context) {
@@ -49,8 +48,7 @@ class AppRoundTextField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: kTextFieldBorder, width: 1),
-          borderRadius:
-              BorderRadius.circular(borderRaius ?? responsiveHeight(60))),
+          borderRadius: BorderRadius.circular(responsiveHeight(60))),
       child: Padding(
         padding: EdgeInsets.all(responsiveHeight(2)),
         child: TextFormField(
@@ -65,7 +63,7 @@ class AppRoundTextField extends StatelessWidget {
           onTap: onTap,
           obscureText: obscureText ?? false,
           textCapitalization: textCapitalization ?? TextCapitalization.none,
-          textAlignVertical: TextAlignVertical.center,
+          textAlignVertical: TextAlignVertical.top,
           maxLines: maxLines ?? 1,
           maxLength: maxLength,
           minLines: maxLines ?? 1,
@@ -74,18 +72,12 @@ class AppRoundTextField extends StatelessWidget {
           decoration: InputDecoration(
               border: InputBorder.none,
               errorText: errorText,
-              label: label,
               errorStyle: TextStyle(
                   fontSize: responsiveFont(12), fontWeight: FontWeight.w400),
               counterText: "",
               constraints: (maxLines != null && maxLines! > 1)
                   ? null
                   : BoxConstraints(maxHeight: responsiveHeight(50)),
-              floatingLabelStyle: TextStyle(
-                fontSize: controller.text.isNotEmpty
-                    ? responsiveFont(16)
-                    : responsiveFont(14),
-              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: responsiveHeight(9),
                   horizontal: responsiveHeight(20)),

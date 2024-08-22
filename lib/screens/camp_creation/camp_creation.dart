@@ -4,6 +4,7 @@ import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
 import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/constants/constants.dart';
+import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:flutter/material.dart';
@@ -74,9 +75,6 @@ class _CampCreationState extends State<CampCreation> {
                       children: [
                         AppRoundTextField(
                           controller: TextEditingController(),
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           onTap: () {
@@ -91,16 +89,26 @@ class _CampCreationState extends State<CampCreation> {
                           },
                           maxLength: 12,
                           readOnly: true,
-                          label: const Text(""),
-                          hint: "Stakeholder type*",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Stakeholder Type',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
-                            height: getProportionateScreenHeight(20),
-                            width: getProportionateScreenHeight(20),
+                            height: responsiveHeight(20),
+                            width: responsiveHeight(20),
                             child: Center(
                               child: Image.asset(
                                 icArrowDownOrange,
-                                height: getProportionateScreenHeight(20),
-                                width: getProportionateScreenHeight(20),
+                                height: responsiveHeight(20),
+                                width: responsiveHeight(20),
                               ),
                             ),
                           ),
@@ -110,9 +118,6 @@ class _CampCreationState extends State<CampCreation> {
                         ),
                         AppRoundTextField(
                           controller: TextEditingController(),
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           onTap: () {
@@ -124,18 +129,27 @@ class _CampCreationState extends State<CampCreation> {
                             commonBottonSheet(
                                 context, (p0) => null, "Location name", list);
                           },
-                          maxLength: 12,
                           readOnly: true,
-                          label: const Text(""),
-                          hint: "Location name*",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Location Name',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
-                            height: getProportionateScreenHeight(20),
-                            width: getProportionateScreenHeight(20),
+                            height: responsiveHeight(20),
+                            width: responsiveHeight(20),
                             child: Center(
                               child: Image.asset(
                                 icArrowDownOrange,
-                                height: getProportionateScreenHeight(20),
-                                width: getProportionateScreenHeight(20),
+                                height: responsiveHeight(20),
+                                width: responsiveHeight(20),
                               ),
                             ),
                           ),
@@ -145,9 +159,6 @@ class _CampCreationState extends State<CampCreation> {
                         ),
                         AppRoundTextField(
                           controller: TextEditingController(),
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           onTap: () {
@@ -159,18 +170,27 @@ class _CampCreationState extends State<CampCreation> {
                             commonBottonSheet(
                                 context, (p0) => null, "Camp name", list);
                           },
-                          maxLength: 12,
                           readOnly: true,
-                          label: const Text(""),
-                          hint: "Camp name*",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Camp Name',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
-                            height: getProportionateScreenHeight(20),
-                            width: getProportionateScreenHeight(20),
+                            height: responsiveHeight(20),
+                            width: responsiveHeight(20),
                             child: Center(
                               child: Image.asset(
                                 icArrowDownOrange,
-                                height: getProportionateScreenHeight(20),
-                                width: getProportionateScreenHeight(20),
+                                height: responsiveHeight(20),
+                                width: responsiveHeight(20),
                               ),
                             ),
                           ),
@@ -180,22 +200,29 @@ class _CampCreationState extends State<CampCreation> {
                         ),
                         AppRoundTextField(
                           controller: TextEditingController(),
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.number,
+                          readOnly: true,
                           onChange: (p0) {},
-                          maxLength: 12,
-                          label: const Text(""),
-                          hint: "Proposed camp date & Time *",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Proposed camp date & time',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
-                            height: getProportionateScreenHeight(20),
-                            width: getProportionateScreenHeight(20),
+                            height: responsiveHeight(20),
+                            width: responsiveHeight(20),
                             child: Center(
                               child: Image.asset(
                                 icCalendar,
-                                height: getProportionateScreenHeight(20),
-                                width: getProportionateScreenHeight(20),
+                                height: responsiveHeight(20),
+                                width: responsiveHeight(20),
                               ),
                             ),
                           ),
@@ -285,34 +312,42 @@ class _CampCreationState extends State<CampCreation> {
               ),
               AppRoundTextField(
                 controller: TextEditingController(),
-                inputStyle: TextStyle(
-                    fontSize: responsiveFont(14), color: kTextBlackColor),
                 inputType: TextInputType.number,
                 onChange: (p0) {},
-                maxLength: 12,
-                label: const Text(""),
-                hint: "Username",
+                label: RichText(
+                  text: const TextSpan(
+                      text: 'Username',
+                      style:
+                          TextStyle(color: kHintColor, fontFamily: Montserrat),
+                      children: [
+                        TextSpan(text: "*", style: TextStyle(color: Colors.red))
+                      ]),
+                ),
+                hint: "",
               ),
               SizedBox(
                 height: responsiveHeight(20),
               ),
               AppRoundTextField(
                 controller: TextEditingController(),
-                inputStyle: TextStyle(
-                    fontSize: responsiveFont(14), color: kTextBlackColor),
                 inputType: TextInputType.number,
                 onChange: (p0) {},
-                maxLength: 12,
-                label: const Text(""),
-                hint: "Login Name",
+                label: RichText(
+                  text: const TextSpan(
+                      text: 'Login Name',
+                      style:
+                          TextStyle(color: kHintColor, fontFamily: Montserrat),
+                      children: [
+                        TextSpan(text: "*", style: TextStyle(color: Colors.red))
+                      ]),
+                ),
+                hint: "",
               ),
               SizedBox(
                 height: responsiveHeight(30),
               ),
               AppRoundTextField(
                 controller: TextEditingController(),
-                inputStyle: TextStyle(
-                    fontSize: responsiveFont(14), color: kTextBlackColor),
                 inputType: TextInputType.number,
                 onChange: (p0) {},
                 onTap: () {
@@ -324,18 +359,25 @@ class _CampCreationState extends State<CampCreation> {
                   commonBottonSheet(
                       context, (p0) => null, "Designation/Member Type", list);
                 },
-                maxLength: 12,
                 readOnly: true,
-                label: const Text(""),
-                hint: "Designation/Member Type*",
+                label: RichText(
+                  text: const TextSpan(
+                      text: 'Designation/Member Type',
+                      style:
+                          TextStyle(color: kHintColor, fontFamily: Montserrat),
+                      children: [
+                        TextSpan(text: "*", style: TextStyle(color: Colors.red))
+                      ]),
+                ),
+                hint: "",
                 suffix: SizedBox(
-                  height: getProportionateScreenHeight(20),
-                  width: getProportionateScreenHeight(20),
+                  height: responsiveHeight(20),
+                  width: responsiveHeight(20),
                   child: Center(
                     child: Image.asset(
                       icArrowDownOrange,
-                      height: getProportionateScreenHeight(20),
-                      width: getProportionateScreenHeight(20),
+                      height: responsiveHeight(20),
+                      width: responsiveHeight(20),
                     ),
                   ),
                 ),
@@ -348,8 +390,6 @@ class _CampCreationState extends State<CampCreation> {
                   Expanded(
                     child: AppRoundTextField(
                       controller: TextEditingController(),
-                      inputStyle: TextStyle(
-                          fontSize: responsiveFont(14), color: kTextBlackColor),
                       inputType: TextInputType.number,
                       onChange: (p0) {},
                       onTap: () {
@@ -357,16 +397,26 @@ class _CampCreationState extends State<CampCreation> {
                       },
                       maxLength: 12,
                       readOnly: true,
-                      label: const Text(""),
-                      hint: "Country Code*",
+                      label: RichText(
+                        text: const TextSpan(
+                            text: 'Country Code',
+                            style: TextStyle(
+                                color: kHintColor, fontFamily: Montserrat),
+                            children: [
+                              TextSpan(
+                                  text: "*",
+                                  style: TextStyle(color: Colors.red))
+                            ]),
+                      ),
+                      hint: "",
                       suffix: SizedBox(
-                        height: getProportionateScreenHeight(20),
-                        width: getProportionateScreenHeight(20),
+                        height: responsiveHeight(20),
+                        width: responsiveHeight(20),
                         child: Center(
                           child: Image.asset(
                             icArrowDownOrange,
-                            height: getProportionateScreenHeight(20),
-                            width: getProportionateScreenHeight(20),
+                            height: responsiveHeight(20),
+                            width: responsiveHeight(20),
                           ),
                         ),
                       ),
@@ -385,18 +435,27 @@ class _CampCreationState extends State<CampCreation> {
                       onTap: () {
                         genderBottomSheet(context, (p0) => null);
                       },
-                      maxLength: 12,
-                      readOnly: true,
-                      label: const Text(""),
-                      hint: "Mobile no*",
+                      maxLength: 10,
+                      label: RichText(
+                        text: const TextSpan(
+                            text: 'Mobile No',
+                            style: TextStyle(
+                                color: kHintColor, fontFamily: Montserrat),
+                            children: [
+                              TextSpan(
+                                  text: "*",
+                                  style: TextStyle(color: Colors.red))
+                            ]),
+                      ),
+                      hint: "",
                       suffix: SizedBox(
-                        height: getProportionateScreenHeight(20),
-                        width: getProportionateScreenHeight(20),
+                        height: responsiveHeight(20),
+                        width: responsiveHeight(20),
                         child: Center(
                           child: Image.asset(
                             icArrowDownOrange,
-                            height: getProportionateScreenHeight(20),
-                            width: getProportionateScreenHeight(20),
+                            height: responsiveHeight(20),
+                            width: responsiveHeight(20),
                           ),
                         ),
                       ),

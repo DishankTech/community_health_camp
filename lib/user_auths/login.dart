@@ -199,7 +199,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           title: "Login",
                           onTap: () async {
-                            validateFields();
+                            Navigator.pushNamed(context, AppRoutes.dashboard);
+                            // validateFields();
                           },
                         )
                       ],

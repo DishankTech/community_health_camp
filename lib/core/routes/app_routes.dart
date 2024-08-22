@@ -1,10 +1,13 @@
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
+import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/location_master/location_master.dart';
-import 'package:community_health_app/screens/patient_registration/patient_registration.dart';
-import 'package:community_health_app/screens/patient_registration/registered_patients.dart';
+import 'package:community_health_app/screens/patient_registration/ui/patient_registration.dart';
+import 'package:community_health_app/screens/patient_registration/ui/patient_registration_edit.dart';
+import 'package:community_health_app/screens/patient_registration/ui/registered_patients.dart';
 import 'package:community_health_app/screens/patient_registration/registered_user_master.dart';
 import 'package:community_health_app/screens/patient_registration/stakeholder_master.dart';
 import 'package:community_health_app/screens/patient_registration/user_master.dart';
+import 'package:community_health_app/screens/patient_registration/user_master_edit.dart';
 import 'package:community_health_app/user_auths/createnewpassword_view.dart';
 import 'package:community_health_app/user_auths/enterpin_view.dart';
 import 'package:community_health_app/user_auths/forgotpassword_view.dart';
@@ -20,7 +23,6 @@ class AppRoutes {
   static const String splash = "/";
   static const String loginScreen = "/loginScreen";
   static const String introScreen = "/introScreen";
-  static const String dashboard = "/dashboard";
   static const String mobileOTP = "/mobileOTP";
   static const String setOTP = "/setOTP";
   static const String homeScreen = "/homeScreen";
@@ -43,11 +45,14 @@ class AppRoutes {
   static const String campCreation = "/campCreation";
   static const String patientRegListScreen = "/patientRegListScreen";
   static const String patientRegScreen = "/patientRegScreen";
+  static const String patientRegEditScreen = "/patientRegEditScreen";
   static const String userMasterScreen = "/userMasterScreen";
+  static const String userMasterEditScreen = "/userMasterEditScreen";
   static const String stakeholderMasterScreen = "/stakeholderMasterScreen";
   static const String registeredUserMaster = "/registeredUserMaster";
   static const String pinValidationPage = "/PinValidationPage";
   static const String updatePasswordPage = "/UpdatePasswordPage";
+  static const String dashboard = "/dashboard";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -63,6 +68,10 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const UserMasterScreen(),
         );
+      case userMasterEditScreen:
+        return MaterialPageRoute(
+          builder: (_) => const UserMasterEdtiScreen(),
+        );
       case stakeholderMasterScreen:
         return MaterialPageRoute(
           builder: (_) => const StakeHolderMasterScreen(),
@@ -70,6 +79,10 @@ class AppRoutes {
       case patientRegListScreen:
         return MaterialPageRoute(
           builder: (_) => const RegisteredPatientsScreen(),
+        );
+      case patientRegEditScreen:
+        return MaterialPageRoute(
+          builder: (_) => const PatientRegistrationEditScreen(),
         );
       case registeredUserMaster:
         return MaterialPageRoute(
@@ -101,6 +114,10 @@ class AppRoutes {
       case campCreation:
         return MaterialPageRoute(
           builder: (_) => const CampCreation(),
+        );
+      case dashboard:
+        return MaterialPageRoute(
+          builder: (_) => const DashboardScreen(),
         );
 
       default:

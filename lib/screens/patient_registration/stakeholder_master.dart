@@ -1,8 +1,10 @@
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
+import 'package:community_health_app/core/common_widgets/app_round_textfield_country_code.dart';
 import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/constants/constants.dart';
+import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
@@ -119,18 +121,24 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                         ),
                         AppRoundTextField(
                           controller: _stakeholderTypeTextController,
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.text,
                           onChange: (p0) {},
                           onTap: () {
                             stakeholderBottomSheet(context, (p0) => null);
                           },
-                          maxLength: 12,
                           readOnly: true,
-                          label: const Text(""),
-                          hint: "Stakeholder Type *",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Stakeholder Tye',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
                             height: responsiveHeight(20),
                             width: responsiveHeight(20),
@@ -148,18 +156,24 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                         ),
                         AppRoundTextField(
                           controller: _stakeholderSubTypeTextController,
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.text,
                           onChange: (p0) {},
                           onTap: () {
                             stakeholderBottomSheet(context, (p0) => null);
                           },
-                          maxLength: 12,
                           readOnly: true,
-                          label: const Text(""),
-                          hint: "Stakeholder Sub Type *",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Stakeholder Sub Type',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
                             height: responsiveHeight(20),
                             width: responsiveHeight(20),
@@ -177,15 +191,21 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                         ),
                         AppRoundTextField(
                           controller: _stakeholderNameTextController,
-                          inputStyle: TextStyle(
-                              fontSize: responsiveFont(14),
-                              color: kTextBlackColor),
                           inputType: TextInputType.name,
                           onChange: (p0) {},
-                          maxLength: 12,
                           readOnly: true,
-                          label: const Text(""),
-                          hint: "Stakeholder Name*",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Stakeholder Name',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: [
+                                  TextSpan(
+                                      text: "*",
+                                      style: TextStyle(color: Colors.red))
+                                ]),
+                          ),
+                          hint: "",
                           suffix: SizedBox(
                             height: responsiveHeight(20),
                             width: responsiveHeight(20),
@@ -204,8 +224,8 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                         Row(
                           children: [
                             Flexible(
-                              flex: 1,
-                              child: AppRoundTextField(
+                              flex: 2,
+                              child: AppRoundTextFieldCountryCode(
                                 controller: _mobileNoCountryCodeTextController,
                                 inputStyle: TextStyle(
                                     fontSize: responsiveFont(14),
@@ -232,17 +252,25 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                               width: responsiveHeight(10),
                             ),
                             Flexible(
-                              flex: 3,
+                              flex: 5,
                               child: AppRoundTextField(
                                 controller: _mobileNoTextController,
-                                inputStyle: TextStyle(
-                                    fontSize: responsiveFont(14),
-                                    color: kTextBlackColor),
                                 inputType: TextInputType.phone,
                                 onChange: (p0) {},
                                 maxLength: 10,
-                                label: const Text(""),
-                                hint: "Mobile No",
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Mobile No',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: [
+                                        TextSpan(
+                                            text: "*",
+                                            style: TextStyle(color: Colors.red))
+                                      ]),
+                                ),
+                                hint: "",
                               ),
                             ),
                           ],
@@ -251,10 +279,17 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                           height: responsiveHeight(20),
                         ),
                         AppRoundTextField(
-                            label: const SizedBox.shrink(),
-                            controller: _emailIdTextController,
-                            inputType: TextInputType.emailAddress,
-                            hint: "Email Id"),
+                          controller: _emailIdTextController,
+                          inputType: TextInputType.emailAddress,
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Email Id',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: []),
+                          ),
+                          hint: "",
+                        ),
                         SizedBox(
                           height: responsiveHeight(20),
                         ),
@@ -265,27 +300,20 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                               child: AppRoundTextField(
                                 controller: _districtTextController,
                                 readOnly: true,
-                                inputStyle: TextStyle(
-                                    fontSize: responsiveFont(14),
-                                    color: kTextBlackColor),
                                 inputType: TextInputType.text,
                                 label: RichText(
-                                  text: TextSpan(
-                                    text: 'District',
-                                    style: TextStyle(
-                                        color: kLabelTextColor,
-                                        fontSize: responsiveFont(14)),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: '',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: responsiveFont(14)),
-                                      ),
-                                    ],
-                                  ),
+                                  text: const TextSpan(
+                                      text: 'District',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: [
+                                        TextSpan(
+                                            text: "*",
+                                            style: TextStyle(color: Colors.red))
+                                      ]),
                                 ),
-                                hint: "District*",
+                                hint: "",
                                 onTap: () {},
                                 suffix: SizedBox(
                                   height: responsiveHeight(20),
@@ -309,27 +337,21 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                   controller: _talukaTextController,
                                   textCapitalization: TextCapitalization.none,
                                   inputType: TextInputType.text,
-                                  inputStyle: TextStyle(
-                                      fontSize: responsiveFont(14),
-                                      color: kTextBlackColor),
                                   readOnly: true,
                                   label: RichText(
-                                    text: TextSpan(
-                                      text: 'Taluka',
-                                      style: TextStyle(
-                                          color: kLabelTextColor,
-                                          fontSize: responsiveFont(14)),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: '',
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: responsiveFont(14)),
-                                        ),
-                                      ],
-                                    ),
+                                    text: const TextSpan(
+                                        text: 'Taluka',
+                                        style: TextStyle(
+                                            color: kHintColor,
+                                            fontFamily: Montserrat),
+                                        children: [
+                                          TextSpan(
+                                              text: "*",
+                                              style:
+                                                  TextStyle(color: Colors.red))
+                                        ]),
                                   ),
-                                  hint: "Taluka*",
+                                  hint: "",
                                   onTap: () {},
                                   suffix: SizedBox(
                                     height: responsiveHeight(20),
@@ -356,27 +378,20 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                 controller: _cityTextController,
                                 readOnly: true,
                                 maxLength: 10,
-                                inputStyle: TextStyle(
-                                    fontSize: responsiveFont(14),
-                                    color: kTextBlackColor),
                                 inputType: TextInputType.text,
                                 label: RichText(
-                                  text: TextSpan(
-                                    text: 'City',
-                                    style: TextStyle(
-                                        color: kLabelTextColor,
-                                        fontSize: responsiveFont(14)),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text: '',
-                                        style: TextStyle(
-                                            color: Colors.red,
-                                            fontSize: responsiveFont(14)),
-                                      ),
-                                    ],
-                                  ),
+                                  text: const TextSpan(
+                                      text: 'City',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: [
+                                        TextSpan(
+                                            text: "*",
+                                            style: TextStyle(color: Colors.red))
+                                      ]),
                                 ),
-                                hint: "City",
+                                hint: "",
                                 onTap: () {},
                                 suffix: SizedBox(
                                   height: responsiveHeight(20),
@@ -400,27 +415,21 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                   controller: _divisionTextController,
                                   textCapitalization: TextCapitalization.none,
                                   inputType: TextInputType.text,
-                                  inputStyle: TextStyle(
-                                      fontSize: responsiveFont(14),
-                                      color: kTextBlackColor),
                                   readOnly: true,
                                   label: RichText(
-                                    text: TextSpan(
-                                      text: 'Division',
-                                      style: TextStyle(
-                                          color: kLabelTextColor,
-                                          fontSize: responsiveFont(14)),
-                                      children: <TextSpan>[
-                                        TextSpan(
-                                          text: '',
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: responsiveFont(14)),
-                                        ),
-                                      ],
-                                    ),
+                                    text: const TextSpan(
+                                        text: 'Division',
+                                        style: TextStyle(
+                                            color: kHintColor,
+                                            fontFamily: Montserrat),
+                                        children: [
+                                          TextSpan(
+                                              text: "*",
+                                              style:
+                                                  TextStyle(color: Colors.red))
+                                        ]),
                                   ),
-                                  hint: "Division",
+                                  hint: "",
                                   onTap: () {},
                                   suffix: SizedBox(
                                     height: responsiveHeight(20),
@@ -447,32 +456,58 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                           inputType: TextInputType.number,
                           onChange: (p0) {},
                           maxLength: 6,
-                          label: const Text(""),
-                          hint: "Pincode",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Pin code',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: []),
+                          ),
+                          hint: "",
                         ),
                         SizedBox(
                           height: responsiveHeight(20),
                         ),
                         AppRoundTextField(
-                            label: const SizedBox.shrink(),
-                            controller: _address1TextController,
-                            inputType: TextInputType.streetAddress,
-                            hint: "Address 1"),
+                          controller: _address1TextController,
+                          inputType: TextInputType.streetAddress,
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Address 1',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: []),
+                          ),
+                          hint: "",
+                        ),
                         SizedBox(
                           height: responsiveHeight(20),
                         ),
                         AppRoundTextField(
-                            label: const SizedBox.shrink(),
-                            controller: _address2TextController,
-                            inputType: TextInputType.streetAddress,
-                            hint: "Address 2"),
+                          controller: _address2TextController,
+                          inputType: TextInputType.streetAddress,
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Address 2',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: []),
+                          ),
+                          hint: "",
+                        ),
                         SizedBox(
                           height: responsiveHeight(30),
                         ),
                         AppRoundTextField(
-                          label: const SizedBox.shrink(),
                           controller: _statusTextController,
-                          hint: "Status",
+                          label: RichText(
+                            text: const TextSpan(
+                                text: 'Status',
+                                style: TextStyle(
+                                    color: kHintColor, fontFamily: Montserrat),
+                                children: []),
+                          ),
+                          hint: "",
                           readOnly: true,
                           onTap: () {
                             stakeholderStatusBottomSheet(context, (p0) => null);
