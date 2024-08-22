@@ -27,6 +27,8 @@ import 'package:flutter/material.dart';
 import 'package:community_health_app/screens/splash_screen.dart';
 import 'package:community_health_app/core/exceptions/route_exception.dart';
 
+import '../../screens/camp_calendar/ui/camp_wise_registered_patients.dart';
+
 class AppRoutes {
   const AppRoutes._();
 
@@ -70,6 +72,8 @@ class AppRoutes {
   static const String campCalendar = "/CampCalendarPage";
   static const String dateWiseCamps = "/DateWiseCampsScreen";
   static const String districtWiseCamps = "/DistrictWiseCampsScreen";
+  static const String campWiseRegisteredPatients =
+      "/CampWiseRegisteredPatientsScreen";
   static const String campApproval = "/campApproval";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -148,6 +152,10 @@ class AppRoutes {
       case districtWiseCamps:
         return MaterialPageRoute(
           builder: (_) => const DistrictWiseCampsScreen(),
+        );
+      case campWiseRegisteredPatients:
+        return MaterialPageRoute(
+          builder: (_) => const CampWiseRegisteredPatientsScreen(),
         );
       case campApproval:
         return MaterialPageRoute(
