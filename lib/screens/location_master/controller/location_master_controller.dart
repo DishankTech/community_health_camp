@@ -2,6 +2,10 @@ import 'dart:convert';
 
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
+import 'package:community_health_app/screens/location_master/model/SubLocationModel/sub_location_details.dart';
+import 'package:community_health_app/screens/location_master/model/SubLocationModel/sub_location_model.dart';
+import 'package:community_health_app/screens/location_master/model/country/country_model.dart';
+import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
 import 'package:community_health_app/screens/location_master/model/division/lookup_det.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,15 +16,15 @@ import '../model/division/division_model.dart';
 class LocationMasterController extends GetxController {
   TextEditingController countryController = TextEditingController();
   String? selectedCountryVal;
-  LookupDet? selectedCountry;
-  LookupDet? selectedState;
+  LookupDetHierarchical? selectedCountry;
+  SubLocationDetails? selectedState;
   String? selectedStateVal;
   String? selectedDistVal;
-  LookupDet? selectedDist;
+  SubLocationDetails? selectedDist;
   String? selectedTalukaVal;
-  LookupDet? selectedTaluka;
+  SubLocationDetails? selectedTaluka;
   String? selectedCityVal;
-  LookupDet? selectedCity;
+  SubLocationDetails? selectedCity;
 
   bool hasInternet = true;
   bool isLoading = false;
@@ -48,6 +52,10 @@ class LocationMasterController extends GetxController {
   String? status;
 
   DivisionModel? divisinModel;
+
+  CountryModel? countryModel;
+
+  SubLocationModel? subLocationModel;
 
   getDivisionList() async {
     isLoading = true;
@@ -106,6 +114,84 @@ class LocationMasterController extends GetxController {
     update();
   }
 
+  getCountry() async {
+    isLoading = true;
+    final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.getAllAddress);
+    final Map<String, dynamic> body = {
+      "lookup_det_code_list1": [
+        {"lookup_det_code": "CRY"}
+      ]
+    };
+
+    String jsonbody = json.encode(body);
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+    debugPrint(body.toString());
+
+    final response = await http.post(uri, headers: headers, body: jsonbody);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      countryModel = CountryModel.fromJson(data);
+      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+  getState(id) async {
+    isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      subLocationModel = SubLocationModel.fromJson(data);
+      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
   saveLocationMaster() async {
     isLoading = true;
     final uri =
@@ -119,11 +205,11 @@ class LocationMasterController extends GetxController {
       "email_id": emailId.text,
       "address1": address1.text,
       "address2": address2.text,
-      "lookup_det_hier_id_country": selectedCountry?.lookupDetId,
-      "lookup_det_hier_id_state": selectedState?.lookupDetId,
-      "lookup_det_hier_id_district": selectedDist?.lookupDetId,
-      "lookup_det_hier_id_taluka": selectedTaluka?.lookupDetId,
-      "lookup_det_hier_id_city": selectedCity?.lookupDetId,
+      "lookup_det_hier_id_country": selectedCountry?.lookupDetHierId,
+      "lookup_det_hier_id_state": selectedState?.lookupDetHierId,
+      "lookup_det_hier_id_district": selectedDist?.lookupDetHierId,
+      "lookup_det_hier_id_taluka": selectedTaluka?.lookupDetHierId,
+      "lookup_det_hier_id_city": selectedCity?.lookupDetHierId,
       "lookup_det_id_division": 0,
       "org_id": 0,
       "status": 0

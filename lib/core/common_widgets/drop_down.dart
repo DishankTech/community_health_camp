@@ -554,7 +554,153 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
                               width: responsiveWidth(6),
                             ),
                             Text(
-                              widget.list[i].lookupDetDescEn ?? "",
+                              widget.list[i].lookupDetHierDescEn ?? "",
+                              style: TextStyle(
+                                  fontSize: responsiveFont(14.0),
+                                  fontWeight: selectedIndex == i
+                                      ? FontWeight.bold
+                                      : FontWeight.w500),
+                            ),
+                            const Spacer(),
+                            if (selectedIndex == i)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+Future<dynamic> commonBottomSheet1(
+    BuildContext context,
+    Function(dynamic) onItemSelected,
+    String bottomSheetTitle,
+    List<dynamic> list,
+    ) {
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: false,
+    builder: (c) => _CommonBottomSheetContent1(
+      onItemSelected: onItemSelected,
+      bottomSheetTitle: bottomSheetTitle,
+      list: list,
+    ),
+  );
+}
+
+
+class _CommonBottomSheetContent1 extends StatefulWidget {
+  final Function(dynamic) onItemSelected;
+  final String bottomSheetTitle;
+  final List<dynamic> list;
+
+  const _CommonBottomSheetContent1({
+    required this.onItemSelected,
+    required this.bottomSheetTitle,
+    required this.list,
+  });
+
+  @override
+  State<_CommonBottomSheetContent1> createState() =>
+      _CommonBottomSheetContent1State();
+}
+
+class _CommonBottomSheetContent1State extends State<_CommonBottomSheetContent1> {
+  int? selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth,
+      decoration: BoxDecoration(
+        color: kWhiteColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(responsiveHeight(50)),
+          topRight: Radius.circular(responsiveHeight(50)),
+        ),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.bottomSheetTitle,
+                  style: TextStyle(
+                    fontSize: responsiveFont(17),
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.cancel_presentation),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: SizeConfig.screenHeight * 0.3,
+            child: ListView.builder(
+              itemCount: widget.list.length,
+              shrinkWrap: true,
+              itemBuilder: (c, i) => Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 12,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex = i;
+                      });
+
+                      widget.onItemSelected(widget.list[i]);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            selectedIndex == i
+                                ? Icon(
+                              Icons.radio_button_checked,
+                              color: kPrimaryColor,
+                              size: responsiveFont(14.0),
+                            )
+                                : Icon(
+                              Icons.circle_outlined,
+                              size: responsiveFont(14.0),
+                            ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Text(
+                              widget.list[i].lookupDetHierDescEn ?? "",
                               style: TextStyle(
                                   fontSize: responsiveFont(14.0),
                                   fontWeight: selectedIndex == i
