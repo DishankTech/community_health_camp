@@ -69,7 +69,7 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                       ? controller.isLoading
                           ? Container(
                               width: SizeConfig.screenWidth * 0.95,
-                              // height: SizeConfig.screenHeight * 0.7,
+                              height: SizeConfig.screenHeight * 0.7,
                               decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(
