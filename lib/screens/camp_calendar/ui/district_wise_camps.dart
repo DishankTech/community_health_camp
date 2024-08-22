@@ -27,10 +27,29 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
     super.initState();
 
     _districtWiseCampList.addAll([
-      DistrictWiseCampsModel(campId: "243305", campName: "Health Camp", campLocation: "Panchsheel Hospital, 368 /, Nana Peth,Pune 411042", noOfPatientRegisteredforCamp: "210"),
-      DistrictWiseCampsModel(campId: "243306", campName: "Health Camp", campLocation: "K.E.M. Hospital, 580/2, Rasta Peth, Vaidya Nanal Shastri Path, Pune 411011", noOfPatientRegisteredforCamp: "45"),
-      DistrictWiseCampsModel(campId: "243381", campName: "Health Camp", campLocation: "Joshi Hospital, Opposite Kamala Nehru Park,778, Shivajinagar, Pune 411004", noOfPatientRegisteredforCamp: "24"),
-      DistrictWiseCampsModel(campId: "243345", campName: "Health Camp", campLocation: "S. Hospital, 32/2, Erandwane, Near Mehendale Garage, Pune 411004", noOfPatientRegisteredforCamp: "31"),
+      DistrictWiseCampsModel(
+          campId: "243305",
+          campName: "Health Camp",
+          campLocation: "Panchsheel Hospital, 368 /, Nana Peth,Pune 411042",
+          noOfPatientRegisteredforCamp: "210"),
+      DistrictWiseCampsModel(
+          campId: "243306",
+          campName: "Health Camp",
+          campLocation:
+              "K.E.M. Hospital, 580/2, Rasta Peth, Vaidya Nanal Shastri Path, Pune 411011",
+          noOfPatientRegisteredforCamp: "45"),
+      DistrictWiseCampsModel(
+          campId: "243381",
+          campName: "Health Camp",
+          campLocation:
+              "Joshi Hospital, Opposite Kamala Nehru Park,778, Shivajinagar, Pune 411004",
+          noOfPatientRegisteredforCamp: "24"),
+      DistrictWiseCampsModel(
+          campId: "243345",
+          campName: "Health Camp",
+          campLocation:
+              "S. Hospital, 32/2, Erandwane, Near Mehendale Garage, Pune 411004",
+          noOfPatientRegisteredforCamp: "31"),
     ]);
   }
 
@@ -41,19 +60,22 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Change to your desired color
       statusBarBrightness: Brightness.light,
-      statusBarIconBrightness: Brightness.light, // For light text/icons on the status bar
+      statusBarIconBrightness:
+          Brightness.light, // For light text/icons on the status bar
     ));
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
+        decoration: const BoxDecoration(
+            image:
+                DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             mAppBarV1(
-                title: "District wise Camps",
-                context: context,
-               /* suffix: Material(
+              title: "District wise Camps",
+              context: context,
+              /* suffix: Material(
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(5),
@@ -67,12 +89,19 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                       ),
                     ),
                   ),
-                )*/),
+                )*/
+            ),
             Container(
               margin: EdgeInsets.all(5),
               decoration: BoxDecoration(
                   color: Colors.white,
-                  boxShadow: [BoxShadow(offset: Offset(0, 0), color: Colors.grey.withOpacity(0.5), spreadRadius: 1, blurRadius: 5)],
+                  boxShadow: [
+                    BoxShadow(
+                        offset: Offset(0, 0),
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 1,
+                        blurRadius: 5)
+                  ],
                   borderRadius: BorderRadius.circular(responsiveHeight(20))),
               child: Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -85,25 +114,31 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("District : ",style: TextStyle(
-                                fontSize: responsiveFont(14),
-                                color: kBlackColor,
-                                fontWeight: FontWeight.bold)),
+                            Text("District : ",
+                                style: TextStyle(
+                                    fontSize: responsiveFont(14),
+                                    color: kBlackColor,
+                                    fontWeight: FontWeight.bold)),
                             Text("Pune"),
                           ],
                         ),
-                        SizedBox(height: 2,),
+                        SizedBox(
+                          height: 2,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Date : ",style: TextStyle(fontSize: responsiveFont(14),
-                                color: kBlackColor,fontWeight: FontWeight.bold),),
+                            Text(
+                              "Date : ",
+                              style: TextStyle(
+                                  fontSize: responsiveFont(14),
+                                  color: kBlackColor,
+                                  fontWeight: FontWeight.bold),
+                            ),
                             Text("1 Aug 2024"),
                           ],
                         ),
-
-
                       ],
                     ),
                     Spacer(),
@@ -111,8 +146,13 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text("Total Camps",style: TextStyle(fontWeight: FontWeight.bold),),
-                        SizedBox(height: 4,),
+                        Text(
+                          "Total Camps",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(
+                          height: 4,
+                        ),
                         Container(
                           width: 35,
                           height: 35,
@@ -127,9 +167,12 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                             children: [
                               Container(
                                   child: Text(
-                                    "6",
-                                    style: TextStyle(color: kWhiteColor, fontWeight: FontWeight.bold, fontFamily: "Montserrat"),
-                                  )),
+                                "6",
+                                style: TextStyle(
+                                    color: kWhiteColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: "Montserrat"),
+                              )),
                             ],
                             mainAxisAlignment: MainAxisAlignment.center,
                           ),
@@ -151,8 +194,15 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                           margin: EdgeInsets.all(5),
                           decoration: BoxDecoration(
                               color: Colors.white,
-                              boxShadow: [BoxShadow(offset: Offset(0, 0), color: Colors.grey.withOpacity(0.5), spreadRadius: 1, blurRadius: 5)],
-                              borderRadius: BorderRadius.circular(responsiveHeight(20))),
+                              boxShadow: [
+                                BoxShadow(
+                                    offset: Offset(0, 0),
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 5)
+                              ],
+                              borderRadius:
+                                  BorderRadius.circular(responsiveHeight(20))),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Column(
@@ -163,50 +213,79 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                                   children: [
                                     Text(
                                       "Total Registered Patients : ",
-                                      style: TextStyle(fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Container(
-                                      margin: EdgeInsets.only(left: 4, right: 4),
-                                      padding: EdgeInsets.only(left: 10,right: 10,top: 4,bottom: 4),
+                                      margin:
+                                          EdgeInsets.only(left: 4, right: 4),
+                                      padding: EdgeInsets.only(
+                                          left: 10,
+                                          right: 10,
+                                          top: 4,
+                                          bottom: 4),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(10),
                                           ),
                                           color: kPrimaryColor),
                                       child: Text(
-                                        _districtWiseCampList[index].noOfPatientRegisteredforCamp,
-                                        style: TextStyle(color: kWhiteColor, fontWeight: FontWeight.bold, fontFamily: "Montserrat"),
+                                        _districtWiseCampList[index]
+                                            .noOfPatientRegisteredforCamp,
+                                        style: TextStyle(
+                                            color: kWhiteColor,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: "Montserrat"),
                                       ),
                                     )
                                   ],
                                 ),
-                                SizedBox(height: 4,),
+                                SizedBox(
+                                  height: 4,
+                                ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "Camp ID : ",
-                                          style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold),
+                                          style: TextStyle(
+                                              fontSize: responsiveFont(14),
+                                              color: kBlackColor,
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                        Text(_districtWiseCampList[index].campId),
+                                        Text(_districtWiseCampList[index]
+                                            .campId),
                                       ],
                                     ),
                                     SizedBox(
                                       height: 2,
                                     ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           "Camp Name : ",
-                                          style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold),
+                                          style: TextStyle(
+                                              fontSize: responsiveFont(14),
+                                              color: kBlackColor,
+                                              fontWeight: FontWeight.bold),
                                         ),
-                                        Text(_districtWiseCampList[index].campName, style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.normal)),
+                                        Text(
+                                            _districtWiseCampList[index]
+                                                .campName,
+                                            style: TextStyle(
+                                                fontSize: responsiveFont(14),
+                                                color: kBlackColor,
+                                                fontWeight: FontWeight.normal)),
                                       ],
                                     ),
                                     SizedBox(
@@ -215,11 +294,21 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                                     RichText(
                                       text: TextSpan(
                                         text: "Camp Location : ",
-                                        style: TextStyle(fontFamily: Lato, color: kBlackColor, fontSize: responsiveFont(14), fontWeight: FontWeight.bold),
+                                        style: TextStyle(
+                                            fontFamily: Montserrat,
+                                            color: kBlackColor,
+                                            fontSize: responsiveFont(14),
+                                            fontWeight: FontWeight.bold),
                                         children: [
                                           TextSpan(
-                                              text: _districtWiseCampList[index].campLocation,
-                                              style: TextStyle(fontFamily: Lato, fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.normal))
+                                              text: _districtWiseCampList[index]
+                                                  .campLocation,
+                                              style: TextStyle(
+                                                  fontFamily: Montserrat,
+                                                  fontSize: responsiveFont(14),
+                                                  color: kBlackColor,
+                                                  fontWeight:
+                                                      FontWeight.normal))
                                         ],
                                       ),
                                     ),

@@ -1,5 +1,6 @@
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
+import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
@@ -19,7 +20,8 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final String passwordPattern = r'^(?=.*[A-Za-z])(?=.*[\d@!#$_])[A-Za-z\d@!#$_]{8,}$'; //special character not necessary
+  final String passwordPattern =
+      r'^(?=.*[A-Za-z])(?=.*[\d@!#$_])[A-Za-z\d@!#$_]{8,}$'; //special character not necessary
 
   bool _obscureText_new = true;
   bool _obscureText_confirm = true;
@@ -54,18 +56,19 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 30, left: 10),
+                      margin: const EdgeInsets.only(top: 30, left: 10),
                       width: 50,
                       height: 50,
                       child: Material(
-                        color: Colors.transparent, // Use transparent if you don't want a background color
+                        color: Colors
+                            .transparent, // Use transparent if you don't want a background color
                         child: IconButton(
                           color: Colors.white,
                           onPressed: () {
                             print('Back button pressed');
                             Navigator.pop(context);
                           },
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.arrow_back,
                             color: Colors.white,
                           ),
@@ -76,10 +79,10 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 100,
                         ),
-                        Text(
+                        const Text(
                           "Create New Password ",
                           style: TextStyle(
                             color: Colors.black,
@@ -87,28 +90,41 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                             fontSize: 20,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Container(
                           width: MediaQuery.sizeOf(context).width * 0.9,
-                          child: Text(
+                          child: const Text(
                             "Set the password to your account so you can login and access all the features",
-                            style: TextStyle(color: Colors.black54, fontWeight: FontWeight.normal, fontSize: 14),
+                            style: TextStyle(
+                                color: Colors.black54,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14),
                             textAlign: TextAlign.center,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 30, right: 30),
+                          margin: const EdgeInsets.only(left: 30, right: 30),
                           child: AppRoundTextField(
                             controller: _newpasswordController,
-                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             onChange: (p0) {},
-                            label: const Text(""),
-                            hint: "New Password *",
+                            label: RichText(
+                              text: const TextSpan(
+                                  text: 'New Password',
+                                  style: TextStyle(
+                                      color: kHintColor,
+                                      fontFamily: Montserrat),
+                                  children: [
+                                    TextSpan(
+                                        text: "*",
+                                        style: TextStyle(color: Colors.red))
+                                  ]),
+                            ),
+                            hint: "",
                             validators: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'New Password is required';
@@ -128,14 +144,13 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                               onPressed: () {
                                 setState(() {
                                   _obscureText_new =
-                                  !_obscureText_new; // Toggle password visibility
+                                      !_obscureText_new; // Toggle password visibility
                                 });
                               },
                             ),
                           ),
-
-                          ),
-                          /*  child: TextFormField(
+                        ),
+                        /*  child: TextFormField(
                             obscureText: _obscureText_new,
                             controller: _newpasswordController,
                             decoration: InputDecoration(
@@ -182,17 +197,27 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                             },
                           ),*/
                         // ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         Container(
-                          margin: EdgeInsets.only(left: 30, right: 30),
+                          margin: const EdgeInsets.only(left: 30, right: 30),
                           child: AppRoundTextField(
                             controller: _confirmpasswordController,
-                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             onChange: (p0) {},
-                            label: const Text(""),
-                            hint: "Confirm Password *",
+                            label: RichText(
+                              text: const TextSpan(
+                                  text: 'Confirm Password',
+                                  style: TextStyle(
+                                      color: kHintColor,
+                                      fontFamily: Montserrat),
+                                  children: [
+                                    TextSpan(
+                                        text: "*",
+                                        style: TextStyle(color: Colors.red))
+                                  ]),
+                            ),
+                            hint: "",
                             validators: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Confirm Password is required';
@@ -212,7 +237,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                               onPressed: () {
                                 setState(() {
                                   _obscureText_confirm =
-                                  !_obscureText_confirm; // Toggle password visibility
+                                      !_obscureText_confirm; // Toggle password visibility
                                 });
                               },
                             ),
@@ -256,7 +281,7 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                             ),
                           ),*/
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30,
                         ),
                         Row(
@@ -264,15 +289,18 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                           children: [
                             Container(
                                 width: MediaQuery.sizeOf(context).width * 0.9,
-                                child: Text(
-                                    style: TextStyle(color: Colors.black54, fontWeight: FontWeight.normal, fontSize: 14),
+                                child: const Text(
+                                    style: TextStyle(
+                                        color: Colors.black54,
+                                        fontWeight: FontWeight.normal,
+                                        fontSize: 14),
                                     textAlign: TextAlign.center,
                                     "Note : The password must contain alphabet with 8 characters long and "
                                     "included at least one number or  special character.Special Characters allowed (@, !, #, \$, _) "
                                     '')),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 40,
                         ),
                         // Row(
@@ -372,21 +400,23 @@ class _UpdatePasswordPageState extends State<UpdatePasswordPage> {
                           title: "Update Password",
                           onTap: () {
                             if (_formKey.currentState!.validate()) {
-                              if (_newpasswordController.text.toString() == _confirmpasswordController.text.toString()) {
+                              if (_newpasswordController.text.toString() ==
+                                  _confirmpasswordController.text.toString()) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                     content: Text(
                                       'Validation Successfull',
                                     ),
                                     backgroundColor: Colors.green,
                                   ),
                                 );
-                                Navigator.pushNamed(context, AppRoutes.campCalendar);
+                                Navigator.pushNamed(
+                                    context, AppRoutes.campCalendar);
 
                                 // Get.to(const CampCalendarPage());
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                     content: Text('Passwords does not match'),
                                     backgroundColor: Colors.red,
                                   ),

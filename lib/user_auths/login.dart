@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _isLoading = false;
 
-  bool _obscureText=true;
+  bool _obscureText = true;
 
   @override
   void initState() {
@@ -84,14 +84,20 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const Text(
                 "Community Health Camp ",
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
               ),
               const SizedBox(
                 height: 50,
               ),
               const Text(
                 "LOGIN",
-                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+                style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18),
               ),
               const SizedBox(
                 height: 10,
@@ -107,7 +113,6 @@ class _LoginPageState extends State<LoginPage> {
                           'Please wait..',
                           style: TextStyle(
                             color: Colors.black,
-                            fontFamily: Lato,
                           ),
                         ),
                       ],
@@ -118,22 +123,20 @@ class _LoginPageState extends State<LoginPage> {
                           margin: const EdgeInsets.only(left: 30, right: 30),
                           child: AppRoundTextField(
                             controller: _usernameController,
-                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             onChange: (p0) {},
-                            maxLength: 12,
                             label: RichText(
                               text: const TextSpan(
                                   text: 'Username',
                                   style: TextStyle(
-                                      color: kHintColor,
-                                     ),
+                                    color: kHintColor,
+                                  ),
                                   children: [
                                     TextSpan(
                                         text: "*",
                                         style: TextStyle(color: Colors.red))
                                   ]),
                             ),
-                            hint: "Username *",
+                            hint: "",
                           ),
                         ),
                         const SizedBox(
@@ -143,22 +146,34 @@ class _LoginPageState extends State<LoginPage> {
                           margin: const EdgeInsets.only(left: 30, right: 30),
                           child: AppRoundTextField(
                             obscureText: true,
-                            suffix:IconButton(
+                            suffix: IconButton(
                               icon: Icon(
-                                _obscureText ? Icons.visibility : Icons.visibility_off,
+                                _obscureText
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
                               ),
                               onPressed: () {
                                 setState(() {
-                                  _obscureText = !_obscureText; // Toggle password visibility
+                                  _obscureText =
+                                      !_obscureText; // Toggle password visibility
                                 });
                               },
                             ),
                             controller: _passwordController,
-                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             onChange: (p0) {},
-                            maxLength: 12,
-                            label: const Text(""),
-                            hint: "Password *",
+                            label: RichText(
+                              text: const TextSpan(
+                                  text: 'Password',
+                                  style: TextStyle(
+                                    color: kHintColor,
+                                  ),
+                                  children: [
+                                    TextSpan(
+                                        text: "*",
+                                        style: TextStyle(color: Colors.red))
+                                  ]),
+                            ),
+                            hint: "",
                           ),
                         ),
                         const SizedBox(
@@ -175,9 +190,12 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(margin: EdgeInsets.only(left: 30), child: Text("Reset Password "))),*/
                             InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, AppRoutes.forgotScreen);
+                                  Navigator.pushNamed(
+                                      context, AppRoutes.forgotScreen);
                                 },
-                                child: Container(margin: const EdgeInsets.only(right: 30), child: const Text("Forgot Password ?"))),
+                                child: Container(
+                                    margin: const EdgeInsets.only(right: 30),
+                                    child: const Text("Forgot Password ?"))),
                           ],
                         ),
                         const SizedBox(
@@ -209,9 +227,21 @@ class _LoginPageState extends State<LoginPage> {
 
   void validateFields() {
     if (_usernameController.value.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Enter Username", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, textColor: Colors.white, fontSize: 16.0);
+      Fluttertoast.showToast(
+          msg: "Enter Username",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.white,
+          fontSize: 16.0);
     } else if (_passwordController.value.text.isEmpty) {
-      Fluttertoast.showToast(msg: "Enter Password", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, textColor: Colors.white, fontSize: 16.0);
+      Fluttertoast.showToast(
+          msg: "Enter Password",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.white,
+          fontSize: 16.0);
     } else {
       loginAPI();
     }
@@ -223,8 +253,12 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse('http://210.89.42.117:8085/api/public/account/login'));
-    request.body = json.encode({"username": _usernameController.text.toString().trim(), "password": _passwordController.text.toString().trim()});
+    var request = http.Request('POST',
+        Uri.parse('http://210.89.42.117:8085/api/public/account/login'));
+    request.body = json.encode({
+      "username": _usernameController.text.toString().trim(),
+      "password": _passwordController.text.toString().trim()
+    });
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -243,7 +277,6 @@ class _LoginPageState extends State<LoginPage> {
       String details = responseBody['details'].toString();
       String token = responseBody['details'][0]['token'].toString();
       if (statusCode == "200") {
-
         DataProvider().storeUserData(token);
 
         ScaffoldMessenger.of(context).showSnackBar(

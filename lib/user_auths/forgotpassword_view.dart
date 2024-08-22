@@ -1,7 +1,9 @@
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
+import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/core/utilities/validators.dart';
 import 'package:community_health_app/user_auths/enterpin_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -117,31 +119,35 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           Container(
                             margin: const EdgeInsets.only(left: 30, right: 30),
                             child: AppRoundTextField(
-                              controller: _mobileNoController,
-                              inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
-                              inputType: TextInputType.number,
-                              onChange: (p0) {},
-                              maxLength: 12,
-                                label: const Text.rich(TextSpan(children: [
-                                  TextSpan(text: 'Mobile Number'),
-                                  TextSpan(
-                                      text: ' *',
+                                controller: _mobileNoController,
+                                inputType: TextInputType.number,
+                                onChange: (p0) {},
+                                maxLength: 10,
+                                errorText: Validators.validateMobile(
+                                    _mobileNoController.text),
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Mobile Number',
                                       style: TextStyle(
-                                          fontSize: 14,
-                                          fontFamily: 'Montserrat',
-                                          color: Colors.red)),
-                                ])),
-                              hint: "Mobile Number *",
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: [
+                                        TextSpan(
+                                            text: "*",
+                                            style: TextStyle(color: Colors.red))
+                                      ]),
+                                ),
+                                hint: "",
                                 validators: (value) {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter your mobile number';
                                   }
-                                  if (!indianMobileNumberRegex.hasMatch(value)) {
+                                  if (!indianMobileNumberRegex
+                                      .hasMatch(value)) {
                                     return 'Please enter a valid 10-digit Indian mobile number';
                                   }
                                   return null; // Validation passed
-                                }
-                            ),
+                                }),
                             /*child: TextFormField(
                               keyboardType: TextInputType.number,
                               inputFormatters: <TextInputFormatter>[
