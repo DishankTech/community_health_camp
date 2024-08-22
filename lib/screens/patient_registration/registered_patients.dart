@@ -77,7 +77,7 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
           mAppBarV1(
             title: "Registered Patients",
             context: context,
-            suffix: Material(
+            suffix:Material(
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(5),

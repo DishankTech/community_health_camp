@@ -352,6 +352,93 @@ Future<dynamic> stakeholderStatusBottomSheet(
 }
 
 
+
+Future<dynamic> commonBottonSheet(
+    BuildContext context, Function(Map<String, dynamic>) onItemSelected,String bottomSheetTitle,List<Map<String, dynamic>> list) {
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => Container(
+        width: SizeConfig.screenWidth,
+        decoration: BoxDecoration(
+            color: kWhiteColor,
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(responsiveHeight(50)),
+                topRight: Radius.circular(responsiveHeight(50)))),
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8,horizontal: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    bottomSheetTitle,
+                    style: TextStyle(
+                        fontSize: responsiveFont(17),
+                        fontWeight: FontWeight.bold,color: kPrimaryColor),
+                  ),
+                  IconButton(onPressed: (){
+                    Navigator.pop(context);
+                  }, icon: const Icon(Icons.cancel_presentation))
+                ],
+              ),
+            ),
+            SizedBox(
+              height: SizeConfig.screenHeight * 0.3,
+              child: BlocBuilder<MasterDataBloc, MasterDataState>(
+                builder: (context, state) {
+
+                  return list != null
+                      ? ListView.builder(
+                    itemCount: list.length,
+                    shrinkWrap: true,
+                    itemBuilder: (c, i) => Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6,horizontal: 12),
+                        child: InkWell(
+                          onTap: (){
+                            var selectedItem = {
+                              'id': list[i]['id'],
+                              'title': list[i]['title']
+                            };
+                            onItemSelected(selectedItem);
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: kContainerBack,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.circle_outlined),
+                                  SizedBox(width: responsiveWidth(6),),
+                                  Text(list[i]['title']),
+                                  const Spacer(),
+                                  const Icon(Icons.check_circle,color: kPrimaryColor,),
+
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                      : const Center(child: Text("Data Not Available"));
+                },
+              ),
+            ),
+          ],
+        ),
+      ));
+}
+
+
 Future<dynamic> commonBottomSheet(
   BuildContext context,
   Function(dynamic) onItemSelected,

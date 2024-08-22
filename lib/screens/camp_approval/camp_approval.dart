@@ -67,31 +67,7 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
           mAppBarV1(
             title: "Camp Approval",
             context: context,
-            // suffix: Row(
-            //   children: [
-            //     Material(
-            //       color: Colors.transparent,
-            //       child: InkWell(
-            //         borderRadius: BorderRadius.circular(5),
-            //         onTap: () {
-            //           Navigator.pushNamed(context, AppRoutes.patientRegScreen);
-            //         },
-            //         child: Ink(
-            //           child: Image.asset(
-            //             icSquarePlus,
-            //             height: responsiveHeight(24),
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //     IconButton(
-            //         onPressed: () {
-            //           Navigator.pushNamed(
-            //               context, AppRoutes.locationMaster);
-            //         },
-            //         icon: const Icon(Icons.location_on_outlined,color: kWhiteColor,))
-            //   ],
-            // ),
+
           ),
           Expanded(
             child: ListView.builder(
