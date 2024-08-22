@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
@@ -21,7 +22,8 @@ class AppRoundTextField extends StatelessWidget {
       this.onTap,
       this.validators,
       this.errorText,
-      this.onChange});
+      this.onChange,
+      this.inputFormatter});
 
   Widget label;
   TextEditingController controller;
@@ -39,6 +41,7 @@ class AppRoundTextField extends StatelessWidget {
   String? Function(String?)? validators;
   String? errorText;
   Function(String)? onChange;
+  TextInputFormatter? inputFormatter;
 
   @override
   Widget build(BuildContext context) {

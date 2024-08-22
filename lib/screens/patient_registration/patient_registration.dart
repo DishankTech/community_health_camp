@@ -18,8 +18,7 @@ class PatientRegistrationScreen extends StatefulWidget {
   const PatientRegistrationScreen({super.key});
 
   @override
-  State<PatientRegistrationScreen> createState() =>
-      _PatientRegistrationScreenState();
+  State<PatientRegistrationScreen> createState() => _PatientRegistrationScreenState();
 }
 
 class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
@@ -86,9 +85,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
     SizeConfig().init(context);
     return Scaffold(
         body: Container(
-      decoration: const BoxDecoration(
-          image:
-              DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
+      decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
       child: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,9 +96,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
               child: Container(
                 width: SizeConfig.screenWidth * 0.95,
                 // height: SizeConfig.screenHeight * 0.85,
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(responsiveHeight(25))),
+                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(responsiveHeight(25))),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(
@@ -111,21 +106,16 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                       ),
                       Stack(children: [
                         Container(
-                          decoration: BoxDecoration(
-                              color: kRegistrationBgColor,
-                              borderRadius: BorderRadius.circular(
-                                  responsiveHeight(135) / 2)),
+                          decoration: BoxDecoration(color: kRegistrationBgColor, borderRadius: BorderRadius.circular(responsiveHeight(135) / 2)),
                           child: capturedFile == null
                               ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      responsiveHeight(135) / 2),
+                                  borderRadius: BorderRadius.circular(responsiveHeight(135) / 2),
                                   child: Icon(
                                     Icons.person,
                                     size: responsiveHeight(135),
                                   ))
                               : ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      responsiveHeight(135) / 2),
+                                  borderRadius: BorderRadius.circular(responsiveHeight(135) / 2),
                                   child: Image.file(
                                     File(capturedFile!.path),
                                     height: responsiveHeight(135),
@@ -137,8 +127,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           right: 0,
                           child: InkWell(
                             splashFactory: InkRipple.splashFactory,
-                            borderRadius:
-                                BorderRadius.circular(responsiveHeight(17)),
+                            borderRadius: BorderRadius.circular(responsiveHeight(17)),
                             onTap: () {},
                             child: Ink(
                               child: Image.asset(
@@ -153,9 +142,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                       SizedBox(height: responsiveHeight(12)),
                       Text(
                         "Patient Name",
-                        style: TextStyle(
-                            fontSize: responsiveFont(14),
-                            fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: responsiveFont(14), fontWeight: FontWeight.w500),
                       ),
                       SizedBox(
                         height: responsiveHeight(20),
@@ -164,9 +151,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                         children: [
                           AppRoundTextField(
                             controller: _campIDTextController,
-                            inputStyle: TextStyle(
-                                fontSize: responsiveFont(14),
-                                color: kTextBlackColor),
+                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             inputType: TextInputType.number,
                             onChange: (p0) {},
                             maxLength: 12,
@@ -178,9 +163,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           ),
                           AppRoundTextField(
                             controller: _campDateTextController,
-                            inputStyle: TextStyle(
-                                fontSize: responsiveFont(14),
-                                color: kTextBlackColor),
+                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             inputType: TextInputType.number,
                             onChange: (p0) {},
                             readOnly: true,
@@ -188,21 +171,17 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                               showDatePicker(
                                       helpText: "Select Camp Date",
                                       context: context,
-                                      initialEntryMode:
-                                          DatePickerEntryMode.calendarOnly,
+                                      initialEntryMode: DatePickerEntryMode.calendarOnly,
                                       initialDate: DateTime.now(),
                                       firstDate: DateTime.now(),
-                                      lastDate: DateTime.now()
-                                          .add(const Duration(days: 15)))
+                                      lastDate: DateTime.now().add(const Duration(days: 15)))
                                   .then((pickedDate) {
                                 if (pickedDate == null) {
                                   return;
                                 }
                                 setState(() {
                                   _selectedCampDate = pickedDate;
-                                  _campDateTextController.text =
-                                      DateFormat("dd-MM-yyyy")
-                                          .format(pickedDate);
+                                  _campDateTextController.text = DateFormat("dd-MM-yyyy").format(pickedDate);
                                 });
                               });
                             },
@@ -226,9 +205,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           ),
                           AppRoundTextField(
                             controller: _genderTextController,
-                            inputStyle: TextStyle(
-                                fontSize: responsiveFont(14),
-                                color: kTextBlackColor),
+                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             inputType: TextInputType.text,
                             onTap: () {
                               genderBottomSheet(
@@ -236,8 +213,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                   (p0) => {
                                         setState(() {
                                           _selectedGender = p0;
-                                          _genderTextController.text =
-                                              _selectedGender!['title'];
+                                          _genderTextController.text = _selectedGender!['title'];
                                         })
                                       });
                             },
@@ -266,11 +242,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                               Flexible(
                                 flex: 1,
                                 child: AppRoundTextField(
-                                  controller:
-                                      _mobileNoCountryCodeTextController,
-                                  inputStyle: TextStyle(
-                                      fontSize: responsiveFont(14),
-                                      color: kTextBlackColor),
+                                  controller: _mobileNoCountryCodeTextController,
+                                  inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                   inputType: TextInputType.number,
                                   readOnly: true,
                                   onChange: (p0) {},
@@ -297,9 +270,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                 flex: 3,
                                 child: AppRoundTextField(
                                   controller: _mobileNoTextController,
-                                  inputStyle: TextStyle(
-                                      fontSize: responsiveFont(14),
-                                      color: kTextBlackColor),
+                                  inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                   inputType: TextInputType.number,
                                   onChange: (p0) {},
                                   maxLength: 10,
@@ -314,9 +285,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           ),
                           AppRoundTextField(
                             controller: _aadhaarNoTextController,
-                            inputStyle: TextStyle(
-                                fontSize: responsiveFont(14),
-                                color: kTextBlackColor),
+                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             inputType: TextInputType.number,
                             onChange: (p0) {},
                             maxLength: 12,
@@ -328,9 +297,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           ),
                           AppRoundTextField(
                             controller: _abhaIDTextController,
-                            inputStyle: TextStyle(
-                                fontSize: responsiveFont(14),
-                                color: kTextBlackColor),
+                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             inputType: TextInputType.number,
                             onChange: (p0) {},
                             maxLength: 12,
@@ -344,9 +311,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                             controller: _addressTextController,
                             maxLines: 5,
                             errorText: null,
-                            inputStyle: TextStyle(
-                                fontSize: responsiveFont(14),
-                                color: kTextBlackColor),
+                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                             onChange: (p0) {},
                             label: const Text(""),
                             inputType: TextInputType.multiline,
@@ -362,22 +327,16 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                 child: AppRoundTextField(
                                   controller: _pincodeTextController,
                                   maxLength: 6,
-                                  inputStyle: TextStyle(
-                                      fontSize: responsiveFont(14),
-                                      color: kTextBlackColor),
+                                  inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                   inputType: TextInputType.phone,
                                   label: RichText(
                                     text: TextSpan(
                                       text: 'Pincode',
-                                      style: TextStyle(
-                                          color: kLabelTextColor,
-                                          fontSize: responsiveFont(14)),
+                                      style: TextStyle(color: kLabelTextColor, fontSize: responsiveFont(14)),
                                       children: <TextSpan>[
                                         TextSpan(
                                           text: '',
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: responsiveFont(14)),
+                                          style: TextStyle(color: Colors.red, fontSize: responsiveFont(14)),
                                         ),
                                       ],
                                     ),
@@ -395,22 +354,16 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     controller: _districtTextController,
                                     textCapitalization: TextCapitalization.none,
                                     inputType: TextInputType.datetime,
-                                    inputStyle: TextStyle(
-                                        fontSize: responsiveFont(14),
-                                        color: kTextBlackColor),
+                                    inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                     readOnly: true,
                                     label: RichText(
                                       text: TextSpan(
                                         text: 'District',
-                                        style: TextStyle(
-                                            color: kLabelTextColor,
-                                            fontSize: responsiveFont(14)),
+                                        style: TextStyle(color: kLabelTextColor, fontSize: responsiveFont(14)),
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: '',
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: responsiveFont(14)),
+                                            style: TextStyle(color: Colors.red, fontSize: responsiveFont(14)),
                                           ),
                                         ],
                                       ),
@@ -442,22 +395,16 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                   controller: _talukaTextController,
                                   readOnly: true,
                                   maxLength: 10,
-                                  inputStyle: TextStyle(
-                                      fontSize: responsiveFont(14),
-                                      color: kTextBlackColor),
+                                  inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                   inputType: TextInputType.phone,
                                   label: RichText(
                                     text: TextSpan(
                                       text: 'Taluka',
-                                      style: TextStyle(
-                                          color: kLabelTextColor,
-                                          fontSize: responsiveFont(14)),
+                                      style: TextStyle(color: kLabelTextColor, fontSize: responsiveFont(14)),
                                       children: <TextSpan>[
                                         TextSpan(
                                           text: '',
-                                          style: TextStyle(
-                                              color: Colors.red,
-                                              fontSize: responsiveFont(14)),
+                                          style: TextStyle(color: Colors.red, fontSize: responsiveFont(14)),
                                         ),
                                       ],
                                     ),
@@ -486,22 +433,16 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     controller: _cityTextController,
                                     textCapitalization: TextCapitalization.none,
                                     inputType: TextInputType.datetime,
-                                    inputStyle: TextStyle(
-                                        fontSize: responsiveFont(14),
-                                        color: kTextBlackColor),
+                                    inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                     readOnly: true,
                                     label: RichText(
                                       text: TextSpan(
                                         text: 'City',
-                                        style: TextStyle(
-                                            color: kLabelTextColor,
-                                            fontSize: responsiveFont(14)),
+                                        style: TextStyle(color: kLabelTextColor, fontSize: responsiveFont(14)),
                                         children: <TextSpan>[
                                           TextSpan(
                                             text: '',
-                                            style: TextStyle(
-                                                color: Colors.red,
-                                                fontSize: responsiveFont(14)),
+                                            style: TextStyle(color: Colors.red, fontSize: responsiveFont(14)),
                                           ),
                                         ],
                                       ),
@@ -533,8 +474,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                               size: responsiveHeight(24),
                             ),
                             onTap: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.registeredUserMaster);
+                              Navigator.pushNamed(context, AppRoutes.registeredUserMaster);
                             },
                           ),
                           SizedBox(

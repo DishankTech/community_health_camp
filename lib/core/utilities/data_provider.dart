@@ -17,6 +17,7 @@ class DataProvider {
   Future<void> storeUserData(String data) async {
     await _prefs.setBool("isLoggedIn", true);
     await _prefs.setString("userData", data);
+    await _prefs.setString("token", data);
     print("data stored");
   }
 

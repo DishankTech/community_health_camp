@@ -2,7 +2,10 @@ import 'dart:convert';
 
 // import 'package:community_health_app/SizeConfig.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
+import 'package:community_health_app/core/constants/constants.dart';
+import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
+import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/user_auths/forgotpassword_view.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +15,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
+
+import '../core/common_widgets/app_round_textfield.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key, required this.title});
@@ -36,6 +41,8 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _passwordController = TextEditingController();
 
   bool _isLoading = false;
+
+  bool _obscureText=true;
 
   @override
   void initState() {
@@ -77,20 +84,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const Text(
                 "Community Health Camp ",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16),
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
               ),
               const SizedBox(
                 height: 50,
               ),
               const Text(
                 "LOGIN",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18),
+                style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
               ),
               const SizedBox(
                 height: 10,
@@ -106,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                           'Please wait..',
                           style: TextStyle(
                             color: Colors.black,
-                            fontFamily: 'NotoSans',
+                            fontFamily: Lato,
                           ),
                         ),
                       ],
@@ -115,26 +116,24 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Container(
                           margin: const EdgeInsets.only(left: 30, right: 30),
-                          child: TextField(
+                          child: AppRoundTextField(
                             controller: _usernameController,
-                            decoration: InputDecoration(
-                              label: const Text.rich(TextSpan(children: [
-                                TextSpan(text: 'Username'),
-                                TextSpan(
-                                    text: ' *',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: 'Montserrat',
-                                        color: Colors.red)),
-                              ])),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              filled: true,
-                              hintStyle: TextStyle(color: Colors.grey[500]),
-                              hintText: "Enter your username",
-                              fillColor: Colors.white70,
+                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                            onChange: (p0) {},
+                            maxLength: 12,
+                            label: RichText(
+                              text: const TextSpan(
+                                  text: 'Username',
+                                  style: TextStyle(
+                                      color: kHintColor,
+                                     ),
+                                  children: [
+                                    TextSpan(
+                                        text: "*",
+                                        style: TextStyle(color: Colors.red))
+                                  ]),
                             ),
+                            hint: "Username *",
                           ),
                         ),
                         const SizedBox(
@@ -142,26 +141,24 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         Container(
                           margin: const EdgeInsets.only(left: 30, right: 30),
-                          child: TextField(
-                            controller: _passwordController,
-                            decoration: InputDecoration(
-                              label: const Text.rich(TextSpan(children: [
-                                TextSpan(text: 'Password'),
-                                TextSpan(
-                                    text: ' *',
-                                    style: TextStyle(
-                                        fontSize: 14,
-                                        fontFamily: 'NatoSans',
-                                        color: Colors.red)),
-                              ])),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30.0),
+                          child: AppRoundTextField(
+                            obscureText: true,
+                            suffix:IconButton(
+                              icon: Icon(
+                                _obscureText ? Icons.visibility : Icons.visibility_off,
                               ),
-                              filled: true,
-                              hintStyle: TextStyle(color: Colors.grey[500]),
-                              hintText: "Enter your password",
-                              fillColor: Colors.white70,
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText; // Toggle password visibility
+                                });
+                              },
                             ),
+                            controller: _passwordController,
+                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                            onChange: (p0) {},
+                            maxLength: 12,
+                            label: const Text(""),
+                            hint: "Password *",
                           ),
                         ),
                         const SizedBox(
@@ -178,12 +175,9 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(margin: EdgeInsets.only(left: 30), child: Text("Reset Password "))),*/
                             InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(
-                                      context, AppRoutes.forgotScreen);
+                                  Navigator.pushNamed(context, AppRoutes.forgotScreen);
                                 },
-                                child: Container(
-                                    margin: const EdgeInsets.only(right: 30),
-                                    child: const Text("Forgot Password ?"))),
+                                child: Container(margin: const EdgeInsets.only(right: 30), child: const Text("Forgot Password ?"))),
                           ],
                         ),
                         const SizedBox(
@@ -214,21 +208,9 @@ class _LoginPageState extends State<LoginPage> {
 
   void validateFields() {
     if (_usernameController.value.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Enter Username",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      Fluttertoast.showToast(msg: "Enter Username", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, textColor: Colors.white, fontSize: 16.0);
     } else if (_passwordController.value.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Enter Password",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      Fluttertoast.showToast(msg: "Enter Password", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, textColor: Colors.white, fontSize: 16.0);
     } else {
       loginAPI();
     }
@@ -240,12 +222,8 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST',
-        Uri.parse('http://210.89.42.117:8085/api/public/account/login'));
-    request.body = json.encode({
-      "username": _usernameController.text.toString().trim(),
-      "password": _passwordController.text.toString().trim()
-    });
+    var request = http.Request('POST', Uri.parse('http://210.89.42.117:8085/api/public/account/login'));
+    request.body = json.encode({"username": _usernameController.text.toString().trim(), "password": _passwordController.text.toString().trim()});
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -261,7 +239,12 @@ class _LoginPageState extends State<LoginPage> {
       var responseBody = json.decode(finalResponse.body);
       // Get the status code as a string
       String statusCode = responseBody['status_code'].toString();
+      String details = responseBody['details'].toString();
+      String token = responseBody['details'][0]['token'].toString();
       if (statusCode == "200") {
+
+        DataProvider().storeUserData(token);
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
@@ -271,7 +254,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
 
-        Navigator.pushNamed(context, AppRoutes.patientRegListScreen);
+        Navigator.pushNamed(context, AppRoutes.dashboard);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
