@@ -6,9 +6,7 @@ import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/dashboard/models/dashbard_meu_model.dart';
 import 'package:community_health_app/user_auths/cubit/profile_cubit.dart';
 import 'package:community_health_app/user_auths/models/login_response_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -40,7 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       DashboardMenuModel(
           name: "Location Master",
           image: icLocationMaster,
-          routeName: AppRoutes.locationMaster),
+          routeName: AppRoutes.locationMasterList),
       DashboardMenuModel(
           name: "Stakeholder Master",
           image: icStakeholderMaster,
@@ -201,16 +199,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                                                   2
                                                   ? BorderSide.none
                                                   : const BorderSide(
-                                                      color: Colors
-                                                          .grey, // Set the color of the bottom border
+                                                      color: Colors.grey,
+                                                      // Set the color of the bottom border
                                                       width:
                                                           0.5, // Set the width of the bottom border
                                                     ),
                                               right: i % 2 == 1
                                                   ? BorderSide.none
                                                   : const BorderSide(
-                                                      color: Colors
-                                                          .grey, // Set the color of the right border
+                                                      color: Colors.grey,
+                                                      // Set the color of the right border
                                                       width:
                                                           0.5, // Set the width of the right border
                                                     ),
