@@ -46,6 +46,8 @@ class _LoginPageState extends State<LoginPage> {
 
   bool _obscureText = true;
 
+  List<dynamic> userDetailsList = [];
+
   @override
   void initState() {
     _usernameController.text = '';
@@ -67,12 +69,8 @@ class _LoginPageState extends State<LoginPage> {
                 "assets/bgimg.png",
                 fit: BoxFit.cover,
               )),
-          Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                /*SizedBox(
+          Column(mainAxisSize: MainAxisSize.max, mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+            /*SizedBox(
                 width: MediaQuery.sizeOf(context).width,
                 child: Image.asset(
                   "assets/loginlogo.png",
@@ -81,155 +79,119 @@ class _LoginPageState extends State<LoginPage> {
                   height: MediaQuery.sizeOf(context).width * 0.4,
                 ),
               ),*/
-                const SizedBox(
-                  height: 5,
-                ),
-                const Text(
-                  "Community Health Camp ",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                const Text(
-                  "LOGIN",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Center(
-                  child: _isLoading
-                      ? const Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+            const SizedBox(
+              height: 5,
+            ),
+            const Text(
+              "Community Health Camp ",
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+            const Text(
+              "LOGIN",
+              style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Center(
+              child: _isLoading
+                  ? const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircularProgressIndicator(
+                          color: Colors.red,
+                        ),
+                        Text(
+                          'Please wait..',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: Montserrat,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(left: 30, right: 30),
+                          child: AppRoundTextField(
+                            controller: _usernameController,
+                            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                            onChange: (p0) {},
+                            maxLength: 12,
+                            label: RichText(
+                              text: const TextSpan(text: 'Username', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                            ),
+                            hint: "",
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(left: 30, right: 30),
+                          child: AppRoundTextField(
+                            obscureText: _obscureText,
+                            suffix: IconButton(
+                              icon: Icon(
+                                _obscureText ? Icons.visibility : Icons.visibility_off,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscureText = !_obscureText; // Toggle password visibility
+                                });
+                              },
+                            ),
+                            controller: _passwordController,
+                            onChange: (p0) {},
+                            label: RichText(
+                              text: const TextSpan(text: 'Password', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                            ),
+                            hint: "",
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            CircularProgressIndicator(
-                              color: Colors.red,
-                            ),
-                            Text(
-                              'Please wait..',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: Montserrat,
-                              ),
-                            ),
-                          ],
-                        )
-                      : Column(
-                          children: [
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(left: 30, right: 30),
-                              child: AppRoundTextField(
-                                controller: _usernameController,
-                                inputStyle: TextStyle(
-                                    fontSize: responsiveFont(14),
-                                    color: kTextBlackColor),
-                                onChange: (p0) {},
-                                maxLength: 12,
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: 'Username',
-                                      style: TextStyle(
-                                          color: kHintColor,
-                                          fontFamily: Montserrat),
-                                      children: [
-                                        TextSpan(
-                                            text: "*",
-                                            style: TextStyle(color: Colors.red))
-                                      ]),
-                                ),
-                                hint: "",
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Container(
-                              margin:
-                                  const EdgeInsets.only(left: 30, right: 30),
-                              child: AppRoundTextField(
-                                obscureText: true,
-                                suffix: IconButton(
-                                  icon: Icon(
-                                    _obscureText
-                                        ? Icons.visibility
-                                        : Icons.visibility_off,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      _obscureText =
-                                          !_obscureText; // Toggle password visibility
-                                    });
-                                  },
-                                ),
-                                controller: _passwordController,
-                                onChange: (p0) {},
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: 'Password',
-                                      style: TextStyle(
-                                          color: kHintColor,
-                                          fontFamily: Montserrat),
-                                      children: [
-                                        TextSpan(
-                                            text: "*",
-                                            style: TextStyle(color: Colors.red))
-                                      ]),
-                                ),
-                                hint: "",
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                /*  InkWell(
+                            /*  InkWell(
                       onTap: () {
                         Get.to(const ResetPasswordPage());
                       },
                       child: Container(margin: EdgeInsets.only(left: 30), child: Text("Reset Password "))),*/
-                                InkWell(
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, AppRoutes.forgotScreen);
-                                    },
-                                    child: Container(
-                                        margin:
-                                            const EdgeInsets.only(right: 30),
-                                        child:
-                                            const Text("Forgot Password ?"))),
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 40,
-                            ),
-                            AppButton(
-                              mWidth: responsiveWidth(260),
-                              mHeight: responsiveHeight(50),
-                              iconData: Icon(
-                                Icons.arrow_forward,
-                                size: responsiveHeight(24),
-                                color: Colors.white,
-                              ),
-                              title: "Login",
-                              onTap: () async {
-                                validateFields();
-                              },
-                            )
+                            InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppRoutes.forgotScreen);
+                                },
+                                child: Container(margin: const EdgeInsets.only(right: 30), child: const Text("Forgot Password ?"))),
                           ],
                         ),
-                ),
-              ]),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        AppButton(
+                          mWidth: responsiveWidth(260),
+                          mHeight: responsiveHeight(50),
+                          iconData: Icon(
+                            Icons.arrow_forward,
+                            size: responsiveHeight(24),
+                            color: Colors.white,
+                          ),
+                          title: "Login",
+                          onTap: () async {
+                            validateFields();
+                          },
+                        )
+                      ],
+                    ),
+            ),
+          ]),
         ],
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
@@ -238,98 +200,107 @@ class _LoginPageState extends State<LoginPage> {
 
   void validateFields() {
     if (_usernameController.value.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Enter Username",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      Fluttertoast.showToast(msg: "Enter Username", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, textColor: Colors.white, fontSize: 16.0);
     } else if (_passwordController.value.text.isEmpty) {
-      Fluttertoast.showToast(
-          msg: "Enter Password",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      Fluttertoast.showToast(msg: "Enter Password", toastLength: Toast.LENGTH_SHORT, gravity: ToastGravity.BOTTOM, timeInSecForIosWeb: 1, textColor: Colors.white, fontSize: 16.0);
     } else {
       loginAPI();
     }
   }
 
-  Future<void> loginAPI() async {
+  Future<List> loginAPI() async {
     setState(() {
       _isLoading = true; // Show loader
     });
 
-    var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse(kBaseUrl + userLogin));
-    request.body = json.encode({
-      "username": _usernameController.text.toString().trim(),
-      "password": _passwordController.text.toString().trim()
-    });
-    request.headers.addAll(headers);
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      var request = http.Request('POST', Uri.parse(kBaseUrl + userLogin));
+      request.body = json.encode({"username": _usernameController.text.toString().trim(), "password": _passwordController.text.toString().trim()});
+      request.headers.addAll(headers);
 
-    http.StreamedResponse response = await request.send();
-    http.Response finalResponse = await http.Response.fromStream(response);
+      http.StreamedResponse response = await request.send();
+      http.Response finalResponse = await http.Response.fromStream(response);
 
-    if (response.statusCode == 200) {
-      setState(() {
-        _isLoading = false;
+      if (response.statusCode == 200) {
+        setState(() {
+          _isLoading = false;
 
-        // Hide loader
-      });
+          // Hide loader
+        });
+        userDetailsList.clear();
+        var responseBody = json.decode(finalResponse.body);
+        // Get the status code as a string
+        String statusCode = responseBody['status_code'].toString();
+        if (statusCode == "200") {
+          DataProvider().storeUserData(finalResponse.body);
 
-      var responseBody = json.decode(finalResponse.body);
-      // Get the status code as a string
-      String statusCode = responseBody['status_code'].toString();
-      String details = responseBody['details'].toString();
-      String token = responseBody['details'][0]['token'].toString();
-      if (statusCode == "200") {
-        DataProvider().storeUserData(finalResponse.body);
+          LoginResponseModel loginResponseModel = LoginResponseModel.fromJson(responseBody);
+          List<Details>? detailsList = loginResponseModel.details;
+          print(detailsList);
+          userDetailsList.addAll(detailsList!);
+          User usersList = userDetailsList[0].user;
 
-        // LoginResponseModel loginResponseModel =
-        //     LoginResponseModel.fromJson(responseBody);
-        // List<Detail>? detailsList = loginResponseModel.details;
-        // print(detailsList);
+          var userId = usersList.userId;
+          var firstLogin = usersList.firstLoginPassReset;
+          print(userId);
+          DataProvider().storeUserCredential(userId!);
+       /*   if(firstLogin.toString()=="N")
+            {
+              Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.resetPassword, (route) => false);
+            }else{
 
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'Login Successfull',
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Login Successfull',
+                ),
+                backgroundColor: Colors.green,
+              ),
+            );
+            Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
+          }*/
+
+          Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
+
+
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Login Failed',
+              ),
+              backgroundColor: Colors.red,
             ),
-            backgroundColor: Colors.green,
-          ),
-        );
-        Navigator.of(context)
-            .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
+          );
+        }
+
+        //navigate to dashboard page
       } else {
+        setState(() {
+          _isLoading = false; // Hide loader
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-              'Login Failed',
+              'Something went wrong',
             ),
             backgroundColor: Colors.red,
           ),
         );
+        print(response.reasonPhrase);
       }
-
-      //navigate to dashboard page
-    } else {
-      setState(() {
-        _isLoading = false; // Hide loader
-      });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Something went wrong',
-          ),
-          backgroundColor: Colors.red,
-        ),
-      );
-      print(response.reasonPhrase);
+    } catch (e) {
+      print(e);
     }
+
+    return userDetailsList;
+  }
+
+  List<User> parseUsers(responseBody) {
+    final parsed = jsonDecode(responseBody);
+    return (parsed as List).map<User>((json) => User.fromJson(json['user'])).toList();
   }
 }
 

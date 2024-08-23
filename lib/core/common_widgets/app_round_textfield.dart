@@ -1,3 +1,4 @@
+import 'package:community_health_app/core/utilities/validators.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:community_health_app/core/constants/constants.dart';
@@ -74,14 +75,15 @@ class AppRoundTextField extends StatelessWidget {
               maxLines: maxLines ?? 1,
               maxLength: maxLength,
               minLines: maxLines ?? 1,
-              validator: validators,
               onChanged: onChange,
+              validator: validators,
               decoration: InputDecoration(
                   border: InputBorder.none,
                   errorText: null,
                   error: null,
                   errorStyle: const TextStyle(fontSize: 0.1),
                   label: label,
+
                   counterText: "",
                   constraints: (maxLines != null && maxLines! > 1)
                       ? null

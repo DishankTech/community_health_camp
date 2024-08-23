@@ -30,7 +30,9 @@ const String kGetPatDtailsByUserId = "dropdown/getpatdetailsbyuserid";
 const String kBookBedApi = "bookBedApi";
 const String kGetMyAppointments = "getAutoSuggetionDetails";
 
-const String userLogin = "public/account/login";
+const String userLogin = "api/public/account/login";
+const String userResetPassword =
+    "api/profile/account/update/user-password-reset";
 //Community
 const String kCreateUser = "profile/account/new";
 const String kUpdateUser = "profile/account/update/user-account-details";

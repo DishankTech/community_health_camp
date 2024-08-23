@@ -1,7 +1,9 @@
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
+import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
+import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/dashboard/models/dashbard_meu_model.dart';
 import 'package:community_health_app/user_auths/cubit/profile_cubit.dart';
@@ -57,6 +59,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           name: "Doctor Desk",
           image: icDoctorDesk,
           routeName: AppRoutes.dashboard),
+      DashboardMenuModel(
+          name: "Camp Calendar",
+          image: icCalendarColourfull,
+          routeName: AppRoutes.campCalendar),
+      DashboardMenuModel(
+          name: "Camp Co-Ordinator",
+          image: icPersons,
+          routeName: AppRoutes.campCoordinator),
     ]);
 
     _menuList.addAll([
@@ -111,6 +121,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
               if (element.parentList!.menuControllerMobile == "Dashboard") {
                 // _menuList.clear();
 
+                //statically added
+                _menuList.add(DashboardMenuModel(name: "Camp Creation", image: icCampCreation,routeName: AppRoutes.campCreation));
+                _menuList.add(DashboardMenuModel(name: "Camp Calendar", image: icCalendarColourfull,routeName: AppRoutes.campCalendar));
+                _menuList.add(DashboardMenuModel(name: "Camp Co-Ordinator", image: icPersons,routeName: AppRoutes.campCoordinator));
+
                 if (element.childList != null) {
                   for (var element in element.childList!) {
                     for (var staticMenu in _staticMenuList) {
@@ -126,12 +141,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
         }
         return Scaffold(
+
             body: Container(
                 decoration: const BoxDecoration(
                     image: DecorationImage(
                         image: AssetImage(patRegBg), fit: BoxFit.fill)),
                 child: Column(children: [
                   mAppBarV1(
+                    suffix: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(5),
+                        onTap: () {
+                          showDialog(
+
+                              builder: (ctxt) {
+                                return AlertDialog(
+                                    title: Text("Logout",textAlign: TextAlign.center,),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text("Do you want to logout?"),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          children: [
+                                            AppButton(
+                                              onTap: (){
+                                                Navigator.pop(context);
+                                              },
+                                              title: "Cancel",
+                                              mWidth: SizeConfig.screenWidth * 0.3,
+
+                                            ),
+                                            SizedBox(width: 10,),
+                                            AppButton(
+                                              onTap: (){
+                                                DataProvider().clearUserData();
+                                                Navigator.pushNamed(context, AppRoutes.loginScreen);
+                                              },
+                                              title:"Logout",
+                                              mWidth: SizeConfig.screenWidth * 0.3,
+                                            )
+                                          ],
+                                        ),
+                                      ],
+                                    ));
+                              },
+                              context: context);
+                        },
+                        child: Ink(
+                          child: Image.asset(
+                            icLogout,
+                            color: Colors.white,
+                            height: responsiveHeight(24),
+                          ),
+                        ),
+                      ),
+                    ),
                     title:
                         "Welcome, ${state.loginResponseModel != null ? state.loginResponseModel!.details!.last.user!.fullName : ''}",
                     leading: GestureDetector(

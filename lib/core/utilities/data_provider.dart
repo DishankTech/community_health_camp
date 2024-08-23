@@ -22,13 +22,13 @@ class DataProvider {
     print("data stored");
   }
 
-  Future<void> storeUserCredential(String data) async {
-    await _prefs.setString("userCredentials", data);
+  Future<void> storeUserCredential(int data) async {
+    await _prefs.setInt("userId", data);
     print("data stored ${data}");
   }
 
-  String? getUserCredentials() {
-    String? data = _prefs.getString("userCredentials");
+  int? getUserCredentials() {
+    int? data = _prefs.getInt("userId");
     print('getUserCredentials');
     print(data);
     return data;
