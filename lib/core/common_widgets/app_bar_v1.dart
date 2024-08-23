@@ -8,8 +8,7 @@ import 'package:flutter/widgets.dart';
 PreferredSize mAppBarV1(
     {required String title,
     required BuildContext context,
-    Widget? suffix,
-    Widget? leading}) {
+    Widget? suffix,    Widget? leading}) {
   return PreferredSize(
     preferredSize: Size.fromHeight(responsiveHeight(60)),
     child: Padding(

@@ -1,6 +1,6 @@
 const String kDomain = "http://103.206.66.115:8080/";
 // const String kBaseUrl = 'http://103.206.66.115:8080/HAEMODIALYSIS/restApi/';
-const String kBaseUrl = 'http://210.89.42.117:8085/api/';
+const String kBaseUrl = 'http://210.89.42.117:8085/';
 const String kBaseUrl1 = 'http://103.206.66.115:8080/Hemodialysis-Apis/';
 // const String kBaseUrl = 'http://103.104.73.130:8080/Mahadialysis-Apis/';
 // const String kBaseUrl1 = 'http://103.104.73.130:8080/Mahadialysis-Apis/';
@@ -34,4 +34,5 @@ const String kGetPatDtailsByUserId = "dropdown/getpatdetailsbyuserid";
 const String kBookBedApi = "bookBedApi";
 const String kGetMyAppointments = "getAutoSuggetionDetails";
 
-const String userLogin = "public/account/login";
+const String userLogin = "api/public/account/login";
+const String userResetPassword = "api/profile/account/update/user-password-reset";

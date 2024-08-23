@@ -2,6 +2,8 @@ import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view
 import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camps.dart';
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/location_master/location_master.dart';
@@ -22,6 +24,7 @@ import 'package:community_health_app/user_auths/createnewpassword_view.dart';
 import 'package:community_health_app/user_auths/enterpin_view.dart';
 import 'package:community_health_app/user_auths/forgotpassword_view.dart';
 import 'package:community_health_app/user_auths/login.dart';
+import 'package:community_health_app/user_auths/resetpassword_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:community_health_app/screens/splash_screen.dart';
@@ -62,19 +65,18 @@ class AppRoutes {
   static const String userMasterScreen = "/userMasterScreen";
   static const String userMasterEditScreen = "/userMasterEditScreen";
   static const String stakeholderMasterScreen = "/stakeholderMasterScreen";
-  static const String stakeholderMasterEditScreen =
-      "/stakeholderMasterEditScreen";
-  static const String stakeholderMasterListScreen =
-      "/stakeholderMasterListScreen";
+  static const String stakeholderMasterEditScreen = "/stakeholderMasterEditScreen";
+  static const String stakeholderMasterListScreen = "/stakeholderMasterListScreen";
   static const String registeredUserMaster = "/registeredUserMaster";
   static const String pinValidationPage = "/PinValidationPage";
   static const String updatePasswordPage = "/UpdatePasswordPage";
   static const String campCalendar = "/CampCalendarPage";
   static const String dateWiseCamps = "/DateWiseCampsScreen";
   static const String districtWiseCamps = "/DistrictWiseCampsScreen";
-  static const String campWiseRegisteredPatients =
-      "/CampWiseRegisteredPatientsScreen";
+  static const String campWiseRegisteredPatients = "/CampWiseRegisteredPatientsScreen";
   static const String campApproval = "/campApproval";
+  static const String campCoordinator = "/campCoordinator";
+  static const String addReferredPatient = "/addReferredPatient";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -168,6 +170,18 @@ class AppRoutes {
       case stakeholderMasterEditScreen:
         return MaterialPageRoute(
           builder: (_) => const StakeHolderMasterEditScreen(),
+        );
+      case resetPassword:
+        return MaterialPageRoute(
+          builder: (_) => const ResetPasswordPage(),
+        );
+      case campCoordinator:
+        return MaterialPageRoute(
+          builder: (_) => const CampCoordinator(),
+        );
+      case addReferredPatient:
+        return MaterialPageRoute(
+          builder: (_) => const AddReferredPatient(),
         );
 
       default:

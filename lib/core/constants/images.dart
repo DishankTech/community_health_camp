@@ -80,6 +80,8 @@ const String icCampApproval = "assets/icons/ic_camp_approval.png";
 const String icPatientRegistration = "assets/icons/ic_patient_registration.png";
 const String icDoctorDesk = "assets/icons/ic_doctor_desk.png";
 const String icRoundFilter = "assets/icons/square-rounded-plus.png";
+const String icLogout = "assets/icons/logout.png";
+const String icPersons = "assets/icons/persons_colorful.png";
 
 //Dashboard
 const String icTotalRegPat = "assets/icons/ic_total_reg_pat.png";
