@@ -56,3 +56,19 @@ class GetAddressByPincode extends MasterDataEvent {
   @override
   List<Object> get props => [pincode];
 }
+
+class GetMasters extends MasterDataEvent {
+  Map payload;
+  GetMasters({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}
+
+class GetMastersDesignationType extends MasterDataEvent {
+  Map payload;
+  GetMastersDesignationType({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}

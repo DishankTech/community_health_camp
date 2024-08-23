@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/common_bloc/repository/master_repository.dart';
+import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
+import 'package:community_health_app/screens/user_master/repository/user_master_repository.dart';
 import 'package:community_health_app/user_auths/cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,7 +24,8 @@ void main() {
   ]);
   runApp(MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(create: (context) => MasterDataRepository())
+        RepositoryProvider(create: (context) => MasterDataRepository()),
+        RepositoryProvider(create: (context) => UserMasterRepository())
       ],
       child: MultiBlocProvider(providers: [
         BlocProvider(create: (context) => ProfileCubit()),
@@ -30,6 +33,10 @@ void main() {
             create: (context) => MasterDataBloc(
                 masterDataRepository:
                     RepositoryProvider.of<MasterDataRepository>(context))),
+        BlocProvider(
+            create: (context) => UserMasterBloc(
+                userMasterRepository:
+                    RepositoryProvider.of<UserMasterRepository>(context))),
       ], child: const MyApp())));
   // Set the status bar color
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

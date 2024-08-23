@@ -60,6 +60,45 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icDoctorDesk,
           routeName: AppRoutes.dashboard),
     ]);
+
+    _menuList.addAll([
+      DashboardMenuModel(
+          name: "Dashboard",
+          image: icDashboard,
+          routeName: AppRoutes.dashboard),
+      DashboardMenuModel(
+          name: "User Master",
+          image: icUserMaster,
+          routeName: AppRoutes.registeredUserMaster),
+      DashboardMenuModel(
+          name: "Location Master",
+          image: icLocationMaster,
+          routeName: AppRoutes.locationMaster),
+      DashboardMenuModel(
+          name: "Stakeholder Master",
+          image: icStakeholderMaster,
+          routeName: AppRoutes.stakeholderMasterListScreen),
+      DashboardMenuModel(
+          name: "Camp Creation",
+          image: icCampCreation,
+          routeName: AppRoutes.campCreation),
+      DashboardMenuModel(
+          name: "Camp Calendar",
+          image: icCampCreation,
+          routeName: AppRoutes.campCalendar),
+      DashboardMenuModel(
+          name: "Camp Approval",
+          image: icCampApproval,
+          routeName: AppRoutes.campApproval),
+      DashboardMenuModel(
+          name: "Patient Registration",
+          image: icPatientRegistration,
+          routeName: AppRoutes.patientRegListScreen),
+      DashboardMenuModel(
+          name: "Doctor Desk",
+          image: icDoctorDesk,
+          routeName: AppRoutes.dashboard),
+    ]);
   }
 
   @override
@@ -72,14 +111,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           for (var element in state.loginResponseModel!.details!.last.menu!) {
             if (element.parentList != null) {
               if (element.parentList!.menuControllerMobile == "Dashboard") {
-                _menuList.clear();
+                // _menuList.clear();
 
                 if (element.childList != null) {
                   for (var element in element.childList!) {
                     for (var staticMenu in _staticMenuList) {
                       if (element.menuControllerMobile != null &&
                           (element.menuControllerMobile == staticMenu.name)) {
-                        _menuList.add(staticMenu);
+                        // _menuList.add(staticMenu);
                       }
                     }
                   }

@@ -1,10 +1,24 @@
 part of 'patient_registration_bloc.dart';
 
-sealed class PatientRegistrationState extends Equatable {
-  const PatientRegistrationState();
-  
-  @override
-  List<Object> get props => [];
-}
+class PatientRegistrationState extends Equatable {
+  const PatientRegistrationState(
+      {required this.patientRegistrationResponse,
+      required this.patientRegistrationStatus});
+  final FormzSubmissionStatus patientRegistrationStatus;
+  final String patientRegistrationResponse;
 
-final class PatientRegistrationInitial extends PatientRegistrationState {}
+  PatientRegistrationState copyWith({
+    FormzSubmissionStatus? patientRegistrationStatus,
+    String? patientRegistrationResponse,
+  }) {
+    return PatientRegistrationState(
+        patientRegistrationResponse:
+            patientRegistrationResponse ?? this.patientRegistrationResponse,
+        patientRegistrationStatus:
+            patientRegistrationStatus ?? this.patientRegistrationStatus);
+  }
+
+  @override
+  List<Object> get props =>
+      [patientRegistrationResponse, patientRegistrationStatus];
+}
