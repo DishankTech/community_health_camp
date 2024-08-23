@@ -124,7 +124,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           color: kTextBlackColor),
                                       inputType: TextInputType.text,
                                       onChange: (p0) {},
-                                      maxLength: 12,
+                                      // maxLength: 12,
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Location Name',
@@ -152,7 +152,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           color: kTextBlackColor),
                                       inputType: TextInputType.number,
                                       onChange: (p0) {},
-                                      maxLength: 12,
+                                      // maxLength: 12,
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Contact No',
@@ -180,7 +180,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           color: kTextBlackColor),
                                       inputType: TextInputType.text,
                                       onChange: (p0) {},
-                                      maxLength: 12,
+                                      // maxLength: 12,
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Contact Person Name',
@@ -208,7 +208,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           color: kTextBlackColor),
                                       inputType: TextInputType.emailAddress,
                                       onChange: (p0) {},
-                                      maxLength: 12,
+                                      // maxLength: 12,
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Email Id',
@@ -236,7 +236,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           color: kTextBlackColor),
                                       inputType: TextInputType.streetAddress,
                                       onChange: (p0) {},
-                                      maxLength: 12,
+                                      // maxLength: 12,
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Address 1',
@@ -264,7 +264,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           color: kTextBlackColor),
                                       inputType: TextInputType.streetAddress,
                                       onChange: (p0) {},
-                                      maxLength: 12,
+                                      // maxLength: 12,
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Address 2',
@@ -328,7 +328,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                         []);
                                               }
                                             },
-                                            maxLength: 12,
+                                            // maxLength: 12,
                                             readOnly: true,
                                             label: RichText(
                                               text: const TextSpan(
@@ -409,7 +409,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                 }
                                               }
                                             },
-                                            maxLength: 12,
+                                            // maxLength: 12,
                                             readOnly: true,
                                             label: RichText(
                                               text: const TextSpan(
@@ -495,7 +495,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                 }
                                               }
                                             },
-                                            maxLength: 12,
+                                            // maxLength: 12,
                                             readOnly: true,
                                             label: RichText(
                                               text: const TextSpan(
@@ -576,7 +576,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                         []);
                                               }
                                             },
-                                            maxLength: 12,
+                                            // maxLength: 12,
                                             readOnly: true,
                                             label: RichText(
                                               text: const TextSpan(
@@ -652,7 +652,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           }
                                         }
                                       },
-                                      maxLength: 12,
+                                      // maxLength: 12,
                                       readOnly: true,
                                       label: RichText(
                                         text: const TextSpan(
@@ -692,8 +692,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                             flex: 1,
                                             child: AppButton(
                                               onTap: () {
-                                                if (widget.isEdit == false ||
-                                                    widget.isEdit == null) {
+                                                if (widget.isEdit == false) {
                                                 } else {
                                                   locationMasterController
                                                       .saveLocationMaster();
