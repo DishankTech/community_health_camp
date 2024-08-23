@@ -81,7 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       DashboardMenuModel(
           name: "Location Master",
           image: icLocationMaster,
-          routeName: AppRoutes.locationMaster),
+          routeName: AppRoutes.addLocationMaster),
       DashboardMenuModel(
           name: "Stakeholder Master",
           image: icStakeholderMaster,
@@ -122,9 +122,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 // _menuList.clear();
 
                 //statically added
-                _menuList.add(DashboardMenuModel(name: "Camp Creation", image: icCampCreation,routeName: AppRoutes.campCreation));
-                _menuList.add(DashboardMenuModel(name: "Camp Calendar", image: icCalendarColourfull,routeName: AppRoutes.campCalendar));
-                _menuList.add(DashboardMenuModel(name: "Camp Co-Ordinator", image: icPersons,routeName: AppRoutes.campCoordinator));
+                _menuList.add(DashboardMenuModel(
+                    name: "Camp Creation",
+                    image: icCampCreation,
+                    routeName: AppRoutes.campCreation));
+                _menuList.add(DashboardMenuModel(
+                    name: "Camp Calendar",
+                    image: icCalendarColourfull,
+                    routeName: AppRoutes.campCalendar));
+                _menuList.add(DashboardMenuModel(
+                    name: "Camp Co-Ordinator",
+                    image: icPersons,
+                    routeName: AppRoutes.campCoordinator));
 
                 if (element.childList != null) {
                   for (var element in element.childList!) {
@@ -141,7 +150,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           }
         }
         return Scaffold(
-
             body: Container(
                 decoration: const BoxDecoration(
                     image: DecorationImage(
@@ -154,33 +162,40 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         borderRadius: BorderRadius.circular(5),
                         onTap: () {
                           showDialog(
-
                               builder: (ctxt) {
                                 return AlertDialog(
-                                    title: Text("Logout",textAlign: TextAlign.center,),
+                                    title: Text(
+                                      "Logout",
+                                      textAlign: TextAlign.center,
+                                    ),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
                                         Text("Do you want to logout?"),
                                         Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
                                           children: [
                                             AppButton(
-                                              onTap: (){
+                                              onTap: () {
                                                 Navigator.pop(context);
                                               },
                                               title: "Cancel",
-                                              mWidth: SizeConfig.screenWidth * 0.3,
-
+                                              mWidth:
+                                                  SizeConfig.screenWidth * 0.3,
                                             ),
-                                            SizedBox(width: 10,),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
                                             AppButton(
-                                              onTap: (){
+                                              onTap: () {
                                                 DataProvider().clearUserData();
-                                                Navigator.pushNamed(context, AppRoutes.loginScreen);
+                                                Navigator.pushNamed(context,
+                                                    AppRoutes.loginScreen);
                                               },
-                                              title:"Logout",
-                                              mWidth: SizeConfig.screenWidth * 0.3,
+                                              title: "Logout",
+                                              mWidth:
+                                                  SizeConfig.screenWidth * 0.3,
                                             )
                                           ],
                                         ),

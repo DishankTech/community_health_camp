@@ -14,7 +14,9 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
   UserMasterBloc({required this.userMasterRepository})
       : super(const UserMasterState(
             createUserResponse: '',
-            createUserStatus: FormzSubmissionStatus.initial)) {
+            createUserStatus: FormzSubmissionStatus.initial,
+            getUserResponse: '',
+            getUserStatus: FormzSubmissionStatus.initial)) {
     on<CreateUserRequest>(_onCreateUserRequest);
   }
 
