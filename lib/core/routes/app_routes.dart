@@ -5,12 +5,13 @@ import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/location_master/location_master.dart';
+import 'package:community_health_app/screens/location_master/location_master_list.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration_edit.dart';
 import 'package:community_health_app/screens/patient_registration/ui/registered_patients.dart';
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
-import 'package:community_health_app/screens/location_master/location_master_screen.dart';
+import 'package:community_health_app/screens/location_master/add_location_master.dart';
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_edit.dart';
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_list.dart';
 
@@ -54,7 +55,8 @@ class AppRoutes {
   static const String updateFamilyMemberScreen = "/updateFamilyMemberScreen";
   static const String idCardList = "/idCardList";
   static const String idCard = "/idCard";
-  static const String locationMaster = "/locationMaster";
+  static const String addLocationMaster = "/locationMaster";
+  static const String locationMasterList = "/locationMasterList";
   static const String campCreation = "/campCreation";
   static const String patientRegListScreen = "/patientRegListScreen";
   static const String patientRegScreen = "/patientRegScreen";
@@ -129,9 +131,13 @@ class AppRoutes {
           builder: (_) => const UpdatePasswordPage(),
         );
 
-      case locationMaster:
+      case addLocationMaster:
         return MaterialPageRoute(
-          builder: (_) => const LocationMasterScreen(),
+          builder: (_) => const AddLocationMaster(),
+        );
+      case locationMasterList:
+        return MaterialPageRoute(
+          builder: (_) => const LocationMasterList(),
         );
       case campCreation:
         return MaterialPageRoute(

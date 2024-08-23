@@ -12,18 +12,25 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class LocationMasterScreen extends StatefulWidget {
-  const LocationMasterScreen({super.key});
+class AddLocationMaster extends StatefulWidget {
+  final bool? isView;
+  final bool? isEdit;
+  final int? locationId;
+
+  const AddLocationMaster(
+      {super.key, this.isView, this.locationId, this.isEdit});
 
   @override
-  State<LocationMasterScreen> createState() => _LocationMasterScreenState();
+  State<AddLocationMaster> createState() => _AddLocationMasterState();
 }
 
-class _LocationMasterScreenState extends State<LocationMasterScreen> {
+class _AddLocationMasterState extends State<AddLocationMaster> {
   final LocationMasterController locationMasterController =
       Get.put(LocationMasterController());
 
   checkInternetAndLoadData() async {
+    // LocDetails args = ModalRoute.of(context)?.settings.arguments as LocDetails;
+
     List<ConnectivityResult> connectivityResult =
         await Connectivity().checkConnectivity();
     // setState(() {
@@ -33,8 +40,10 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
     // });
     locationMasterController.update();
     if (locationMasterController.hasInternet) {
-      await locationMasterController.getDivisionList();
-      await locationMasterController.getCountry();
+      await locationMasterController.getCountry(false);
+      if (widget.isView == true || widget.isEdit == true) {
+        locationMasterController.getLocationDetails(widget.locationId);
+      }
     }
     // setState(() {});
     locationMasterController.update();
@@ -43,6 +52,17 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
   @override
   void initState() {
     // TODO: implement initState
+    locationMasterController.locationName.text = "";
+    locationMasterController.contactNo.text = "";
+    locationMasterController.contactPerson.text = "";
+    locationMasterController.emailId.text = "";
+    locationMasterController.address1.text = "";
+    locationMasterController.address2.text = "";
+    locationMasterController.distController.text = "";
+    locationMasterController.talukaController.text = "";
+    locationMasterController.cityController.text = "";
+    locationMasterController.countryController.text = "";
+    locationMasterController.stateController.text = "";
     checkInternetAndLoadData();
     super.initState();
   }
@@ -59,7 +79,11 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            mAppBarV1(title: "Location Master", context: context),
+            mAppBarV1(
+                title: widget.isEdit == true
+                    ? "Edit Location Master"
+                    : "Location Master",
+                context: context),
             SizedBox(
               height: responsiveHeight(10),
             ),
@@ -92,6 +116,7 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       height: responsiveHeight(20),
                                     ),
                                     AppRoundTextField(
+                                      readOnly: widget?.isView,
                                       controller:
                                           locationMasterController.locationName,
                                       inputStyle: TextStyle(
@@ -119,6 +144,7 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       height: responsiveHeight(20),
                                     ),
                                     AppRoundTextField(
+                                      readOnly: widget?.isView,
                                       controller:
                                           locationMasterController.contactNo,
                                       inputStyle: TextStyle(
@@ -146,6 +172,7 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       height: responsiveHeight(30),
                                     ),
                                     AppRoundTextField(
+                                      readOnly: widget.isView,
                                       controller: locationMasterController
                                           .contactPerson,
                                       inputStyle: TextStyle(
@@ -173,6 +200,7 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       height: responsiveHeight(30),
                                     ),
                                     AppRoundTextField(
+                                      readOnly: widget.isView,
                                       controller:
                                           locationMasterController.emailId,
                                       inputStyle: TextStyle(
@@ -200,6 +228,7 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       height: responsiveHeight(30),
                                     ),
                                     AppRoundTextField(
+                                      readOnly: widget.isView,
                                       controller:
                                           locationMasterController.address1,
                                       inputStyle: TextStyle(
@@ -227,6 +256,7 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       height: responsiveHeight(30),
                                     ),
                                     AppRoundTextField(
+                                      readOnly: widget.isView,
                                       controller:
                                           locationMasterController.address2,
                                       inputStyle: TextStyle(
@@ -265,34 +295,38 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             inputType: TextInputType.number,
                                             onChange: (p0) {},
                                             onTap: () {
-                                              commonBottomSheet(
-                                                  context,
-                                                  (p0) async => {
-                                                        locationMasterController
-                                                                .selectedCountryVal =
-                                                            p0.lookupDetHierDescEn,
-                                                        locationMasterController
-                                                            .selectedCountry = p0,
-                                                        locationMasterController
-                                                                .countryController
-                                                                .text =
-                                                            locationMasterController
-                                                                    .selectedCountryVal ??
-                                                                "",
-                                                       await locationMasterController.getState(
-                                                            locationMasterController
-                                                                .selectedCountry
-                                                                ?.lookupDetHierId.toString()),
-                                                        locationMasterController
-                                                            .update()
-                                                      },
-                                                  "Country",
-                                                  locationMasterController
-                                                          .countryModel
-                                                          ?.details
-                                                          ?.first
-                                                          .lookupDetHierarchical ??
-                                                      []);
+                                              if (widget.isView == false ||
+                                                  widget.isView == null) {
+                                                commonBottomSheet(
+                                                    context,
+                                                    (p0) async => {
+                                                          locationMasterController
+                                                                  .selectedCountryVal =
+                                                              p0.lookupDetHierDescEn,
+                                                          locationMasterController
+                                                              .selectedCountry = p0,
+                                                          locationMasterController
+                                                              .countryController
+                                                              .text = locationMasterController
+                                                                  .selectedCountryVal ??
+                                                              "",
+                                                          await locationMasterController.getState(
+                                                              locationMasterController
+                                                                  .selectedCountry
+                                                                  ?.lookupDetHierId
+                                                                  .toString(),
+                                                              false),
+                                                          locationMasterController
+                                                              .update()
+                                                        },
+                                                    "Country",
+                                                    locationMasterController
+                                                            .countryModel
+                                                            ?.details
+                                                            ?.first
+                                                            .lookupDetHierarchical ??
+                                                        []);
+                                              }
                                             },
                                             maxLength: 12,
                                             readOnly: true,
@@ -335,33 +369,45 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                                 color: kTextBlackColor),
                                             inputType: TextInputType.number,
                                             onChange: (p0) {},
-                                            onTap: () {
-                                              commonBottomSheet1(
-                                                  context,
-                                                  (p0) async => {
-                                                        locationMasterController
-                                                                .selectedStateVal =
-                                                            p0.lookupDetHierDescEn,
-                                                        locationMasterController
-                                                            .selectedState = p0,
-                                                        locationMasterController
-                                                                .stateController
-                                                                .text =
+                                            onTap: () async {
+                                              if (widget.isView == false ||
+                                                  widget.isView == null) {
+                                                if (locationMasterController
+                                                        .selectedCountryVal!
+                                                        .isNotEmpty &&
+                                                    locationMasterController
+                                                        .stateModel!
+                                                        .details!
+                                                        .isNotEmpty) {
+                                                  await commonBottomSheet1(
+                                                      context,
+                                                      (p0) async => {
                                                             locationMasterController
+                                                                    .selectedStateVal =
+                                                                p0.lookupDetHierDescEn,
+                                                            locationMasterController
+                                                                .selectedState = p0,
+                                                            locationMasterController
+                                                                .stateController
+                                                                .text = locationMasterController
                                                                     .selectedStateVal ??
                                                                 "",
-                                                    await locationMasterController.getState(
-                                                        locationMasterController
-                                                            .selectedState
-                                                            ?.lookupDetHierId.toString()),
-                                                        locationMasterController
-                                                            .update()
-                                                      },
-                                                  "State",
-                                                  locationMasterController
-                                                          .subLocationModel
-                                                          ?.details ??
-                                                      []);
+                                                            await locationMasterController.getDist(
+                                                                locationMasterController
+                                                                    .selectedState
+                                                                    ?.lookupDetHierId
+                                                                    .toString(),
+                                                                false),
+                                                            locationMasterController
+                                                                .update()
+                                                          },
+                                                      "State",
+                                                      locationMasterController
+                                                              .stateModel
+                                                              ?.details ??
+                                                          []);
+                                                }
+                                              }
                                             },
                                             maxLength: 12,
                                             readOnly: true,
@@ -408,33 +454,46 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                                 color: kTextBlackColor),
                                             inputType: TextInputType.number,
                                             onChange: (p0) {},
-                                            onTap: () {
-                                              commonBottomSheet1(
-                                                  context,
-                                                  (p0) async => {
-                                                        locationMasterController
-                                                                .selectedDistVal =
-                                                            p0.lookupDetHierDescEn,
-                                                        locationMasterController
-                                                            .selectedDist = p0,
-                                                        locationMasterController
-                                                                .distController
-                                                                .text =
+                                            onTap: () async {
+                                              if (widget.isView == false ||
+                                                  widget.isView == null) {
+                                                if (locationMasterController
+                                                        .selectedStateVal!
+                                                        .isNotEmpty &&
+                                                    locationMasterController
+                                                        .distModel!
+                                                        .details!
+                                                        .isNotEmpty) {
+                                                  await commonBottomSheet1(
+                                                      context,
+                                                      (p0) async => {
                                                             locationMasterController
-                                                                    .selectedDistVal ??
-                                                                "",
-                                                    await locationMasterController.getState(
-                                                        locationMasterController
-                                                            .selectedDist
-                                                            ?.lookupDetHierId.toString()),
-                                                        locationMasterController
-                                                            .update()
-                                                      },
-                                                  "District",
-                                                  locationMasterController
-                                                          .subLocationModel
-                                                          ?.details ??
-                                                      []);
+                                                                    .selectedDistVal =
+                                                                p0.lookupDetHierDescEn,
+                                                            locationMasterController
+                                                                .selectedDist = p0,
+                                                            locationMasterController
+                                                                    .distController
+                                                                    .text =
+                                                                locationMasterController
+                                                                        .selectedDistVal ??
+                                                                    "",
+                                                            await locationMasterController.getTaluka(
+                                                                locationMasterController
+                                                                    .selectedDist
+                                                                    ?.lookupDetHierId
+                                                                    .toString(),
+                                                                false),
+                                                            locationMasterController
+                                                                .update()
+                                                          },
+                                                      "District",
+                                                      locationMasterController
+                                                              .distModel
+                                                              ?.details ??
+                                                          []);
+                                                }
+                                              }
                                             },
                                             maxLength: 12,
                                             readOnly: true,
@@ -478,32 +537,44 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                             inputType: TextInputType.number,
                                             onChange: (p0) {},
                                             onTap: () {
-                                              commonBottomSheet(
-                                                  context,
-                                                  (p0) async => {
-                                                        locationMasterController
-                                                                .selectedTalukaVal =
-                                                            p0.lookupDetHierDescEn,
-                                                        locationMasterController
-                                                            .selectedTaluka = p0,
-                                                        locationMasterController
-                                                                .talukaController
-                                                                .text =
-                                                            locationMasterController
-                                                                    .selectedTalukaVal ??
-                                                                "",
-                                                    await locationMasterController.getState(
-                                                        locationMasterController
-                                                            .selectedTaluka
-                                                            ?.lookupDetHierId.toString()),
-                                                        locationMasterController
-                                                            .update()
-                                                      },
-                                                  "Taluka",
-                                                  locationMasterController
-                                                          .subLocationModel
-                                                          ?.details ??
-                                                      []);
+                                              if (widget.isView == false ||
+                                                  widget.isView == null) {
+                                                if (locationMasterController
+                                                        .selectedDistVal!
+                                                        .isNotEmpty &&
+                                                    locationMasterController
+                                                        .talukaModel!
+                                                        .details!
+                                                        .isNotEmpty) {}
+                                                commonBottomSheet(
+                                                    context,
+                                                    (p0) async => {
+                                                          locationMasterController
+                                                                  .selectedTalukaVal =
+                                                              p0.lookupDetHierDescEn,
+                                                          locationMasterController
+                                                              .selectedTaluka = p0,
+                                                          locationMasterController
+                                                                  .talukaController
+                                                                  .text =
+                                                              locationMasterController
+                                                                      .selectedTalukaVal ??
+                                                                  "",
+                                                          await locationMasterController.getCity(
+                                                              locationMasterController
+                                                                  .selectedTaluka
+                                                                  ?.lookupDetHierId
+                                                                  .toString(),
+                                                              false),
+                                                          locationMasterController
+                                                              .update()
+                                                        },
+                                                    "Taluka",
+                                                    locationMasterController
+                                                            .talukaModel
+                                                            ?.details ??
+                                                        []);
+                                              }
                                             },
                                             maxLength: 12,
                                             readOnly: true,
@@ -548,27 +619,38 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                       inputType: TextInputType.number,
                                       onChange: (p0) {},
                                       onTap: () {
-                                        commonBottomSheet(
-                                            context,
-                                            (p0) => {
-                                                  locationMasterController
-                                                          .selectedCityVal =
-                                                      p0.lookupDetHierDescEn,
-                                                  locationMasterController
-                                                      .selectedCity = p0,
-                                                  locationMasterController
-                                                          .cityController.text =
+                                        if (widget.isView == false ||
+                                            widget.isView == null) {
+                                          if (locationMasterController
+                                                  .selectedTalukaVal!
+                                                  .isNotEmpty &&
+                                              locationMasterController
+                                                  .cityModel!
+                                                  .details!
+                                                  .isNotEmpty) {
+                                            commonBottomSheet(
+                                                context,
+                                                (p0) => {
                                                       locationMasterController
-                                                              .selectedCityVal ??
-                                                          "",
-                                                  locationMasterController
-                                                      .update(),
-                                                },
-                                            "City",
-                                            locationMasterController
-                                                    .subLocationModel
-                                                    ?.details ??
-                                                []);
+                                                              .selectedCityVal =
+                                                          p0.lookupDetHierDescEn,
+                                                      locationMasterController
+                                                          .selectedCity = p0,
+                                                      locationMasterController
+                                                              .cityController
+                                                              .text =
+                                                          locationMasterController
+                                                                  .selectedCityVal ??
+                                                              "",
+                                                      locationMasterController
+                                                          .update(),
+                                                    },
+                                                "City",
+                                                locationMasterController
+                                                        .cityModel?.details ??
+                                                    []);
+                                          }
+                                        }
                                       },
                                       maxLength: 12,
                                       readOnly: true,
@@ -601,39 +683,47 @@ class _LocationMasterScreenState extends State<LocationMasterScreen> {
                                     SizedBox(
                                       height: responsiveHeight(30),
                                     ),
-                                    Row(
-                                      children: [
-                                        Flexible(
-                                          flex: 1,
-                                          child: AppButton(
-                                            onTap: () {
-                                              locationMasterController
-                                                  .saveLocationMaster();
-                                            },
-                                            title: "Save",
-                                            iconData: Icon(
-                                              Icons.arrow_forward,
-                                              color: kWhiteColor,
-                                              size: responsiveHeight(24),
+                                    Visibility(
+                                      visible: widget.isView == false ||
+                                          widget.isView == null,
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            flex: 1,
+                                            child: AppButton(
+                                              onTap: () {
+                                                if (widget.isEdit == false ||
+                                                    widget.isEdit == null) {
+                                                } else {
+                                                  locationMasterController
+                                                      .saveLocationMaster();
+                                                }
+                                              },
+                                              title: "Save",
+                                              iconData: Icon(
+                                                Icons.arrow_forward,
+                                                color: kWhiteColor,
+                                                size: responsiveHeight(24),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: responsiveWidth(60),
-                                        ),
-                                        Flexible(
-                                          flex: 1,
-                                          child: AppButton(
-                                            title: "Clear",
-                                            buttonColor: Colors.grey,
-                                            iconData: Icon(
-                                              Icons.arrow_forward,
-                                              color: kWhiteColor,
-                                              size: responsiveHeight(24),
+                                          SizedBox(
+                                            width: responsiveWidth(60),
+                                          ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: AppButton(
+                                              title: "Clear",
+                                              buttonColor: Colors.grey,
+                                              iconData: Icon(
+                                                Icons.arrow_forward,
+                                                color: kWhiteColor,
+                                                size: responsiveHeight(24),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     )
                                   ],
                                 ),

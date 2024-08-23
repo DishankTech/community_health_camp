@@ -586,7 +586,7 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
 
 Future<dynamic> commonBottomSheet1(
     BuildContext context,
-    Function(dynamic) onItemSelected,
+    Future Function(dynamic) onItemSelected,
     String bottomSheetTitle,
     List<dynamic> list,
     ) {
