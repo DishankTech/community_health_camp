@@ -9,7 +9,9 @@ PreferredSize mAppBarV1(
     {required String title,
     required BuildContext context,
     Widget? suffix,
-    Widget? leading}) {
+    Widget? leading,
+    Function? onBackButtonPress
+    }) {
   return PreferredSize(
     preferredSize: Size.fromHeight(responsiveHeight(60)),
     child: Padding(
@@ -28,7 +30,8 @@ PreferredSize mAppBarV1(
               leading ??
                   GestureDetector(
                     onTap: () {
-                      Navigator.pop(context);
+                      // Navigator.pop(context);
+                      onBackButtonPress!();
                     },
                     child: Image.asset(
                       icArrowBack,

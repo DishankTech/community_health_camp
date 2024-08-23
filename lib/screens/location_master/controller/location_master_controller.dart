@@ -157,22 +157,21 @@ class LocationMasterController extends GetxController {
       address2.text = locationDetailsModel?.details?.address2 ?? "";
 
       await getCountry(true);
-      if(locationDetailsModel?.details?.lookupDetHierIdState != null){
-        await getState(locationDetailsModel?.details?.lookupDetHierIdState, true);
-
+      if (locationDetailsModel?.details?.lookupDetHierIdState != null) {
+        await getState(
+            locationDetailsModel?.details?.lookupDetHierIdState, true);
       }
-      if(locationDetailsModel?.details?.lookupDetHierIdDistrict != null){
+      if (locationDetailsModel?.details?.lookupDetHierIdDistrict != null) {
         await getDist(
             locationDetailsModel?.details?.lookupDetHierIdDistrict, true);
       }
 
-      if(locationDetailsModel?.details?.lookupDetHierIdTaluka != null){
-        await getTaluka(locationDetailsModel?.details?.lookupDetHierIdTaluka,true);
-
+      if (locationDetailsModel?.details?.lookupDetHierIdTaluka != null) {
+        await getTaluka(
+            locationDetailsModel?.details?.lookupDetHierIdTaluka, true);
       }
-      if(locationDetailsModel?.details?.lookupDetHierIdCity != null){
-        await getCity(locationDetailsModel?.details?.lookupDetHierIdCity,true);
-
+      if (locationDetailsModel?.details?.lookupDetHierIdCity != null) {
+        await getCity(locationDetailsModel?.details?.lookupDetHierIdCity, true);
       }
       update();
     } else if (response.statusCode == 401) {
@@ -187,13 +186,26 @@ class LocationMasterController extends GetxController {
     update();
   }
 
-  getCountry(bool? isView) async {
+  updateLocationMaster(locationMasterid) async {
     isLoading = true;
-    final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.getAllAddress);
+    final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.updateLocation);
+
     final Map<String, dynamic> body = {
-      "lookup_det_code_list1": [
-        {"lookup_det_code": "CRY"}
-      ]
+      "location_master_id": locationMasterid,
+      "location_name": locationName.text,
+      "contact_number": contactNo.text,
+      "contact_person_name": contactPerson.text,
+      "email_id": emailId.text,
+      "address1": address1.text,
+      "address2": address2.text,
+      "lookup_det_hier_id_country": selectedCountry?.lookupDetHierId,
+      "lookup_det_hier_id_state": selectedState?.lookupDetHierId,
+      "lookup_det_hier_id_district": selectedDist?.lookupDetHierId,
+      "lookup_det_hier_id_taluka": selectedTaluka?.lookupDetHierId,
+      "lookup_det_hier_id_city": selectedCity?.lookupDetHierId,
+      "lookup_det_id_division": null,
+      "org_id": 1,
+      "status": 1
     };
 
     String jsonbody = json.encode(body);
@@ -209,180 +221,31 @@ class LocationMasterController extends GetxController {
     debugPrint("response.body : ${response.body}");
 
     if (response.statusCode == 200) {
-      isLoading = false;
-
       final data = json.decode(response.body);
-      // if (data['status'] == 'Success') {
-      isLoading = false;
-      countryModel = CountryModel.fromJson(data);
-      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
-      if (isView == true) {
-        countryController.text = countryModel?.details?.first
-                .lookupDetHierarchical?.first.lookupDetHierDescEn ??
-            '';
+      addlocationMasterResp = AddLocationMasterResp.fromJson(data);
+
+      if (addlocationMasterResp!.statusCode == 200) {
+        isLoading = false;
+        CustomMessage.toast("Save Successfully");
+        Get.back();
+        await fetchPage(1);
+      } else {
+        isLoading = false;
+        CustomMessage.toast("Save Failed");
+        Get.back();
       }
+
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
+      CustomMessage.toast("Save Failed");
+      Get.back();
 
       status = "Something went wrong";
     } else {
       isLoading = false;
-
-      throw Exception('Failed search');
-    }
-    update();
-  }
-
-  getState(id, bool? isView) async {
-    isLoading = true;
-    final uri = Uri.parse(
-        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
-
-    Map<String, String> headers = {
-      "Content-Type": "application/json",
-    };
-
-    debugPrint(uri.path);
-
-    final response = await http.post(uri, headers: headers, body: null);
-    debugPrint(response.statusCode.toString());
-    debugPrint("response.body : ${response.body}");
-
-    if (response.statusCode == 200) {
-      isLoading = false;
-
-      final data = json.decode(response.body);
-      // if (data['status'] == 'Success') {
-      isLoading = false;
-      stateModel = SubLocationModel.fromJson(data);
-      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
-      if(isView == true){
-        stateController.text = stateModel?.details?.first.lookupDetHierDescEn ?? "";
-      }
-      update();
-    } else if (response.statusCode == 401) {
-      isLoading = false;
-
-      status = "Something went wrong";
-    } else {
-      isLoading = false;
-
-      throw Exception('Failed search');
-    }
-    update();
-  }
-
-  getDist(id, bool? isView) async {
-    isLoading = true;
-    final uri = Uri.parse(
-        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
-
-    Map<String, String> headers = {
-      "Content-Type": "application/json",
-    };
-
-    debugPrint(uri.path);
-
-    final response = await http.post(uri, headers: headers, body: null);
-    debugPrint(response.statusCode.toString());
-    debugPrint("response.body : ${response.body}");
-
-    if (response.statusCode == 200) {
-      isLoading = false;
-
-      final data = json.decode(response.body);
-      // if (data['status'] == 'Success') {
-      isLoading = false;
-      distModel = SubLocationModel.fromJson(data);
-
-      distController.text = distModel?.details?.first.lookupDetHierDescEn ?? "";
-      update();
-    } else if (response.statusCode == 401) {
-      isLoading = false;
-
-      status = "Something went wrong";
-    } else {
-      isLoading = false;
-
-      throw Exception('Failed search');
-    }
-    update();
-  }
-
-  getTaluka(id, bool? isView) async {
-    isLoading = true;
-    final uri = Uri.parse(
-        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
-
-    Map<String, String> headers = {
-      "Content-Type": "application/json",
-    };
-
-    debugPrint(uri.path);
-
-    final response = await http.post(uri, headers: headers, body: null);
-    debugPrint(response.statusCode.toString());
-    debugPrint("response.body : ${response.body}");
-
-    if (response.statusCode == 200) {
-      isLoading = false;
-
-      final data = json.decode(response.body);
-      // if (data['status'] == 'Success') {
-      isLoading = false;
-      talukaModel = SubLocationModel.fromJson(data);
-      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
-      if(isView == true){
-        talukaController.text = talukaModel?.details?.first.lookupDetHierDescEn ?? "";
-      }
-      update();
-    } else if (response.statusCode == 401) {
-      isLoading = false;
-
-      status = "Something went wrong";
-    } else {
-      isLoading = false;
-
-      throw Exception('Failed search');
-    }
-    update();
-  }
-
-  getCity(id, bool? isView) async {
-    isLoading = true;
-    final uri = Uri.parse(
-        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
-
-    Map<String, String> headers = {
-      "Content-Type": "application/json",
-    };
-
-    debugPrint(uri.path);
-
-    final response = await http.post(uri, headers: headers, body: null);
-    debugPrint(response.statusCode.toString());
-    debugPrint("response.body : ${response.body}");
-
-    if (response.statusCode == 200) {
-      isLoading = false;
-
-      final data = json.decode(response.body);
-      // if (data['status'] == 'Success') {
-      isLoading = false;
-      cityModel = SubLocationModel.fromJson(data);
-      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
-      if (isView == true) {
-        cityController.text =
-            cityModel?.details?.first.lookupDetHierDescEn ?? "";
-      }
-      update();
-    } else if (response.statusCode == 401) {
-      isLoading = false;
-
-      status = "Something went wrong";
-    } else {
-      isLoading = false;
+      CustomMessage.toast("Save Failed");
+      Get.back();
 
       throw Exception('Failed search');
     }
@@ -392,7 +255,7 @@ class LocationMasterController extends GetxController {
   saveLocationMaster() async {
     isLoading = true;
     final uri =
-        Uri.parse(ApiConstants.baseUrl + ApiConstants.saveLocationMaster);
+    Uri.parse(ApiConstants.baseUrl + ApiConstants.saveLocationMaster);
 
     final Map<String, dynamic> body = {
       "location_name": locationName.text,
@@ -454,4 +317,230 @@ class LocationMasterController extends GetxController {
     }
     update();
   }
+
+  getCountry(bool? isView) async {
+    isLoading = true;
+    final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.getAllAddress);
+    final Map<String, dynamic> body = {
+      "lookup_det_code_list1": [
+        {"lookup_det_code": "CRY"}
+      ]
+    };
+
+    String jsonbody = json.encode(body);
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+    debugPrint(body.toString());
+
+    final response = await http.post(uri, headers: headers, body: jsonbody);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      countryModel = CountryModel.fromJson(data);
+      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
+      if (isView == true) {
+        countryController.text = countryModel?.details?.first
+                .lookupDetHierarchical?.first.lookupDetHierDescEn ??
+            '';
+        selectedCountry =  countryModel?.details?.first
+            .lookupDetHierarchical?.first;
+
+        selectedCountryVal = countryModel?.details?.first
+            .lookupDetHierarchical?.first.lookupDetHierDescEn ??
+            '';
+      }
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+  getState(id, bool? isView) async {
+    isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      stateModel = SubLocationModel.fromJson(data);
+      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
+      if (isView == true) {
+        stateController.text =
+            stateModel?.details?.first.lookupDetHierDescEn ?? "";
+        selectedState = stateModel?.details?.first;
+        selectedStateVal = stateModel?.details?.first.lookupDetHierDescEn ?? "";
+      }
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+  getDist(id, bool? isView) async {
+    isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      distModel = SubLocationModel.fromJson(data);
+
+      distController.text = distModel?.details?.first.lookupDetHierDescEn ?? "";
+      if (isView == true) {
+        distController.text =
+            distModel?.details?.first.lookupDetHierDescEn ?? "";
+        selectedDist = distModel?.details?.first;
+        selectedDistVal= distModel?.details?.first.lookupDetHierDescEn ?? "";
+      }
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+  getTaluka(id, bool? isView) async {
+    isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      talukaModel = SubLocationModel.fromJson(data);
+      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
+      if (isView == true) {
+        talukaController.text =
+            talukaModel?.details?.first.lookupDetHierDescEn ?? "";
+        selectedTaluka = talukaModel?.details?.first;
+        selectedTalukaVal = talukaModel?.details?.first.lookupDetHierDescEn ?? "";
+      }
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+  getCity(id, bool? isView) async {
+    isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      cityModel = SubLocationModel.fromJson(data);
+
+      if (isView == true && cityModel!.details!.isNotEmpty) {
+        cityController.text =
+            cityModel!.details!.first.lookupDetHierDescEn ?? "";
+        selectedCity = cityModel?.details?.first;
+        selectedCityVal = cityModel!.details!.first.lookupDetHierDescEn ?? '';
+      } else {
+        cityController.text = "";
+      }
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+
 }

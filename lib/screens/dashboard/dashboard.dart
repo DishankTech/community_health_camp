@@ -93,6 +93,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         image: AssetImage(patRegBg), fit: BoxFit.fill)),
                 child: Column(children: [
                   mAppBarV1(
+                    suffix: IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, AppRoutes.locationMasterList);
+                        },
+                        icon: const Icon(Icons.location_city)),
                     title:
                         "Welcome, ${state.loginResponseModel != null ? state.loginResponseModel!.details!.last.user!.fullName : ''}",
                     leading: GestureDetector(
