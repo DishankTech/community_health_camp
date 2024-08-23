@@ -75,8 +75,10 @@ class MasterDataRepository {
     return await http
         .get(Uri.parse('$kBaseUrl1$kGetAddressByPincode?pincode=$pincode'));
   }
-  // Future<http.Response> getDialysisMode() async {
-  //   return await http
-  //       .get(Uri.parse('$kBaseUrl$kGetHaemodialysisProcedureTypeList'));
-  // }
+
+  Future<http.Response> getMaster(Map payload) async {
+    return await http.post(Uri.parse('$kBaseUrl$kGetMasters'),
+        body: jsonEncode(payload),
+        headers: {'Content-Type': "application/json"});
+  }
 }

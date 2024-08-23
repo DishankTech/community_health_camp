@@ -6,3 +6,14 @@ sealed class PatientRegistrationEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+// ignore: must_be_immutable
+class PatientRegistrationRequest extends PatientRegistrationEvent {
+  Map payload;
+  PatientRegistrationRequest({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}
+
+class GetPatientListRequest extends PatientRegistrationEvent {}

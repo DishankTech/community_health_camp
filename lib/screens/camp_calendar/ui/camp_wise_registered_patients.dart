@@ -99,12 +99,12 @@ class _CampWiseRegisteredPatientsScreenState
             ),*/
           ),
           Container(
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                      offset: Offset(0, 0),
+                      offset: const Offset(0, 0),
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 1,
                       blurRadius: 5)
@@ -119,8 +119,8 @@ class _CampWiseRegisteredPatientsScreenState
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        "Total Registered Patients ",
+                      const Text(
+                        "Total Registered Patients",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 12),
                       ),
@@ -128,30 +128,29 @@ class _CampWiseRegisteredPatientsScreenState
                         width: 40,
                         height: 40,
                         clipBehavior: Clip.hardEdge,
-                        padding: EdgeInsets.only(
-                            left: 8, right: 8, top: 4, bottom: 4),
-                        decoration: BoxDecoration(
+                        padding: const EdgeInsets.only(
+                            left: 4, right: 4, top: 4, bottom: 4),
+                        decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(
                               Radius.circular(5),
                             ),
                             color: kPrimaryColor),
-                        child: Column(
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                                child: Text(
+                            Text(
                               "210",
                               style: TextStyle(
                                   color: kWhiteColor,
                                   fontWeight: FontWeight.bold,
-                                  fontFamily: "Montserrat",
+                                  fontFamily: Montserrat,
                                   fontSize: 12),
-                            )),
+                            ),
                           ],
-                          mainAxisAlignment: MainAxisAlignment.center,
                         ),
                       ),
-                      Spacer(),
-                      Text(
+                      const Spacer(),
+                      const Text(
                         "Total Camps ",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 12),
@@ -159,26 +158,25 @@ class _CampWiseRegisteredPatientsScreenState
                       Container(
                         width: 35,
                         height: 35,
-                        margin: EdgeInsets.only(right: 5),
+                        margin: const EdgeInsets.only(right: 5),
                         clipBehavior: Clip.hardEdge,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(
                               Radius.circular(40),
                             ),
                             color: kPrimaryDarkColor),
-                        child: Column(
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                                child: Text(
+                            Text(
                               "6",
                               style: TextStyle(
                                   color: kWhiteColor,
                                   fontWeight: FontWeight.bold,
                                   fontFamily: "Montserrat",
                                   fontSize: 12),
-                            )),
+                            ),
                           ],
-                          mainAxisAlignment: MainAxisAlignment.center,
                         ),
                       ),
                     ],
@@ -192,10 +190,10 @@ class _CampWiseRegisteredPatientsScreenState
                               fontSize: responsiveFont(14),
                               color: kBlackColor,
                               fontWeight: FontWeight.bold)),
-                      Text("Pune"),
+                      const Text("Pune"),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2,
                   ),
                   Row(
@@ -209,10 +207,10 @@ class _CampWiseRegisteredPatientsScreenState
                             color: kBlackColor,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text("1 Aug 2024"),
+                      const Text("1 Aug 2024"),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2,
                   ),
                   Row(
@@ -226,10 +224,10 @@ class _CampWiseRegisteredPatientsScreenState
                             color: kBlackColor,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text("243305"),
+                      const Text("243305"),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2,
                   ),
                   Row(
@@ -243,10 +241,10 @@ class _CampWiseRegisteredPatientsScreenState
                             color: kBlackColor,
                             fontWeight: FontWeight.bold),
                       ),
-                      Text("Health Camp"),
+                      const Text("Health Camp"),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 2,
                   ),
                   RichText(
@@ -285,7 +283,7 @@ class _CampWiseRegisteredPatientsScreenState
                             color: Colors.white,
                             boxShadow: [
                               BoxShadow(
-                                  offset: Offset(0, 0),
+                                  offset: const Offset(0, 0),
                                   color: Colors.grey.withOpacity(0.5),
                                   spreadRadius: 1,
                                   blurRadius: 5)

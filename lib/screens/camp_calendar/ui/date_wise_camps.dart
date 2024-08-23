@@ -24,13 +24,20 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
   void initState() {
     super.initState();
 
-    _dateWiseCampList.addAll([DateWiseCampsModel(district: "Pune", date: "1 Aug 2024", noOfCamps: "6"),
-      DateWiseCampsModel(district: "Kolhapur", date: "1 Aug 2024", noOfCamps: "3"),
-      DateWiseCampsModel(district: "Sangli", date: "1 Aug 2024", noOfCamps: "3"),
-      DateWiseCampsModel(district: "Mumbai", date: "1 Aug 2024", noOfCamps: "1"),
-      DateWiseCampsModel(district: "Nashik", date: "1 Aug 2024", noOfCamps: "3"),
-      DateWiseCampsModel(district: "Nagpur", date: "1 Aug 2024", noOfCamps: "4"),
-      DateWiseCampsModel(district: "Akola", date: "1 Aug 2024", noOfCamps: "1"),]);
+    _dateWiseCampList.addAll([
+      DateWiseCampsModel(district: "Pune", date: "1 Aug 2024", noOfCamps: "6"),
+      DateWiseCampsModel(
+          district: "Kolhapur", date: "1 Aug 2024", noOfCamps: "3"),
+      DateWiseCampsModel(
+          district: "Sangli", date: "1 Aug 2024", noOfCamps: "3"),
+      DateWiseCampsModel(
+          district: "Mumbai", date: "1 Aug 2024", noOfCamps: "1"),
+      DateWiseCampsModel(
+          district: "Nashik", date: "1 Aug 2024", noOfCamps: "3"),
+      DateWiseCampsModel(
+          district: "Nagpur", date: "1 Aug 2024", noOfCamps: "4"),
+      DateWiseCampsModel(district: "Akola", date: "1 Aug 2024", noOfCamps: "1"),
+    ]);
   }
 
   @override
@@ -40,12 +47,15 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Change to your desired color
       statusBarBrightness: Brightness.light,
-      statusBarIconBrightness: Brightness.light, // For light text/icons on the status bar
+      statusBarIconBrightness:
+          Brightness.light, // For light text/icons on the status bar
     ));
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
+        decoration: const BoxDecoration(
+            image:
+                DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -56,9 +66,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.patientRegScreen);
-                    },
+                    onTap: () {},
                     child: Ink(
                       child: Image.asset(
                         icSquarePlus,
@@ -74,14 +82,22 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          Navigator.pushNamed(context, AppRoutes.districtWiseCamps);
+                          Navigator.pushNamed(
+                              context, AppRoutes.districtWiseCamps);
                         },
                         child: Container(
                           margin: EdgeInsets.all(5),
                           decoration: BoxDecoration(
                               color: Colors.white,
-                              boxShadow: [BoxShadow(offset: Offset(0, 0), color: Colors.grey.withOpacity(0.5), spreadRadius: 1, blurRadius: 5)],
-                              borderRadius: BorderRadius.circular(responsiveHeight(20))),
+                              boxShadow: [
+                                BoxShadow(
+                                    offset: Offset(0, 0),
+                                    color: Colors.grey.withOpacity(0.5),
+                                    spreadRadius: 1,
+                                    blurRadius: 5)
+                              ],
+                              borderRadius:
+                                  BorderRadius.circular(responsiveHeight(20))),
                           child: Padding(
                             padding: const EdgeInsets.all(10.0),
                             child: Row(
@@ -90,28 +106,38 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text("District : ",style: TextStyle(
-                                            fontSize: responsiveFont(14),
-                                            color: kBlackColor,
-                                            fontWeight: FontWeight.bold)),
+                                        Text("District : ",
+                                            style: TextStyle(
+                                                fontSize: responsiveFont(14),
+                                                color: kBlackColor,
+                                                fontWeight: FontWeight.bold)),
                                         Text(_dateWiseCampList[index].district),
                                       ],
                                     ),
-                                    SizedBox(height: 2,),
+                                    SizedBox(
+                                      height: 2,
+                                    ),
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text("Date : ",style: TextStyle(fontSize: responsiveFont(14),
-                                            color: kBlackColor,fontWeight: FontWeight.bold),),
+                                        Text(
+                                          "Date : ",
+                                          style: TextStyle(
+                                              fontSize: responsiveFont(14),
+                                              color: kBlackColor,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                         Text(_dateWiseCampList[index].date),
                                       ],
                                     ),
-
-
                                   ],
                                 ),
                                 Spacer(),
@@ -119,8 +145,14 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                                   // mainAxisAlignment: MainAxisAlignment.center,
                                   // crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text("Total Camps",style: TextStyle(fontWeight: FontWeight.bold),),
-                                    SizedBox(height: 4,),
+                                    Text(
+                                      "Total Camps",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                      height: 4,
+                                    ),
                                     Container(
                                       width: 35,
                                       height: 35,
@@ -133,14 +165,17 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                                           color: kPrimaryDarkColor),
                                       child: Column(
                                         children: [
-
                                           Container(
                                               child: Text(
-                                                _dateWiseCampList[index].noOfCamps,
-                                                style: TextStyle(color: kWhiteColor, fontWeight: FontWeight.bold, fontFamily: "Montserrat"),
-                                              )),
+                                            _dateWiseCampList[index].noOfCamps,
+                                            style: TextStyle(
+                                                color: kWhiteColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: "Montserrat"),
+                                          )),
                                         ],
-                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
                                       ),
                                     ),
                                   ],

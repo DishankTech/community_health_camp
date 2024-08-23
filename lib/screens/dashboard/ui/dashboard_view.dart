@@ -46,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 title: "Dashboard",
                 context: context,
                 suffix: Material(
-                  color: Colors.transparent,
+                  color: Colors.white,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(5),
                     onTap: () {

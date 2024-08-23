@@ -8,7 +8,10 @@ import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
 
 class StakeHolderMasterScreen extends StatefulWidget {
@@ -49,6 +52,9 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
   Map? _selectedDivision;
   Map? _selectedStatus;
   bool _isObscure = true;
+
+  Map? _selectedStakeholder;
+  Map? _selectedDesignationType;
 
   void _toggleObscure() {
     setState(() {
@@ -548,14 +554,46 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                           children: [
                             Flexible(
                               flex: 1,
-                              child: AppButton(
-                                onTap: () {},
-                                title: "Save",
-                                iconData: Icon(
-                                  Icons.arrow_forward,
-                                  color: kWhiteColor,
-                                  size: responsiveHeight(24),
-                                ),
+                              child:
+                                  BlocBuilder<UserMasterBloc, UserMasterState>(
+                                builder: (context, state) {
+                                  return state.createUserStatus.isInProgress
+                                      ? const CircularProgressIndicator()
+                                      : AppButton(
+                                          onTap: () {
+                                            var payload = {
+                                              "user_id": null,
+                                              "stakeholder_master_id":
+                                                  _selectedStakeholder != null
+                                                      ? _selectedStakeholder![
+                                                          'id']
+                                                      : 0,
+                                              "full_name": "",
+                                              "login_name": "",
+                                              "passwords": "",
+                                              "mobile_number":
+                                                  _mobileNoTextController.text,
+                                              "email_id":
+                                                  _emailIdTextController.text,
+                                              "first_login_pass_reset": "Y",
+                                              "status": 1,
+                                              "org_id": 1,
+                                              "lookup_det_hier_id_stakeholder_type1":
+                                                  1
+                                            };
+
+                                            context.read<UserMasterBloc>().add(
+                                                CreateUserRequest(
+                                                    payload: payload));
+                                          },
+                                          title: "Save",
+                                          iconData: Icon(
+                                            Icons.arrow_forward,
+                                            color: kWhiteColor,
+                                            size: responsiveHeight(24),
+                                          ),
+                                        );
+                                },
                               ),
                             ),
                             SizedBox(
