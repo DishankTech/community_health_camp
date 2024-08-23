@@ -81,7 +81,9 @@ class _CampCoordinatorState extends State<CampCoordinator> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              mAppBarV1(title: "Camp Details", context: context),
+              mAppBarV1(title: "Camp Details",  onBackButtonPress: (){
+                Navigator.pop(context);
+              },context: context),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(

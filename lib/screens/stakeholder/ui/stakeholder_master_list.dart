@@ -66,6 +66,9 @@ class _StakeholderMasterListState extends State<StakeholderMasterList> {
         children: [
           mAppBarV1(
             title: "Stakeholder Master",
+            onBackButtonPress: (){
+              Navigator.pop(context);
+            },
             context: context,
             suffix: Material(
               color: Colors.transparent,

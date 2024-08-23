@@ -81,7 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       DashboardMenuModel(
           name: "Location Master",
           image: icLocationMaster,
-          routeName: AppRoutes.addLocationMaster),
+          routeName: AppRoutes.locationMasterList),
       DashboardMenuModel(
           name: "Stakeholder Master",
           image: icStakeholderMaster,

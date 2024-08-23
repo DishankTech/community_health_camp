@@ -74,6 +74,9 @@ class _LocationMasterListState extends State<LocationMasterList> {
           mAppBarV1(
             title: "Locations",
             context: context,
+            onBackButtonPress: (){
+              Navigator.pop(context);
+            },
             suffix: Material(
               color: Colors.transparent,
               child: InkWell(
@@ -81,7 +84,7 @@ class _LocationMasterListState extends State<LocationMasterList> {
                 onTap: () {
                   // Navigator.pushNamed(context, AppRoutes.addLocationMaster,
                   //     arguments: LocDetails(false, null));
-                  Get.to(() => AddLocationMaster(
+                  Get.to(() => const AddLocationMaster(
                         isView: false,
                         locationId: null,
                       ));

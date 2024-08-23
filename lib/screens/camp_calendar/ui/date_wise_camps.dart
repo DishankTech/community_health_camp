@@ -61,6 +61,9 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
           children: [
             mAppBarV1(
                 title: "Date wise Camps",
+                onBackButtonPress: (){
+                  Navigator.pop(context);
+                },
                 context: context,
                 suffix: Material(
                   color: Colors.transparent,

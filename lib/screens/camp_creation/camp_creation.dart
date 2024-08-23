@@ -76,7 +76,9 @@ class _CampCreationState extends State<CampCreation> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              mAppBarV1(title: "Camp Creation", context: context),
+              mAppBarV1(title: "Camp Creation", context: context, onBackButtonPress: (){
+                Navigator.pop(context);
+              },),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
