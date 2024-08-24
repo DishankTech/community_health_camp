@@ -7,6 +7,7 @@ import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinato
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_patient_registration_screen.dart';
+import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/location_master/location_master.dart';
 import 'package:community_health_app/screens/location_master/location_master_list.dart';
@@ -86,6 +87,7 @@ class AppRoutes {
   static const String addReferredPatient = "/addReferredPatient";
   static const String registrationDashboard = "/registrationDashboard";
   static const String doctorDesk = "/doctorDesk";
+  static const String addTreatmentDetailsScreen = "/addTreatmentDetailsScreen";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -203,6 +205,10 @@ class AppRoutes {
       case doctorDesk:
         return MaterialPageRoute(
           builder: (_) => const DoctorDeskPatientsScreen(),
+        );
+      case addTreatmentDetailsScreen:
+        return MaterialPageRoute(
+          builder: (_) => const AddTreatmentDetailsScreen(),
         );
 
       default:

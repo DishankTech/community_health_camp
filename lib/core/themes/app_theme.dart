@@ -67,18 +67,18 @@ class AppTheme {
   }
 
   static final ColorScheme _shrineColorScheme = ColorScheme(
-    primary: kPrimaryColor,
-    secondary: kPrimaryDarkColor,
-    surface: shrineSurfaceWhite,
-    background: kWhiteColor,
-    error: Colors.red,
-    onPrimary: kWhiteColor,
-    onSecondary: kWhiteColor,
-    onSurface: kBlackColor,
-    onBackground: kWhiteColor,
-    onError: shrineSurfaceWhite,
-    brightness: Brightness.light,
-  );
+      primary: kPrimaryColor,
+      secondary: kPrimaryDarkColor,
+      surface: shrineSurfaceWhite,
+      background: kWhiteColor,
+      error: Colors.red,
+      onPrimary: kWhiteColor,
+      onSecondary: kWhiteColor,
+      onSurface: kBlackColor,
+      onBackground: kWhiteColor,
+      onError: shrineSurfaceWhite,
+      brightness: Brightness.light,
+      surfaceVariant: kWhiteColor);
 
   static Color shrinePink50 = const Color(0xFFFEEAE6);
   static Color shrinePink100 = const Color(0xFFFEDBD0);

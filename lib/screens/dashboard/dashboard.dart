@@ -32,7 +32,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       DashboardMenuModel(
           name: "Dashboard",
           image: icDashboard,
-          routeName: AppRoutes.dashboard),
+          routeName: AppRoutes.registrationDashboard),
       DashboardMenuModel(
           name: "User Master",
           image: icUserMaster,
@@ -50,7 +50,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icCampCreation,
           routeName: AppRoutes.campCreation),
       DashboardMenuModel(
-          name: "Camp Approval", image: icCampApproval, routeName: null),
+          name: "Camp Approval",
+          image: icCampApproval,
+          routeName: AppRoutes.campApproval),
       DashboardMenuModel(
           name: "Patient Registration",
           image: icPatientRegistration,
@@ -58,7 +60,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       DashboardMenuModel(
           name: "Doctor Desk",
           image: icDoctorDesk,
-          routeName: AppRoutes.dashboard),
+          routeName: AppRoutes.doctorDesk),
       DashboardMenuModel(
           name: "Camp Calendar",
           image: icCalendarColourfull,
@@ -79,7 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       DashboardMenuModel(
           name: "Dashboard",
           image: icDashboard,
-          routeName: AppRoutes.dashboard),
+          routeName: AppRoutes.registrationDashboard),
       DashboardMenuModel(
           name: "User Master",
           image: icUserMaster,

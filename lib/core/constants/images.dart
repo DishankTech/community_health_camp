@@ -92,3 +92,17 @@ const String icRescheduledAppointment =
     "assets/icons/ic_rescheduled_appointment.png";
 const String icCancelledAppointment =
     "assets/icons/ic_cancelled_appointment.png";
+
+const String icDoctorsOffice = "assets/icons/doctorsOffice.png";
+const String iccampcreationice = "assets/icons/ic_camp_creation.png";
+const String icExamination = "assets/icons/examinationicon.png";
+const String icpatientregistration = "assets/icons/ic_patient_registration.png";
+const String iccalendar = "assets/icons/calendar.png";
+const String calendarMonth = "assets/icons/calendarMonth.png";
+const String campingtenticon = "assets/icons/campingtenticon.png";
+const String selectedGrid = "assets/icons/dashboardselectedbgimage.png";
+const String unSelectedGrid = "assets/icons/dashboardunselectedbgimage.png";
+const String downloadIcon = "assets/icons/download.png";
+const String verifiedicon = "assets/icons/verifiedicon.png";
+const String nointernetconnectionicon =
+    "assets/icons/nointernetconnectionicon.png";
