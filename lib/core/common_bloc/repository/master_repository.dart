@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:community_health_app/core/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/constants/network_constant.dart';
@@ -77,6 +78,12 @@ class MasterDataRepository {
   }
 
   Future<http.Response> getMaster(Map payload) async {
+    return await http.post(Uri.parse('$kBaseUrl$kGetMastersDetCode'),
+        body: jsonEncode(payload),
+        headers: {'Content-Type': "application/json"});
+  }
+
+  Future<http.Response> getMasterDesignationType(Map payload) async {
     return await http.post(Uri.parse('$kBaseUrl$kGetMasters'),
         body: jsonEncode(payload),
         headers: {'Content-Type': "application/json"});

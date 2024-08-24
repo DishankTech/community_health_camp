@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
+import 'package:community_health_app/core/common_bloc/models/get_master_response_model_with_hier.dart';
 import 'package:community_health_app/core/common_bloc/models/master_response_model.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/images.dart';
@@ -153,16 +154,15 @@ Future<dynamic> stakeholderBottomSheet(
                     ),
                     BlocBuilder<MasterDataBloc, MasterDataState>(
                       builder: (context, state) {
-                        MasterResponseModel responseModel =
-                            MasterResponseModel.fromJson(
+                        GetUserMasterWithHierResponse responseModel =
+                            GetUserMasterWithHierResponse.fromJson(
                                 jsonDecode(state.getMasterResponse));
 
-                        return responseModel.details != null &&
-                                responseModel.details![0].lookupDet != null
+                        return responseModel.details != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel
-                                      .details![0].lookupDet!.length,
+                                  itemCount: responseModel.details![0]
+                                      .lookupDetHierarchical!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -171,10 +171,14 @@ Future<dynamic> stakeholderBottomSheet(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
                                           var selectedItem = {
-                                            'id': responseModel.details![0]
-                                                .lookupDet![i].lookupDetId!,
-                                            'title': responseModel.details![0]
-                                                .lookupDet![i].lookupDetDescEn!
+                                            'id': responseModel
+                                                .details![0]
+                                                .lookupDetHierarchical![i]
+                                                .lookupDetHierId,
+                                            'title': responseModel
+                                                .details![0]
+                                                .lookupDetHierarchical![i]
+                                                .lookupDetHierDescEn!
                                           };
                                           onItemSelected(selectedItem);
                                           setState(
@@ -207,8 +211,8 @@ Future<dynamic> stakeholderBottomSheet(
                                                 ),
                                                 Text(responseModel
                                                     .details![0]
-                                                    .lookupDet![i]
-                                                    .lookupDetDescEn!),
+                                                    .lookupDetHierarchical![i]
+                                                    .lookupDetHierDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(

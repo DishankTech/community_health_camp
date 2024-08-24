@@ -39,3 +39,4 @@ const String kUpdateUser = "profile/account/update/user-account-details";
 const String kGetAllUsers = "profile/account/all-user-details-pagination";
 const String kPatientRegistration = "administator/master/add/patient-master";
 const String kGetMasters = "common/lookup/lookupCode";
+const String kGetMastersDetCode = "common/lookup/lookupDetCode";
