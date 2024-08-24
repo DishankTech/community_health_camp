@@ -8,7 +8,9 @@ import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/screens/location_master/location_master_list.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
 class LocationMaster extends StatefulWidget {
@@ -52,7 +54,9 @@ class _LocationMasterState extends State<LocationMaster> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              mAppBarV1(title: "Location Master", context: context),
+              mAppBarV1(title: "Location Master", context: context,onBackButtonPress: (){
+                Get.to(() => const LocationMasterList());
+              }),
               SizedBox(
                 height: responsiveHeight(10),
               ),

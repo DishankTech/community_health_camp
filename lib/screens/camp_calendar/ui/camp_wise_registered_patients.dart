@@ -82,6 +82,9 @@ class _CampWiseRegisteredPatientsScreenState
           mAppBarV1(
             title: "Camp Wise Registered Patients",
             context: context,
+            onBackButtonPress: (){
+              Navigator.pop(context);
+            },
             /* suffix: Material(
               color: Colors.transparent,
               child: InkWell(

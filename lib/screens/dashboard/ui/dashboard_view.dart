@@ -44,6 +44,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             mAppBarV1(
                 title: "Dashboard",
+                onBackButtonPress: (){
+                  Navigator.pop(context);
+                },
                 context: context,
                 suffix: Material(
                   color: Colors.white,

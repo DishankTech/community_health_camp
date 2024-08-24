@@ -8,6 +8,7 @@ import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/location_master/controller/location_master_controller.dart';
+import 'package:community_health_app/screens/location_master/location_master_list.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -83,7 +84,11 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                 title: widget.isEdit == true
                     ? "Edit Location Master"
                     : "Location Master",
-                context: context),
+                context: context,
+            onBackButtonPress: (){
+                  Get.to(() => LocationMasterList());
+            }
+            ),
             SizedBox(
               height: responsiveHeight(10),
             ),
@@ -152,7 +157,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           color: kTextBlackColor),
                                       inputType: TextInputType.number,
                                       onChange: (p0) {},
-                                      // maxLength: 12,
+                                      maxLength: 10,
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Contact No',
@@ -693,9 +698,12 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                             child: AppButton(
                                               onTap: () {
                                                 if (widget.isEdit == false) {
-                                                } else {
+
                                                   locationMasterController
                                                       .saveLocationMaster();
+                                                } else {
+                                                  locationMasterController
+                                                      .updateLocationMaster(widget.locationId);
                                                 }
                                               },
                                               title: "Save",

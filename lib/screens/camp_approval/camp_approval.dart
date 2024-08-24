@@ -67,7 +67,9 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
           mAppBarV1(
             title: "Camp Approval",
             context: context,
-
+            onBackButtonPress: (){
+              Navigator.pop(context);
+            },
           ),
           Expanded(
             child: ListView.builder(

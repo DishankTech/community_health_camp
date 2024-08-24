@@ -91,7 +91,9 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              mAppBarV1(title: "User Master", context: context),
+              mAppBarV1(title: "User Master", context: context, onBackButtonPress: (){
+                Navigator.pop(context);
+              },),
               SizedBox(
                 height: responsiveHeight(10),
               ),

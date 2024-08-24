@@ -81,7 +81,10 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              mAppBarV1(title: "Add Referred Patient", context: context),
+              mAppBarV1(title: "Add Referred Patient",
+                  onBackButtonPress: (){
+                    Navigator.pop(context);
+                  },context: context),
               SizedBox(
                 height: responsiveHeight(10),
               ),

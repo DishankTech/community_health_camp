@@ -74,6 +74,9 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
           children: [
             mAppBarV1(
               title: "District wise Camps",
+              onBackButtonPress: (){
+                Navigator.pop(context);
+              },
               context: context,
               /* suffix: Material(
                   color: Colors.transparent,

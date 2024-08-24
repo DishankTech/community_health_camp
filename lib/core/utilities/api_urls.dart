@@ -11,5 +11,10 @@ class ApiConstants {
   static const String getLocationDetails = "/administrator/masters/get-location-master-by-id";
   static const String saveLocationMaster = "/administrator/masters/add/location-master";
   static const String locationList = "/administrator/masters/all-location-master-pagination";
+  static const String updateLocation = "/administrator/masters/update/location-master";
+  static const String getLocationName = "/administrator/masters/dropdown/location-list";
+  static const String useList = "/profile/account/dropdown/user-list";
+  static const String saveCampCreation = "/administrator/camp/add/camp-details";
+  static const String userCreation = "/profile/account/new/";
 
 }

@@ -72,6 +72,9 @@ class _RegisteredUserMasterScreenState
         children: [
           mAppBarV1(
             title: "Registered User Master",
+            onBackButtonPress: (){
+              Navigator.pop(context);
+            },
             context: context,
             suffix: Material(
               color: Colors.transparent,
