@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:community_health_app/user_auths/models/login_response_model.dart';
+import 'package:community_health_app/screens/user_auths/models/login_response_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';

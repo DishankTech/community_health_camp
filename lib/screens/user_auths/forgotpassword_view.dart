@@ -4,13 +4,13 @@ import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/core/utilities/validators.dart';
-import 'package:community_health_app/user_auths/enterpin_view.dart';
+import 'package:community_health_app/screens/user_auths/enterpin_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-import '../core/constants/constants.dart';
+import '../../core/constants/constants.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key? key}) : super(key: key);

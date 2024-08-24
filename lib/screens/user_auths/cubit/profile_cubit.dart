@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
-import 'package:community_health_app/user_auths/models/login_response_model.dart';
+import 'package:community_health_app/screens/user_auths/models/login_response_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
 

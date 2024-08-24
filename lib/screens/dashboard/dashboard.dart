@@ -6,8 +6,8 @@ import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/dashboard/models/dashbard_meu_model.dart';
-import 'package:community_health_app/user_auths/cubit/profile_cubit.dart';
-import 'package:community_health_app/user_auths/models/login_response_model.dart';
+import 'package:community_health_app/screens/user_auths/cubit/profile_cubit.dart';
+import 'package:community_health_app/screens/user_auths/models/login_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
-import 'package:community_health_app/user_auths/createnewpassword_view.dart';
+import 'package:community_health_app/screens/user_auths/createnewpassword_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -45,7 +45,7 @@ class _PinValidationPageState extends State<PinValidationPage> {
   Timer _timer = Timer(const Duration(milliseconds: 30), () {});
 
   void _startTimer() {
-    try{
+    try {
       _counter = 30;
       if (_timer != null) {
         _timer.cancel();
@@ -57,10 +57,9 @@ class _PinValidationPageState extends State<PinValidationPage> {
         print(_counter);
         _events.add(_counter);
       });
-    }catch ( e) {
+    } catch (e) {
       print(e);
     }
-
   }
 
   @override
@@ -120,8 +119,7 @@ class _PinValidationPageState extends State<PinValidationPage> {
                         itemCount: 4,
                         itemBuilder: (context, index) {
                           return Container(
-                            margin:
-                                const EdgeInsets.only(left: 8, right: 8),
+                            margin: const EdgeInsets.only(left: 8, right: 8),
                             alignment: Alignment.center,
                             width: 40,
                             height: 120,
@@ -135,16 +133,13 @@ class _PinValidationPageState extends State<PinValidationPage> {
                                           .grey, // Change the border color when not focused
                                       width: 1.0,
                                     ),
-                                    borderRadius:
-                                        BorderRadius.circular(5.0),
+                                    borderRadius: BorderRadius.circular(5.0),
                                   ),
                                   border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(8.0),
+                                    borderRadius: BorderRadius.circular(8.0),
                                   ),
                                   filled: true,
-                                  hintStyle:
-                                      TextStyle(color: Colors.grey[500]),
+                                  hintStyle: TextStyle(color: Colors.grey[500]),
                                   hintText: "",
                                   fillColor: Colors.white70,
                                 ),
@@ -155,8 +150,8 @@ class _PinValidationPageState extends State<PinValidationPage> {
                   ),
                   StreamBuilder(
                       stream: _events.stream,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<int> snapshot) {
+                      builder:
+                          (BuildContext context, AsyncSnapshot<int> snapshot) {
                         print(snapshot.data.toString());
                         return SizedBox(
                           height: 215,

@@ -8,9 +8,9 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 
-import '../core/constants/network_constant.dart';
-import '../core/utilities/data_provider.dart';
-import '../core/utilities/size_config.dart';
+import '../../core/constants/network_constant.dart';
+import '../../core/utilities/data_provider.dart';
+import '../../core/utilities/size_config.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({Key? key}) : super(key: key);
@@ -25,12 +25,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final String passwordPattern = r'^(?=.*[A-Za-z])(?=.*[\d@!#$_])[A-Za-z\d@!#$_]{8,}$'; //special character not necessary
+  final String passwordPattern =
+      r'^(?=.*[A-Za-z])(?=.*[\d@!#$_])[A-Za-z\d@!#$_]{8,}$'; //special character not necessary
 
   bool _obscureText_new = true;
   bool _obscureText_confirm = true;
   bool _isLoading = false;
-  String errorMessage="";
+  String errorMessage = "";
 
   @override
   void initState() {
@@ -78,7 +79,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       width: MediaQuery.sizeOf(context).width * 0.9,
                       child: Text(
                         "Set the password to your account so you can login and access all the features",
-                        style: TextStyle(color: Colors.black54, fontWeight: FontWeight.normal, fontSize: 14),
+                        style: TextStyle(
+                            color: Colors.black54,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                     ),
@@ -94,11 +98,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         controller: _newpasswordController,
                         suffix: IconButton(
                           icon: Icon(
-                            _obscureText_new ? Icons.visibility : Icons.visibility_off,
+                            _obscureText_new
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureText_new = !_obscureText_new; // Toggle password visibility
+                              _obscureText_new =
+                                  !_obscureText_new; // Toggle password visibility
                             });
                           },
                         ),
@@ -124,34 +131,37 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         obscureText: _obscureText_confirm,
                         label: Text("Confirm Password"),
                         hint: "Enter Confirm Password",
-                        errorText:errorMessage ,
+                        errorText: errorMessage,
                         validators: (value) {
                           if (value == null || value.isEmpty) {
-                            return errorMessage='Confirm Password is required';
+                            return errorMessage =
+                                'Confirm Password is required';
                           }
                           final regex = RegExp(passwordPattern);
                           if (!regex.hasMatch(value)) {
-                            return errorMessage='The password must be at least 8 characters long, \ncontain at least one alphabet, one number or one special character (@, !, #, \$, _).';
+                            return errorMessage =
+                                'The password must be at least 8 characters long, \ncontain at least one alphabet, one number or one special character (@, !, #, \$, _).';
                           }
                           return null; // Validation passed
                         },
                         suffix: IconButton(
                           icon: Icon(
-                            _obscureText_confirm ? Icons.visibility : Icons.visibility_off,
+                            _obscureText_confirm
+                                ? Icons.visibility
+                                : Icons.visibility_off,
                           ),
                           onPressed: () {
                             setState(() {
-                              _obscureText_confirm = !_obscureText_confirm; // Toggle password visibility
+                              _obscureText_confirm =
+                                  !_obscureText_confirm; // Toggle password visibility
                             });
                           },
                         ),
-
                       ),
                     ),
                     SizedBox(
                       height: 30,
                     ),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -164,7 +174,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                           ),
                           onTap: () {
                             if (_formKey.currentState!.validate()) {
-                              if (_newpasswordController.text.toString() == _confirmpasswordController.text.toString()) {
+                              if (_newpasswordController.text.toString() ==
+                                  _confirmpasswordController.text.toString()) {
                                 /*  ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(content: Text('Validation Successfull',),backgroundColor: Colors.green,),
                                       );*/
@@ -181,7 +192,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             }
                           },
                         ),
-                        SizedBox(width: 10,),
+                        SizedBox(
+                          width: 10,
+                        ),
                         AppButton(
                           title: 'Cancel',
                           mWidth: SizeConfig.screenWidth * 0.4,
@@ -191,7 +204,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         ),
                       ],
                     ),
-
                   ],
                 ),
               ),
@@ -211,7 +223,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     int? userId = DataProvider().getUserCredentials();
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request('POST', Uri.parse(kBaseUrl + userResetPassword));
-    request.body = json.encode({"user_id": userId, "password": _confirmpasswordController.text.toString().trim()});
+    request.body = json.encode({
+      "user_id": userId,
+      "password": _confirmpasswordController.text.toString().trim()
+    });
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -243,7 +258,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.loginScreen, (route) => false);
+        Navigator.of(context)
+            .pushNamedAndRemoveUntil(AppRoutes.loginScreen, (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(

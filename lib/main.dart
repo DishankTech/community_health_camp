@@ -7,7 +7,7 @@ import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master
 import 'package:community_health_app/screens/stakeholder/repository/stakeholder_repository.dart';
 import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
 import 'package:community_health_app/screens/user_master/repository/user_master_repository.dart';
-import 'package:community_health_app/user_auths/cubit/profile_cubit.dart';
+import 'package:community_health_app/screens/user_auths/cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
