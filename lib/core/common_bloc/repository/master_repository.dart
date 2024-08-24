@@ -84,8 +84,9 @@ class MasterDataRepository {
   }
 
   Future<http.Response> getMasterDesignationType(Map payload) async {
+    print(payload);
     return await http.post(Uri.parse('$kBaseUrl$kGetMasters'),
         body: jsonEncode(payload),
-        headers: {'Content-Type': "application/json"});
+        headers: {'Content-Type': "application/json", 'Accept': '*/*'});
   }
 }

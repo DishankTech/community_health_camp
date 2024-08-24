@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:community_health_app/core/common_bloc/models/master_response_model.dart';
 import 'package:community_health_app/core/common_widgets/address_text_form_field.dart';
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
@@ -42,7 +43,7 @@ class _PatientRegistrationEditScreenState
   late TextEditingController _talukaTextController;
   late TextEditingController _cityTextController;
 
-  Map<String, dynamic>? _selectedGender = null;
+  LookupDet? _selectedGender = null;
   Map<String, dynamic>? _selectedDistrict = null;
   Map<String, dynamic>? _selectedTaluka = null;
   Map<String, dynamic>? _selectedCity = null;
@@ -256,7 +257,7 @@ class _PatientRegistrationEditScreenState
                                         setState(() {
                                           _selectedGender = p0;
                                           _genderTextController.text =
-                                              _selectedGender!['title'];
+                                              p0.lookupDetDescEn!;
                                         })
                                       });
                             },

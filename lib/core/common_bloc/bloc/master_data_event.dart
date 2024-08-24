@@ -29,15 +29,50 @@ class GetMaritalStatus extends MasterDataEvent {}
 
 class GetRelation extends MasterDataEvent {}
 
-class GetDivisionList extends MasterDataEvent {}
+class GetDivisionList extends MasterDataEvent {
+  Map payload;
+  GetDivisionList({required this.payload});
 
-class GetDistrictList extends MasterDataEvent {}
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
 
-class GetStateList extends MasterDataEvent {}
+class GetDistrictList extends MasterDataEvent {
+  Map payload;
+  GetDistrictList({required this.payload});
 
-class GetTownList extends MasterDataEvent {}
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
 
-class GetTalukaList extends MasterDataEvent {}
+class GetStateList extends MasterDataEvent {
+  Map payload;
+  GetStateList({required this.payload});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
+
+class GetTownList extends MasterDataEvent {
+  Map payload;
+  GetTownList({required this.payload});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
+
+class GetTalukaList extends MasterDataEvent {
+  Map payload;
+  GetTalukaList({required this.payload});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
 
 class GetSchemeAdptedList extends MasterDataEvent {}
 
@@ -68,6 +103,22 @@ class GetMasters extends MasterDataEvent {
 class GetMastersDesignationType extends MasterDataEvent {
   Map payload;
   GetMastersDesignationType({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}
+
+class GetGenderRequest extends MasterDataEvent {
+  Map payload;
+  GetGenderRequest({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}
+
+class GetStakeholderSubType extends MasterDataEvent {
+  Map payload;
+  GetStakeholderSubType({required this.payload});
 
   @override
   List<Object> get props => [payload];

@@ -45,8 +45,8 @@ class DataProvider {
   }
 
   LoginResponseModel? getParsedUserData() {
-    print('user Data');
-    print(_prefs.getString("userData"));
+    // print('user Data');
+    // print(_prefs.getString("userData"));
     if (_prefs.getString("userData") != null) {
       var res = jsonDecode(_prefs.getString("userData")!);
       return LoginResponseModel.fromJson(res);

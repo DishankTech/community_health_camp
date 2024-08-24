@@ -68,7 +68,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icPersons,
           routeName: AppRoutes.campCoordinator),
     ]);
+  }
 
+  @override
+  Widget build(BuildContext context) {
+    SizeConfig().init(context);
+    context.read<ProfileCubit>().getProfile();
     _menuList.clear();
     _menuList.addAll([
       DashboardMenuModel(
@@ -92,10 +97,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icCampCreation,
           routeName: AppRoutes.campCreation),
       DashboardMenuModel(
-          name: "Camp Calendar",
-          image: icCampCreation,
-          routeName: AppRoutes.campCalendar),
-      DashboardMenuModel(
           name: "Camp Approval",
           image: icCampApproval,
           routeName: AppRoutes.campApproval),
@@ -108,12 +109,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icDoctorDesk,
           routeName: AppRoutes.dashboard),
     ]);
-  }
 
-  @override
-  Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    context.read<ProfileCubit>().getProfile();
+    _menuList.add(DashboardMenuModel(
+        name: "Camp Creation",
+        image: icCampCreation,
+        routeName: AppRoutes.campCreation));
+    _menuList.add(DashboardMenuModel(
+        name: "Camp Calendar",
+        image: icCalendarColourfull,
+        routeName: AppRoutes.campCalendar));
+    _menuList.add(DashboardMenuModel(
+        name: "Camp Co-Ordinator",
+        image: icPersons,
+        routeName: AppRoutes.campCoordinator));
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state.loginResponseModel != null) {
@@ -123,18 +131,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 // _menuList.clear();
 
                 //statically added
-                _menuList.add(DashboardMenuModel(
-                    name: "Camp Creation",
-                    image: icCampCreation,
-                    routeName: AppRoutes.campCreation));
-                _menuList.add(DashboardMenuModel(
-                    name: "Camp Calendar",
-                    image: icCalendarColourfull,
-                    routeName: AppRoutes.campCalendar));
-                _menuList.add(DashboardMenuModel(
-                    name: "Camp Co-Ordinator",
-                    image: icPersons,
-                    routeName: AppRoutes.campCoordinator));
 
                 if (element.childList != null) {
                   for (var element in element.childList!) {

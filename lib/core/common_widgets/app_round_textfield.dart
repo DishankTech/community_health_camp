@@ -71,7 +71,7 @@ class AppRoundTextField extends StatelessWidget {
               onTap: onTap,
               obscureText: obscureText ?? false,
               textCapitalization: textCapitalization ?? TextCapitalization.none,
-              textAlignVertical: TextAlignVertical.center,
+              textAlignVertical: TextAlignVertical.top,
               maxLines: maxLines ?? 1,
               maxLength: maxLength,
               minLines: maxLines ?? 1,
@@ -83,7 +83,6 @@ class AppRoundTextField extends StatelessWidget {
                   error: null,
                   errorStyle: const TextStyle(fontSize: 0.1),
                   label: label,
-
                   counterText: "",
                   constraints: (maxLines != null && maxLines! > 1)
                       ? null

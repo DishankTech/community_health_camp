@@ -22,13 +22,13 @@ class GetUserMasterWithHierResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status_code'] = this.statusCode;
-    data['message'] = this.message;
-    data['path'] = this.path;
-    data['dateTime'] = this.dateTime;
-    if (this.details != null) {
-      data['details'] = this.details!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status_code'] = statusCode;
+    data['message'] = message;
+    data['path'] = path;
+    data['dateTime'] = dateTime;
+    if (details != null) {
+      data['details'] = details!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -53,12 +53,12 @@ class Details {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['lookup_det_id'] = this.lookupDetId;
-    data['lookup_det_value'] = this.lookupDetValue;
-    if (this.lookupDetHierarchical != null) {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['lookup_det_id'] = lookupDetId;
+    data['lookup_det_value'] = lookupDetValue;
+    if (lookupDetHierarchical != null) {
       data['lookup_det_hierarchical'] =
-          this.lookupDetHierarchical!.map((v) => v.toJson()).toList();
+          lookupDetHierarchical!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -69,7 +69,7 @@ class LookupDetHierarchical {
   String? lookupDetHierValue;
   String? lookupDetHierDescEn;
   String? lookupDetHierDescRg;
-  Null? lookupDetHierParentId;
+  int? lookupDetHierParentId;
   int? status;
 
   LookupDetHierarchical(
@@ -90,13 +90,13 @@ class LookupDetHierarchical {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['lookup_det_hier_id'] = this.lookupDetHierId;
-    data['lookup_det_hier_value'] = this.lookupDetHierValue;
-    data['lookup_det_hier_desc_en'] = this.lookupDetHierDescEn;
-    data['lookup_det_hier_desc_rg'] = this.lookupDetHierDescRg;
-    data['lookup_det_hier_parent_id'] = this.lookupDetHierParentId;
-    data['status'] = this.status;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['lookup_det_hier_id'] = lookupDetHierId;
+    data['lookup_det_hier_value'] = lookupDetHierValue;
+    data['lookup_det_hier_desc_en'] = lookupDetHierDescEn;
+    data['lookup_det_hier_desc_rg'] = lookupDetHierDescRg;
+    data['lookup_det_hier_parent_id'] = lookupDetHierParentId;
+    data['status'] = status;
     return data;
   }
 }

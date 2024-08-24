@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 class UserMasterRepository {
   Future<http.StreamedResponse> createUser(Map<String, dynamic> payload) async {
+    print(payload);
     var headers = {'Content-Type': 'application/json'};
     var request = http.Request('POST', Uri.parse('$kBaseUrl$kCreateUser'));
     request.body = json.encode(payload);

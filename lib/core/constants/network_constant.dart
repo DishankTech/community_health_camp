@@ -38,5 +38,14 @@ const String kCreateUser = "profile/account/new";
 const String kUpdateUser = "profile/account/update/user-account-details";
 const String kGetAllUsers = "profile/account/all-user-details-pagination";
 const String kPatientRegistration = "administator/master/add/patient-master";
+const String kGetAllPatients =
+    "administrator/masters/all-patient-master-pagination";
 const String kGetMasters = "common/lookup/lookupCode";
 const String kGetMastersDetCode = "common/lookup/lookupDetCode";
+
+// Stakeholder
+const String kAddStakeholder = "administrator/masters/add/stake-holder-master";
+const String kGetAllStakeholders =
+    "administrator/masters/all-stake-holder-master-pagination";
+const String kGetStakeholderName =
+    "administrator/masters/dropdown/stake-holder-list";

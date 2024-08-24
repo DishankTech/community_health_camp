@@ -16,4 +16,10 @@ class PatientRegistrationRequest extends PatientRegistrationEvent {
   List<Object> get props => [payload];
 }
 
-class GetPatientListRequest extends PatientRegistrationEvent {}
+class GetPatientListRequest extends PatientRegistrationEvent {
+  Map payload;
+  GetPatientListRequest({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}
