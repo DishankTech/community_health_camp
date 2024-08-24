@@ -157,7 +157,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           color: kTextBlackColor),
                                       inputType: TextInputType.number,
                                       onChange: (p0) {},
-                                      // maxLength: 12,
+                                      maxLength: 10,
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Contact No',

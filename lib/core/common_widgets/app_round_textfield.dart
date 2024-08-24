@@ -1,15 +1,15 @@
-import 'package:community_health_app/core/utilities/validators.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppRoundTextField extends StatelessWidget {
-  AppRoundTextField(
+  const AppRoundTextField(
       {super.key,
       required this.label,
-      required this.controller,
+      this.controller,
       required this.hint,
+      this.initialValue,
       this.suffix,
       this.readOnly,
       this.bgColor,
@@ -27,29 +27,30 @@ class AppRoundTextField extends StatelessWidget {
       this.borderRaius,
       this.inputFormatter});
 
-  Widget label;
-  TextEditingController controller;
-  Widget? suffix;
-  String hint;
-  bool? readOnly;
-  Color? bgColor;
-  TextInputType? inputType;
-  TextStyle? inputStyle;
-  int? maxLength;
-  TextCapitalization? textCapitalization;
-  bool? obscureText;
-  int? maxLines;
-  bool? isFloatingLabelEnable;
-  Function()? onTap;
-  String? Function(String?)? validators;
-  String? errorText;
-  Function(String)? onChange;
-  double? borderRaius;
-  TextInputFormatter? inputFormatter;
+  final String? initialValue;
+  final Widget label;
+  final TextEditingController? controller;
+  final Widget? suffix;
+  final String hint;
+  final bool? readOnly;
+  final Color? bgColor;
+  final TextInputType? inputType;
+  final TextStyle? inputStyle;
+  final int? maxLength;
+  final TextCapitalization? textCapitalization;
+  final bool? obscureText;
+  final int? maxLines;
+  final bool? isFloatingLabelEnable;
+  final Function()? onTap;
+  final String? Function(String?)? validators;
+  final String? errorText;
+  final Function(String)? onChange;
+  final double? borderRaius;
+  final TextInputFormatter? inputFormatter;
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
+    // SizeConfig().init(context);
     return Column(
       children: [
         Container(
@@ -60,6 +61,8 @@ class AppRoundTextField extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(responsiveHeight(2)),
             child: TextFormField(
+              key: key,
+              initialValue: initialValue,
               readOnly: readOnly ?? false,
               controller: controller,
               keyboardType: inputType,
@@ -75,7 +78,9 @@ class AppRoundTextField extends StatelessWidget {
               maxLines: maxLines ?? 1,
               maxLength: maxLength,
               minLines: maxLines ?? 1,
-              onChanged: onChange,
+              onChanged: (value) {
+                if(onChange != null) onChange!(value);
+              },
               validator: validators,
               decoration: InputDecoration(
                   border: InputBorder.none,
@@ -83,13 +88,12 @@ class AppRoundTextField extends StatelessWidget {
                   error: null,
                   errorStyle: const TextStyle(fontSize: 0.1),
                   label: label,
-
                   counterText: "",
                   constraints: (maxLines != null && maxLines! > 1)
                       ? null
                       : BoxConstraints(maxHeight: responsiveHeight(50)),
                   floatingLabelStyle: TextStyle(
-                    fontSize: controller.text.isNotEmpty
+                    fontSize: (controller?.text ?? (initialValue ?? '')).isNotEmpty
                         ? responsiveFont(16)
                         : responsiveFont(14),
                   ),
