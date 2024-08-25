@@ -37,10 +37,10 @@ class _NoInternetConnectionScreenState
               color: Colors.transparent,
               width: responsiveWidth(300),
               height: responsiveHeight(220),
-              child: Image.asset(
-                nointernetconnectionicon,
-                fit: BoxFit.contain,
-              ),
+              // child: Image.asset(
+              //   nointernetconnectionicon,
+              //   fit: BoxFit.contain,
+              // ),
             ),
           ),
           Text(
@@ -59,7 +59,7 @@ class _NoInternetConnectionScreenState
             "Please check your internet\nconnection",
             textAlign: TextAlign.center,
             style: TextStyle(
-              color: noInternetTextColor,
+              // color: noInternetTextColor,
               fontSize: responsiveHeight(18),
               fontWeight: FontWeight.w400,
             ),

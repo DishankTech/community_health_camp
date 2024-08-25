@@ -1,10 +1,17 @@
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/images.dart';
+import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
-import 'package:community_health_app/screens/camp_approval/camp_approval_modal.dart';
+import 'package:community_health_app/screens/camp_approval/camp_approval_details.dart';
+import 'package:community_health_app/screens/camp_approval/controller/camp_approval_controller.dart';
+import 'package:community_health_app/screens/camp_approval/model/camp_approval_data.dart';
+import 'package:community_health_app/screens/dashboard/dashboard.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 class CampApprovalScreen extends StatefulWidget {
   const CampApprovalScreen({super.key});
@@ -14,39 +21,39 @@ class CampApprovalScreen extends StatefulWidget {
 }
 
 class _CampApprovalScreenState extends State<CampApprovalScreen> {
-  List<CampApprovalModal> _list = [];
+  final CampApprovalController campApprovalController =
+      Get.put(CampApprovalController());
+
+  checkInternetAndLoadData() async {
+    List<ConnectivityResult> connectivityResult =
+        await Connectivity().checkConnectivity();
+
+    campApprovalController.hasInternet =
+        (connectivityResult.contains(ConnectivityResult.mobile) ||
+            connectivityResult.contains(ConnectivityResult.wifi));
+
+    if (campApprovalController.hasInternet) {
+      campApprovalController.fetchPage(1);
+
+      campApprovalController.pagingController.addPageRequestListener((pageKey) {
+        campApprovalController.fetchPage(pageKey);
+      });
+    }
+
+    campApprovalController.update();
+  }
+
+  @override
+  void dispose() {
+    campApprovalController.pagingController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     // TODO: implement initState
+    checkInternetAndLoadData();
     super.initState();
-
-    _list.addAll([
-      CampApprovalModal(
-          campReqId: '865304',
-          locationName: '32/2, Erandwane, Near Mehendale Garage, Pune 411004',
-          district: 'Pune',
-          stakeHodlerType: 'Hospital',
-          campDateTime: '21 Aug 2024  |  8.00 am to 6.00 pm'),
-      CampApprovalModal(
-          campReqId: '521049',
-          locationName: 'Opposite Kamala Nehru Park, 778, Shivajinagar, Pune 411004',
-          district: 'Pune',
-          stakeHodlerType: 'NGO',
-          campDateTime: '14 Aug 2024  |  9.00 am to 4.00 pm'),
-      CampApprovalModal(
-          campReqId: '365410',
-          locationName: '163, DP Road, Aundh, Pune 411007',
-          district: 'Pune',
-          stakeHodlerType: 'STEM',
-          campDateTime: '14 Aug 2024  |  9.00 am to 4.00 pm'),
-      CampApprovalModal(
-          campReqId: '987413',
-          locationName: 'D.A.V. In front of School, Aundh, Pune 411007',
-          district: 'Pune',
-          stakeHodlerType: 'User',
-          campDateTime: '5 Aug 2024  |  8.30 am to 5.30 pm')
-    ]);
   }
 
   @override
@@ -67,178 +74,262 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
           mAppBarV1(
             title: "Camp Approval",
             context: context,
-            onBackButtonPress: (){
-              Navigator.pop(context);
+            onBackButtonPress: () {
+              Get.to(() => const DashboardScreen());
             },
           ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: _list.length,
-                padding: EdgeInsets.zero,
-                itemBuilder: (c, i) {
-                  return Stack(children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                  offset: Offset(0, 0),
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 5)
-                            ],
-                            borderRadius:
-                                BorderRadius.circular(responsiveHeight(20))),
-                        child: Padding(
-                          padding: EdgeInsets.all(responsiveHeight(20)),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-
-                              SizedBox(
-                                width: responsiveWidth(16),
+          GetBuilder<CampApprovalController>(
+              init: CampApprovalController(),
+              builder: (controller) {
+                return campApprovalController.hasInternet
+                    ? controller.isLoading
+                        ? Container(
+                            width: SizeConfig.screenWidth * 0.95,
+                            height: SizeConfig.screenHeight * 0.7,
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                    responsiveHeight(25))),
+                            child: const Center(
+                                child: CircularProgressIndicator()))
+                        : Expanded(
+                            child: PagedListView<int, CampApprovalData>(
+                              pagingController:
+                                  campApprovalController.pagingController,
+                              builderDelegate:
+                                  PagedChildBuilderDelegate<CampApprovalData>(
+                                itemBuilder: (context, item, index) =>
+                                    Stack(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 8.0, left: 8.0, right: 0.8),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                offset: const Offset(0, 0),
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 1,
+                                                blurRadius: 5)
+                                          ],
+                                          borderRadius: BorderRadius.circular(
+                                              responsiveHeight(20))),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(
+                                            responsiveHeight(20)),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Flexible(
+                                              flex: 3,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(
+                                                    height:
+                                                        responsiveHeight(10),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: "Camp Request ID: ",
+                                                      style: TextStyle(
+                                                          color: kTextColor,
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: item
+                                                                    .campCreateRequestId
+                                                                    .toString() ??
+                                                                "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        12),
+                                                                color:
+                                                                    kTextColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        responsiveHeight(10),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: "Location Name: ",
+                                                      style: TextStyle(
+                                                          color: kTextColor,
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        12),
+                                                                color:
+                                                                    kTextColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        responsiveHeight(10),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text: "District : ",
+                                                      style: TextStyle(
+                                                          color: kTextColor,
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: item
+                                                                    .distirctCampApprovalId
+                                                                    .toString() ??
+                                                                "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        12),
+                                                                color:
+                                                                    kTextColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        responsiveHeight(10),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text:
+                                                          "Stakeholder Name : ",
+                                                      style: TextStyle(
+                                                          color: kTextColor,
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        12),
+                                                                color:
+                                                                    kTextColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        responsiveHeight(10),
+                                                  ),
+                                                  RichText(
+                                                    text: TextSpan(
+                                                      text:
+                                                          "Proposed Camp Date-Time : ",
+                                                      style: TextStyle(
+                                                          color: kTextColor,
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                      children: [
+                                                        TextSpan(
+                                                            text:
+                                                                item.confirmCampDate ??
+                                                                    "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        12),
+                                                                color:
+                                                                    kTextColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .normal))
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        responsiveHeight(10),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 20,
+                                    right: 20,
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(5),
+                                        onTap: () {
+                                          Get.to(
+                                              () => CampApprovalDetailsScreen(
+                                                    campApprovalId:
+                                                        item.campCreateRequestId ??
+                                                            0,
+                                                  ));
+                                        },
+                                        child: Ink(
+                                          child: Image.asset(
+                                            icEye,
+                                            height: responsiveHeight(24),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ]),
                               ),
-                              Flexible(
-                                flex: 3,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-
-                                    RichText(
-                                      text: TextSpan(
-                                        text: "Camp Request ID : ",
-                                        style: TextStyle(
-                                            color: kTextColor,
-                                            fontSize: responsiveFont(12),
-                                            fontWeight: FontWeight.bold),
-                                        children: [
-                                          TextSpan(
-                                              text: _list[i].campReqId,
-                                              style: TextStyle(
-                                                  fontSize: responsiveFont(12),
-                                                  color: kTextColor,
-                                                  fontWeight:
-                                                      FontWeight.normal))
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: responsiveHeight(10),
-                                    ),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: "Location Name: ",
-                                        style: TextStyle(
-                                            color: kTextColor,
-                                            fontSize: responsiveFont(12),
-                                            fontWeight: FontWeight.bold),
-                                        children: [
-                                          TextSpan(
-                                              text: _list[i].locationName,
-                                              style: TextStyle(
-                                                  fontSize: responsiveFont(12),
-                                                  color: kTextColor,
-                                                  fontWeight:
-                                                      FontWeight.normal))
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: responsiveHeight(10),
-                                    ),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: "District: ",
-                                        style: TextStyle(
-                                            color: kTextColor,
-                                            fontSize: responsiveFont(12),
-                                            fontWeight: FontWeight.bold),
-                                        children: [
-                                          TextSpan(
-                                              text: _list[i].district,
-                                              style: TextStyle(
-                                                  fontSize: responsiveFont(12),
-                                                  color: kTextColor,
-                                                  fontWeight:
-                                                      FontWeight.normal))
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: responsiveHeight(10),
-                                    ),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: "Stakeholder Type: ",
-                                        style: TextStyle(
-                                            color: kTextColor,
-                                            fontSize: responsiveFont(12),
-                                            fontWeight: FontWeight.bold),
-                                        children: [
-                                          TextSpan(
-                                              text: _list[i].stakeHodlerType,
-                                              style: TextStyle(
-                                                  fontSize: responsiveFont(12),
-                                                  color: kTextColor,
-                                                  fontWeight:
-                                                      FontWeight.normal))
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: responsiveHeight(10),
-                                    ),
-                                    RichText(
-                                      text: TextSpan(
-                                        text: "Proposed Camp date-time: ",
-                                        style: TextStyle(
-                                            color: kTextColor,
-                                            fontSize: responsiveFont(12),
-                                            fontWeight: FontWeight.bold),
-                                        children: [
-                                          TextSpan(
-                                              text: _list[i].campDateTime,
-                                              style: TextStyle(
-                                                  fontSize: responsiveFont(12),
-                                                  color: kTextColor,
-                                                  fontWeight:
-                                                  FontWeight.normal))
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: responsiveHeight(10),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 20,
-                      right: 20,
-                      child:  Material(
-                        color: Colors.transparent,
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(5),
-                          onTap: () {},
-                          child: Ink(
-                            child: Image.asset(
-                              icEye,
-                              height: responsiveHeight(24),
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ]);
-                }),
-          )
+                          )
+                    : InternetIssue(
+                        onRetryPressed: () {
+                          checkInternetAndLoadData();
+                        },
+                      );
+              })
         ],
       ),
     ));

@@ -56,10 +56,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icPatientRegistration,
           routeName: AppRoutes.patientRegListScreen),
       DashboardMenuModel(
-          name: "Doctor Desk",
-          image: icDoctorDesk,
-          routeName: AppRoutes.dashboard),
-      DashboardMenuModel(
           name: "Camp Calendar",
           image: icCalendarColourfull,
           routeName: AppRoutes.campCalendar),
@@ -107,7 +103,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       DashboardMenuModel(
           name: "Doctor Desk",
           image: icDoctorDesk,
-          routeName: AppRoutes.dashboard),
+          routeName: AppRoutes.doctorDesk),
+
     ]);
 
     _menuList.add(DashboardMenuModel(
