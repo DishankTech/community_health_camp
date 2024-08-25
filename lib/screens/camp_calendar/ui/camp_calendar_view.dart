@@ -70,12 +70,6 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
   bool isLoading =false;
 
-  // List<Datum> uniqueLocationList  = [];
-  List<dynamic> uniqueLocationList  = [];
-
-  Set<int> seenLocationIds = {};
-
-
   @override
   void dispose() {
     // _selectedEvents.clear();
@@ -456,7 +450,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
     };
 
     var body = json.encode({
-      "total_pages": 20,
+      "total_pages": 10,
       "page": 1,
       "total_count": 20,
       "per_page": 20,
@@ -484,32 +478,13 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
           }*/
 
         List<dynamic> dataList = jsonResponse['details']['data'];
-        uniqueLocationList = [];
-
-        for (var camp in dataList) {
-          // if(camp.locationMasterId!=null)
-          if(camp['location_master_id']!=null)
-          {
-            int locationId = int.parse(camp['location_master_id'].toString());
-            if (!seenLocationIds.contains(locationId)) {
-              seenLocationIds.add(locationId);
-              uniqueLocationList.add(camp);
-            }
-          }
-
-
-        }
-
-
-
-        // for (var item in dataList) {
-        for (var item in uniqueLocationList) {
-          // String dateStr = item['prop_camp_date'].split('T')[0];
-          // String dateStr = item.propCampDate.timeZoneName.split('T')[0];
-          // String dateStr = item['prop_camp_date'].timeZoneName.split('T')[0];
+        for (var item in dataList) {
           String dateStr = item['prop_camp_date'].split('T')[0];
           // Parse the string into a DateTime object
           DateTime dateTime = DateTime.parse(dateStr + ' 00:00:00.000Z');
+
+          // Format the DateTime object to the desired format
+          String formattedDate = dateStr;
 
 
           if (eventsByDate[dateTime] == null) {
