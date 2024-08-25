@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/common_bloc/repository/master_repository.dart';
 import 'package:community_health_app/screens/patient_registration/bloc/patient_registration_bloc.dart';
