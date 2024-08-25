@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/images.dart';
@@ -7,6 +8,7 @@ import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/patient_registration/bloc/patient_registration_bloc.dart';
 import 'package:community_health_app/screens/patient_registration/models/registered_patient_model.dart';
+import 'package:community_health_app/screens/patient_registration/models/registered_patient_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -62,6 +64,26 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
           name: "Sanjay Desai",
           image: pat1),
     ]);
+
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   context.read<MasterDataBloc>().add(GetGenderRequest(payload: const {
+    //         "lookup_code_list1": [
+    //           {"lookup_code": "GEN"}
+    //         ]
+    //       }));
+
+    //   context.read<MasterDataBloc>().add(GetDistrictList(payload: const {
+    //         "lookup_det_code_list1": const [
+    //           {"lookup_det_code": "DIS"}
+    //         ]
+    //       }));
+
+    //   context.read<MasterDataBloc>().add(GetTalukaList(payload: const {
+    //         "lookup_det_code_list1": const [
+    //           {"lookup_det_code": "TLK"}
+    //         ]
+    //       }));
+    // });
   }
 
   @override
@@ -114,9 +136,12 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                     Navigator.pushNamed(context, AppRoutes.patientRegScreen);
                   },
                   child: Ink(
-                    child: Image.asset(
-                      icSquarePlus,
-                      height: responsiveHeight(24),
+                    child: Center(
+                      child: Image.asset(
+                        icSquarePlus,
+                        fit: BoxFit.cover,
+                        height: responsiveHeight(24),
+                      ),
                     ),
                   ),
                 ),
@@ -125,18 +150,20 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
             BlocBuilder<PatientRegistrationBloc, PatientRegistrationState>(
               builder: (context, state) {
                 print(state);
-                var res;
+                RegisteredPatientResponseModel? regPatients;
                 if (state.patientListStatus.isSuccess) {
-                  res = jsonDecode(state.patientListResponse);
-                  if (res['message'] == 'Data Not Found') {}
+                  var res = jsonDecode(state.patientListResponse);
+                  regPatients = RegisteredPatientResponseModel.fromJson(res);
                 }
                 return state.patientListStatus.isInProgress
                     ? const Expanded(
                         child: Center(child: CircularProgressIndicator()))
-                    : res['message'] != 'Data Not Found'
+                    : regPatients != null &&
+                            regPatients.details != null &&
+                            regPatients.details!.data!.isNotEmpty
                         ? Expanded(
                             child: ListView.builder(
-                                itemCount: _list.length,
+                                itemCount: regPatients.details!.data!.length,
                                 padding: EdgeInsets.zero,
                                 itemBuilder: (c, i) {
                                   return Stack(children: [
@@ -195,7 +222,12 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(_list[i].name,
+                                                    Text(
+                                                        regPatients!
+                                                                .details!
+                                                                .data![i]
+                                                                .patientName ??
+                                                            '',
                                                         style: TextStyle(
                                                             fontSize:
                                                                 responsiveFont(
@@ -221,8 +253,11 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                              text: _list[i]
-                                                                  .mobile,
+                                                              text: regPatients!
+                                                                      .details!
+                                                                      .data![i]
+                                                                      .contactNumber ??
+                                                                  '',
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       responsiveFont(
@@ -252,8 +287,10 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                              text: _list[i]
-                                                                  .address,
+                                                              text: regPatients!
+                                                                  .details!
+                                                                  .data![i]
+                                                                  .pinCode,
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       responsiveFont(
@@ -283,8 +320,12 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                              text: _list[i]
-                                                                  .campName,
+                                                              text: regPatients!
+                                                                      .details!
+                                                                      .data![i]
+                                                                      .campCreateRequestId
+                                                                      .toString() ??
+                                                                  '',
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       responsiveFont(
@@ -314,8 +355,11 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                              text: _list[i]
-                                                                  .campDate,
+                                                              text: regPatients!
+                                                                      .details!
+                                                                      .data![i]
+                                                                      .campDate ??
+                                                                  '',
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       responsiveFont(
@@ -354,7 +398,9 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                                 Navigator.pushNamed(
                                                     context,
                                                     AppRoutes
-                                                        .patientRegEditScreen);
+                                                        .patientRegEditScreen,
+                                                    arguments: regPatients!
+                                                        .details!.data![i]);
                                               },
                                               child: Ink(
                                                 child: Image.asset(

@@ -10,8 +10,11 @@ import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
+import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master_bloc.dart';
+import 'package:community_health_app/screens/stakeholder/models/stakeholder_name_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 import 'package:get/get.dart';
 
 Future<dynamic> genderBottomSheet(
@@ -155,7 +158,7 @@ Future<dynamic> genderBottomSheet(
 }
 
 Future<dynamic> stakeholderBottomSheet(
-    BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
+    BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -204,9 +207,151 @@ Future<dynamic> stakeholderBottomSheet(
                     ),
                     BlocBuilder<MasterDataBloc, MasterDataState>(
                       builder: (context, state) {
+                        GetUserMasterWithHierResponse? responseModel;
+                        if (state.getMasterResponse.isNotEmpty) {
+                          responseModel =
+                              GetUserMasterWithHierResponse.fromJson(
+                                  jsonDecode(state.getMasterResponse));
+                        }
+
+                        return state.getMasterStatus.isInProgress
+                            ? const Center(child: CircularProgressIndicator())
+                            : responseModel != null &&
+                                    responseModel.details != null
+                                ? Expanded(
+                                    child: ListView.builder(
+                                      itemCount: responseModel.details![0]
+                                          .lookupDetHierarchical!.length,
+                                      itemBuilder: (c, i) => Padding(
+                                        padding: const EdgeInsets.all(2.0),
+                                        child: Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            onTap: () {
+                                              onItemSelected(responseModel!
+                                                  .details![0]
+                                                  .lookupDetHierarchical![i]);
+                                              setState(
+                                                () {
+                                                  selectedIndex = i;
+                                                },
+                                              );
+                                              Navigator.pop(context);
+                                            },
+                                            child: Ink(
+                                              decoration: BoxDecoration(
+                                                color: i == selectedIndex
+                                                    ? Colors.transparent
+                                                    : kListBGColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Image.asset(
+                                                      i == selectedIndex
+                                                          ? icCircleDot
+                                                          : icCircle,
+                                                      height:
+                                                          responsiveHeight(20),
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                          responsiveWidth(20),
+                                                    ),
+                                                    Text(responseModel!
+                                                        .details![0]
+                                                        .lookupDetHierarchical![
+                                                            i]
+                                                        .lookupDetHierDescEn!),
+                                                    const Spacer(),
+                                                    i == selectedIndex
+                                                        ? Image.asset(
+                                                            icCircleCheck,
+                                                            height:
+                                                                responsiveHeight(
+                                                                    20),
+                                                          )
+                                                        : const SizedBox
+                                                            .shrink(),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const Center(
+                                    child: Text("Data Not Available"));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
+
+Future<dynamic> stakeholderSubTypeBottomSheet(
+    BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
+  int selectedIndex = -1;
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => StatefulBuilder(
+            builder: (c, setState) => Container(
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(responsiveHeight(50)),
+                      topRight: Radius.circular(responsiveHeight(50)))),
+              child: Padding(
+                padding: EdgeInsets.all(responsiveHeight(30)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Stakeholder Sub Type",
+                            style: TextStyle(
+                                fontSize: responsiveFont(17),
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                icSquareClose,
+                                height: responsiveHeight(24),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(25),
+                    ),
+                    BlocBuilder<MasterDataBloc, MasterDataState>(
+                      builder: (context, state) {
                         GetUserMasterWithHierResponse responseModel =
-                            GetUserMasterWithHierResponse.fromJson(
-                                jsonDecode(state.getMasterResponse));
+                            GetUserMasterWithHierResponse.fromJson(jsonDecode(
+                                state.getStakeholderSubTypeResponse));
 
                         return responseModel.details != null
                             ? Expanded(
@@ -230,7 +375,9 @@ Future<dynamic> stakeholderBottomSheet(
                                                 .lookupDetHierarchical![i]
                                                 .lookupDetHierDescEn!
                                           };
-                                          onItemSelected(selectedItem);
+                                          onItemSelected(responseModel
+                                              .details![0]
+                                              .lookupDetHierarchical![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -259,10 +406,141 @@ Future<dynamic> stakeholderBottomSheet(
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel
-                                                    .details![0]
-                                                    .lookupDetHierarchical![i]
-                                                    .lookupDetHierDescEn!),
+                                                Expanded(
+                                                  child: Text(responseModel
+                                                      .details![0]
+                                                      .lookupDetHierarchical![i]
+                                                      .lookupDetHierDescEn!),
+                                                ),
+                                                const Spacer(),
+                                                i == selectedIndex
+                                                    ? Image.asset(
+                                                        icCircleCheck,
+                                                        height:
+                                                            responsiveHeight(
+                                                                20),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Center(child: Text("Data Not Available"));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
+
+Future<dynamic> stakeholderNameBottomSheet(
+    BuildContext context, Function(StakeholderNameDetails) onItemSelected) {
+  int selectedIndex = -1;
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => StatefulBuilder(
+            builder: (c, setState) => Container(
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(responsiveHeight(50)),
+                      topRight: Radius.circular(responsiveHeight(50)))),
+              child: Padding(
+                padding: EdgeInsets.all(responsiveHeight(30)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Stakeholder Name",
+                            style: TextStyle(
+                                fontSize: responsiveFont(17),
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                icSquareClose,
+                                height: responsiveHeight(24),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(25),
+                    ),
+                    BlocBuilder<StakeholderMasterBloc, StakeholderMasterState>(
+                      builder: (context, state) {
+                        StakeholderNameResponseModel responseModel =
+                            StakeholderNameResponseModel.fromJson(
+                                jsonDecode(state.getStakeholderNameResponse));
+
+                        return responseModel.details != null &&
+                                responseModel.details!.isNotEmpty
+                            ? Expanded(
+                                child: ListView.builder(
+                                  itemCount: responseModel.details!.length,
+                                  itemBuilder: (c, i) => Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: () {
+                                          onItemSelected(
+                                              responseModel.details![i]);
+                                          setState(
+                                            () {
+                                              selectedIndex = i;
+                                            },
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                        child: Ink(
+                                          decoration: BoxDecoration(
+                                            color: i == selectedIndex
+                                                ? Colors.transparent
+                                                : kListBGColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  i == selectedIndex
+                                                      ? icCircleDot
+                                                      : icCircle,
+                                                  height: responsiveHeight(20),
+                                                ),
+                                                SizedBox(
+                                                  width: responsiveWidth(20),
+                                                ),
+                                                Expanded(
+                                                  child: Text(responseModel
+                                                      .details![i]
+                                                      .stakeholderNameEn!),
+                                                ),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
@@ -1050,8 +1328,8 @@ Future<dynamic> stakeholderStatusBottomSheet(
                     BlocBuilder<MasterDataBloc, MasterDataState>(
                       builder: (context, state) {
                         List<Map<String, dynamic>> list = [
-                          {"title": "Active", "id": 1},
-                          {"title": "In Active", "id": 2},
+                          {"title": "Active", "id": 0},
+                          {"title": "In Active", "id": 1},
                         ];
                         return list != null
                             ? ListView.builder(
@@ -1074,6 +1352,8 @@ Future<dynamic> stakeholderStatusBottomSheet(
                                             selectedIndex = i;
                                           },
                                         );
+
+                                        Navigator.pop(context);
                                       },
                                       child: Ink(
                                         decoration: BoxDecoration(
@@ -1847,7 +2127,6 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
   Widget build(BuildContext context) {
     CampCreationController campCreationController = Get.find();
 
-
     return Container(
       width: SizeConfig.screenWidth,
       decoration: BoxDecoration(
@@ -1893,7 +2172,7 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
                   context,
                   (p0) => {
                         widget.stakeH.text = p0.lookupDetHierDescEn,
-                    campCreationController.selectedStakeHolder = p0,
+                        campCreationController.selectedStakeHolder = p0,
                         setState(() {})
                         // controller
                         //     .selectedStakeHVal =
@@ -1952,7 +2231,6 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
             ),
             hint: "",
           ),
-
           SizedBox(
             height: responsiveHeight(20),
           ),
@@ -1965,7 +2243,8 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
                   child: AppButton(
                     title: "Save",
                     onTap: () {
-                      campCreationController.userCreation(widget.loginName.text);
+                      campCreationController
+                          .userCreation(widget.loginName.text);
                     },
                     iconData: Icon(
                       Icons.arrow_forward,
@@ -1980,7 +2259,7 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
                 Expanded(
                   child: AppButton(
                     title: "Cancel",
-                    onTap: (){
+                    onTap: () {
                       Get.back();
                     },
                     buttonColor: Colors.grey,

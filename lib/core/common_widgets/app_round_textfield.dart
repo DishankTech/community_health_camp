@@ -79,7 +79,7 @@ class AppRoundTextField extends StatelessWidget {
               maxLength: maxLength,
               minLines: maxLines ?? 1,
               onChanged: (value) {
-                if(onChange != null) onChange!(value);
+                if (onChange != null) onChange!(value);
               },
               validator: validators,
               decoration: InputDecoration(
@@ -89,13 +89,14 @@ class AppRoundTextField extends StatelessWidget {
                   errorStyle: const TextStyle(fontSize: 0.1),
                   label: label,
                   counterText: "",
-                  constraints: (maxLines != null && maxLines! > 1)
-                      ? null
-                      : BoxConstraints(maxHeight: responsiveHeight(50)),
+                  // constraints: (maxLines != null && maxLines! > 1)
+                  //     ? null
+                  //     : BoxConstraints(maxHeight: responsiveHeight(50)),
                   floatingLabelStyle: TextStyle(
-                    fontSize: (controller?.text ?? (initialValue ?? '')).isNotEmpty
-                        ? responsiveFont(16)
-                        : responsiveFont(14),
+                    fontSize:
+                        (controller?.text ?? (initialValue ?? '')).isNotEmpty
+                            ? responsiveFont(16)
+                            : responsiveFont(14),
                   ),
                   contentPadding: EdgeInsets.symmetric(
                       vertical: responsiveHeight(9),

@@ -23,3 +23,5 @@ class GetPatientListRequest extends PatientRegistrationEvent {
   @override
   List<Object> get props => [payload];
 }
+
+class ResetPatientRegistrationState extends PatientRegistrationEvent {}

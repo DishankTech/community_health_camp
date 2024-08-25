@@ -12,6 +12,7 @@ class PatientRegistrationRepository {
   }
 
   Future<http.Response> registerPatient(Map payload) async {
+    print(payload);
     var headers = {
       'Content-Type': 'application/json',
       'Authorization':

@@ -6,6 +6,20 @@ class Validators {
     return emailValid;
   }
 
+  static String? validateEmail(String? email) {
+    if (email == null || email.isEmpty) {
+      return null;
+    }
+    final bool emailValid = RegExp(
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+        .hasMatch(email);
+    if (!emailValid) {
+      return "Please enter valid email";
+    }
+
+    return null;
+  }
+
   static bool isValidMobileNo(String str) {
     final bool mobileValid = RegExp(r"^(0/91)?[6-9][0-9]{9}").hasMatch(str);
     return mobileValid;
@@ -23,5 +37,76 @@ class Validators {
       return 'Please enter a valid 10-digit Indian mobile number';
     }
     return null; // Validation passed
+  }
+
+  static String? validateStakeholderType(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select stakeholder';
+    }
+
+    return null;
+  }
+
+  static String? validateDesignationType(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select Designation/Member Type';
+    }
+
+    return null;
+  }
+
+  static String? validateStakeholderName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select stakeholder name';
+    }
+
+    return null;
+  }
+
+  static String? validateFullname(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter Full Name';
+    }
+
+    return null;
+  }
+
+  static String? validateLoginName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter Login Name';
+    }
+
+    return null;
+  }
+
+  static String? validatePassword(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter password';
+    }
+
+    if (value.length < 3) {
+      return 'Password must be at least 3 characters long';
+    }
+    String pattern =
+        r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=])[A-Za-z\d@#$%^&+=]{8,}$';
+    RegExp regExp = RegExp(pattern);
+    bool isValid = regExp.hasMatch(value);
+    if (!isValid) {
+      return "Password must include mentioned rules ";
+    }
+    return null;
+  }
+
+  static String? validateConfirmPassword(
+      String? password, String? confirmPassword) {
+    if (confirmPassword == null || confirmPassword.isEmpty) {
+      return 'Please enter password';
+    }
+
+    if (confirmPassword != password) {
+      return 'Confirm Password does not match with Password';
+    }
+
+    return null;
   }
 }

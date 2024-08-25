@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:community_health_app/screens/user_master/repository/user_master_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
+import 'package:dio/dio.dart';
+
 import 'package:http/http.dart' as http;
 part 'user_master_event.dart';
 part 'user_master_state.dart';
@@ -19,6 +22,7 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
             getUserStatus: FormzSubmissionStatus.initial)) {
     on<CreateUserRequest>(_onCreateUserRequest);
     on<GetUserRequest>(_onGetUserRequest);
+    on<ResetUserMasterState>(_onResetUserMasterState);
   }
 
   FutureOr<void> _onCreateUserRequest(
@@ -27,17 +31,17 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
       emit(state.copyWith(
           createUserResponse: '',
           createUserStatus: FormzSubmissionStatus.inProgress));
-      http.StreamedResponse res =
-          await userMasterRepository.createUser(event.payload);
+      Response res = await userMasterRepository.createUser(event.payload);
+
+      // http.Response res = await userMasterRepository.createUser(event.payload);
 
       if (res.statusCode == 201) {
-        String decodeRes = await res.stream.bytesToString();
         emit(state.copyWith(
-            createUserResponse: decodeRes,
+            createUserResponse: jsonEncode(res.data),
             createUserStatus: FormzSubmissionStatus.success));
       } else {
         emit(state.copyWith(
-            createUserResponse: res.reasonPhrase,
+            createUserResponse: res.statusMessage,
             createUserStatus: FormzSubmissionStatus.failure));
       }
     } catch (e) {
@@ -84,5 +88,16 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
           getUserResponse: e.toString(),
           getUserStatus: FormzSubmissionStatus.failure));
     }
+  }
+
+  FutureOr<void> _onResetUserMasterState(
+      ResetUserMasterState event, Emitter<UserMasterState> emit) async {
+    try {
+      emit(state.copyWith(
+          createUserResponse: '',
+          createUserStatus: FormzSubmissionStatus.initial,
+          getUserResponse: '',
+          getUserStatus: FormzSubmissionStatus.initial));
+    } catch (e) {}
   }
 }

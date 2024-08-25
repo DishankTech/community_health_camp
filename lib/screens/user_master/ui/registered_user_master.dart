@@ -72,7 +72,7 @@ class _RegisteredUserMasterScreenState
         children: [
           mAppBarV1(
             title: "Registered User Master",
-            onBackButtonPress: (){
+            onBackButtonPress: () {
               Navigator.pop(context);
             },
             context: context,
@@ -100,8 +100,12 @@ class _RegisteredUserMasterScreenState
                     jsonDecode(state.getUserResponse));
               }
               return state.getUserStatus.isInProgress
-                  ? const CircularProgressIndicator(
-                      color: kPrimaryColor,
+                  ? const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: kPrimaryColor,
+                        ),
+                      ),
                     )
                   : getUserMasterResponse != null &&
                           getUserMasterResponse.details!.data!.isNotEmpty
@@ -329,7 +333,10 @@ class _RegisteredUserMasterScreenState
                                               Navigator.pushNamed(
                                                   context,
                                                   AppRoutes
-                                                      .userMasterEditScreen);
+                                                      .userMasterEditScreen,
+                                                  arguments:
+                                                      getUserMasterResponse!
+                                                          .details!.data![i]);
                                             },
                                             child: Ink(
                                               child: Image.asset(
@@ -339,23 +346,23 @@ class _RegisteredUserMasterScreenState
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: responsiveHeight(10),
-                                        ),
-                                        Material(
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            onTap: () {},
-                                            child: Ink(
-                                              child: Image.asset(
-                                                icEye,
-                                                height: responsiveHeight(24),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                        // SizedBox(
+                                        //   width: responsiveHeight(10),
+                                        // ),
+                                        // Material(
+                                        //   color: Colors.transparent,
+                                        //   child: InkWell(
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(5),
+                                        //     onTap: () {},
+                                        //     child: Ink(
+                                        //       child: Image.asset(
+                                        //         icEye,
+                                        //         height: responsiveHeight(24),
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),

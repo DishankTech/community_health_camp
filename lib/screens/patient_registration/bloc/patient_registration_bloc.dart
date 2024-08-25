@@ -20,6 +20,7 @@ class PatientRegistrationBloc
             patientListStatus: FormzSubmissionStatus.initial)) {
     on<PatientRegistrationRequest>(_onPatientRegistrationRequest);
     on<GetPatientListRequest>(_onGetPatientListRequest);
+    on<ResetPatientRegistrationState>(_onResetPatientRegistrationState);
   }
 
   FutureOr<void> _onPatientRegistrationRequest(PatientRegistrationRequest event,
@@ -27,14 +28,15 @@ class PatientRegistrationBloc
     try {
       emit(state.copyWith(
           patientRegistrationResponse: '',
-          patientRegistrationStatus: FormzSubmissionStatus.inProgress));
+          patientRegistrationStatus: FormzSubmissionStatus.inProgress,
+          patientListStatus: FormzSubmissionStatus.initial));
       http.Response res =
           await patientRegistrationRepository.registerPatient(event.payload);
 
       if (res.statusCode == 200) {
         emit(state.copyWith(
             patientRegistrationResponse: res.body,
-            patientListStatus: FormzSubmissionStatus.success));
+            patientRegistrationStatus: FormzSubmissionStatus.success));
       } else {
         emit(state.copyWith(
             patientRegistrationResponse: res.reasonPhrase,
@@ -79,5 +81,15 @@ class PatientRegistrationBloc
           patientListResponse: e.toString(),
           patientListStatus: FormzSubmissionStatus.failure));
     }
+  }
+
+  FutureOr<void> _onResetPatientRegistrationState(
+      ResetPatientRegistrationState event,
+      Emitter<PatientRegistrationState> emit) {
+    try {
+      emit(state.copyWith(
+          patientListStatus: FormzSubmissionStatus.initial,
+          patientRegistrationStatus: FormzSubmissionStatus.initial));
+    } catch (e) {}
   }
 }

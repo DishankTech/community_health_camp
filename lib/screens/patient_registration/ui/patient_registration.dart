@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
 
@@ -139,13 +140,32 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
     return BlocListener<PatientRegistrationBloc, PatientRegistrationState>(
       listener: (context, state) {
         if (state.patientRegistrationStatus.isSuccess) {
-          ScaffoldMessenger.of(context)
-            ..clearSnackBars()
-            ..showSnackBar(SnackBar(
-              content: Text(state.patientRegistrationResponse),
-              backgroundColor: Colors.green,
-              duration: Duration(seconds: 2),
-            ));
+          var res = jsonDecode(state.patientRegistrationResponse);
+          if (res['status_code'] == 200) {
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(SnackBar(
+                content: Text(res['message']),
+                backgroundColor: Colors.green,
+                duration: Duration(seconds: 2),
+              ));
+            context.read<PatientRegistrationBloc>().add(GetPatientListRequest(
+                    payload: const {
+                      "total_pages": 1,
+                      "page": 1,
+                      "total_count": 1,
+                      "per_page": 100,
+                      "data": ""
+                    }));
+          } else {
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(SnackBar(
+                content: Text(res['exception']),
+                backgroundColor: Colors.red,
+                duration: Duration(seconds: 2),
+              ));
+          }
         }
 
         if (state.patientRegistrationStatus.isFailure) {
@@ -848,7 +868,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                               "camp_create_request_id":
                                                   _campIDTextController.text,
                                               "camp_date": DateFormat(
-                                                      'dd-MM-yyyy')
+                                                      'yyyy-MM-dd')
                                                   .format(_selectedCampDate!),
                                               "user_id_register_by":
                                                   DataProvider()
@@ -869,7 +889,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                               "addhar_card":
                                                   _aadhaarNoTextController.text,
                                               "abha_card": "",
-                                              "lookup_det_hier_id_country": 0,
+                                              "lookup_det_hier_id_country":
+                                                  null,
                                               "lookup_det_hier_id_state": 4,
                                               "lookup_det_hier_id_district":
                                                   _selectedDistrict!
@@ -880,7 +901,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                               "lookup_det_hier_id_city":
                                                   _selectedCity!
                                                       .lookupDetHierId,
-                                              "lookup_det_id_division": 1,
+                                              "lookup_det_id_division": null,
                                               "pin_code":
                                                   _pincodeTextController.text,
                                               "org_id": null,

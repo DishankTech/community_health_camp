@@ -19,9 +19,13 @@ class StakeholderMasterBloc
             getAllStakeholderResponse: '',
             getAllStakeholderStatus: FormzSubmissionStatus.initial,
             registerStakeholderResponse: '',
-            registerStakeholderStatus: FormzSubmissionStatus.initial)) {
+            registerStakeholderStatus: FormzSubmissionStatus.initial,
+            getStakeholderNameResponse: '',
+            getStakeholderNameStatus: FormzSubmissionStatus.initial)) {
     on<GetAllStakeholder>(_onGetAllStakeholder);
     on<RegisterStakeholder>(_onRegisterStakeholder);
+    on<GetStakeholderName>(_onGetStakeholderName);
+    on<ResetStakeholderMasterState>(_onResetStakeholderMasterState);
   }
 
   FutureOr<void> _onGetAllStakeholder(
@@ -31,7 +35,8 @@ class StakeholderMasterBloc
           getAllStakeholderResponse: '',
           registerStakeholderResponse: '',
           registerStakeholderStatus: FormzSubmissionStatus.initial,
-          getAllStakeholderStatus: FormzSubmissionStatus.inProgress));
+          getAllStakeholderStatus: FormzSubmissionStatus.inProgress,
+          getStakeholderNameStatus: FormzSubmissionStatus.initial));
 
       http.Response res = await stakeholderRepository.getAll(event.payload);
       if (res.statusCode == 200) {
@@ -59,7 +64,8 @@ class StakeholderMasterBloc
       emit(state.copyWith(
           registerStakeholderResponse: '',
           registerStakeholderStatus: FormzSubmissionStatus.inProgress,
-          getAllStakeholderStatus: FormzSubmissionStatus.initial));
+          getAllStakeholderStatus: FormzSubmissionStatus.initial,
+          getStakeholderNameStatus: FormzSubmissionStatus.initial));
 
       http.Response res = await stakeholderRepository.register(event.payload);
       if (res.statusCode == 200) {
@@ -78,6 +84,53 @@ class StakeholderMasterBloc
       emit(state.copyWith(
           registerStakeholderResponse: e.toString(),
           registerStakeholderStatus: FormzSubmissionStatus.failure));
+    }
+  }
+
+  FutureOr<void> _onGetStakeholderName(
+      GetStakeholderName event, Emitter<StakeholderMasterState> emit) async {
+    try {
+      emit(state.copyWith(
+          registerStakeholderResponse: '',
+          registerStakeholderStatus: FormzSubmissionStatus.initial,
+          getAllStakeholderStatus: FormzSubmissionStatus.initial,
+          getStakeholderNameResponse: '',
+          getStakeholderNameStatus: FormzSubmissionStatus.inProgress));
+
+      http.Response res =
+          await stakeholderRepository.getStakeholderName(event.payload);
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            getStakeholderNameResponse: res.body,
+            getStakeholderNameStatus: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+            getStakeholderNameResponse: res.reasonPhrase,
+            getStakeholderNameStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+
+      emit(state.copyWith(
+          getStakeholderNameResponse: e.toString(),
+          getStakeholderNameStatus: FormzSubmissionStatus.failure));
+    }
+  }
+
+  FutureOr<void> _onResetStakeholderMasterState(
+      ResetStakeholderMasterState event,
+      Emitter<StakeholderMasterState> emit) async {
+    try {
+      emit(state.copyWith(
+          getAllStakeholderResponse: '',
+          getAllStakeholderStatus: FormzSubmissionStatus.initial,
+          registerStakeholderResponse: '',
+          registerStakeholderStatus: FormzSubmissionStatus.initial,
+          getStakeholderNameStatus: FormzSubmissionStatus.initial));
+    } catch (e) {
+      print(e);
     }
   }
 }

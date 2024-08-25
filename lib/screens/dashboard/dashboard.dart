@@ -99,9 +99,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icCampCreation,
           routeName: AppRoutes.campCreation),
       DashboardMenuModel(
+          name: "Camp Calendar",
+          image: icCalendarColourfull,
+          routeName: AppRoutes.campCalendar),
+      DashboardMenuModel(
           name: "Camp Approval",
           image: icCampApproval,
           routeName: AppRoutes.campApproval),
+      DashboardMenuModel(
+          name: "Camp Co-Ordinator",
+          image: icPersons,
+          routeName: AppRoutes.campCoordinator),
       DashboardMenuModel(
           name: "Patient Registration",
           image: icPatientRegistration,
@@ -109,21 +117,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
       DashboardMenuModel(
           name: "Doctor Desk",
           image: icDoctorDesk,
-          routeName: AppRoutes.dashboard),
+          routeName: AppRoutes.doctorDesk),
     ]);
 
-    _menuList.add(DashboardMenuModel(
-        name: "Camp Creation",
-        image: icCampCreation,
-        routeName: AppRoutes.campCreation));
-    _menuList.add(DashboardMenuModel(
-        name: "Camp Calendar",
-        image: icCalendarColourfull,
-        routeName: AppRoutes.campCalendar));
-    _menuList.add(DashboardMenuModel(
-        name: "Camp Co-Ordinator",
-        image: icPersons,
-        routeName: AppRoutes.campCoordinator));
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state.loginResponseModel != null) {

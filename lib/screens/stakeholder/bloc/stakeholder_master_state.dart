@@ -5,17 +5,24 @@ class StakeholderMasterState extends Equatable {
       {required this.getAllStakeholderResponse,
       required this.getAllStakeholderStatus,
       required this.registerStakeholderResponse,
-      required this.registerStakeholderStatus});
+      required this.registerStakeholderStatus,
+      required this.getStakeholderNameResponse,
+      required this.getStakeholderNameStatus});
   final FormzSubmissionStatus getAllStakeholderStatus;
   final String getAllStakeholderResponse;
   final FormzSubmissionStatus registerStakeholderStatus;
   final String registerStakeholderResponse;
+
+  final FormzSubmissionStatus getStakeholderNameStatus;
+  final String getStakeholderNameResponse;
 
   StakeholderMasterState copyWith({
     FormzSubmissionStatus? getAllStakeholderStatus,
     String? getAllStakeholderResponse,
     FormzSubmissionStatus? registerStakeholderStatus,
     String? registerStakeholderResponse,
+    FormzSubmissionStatus? getStakeholderNameStatus,
+    String? getStakeholderNameResponse,
   }) {
     return StakeholderMasterState(
         getAllStakeholderResponse:
@@ -25,7 +32,11 @@ class StakeholderMasterState extends Equatable {
         registerStakeholderResponse:
             registerStakeholderResponse ?? this.registerStakeholderResponse,
         registerStakeholderStatus:
-            registerStakeholderStatus ?? this.registerStakeholderStatus);
+            registerStakeholderStatus ?? this.registerStakeholderStatus,
+        getStakeholderNameResponse:
+            getStakeholderNameResponse ?? this.getStakeholderNameResponse,
+        getStakeholderNameStatus:
+            getStakeholderNameStatus ?? this.getStakeholderNameStatus);
   }
 
   @override
@@ -33,6 +44,8 @@ class StakeholderMasterState extends Equatable {
         getAllStakeholderResponse,
         getAllStakeholderStatus,
         registerStakeholderResponse,
-        registerStakeholderStatus
+        registerStakeholderStatus,
+        getStakeholderNameResponse,
+        getStakeholderNameStatus
       ];
 }

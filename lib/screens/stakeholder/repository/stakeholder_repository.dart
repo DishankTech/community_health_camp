@@ -15,4 +15,11 @@ class StakeholderRepository {
     return await http.post(Uri.parse('$kBaseUrl$kAddStakeholder'),
         body: jsonEncode(payload), headers: headers);
   }
+
+  Future<http.Response> getStakeholderName(int payload) async {
+    var headers = {'Content-Type': 'application/json'};
+    return await http.post(
+      Uri.parse('$kBaseUrl$kGetStakeholderName$payload'),
+    );
+  }
 }

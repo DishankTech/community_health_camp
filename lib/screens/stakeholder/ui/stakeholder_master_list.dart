@@ -67,7 +67,7 @@ class _StakeholderMasterListState extends State<StakeholderMasterList> {
           "total_pages": 1,
           "page": 1,
           "total_count": 1,
-          "per_page": 100,
+          "per_page": 10,
           "data": ""
         }));
     return Scaffold(
@@ -79,7 +79,7 @@ class _StakeholderMasterListState extends State<StakeholderMasterList> {
         children: [
           mAppBarV1(
             title: "Stakeholder Master",
-            onBackButtonPress: (){
+            onBackButtonPress: () {
               Navigator.pop(context);
             },
             context: context,
@@ -108,11 +108,12 @@ class _StakeholderMasterListState extends State<StakeholderMasterList> {
                     jsonDecode(state.getAllStakeholderResponse));
               }
               return state.getAllStakeholderStatus.isInProgress
-                  ? Expanded(
+                  ? const Expanded(
                       child: Center(
                       child: CircularProgressIndicator(),
                     ))
                   : stakeholderResponseModel != null &&
+                          stakeholderResponseModel.details != null &&
                           stakeholderResponseModel.details!.data!.isNotEmpty
                       ? Expanded(
                           child: ListView.builder(
@@ -272,8 +273,15 @@ class _StakeholderMasterListState extends State<StakeholderMasterList> {
                                                 ),
                                                 Container(
                                                   decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xFF54BB44),
+                                                      color:
+                                                          stakeholderResponseModel
+                                                                      .details!
+                                                                      .data![i]
+                                                                      .status ==
+                                                                  0
+                                                              ? Colors.red
+                                                              : const Color(
+                                                                  0xFF54BB44),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               responsiveHeight(
@@ -292,8 +300,8 @@ class _StakeholderMasterListState extends State<StakeholderMasterList> {
                                                                     .data![i]
                                                                     .status ==
                                                                 0
-                                                            ? "Active"
-                                                            : "InActive",
+                                                            ? "In Active"
+                                                            : "Active",
                                                         style: TextStyle(
                                                             fontSize:
                                                                 responsiveFont(
@@ -328,7 +336,10 @@ class _StakeholderMasterListState extends State<StakeholderMasterList> {
                                               Navigator.pushNamed(
                                                   context,
                                                   AppRoutes
-                                                      .stakeholderMasterEditScreen);
+                                                      .stakeholderMasterEditScreen,
+                                                  arguments:
+                                                      stakeholderResponseModel!
+                                                          .details!.data![i]);
                                             },
                                             child: Ink(
                                               child: Image.asset(
@@ -338,23 +349,23 @@ class _StakeholderMasterListState extends State<StakeholderMasterList> {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: responsiveHeight(10),
-                                        ),
-                                        Material(
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            onTap: () {},
-                                            child: Ink(
-                                              child: Image.asset(
-                                                icEye,
-                                                height: responsiveHeight(24),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
+                                        // SizedBox(
+                                        //   width: responsiveHeight(10),
+                                        // ),
+                                        // Material(
+                                        //   color: Colors.transparent,
+                                        //   child: InkWell(
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(5),
+                                        //     onTap: () {},
+                                        //     child: Ink(
+                                        //       child: Image.asset(
+                                        //         icEye,
+                                        //         height: responsiveHeight(24),
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),

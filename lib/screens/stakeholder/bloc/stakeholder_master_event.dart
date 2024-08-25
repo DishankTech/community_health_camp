@@ -22,3 +22,13 @@ class RegisterStakeholder extends StakeholderMasterEvent {
   @override
   List<Object> get props => [payload];
 }
+
+class GetStakeholderName extends StakeholderMasterEvent {
+  int payload;
+  GetStakeholderName({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}
+
+class ResetStakeholderMasterState extends StakeholderMasterEvent {}

@@ -87,7 +87,7 @@ class _DashboardPatientRegistrationScreenState
   void _showDownloadReportBottomSheet() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: false,
       constraints: const BoxConstraints(
         minWidth: double.infinity,
       ),
@@ -98,7 +98,7 @@ class _DashboardPatientRegistrationScreenState
       ) {
         return Container(
           width: double.infinity,
-          height: MediaQuery.of(context).size.width * 0.70,
+          // height: MediaQuery.of(context).size.width * 0.70,
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -204,9 +204,7 @@ class _DashboardPatientRegistrationScreenState
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: responsiveHeight(30),
-                    ),
+                    const Spacer(),
                     Row(
                       children: [
                         Flexible(
@@ -216,6 +214,10 @@ class _DashboardPatientRegistrationScreenState
                               Navigator.pop(context);
                             },
                             title: "Download",
+                            textStyle: TextStyle(
+                                fontSize: responsiveFont(14),
+                                color: kWhiteColor,
+                                fontWeight: FontWeight.bold),
                             iconData: Icon(
                               Icons.arrow_forward,
                               color: kWhiteColor,
@@ -233,6 +235,10 @@ class _DashboardPatientRegistrationScreenState
                               Navigator.pop(context);
                             },
                             title: "Cancel",
+                            textStyle: TextStyle(
+                                fontSize: responsiveFont(14),
+                                color: kWhiteColor,
+                                fontWeight: FontWeight.bold),
                             buttonColor: Colors.grey,
                             iconData: Icon(
                               Icons.arrow_forward,
@@ -848,9 +854,6 @@ class _DashboardPatientRegistrationScreenState
                                     ),
                                   ],
                                 ),
-                              ),
-                              SizedBox(
-                                width: responsiveHeight(10),
                               ),
                             ],
                           ),

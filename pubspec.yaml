@@ -66,7 +66,7 @@ dependencies:
   infinite_scroll_pagination: ^4.0.0
   dio: ^5.6.0
   pie_chart: ^5.4.0
-  syncfusion_flutter_datepicker: ^26.2.10
+  syncfusion_flutter_datepicker: ^26.1.35
 
 
 dev_dependencies:

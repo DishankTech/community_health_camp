@@ -35,7 +35,7 @@ class Details {
   int? page;
   int? totalCount;
   int? perPage;
-  List<Data>? data;
+  List<StakeholderMasterData>? data;
 
   Details(
       {this.totalPages, this.page, this.totalCount, this.perPage, this.data});
@@ -46,9 +46,9 @@ class Details {
     totalCount = json['total_count'];
     perPage = json['per_page'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <StakeholderMasterData>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new StakeholderMasterData.fromJson(v));
       });
     }
   }
@@ -66,7 +66,7 @@ class Details {
   }
 }
 
-class Data {
+class StakeholderMasterData {
   int? stakeholderMasterId;
   int? lookupDetHierIdStakeholderType1;
   String? stakeholderNameEn;
@@ -101,7 +101,7 @@ class Data {
   String? stakeholderSubType2Rg;
   int? status;
 
-  Data(
+  StakeholderMasterData(
       {this.stakeholderMasterId,
       this.lookupDetHierIdStakeholderType1,
       this.stakeholderNameEn,
@@ -136,7 +136,7 @@ class Data {
       this.stakeholderSubType2Rg,
       this.status});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  StakeholderMasterData.fromJson(Map<String, dynamic> json) {
     stakeholderMasterId = json['stakeholder_master_id'];
     lookupDetHierIdStakeholderType1 =
         json['lookup_det_hier_id_stakeholder_type1'];

@@ -123,3 +123,5 @@ class GetStakeholderSubType extends MasterDataEvent {
   @override
   List<Object> get props => [payload];
 }
+
+class ResetMasterState extends MasterDataEvent {}

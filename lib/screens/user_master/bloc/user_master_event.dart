@@ -16,3 +16,5 @@ class CreateUserRequest extends UserMasterEvent {
 }
 
 class GetUserRequest extends UserMasterEvent {}
+
+class ResetUserMasterState extends UserMasterEvent {}

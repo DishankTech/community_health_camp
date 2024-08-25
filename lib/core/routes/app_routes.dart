@@ -105,8 +105,7 @@ class AppRoutes {
         );
       case userMasterEditScreen:
         return MaterialPageRoute(
-          builder: (_) => const UserMasterEditScreen(),
-        );
+            builder: (_) => const UserMasterEditScreen(), settings: settings);
       case stakeholderMasterScreen:
         return MaterialPageRoute(
           builder: (_) => const StakeHolderMasterScreen(),
@@ -117,8 +116,8 @@ class AppRoutes {
         );
       case patientRegEditScreen:
         return MaterialPageRoute(
-          builder: (_) => const PatientRegistrationEditScreen(),
-        );
+            builder: (_) => const PatientRegistrationEditScreen(),
+            settings: settings);
       case registeredUserMaster:
         return MaterialPageRoute(
           builder: (_) => const RegisteredUserMasterScreen(),
@@ -184,8 +183,8 @@ class AppRoutes {
         );
       case stakeholderMasterEditScreen:
         return MaterialPageRoute(
-          builder: (_) => const StakeHolderMasterEditScreen(),
-        );
+            builder: (_) => const StakeHolderMasterEditScreen(),
+            settings: settings);
       case resetPassword:
         return MaterialPageRoute(
           builder: (_) => const ResetPasswordPage(),
