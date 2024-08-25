@@ -11,18 +11,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:pinput/pinput.dart';
 
-Future<dynamic> genderBottomSheet(
-    BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
+Future<dynamic> genderBottomSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
   return showModalBottomSheet(
       context: context,
       isScrollControlled: false,
       builder: (c) => Container(
             width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(responsiveHeight(50)),
-                    topRight: Radius.circular(responsiveHeight(50)))),
+            decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
             child: Column(
               children: [
                 Padding(
@@ -31,10 +26,7 @@ Future<dynamic> genderBottomSheet(
                     children: [
                       Text(
                         "Gender",
-                        style: TextStyle(
-                            fontSize: responsiveFont(17),
-                            fontWeight: FontWeight.bold,
-                            color: kPrimaryColor),
+                        style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                       ),
                       const Spacer(),
                       GestureDetector(
@@ -71,18 +63,13 @@ Future<dynamic> genderBottomSheet(
                                   child: InkWell(
                                     borderRadius: BorderRadius.circular(10),
                                     onTap: () {
-                                      var selectedItem = {
-                                        'id': list[i]['id'],
-                                        'title': list[i]['title']
-                                      };
+                                      var selectedItem = {'id': list[i]['id'], 'title': list[i]['title']};
                                       onItemSelected(selectedItem);
                                       Navigator.pop(context);
                                     },
                                     child: Ink(
                                       decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: kTextFieldBorder,
-                                            width: 0.5),
+                                        border: Border.all(color: kTextFieldBorder, width: 0.5),
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                       child: Padding(
@@ -103,8 +90,7 @@ Future<dynamic> genderBottomSheet(
           ));
 }
 
-Future<dynamic> stakeholderBottomSheet(
-    BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
+Future<dynamic> stakeholderBottomSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -112,11 +98,7 @@ Future<dynamic> stakeholderBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -127,10 +109,7 @@ Future<dynamic> stakeholderBottomSheet(
                         children: [
                           Text(
                             "Stakeholder Type",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -153,16 +132,12 @@ Future<dynamic> stakeholderBottomSheet(
                     ),
                     BlocBuilder<MasterDataBloc, MasterDataState>(
                       builder: (context, state) {
-                        MasterResponseModel responseModel =
-                            MasterResponseModel.fromJson(
-                                jsonDecode(state.getMasterResponse));
+                        MasterResponseModel responseModel = MasterResponseModel.fromJson(jsonDecode(state.getMasterResponse));
 
-                        return responseModel.details != null &&
-                                responseModel.details![0].lookupDet != null
+                        return responseModel.details != null && responseModel.details![0].lookupDet != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel
-                                      .details![0].lookupDet!.length,
+                                  itemCount: responseModel.details![0].lookupDet!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -170,12 +145,7 @@ Future<dynamic> stakeholderBottomSheet(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          var selectedItem = {
-                                            'id': responseModel.details![0]
-                                                .lookupDet![i].lookupDetId!,
-                                            'title': responseModel.details![0]
-                                                .lookupDet![i].lookupDetDescEn!
-                                          };
+                                          var selectedItem = {'id': responseModel.details![0].lookupDet![i].lookupDetId!, 'title': responseModel.details![0].lookupDet![i].lookupDetDescEn!};
                                           onItemSelected(selectedItem);
                                           setState(
                                             () {
@@ -186,36 +156,26 @@ Future<dynamic> stakeholderBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel
-                                                    .details![0]
-                                                    .lookupDet![i]
-                                                    .lookupDetDescEn!),
+                                                Text(responseModel.details![0].lookupDet![i].lookupDetDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -237,8 +197,7 @@ Future<dynamic> stakeholderBottomSheet(
           ));
 }
 
-Future<dynamic> designationTypeBottomSheet(
-    BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
+Future<dynamic> designationTypeBottomSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -246,11 +205,7 @@ Future<dynamic> designationTypeBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -261,10 +216,7 @@ Future<dynamic> designationTypeBottomSheet(
                         children: [
                           Text(
                             "Designation Type",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -289,17 +241,12 @@ Future<dynamic> designationTypeBottomSheet(
                       builder: (context, state) {
                         MasterResponseModel? responseModel;
                         if (state.getMasterDesignationTypeResponse.isNotEmpty) {
-                          responseModel = MasterResponseModel.fromJson(
-                              jsonDecode(
-                                  state.getMasterDesignationTypeResponse));
+                          responseModel = MasterResponseModel.fromJson(jsonDecode(state.getMasterDesignationTypeResponse));
                         }
-                        return responseModel != null &&
-                                responseModel.details != null &&
-                                responseModel.details![0].lookupDet != null
+                        return responseModel != null && responseModel.details != null && responseModel.details![0].lookupDet != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel
-                                      .details![0].lookupDet!.length,
+                                  itemCount: responseModel.details![0].lookupDet!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -307,12 +254,7 @@ Future<dynamic> designationTypeBottomSheet(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          var selectedItem = {
-                                            'id': responseModel!.details![0]
-                                                .lookupDet![i].lookupDetId!,
-                                            'title': responseModel.details![0]
-                                                .lookupDet![i].lookupDetDescEn!
-                                          };
+                                          var selectedItem = {'id': responseModel!.details![0].lookupDet![i].lookupDetId!, 'title': responseModel.details![0].lookupDet![i].lookupDetDescEn!};
                                           onItemSelected(selectedItem);
                                           setState(
                                             () {
@@ -324,36 +266,26 @@ Future<dynamic> designationTypeBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel!
-                                                    .details![0]
-                                                    .lookupDet![i]
-                                                    .lookupDetDescEn!),
+                                                Text(responseModel!.details![0].lookupDet![i].lookupDetDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -375,8 +307,7 @@ Future<dynamic> designationTypeBottomSheet(
           ));
 }
 
-Future<dynamic> stakeholderStatusBottomSheet(
-    BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
+Future<dynamic> stakeholderStatusBottomSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -384,11 +315,7 @@ Future<dynamic> stakeholderStatusBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -399,10 +326,7 @@ Future<dynamic> stakeholderStatusBottomSheet(
                         children: [
                           Text(
                             "Status",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -437,10 +361,7 @@ Future<dynamic> stakeholderStatusBottomSheet(
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () {
-                                        var selectedItem = {
-                                          'id': list[i]['id'],
-                                          'title': list[i]['title']
-                                        };
+                                        var selectedItem = {'id': list[i]['id'], 'title': list[i]['title']};
                                         onItemSelected(selectedItem);
                                         setState(
                                           () {
@@ -450,23 +371,18 @@ Future<dynamic> stakeholderStatusBottomSheet(
                                       },
                                       child: Ink(
                                         decoration: BoxDecoration(
-                                          color: i == selectedIndex
-                                              ? Colors.transparent
-                                              : kListBGColor,
+                                          color: i == selectedIndex ? Colors.transparent : kListBGColor,
                                           // border: Border.all(
                                           //     color: kTextFieldBorder,
                                           //     width: 0.5),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Row(
                                             children: [
                                               Image.asset(
-                                                i == selectedIndex
-                                                    ? icCircleDot
-                                                    : icCircle,
+                                                i == selectedIndex ? icCircleDot : icCircle,
                                                 height: responsiveHeight(20),
                                               ),
                                               SizedBox(
@@ -477,8 +393,7 @@ Future<dynamic> stakeholderStatusBottomSheet(
                                               i == selectedIndex
                                                   ? Image.asset(
                                                       icCircleCheck,
-                                                      height:
-                                                          responsiveHeight(20),
+                                                      height: responsiveHeight(20),
                                                     )
                                                   : const SizedBox.shrink(),
                                             ],
@@ -499,35 +414,99 @@ Future<dynamic> stakeholderStatusBottomSheet(
           ));
 }
 
-Future<dynamic> commonBottonSheet(
-    BuildContext context,
-    Function(Map<String, dynamic>) onItemSelected,
-    String bottomSheetTitle,
-    List<Map<String, dynamic>> list) {
+/*
+void showLocationBottomSheet(BuildContext context, Future<List<Map<String, dynamic>>> locationDataFuture) {
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return FutureBuilder<List<Map<String, dynamic>>>(
+        future: locationDataFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (snapshot.hasData) {
+            final locationData = snapshot.data!;
+            return ListView.builder(
+              itemCount: locationData.length,
+              itemBuilder: (context, index) {
+                final item = locationData[index];
+               */
+/* return ListTile(
+                  // title: Text('ID: ${item['location_master_id']}'),
+                  subtitle: Text(' ${item['lookup_det_hier_desc_en']}'),
+                );*/ /*
+
+                ListView.builder(
+                  itemCount: item.length,
+                  shrinkWrap: true,
+                  itemBuilder: (c, i) => Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                      child: InkWell(
+                        onTap: () {
+                          var selectedItem = {'id': item[i]['location_master_id'], 'title': item[i]['lookup_det_hier_desc_en']};
+                          onItemSelected(selectedItem);
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: kContainerBack,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              children: [
+                                const Icon(Icons.circle_outlined),
+                                SizedBox(
+                                  width: responsiveWidth(6),
+                                ),
+                                Text(list[i]['locationData']),
+                                const Spacer(),
+                                const Icon(
+                                  Icons.check_circle,
+                                  color: kPrimaryColor,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              },
+            );
+          } else {
+            return Center(child: Text('No data available'));
+          }
+        },
+      );
+    },
+  );
+}
+*/
+
+Future<dynamic> commonBottonSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected, String bottomSheetTitle, List<Map<String, dynamic>> list) {
   return showModalBottomSheet(
       context: context,
       isScrollControlled: false,
       builder: (c) => Container(
             width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(responsiveHeight(50)),
-                    topRight: Radius.circular(responsiveHeight(50)))),
+            decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         bottomSheetTitle,
-                        style: TextStyle(
-                            fontSize: responsiveFont(17),
-                            fontWeight: FontWeight.bold,
-                            color: kPrimaryColor),
+                        style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                       ),
                       IconButton(
                           onPressed: () {
@@ -548,14 +527,10 @@ Future<dynamic> commonBottonSheet(
                               itemBuilder: (c, i) => Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 6, horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                                   child: InkWell(
                                     onTap: () {
-                                      var selectedItem = {
-                                        'id': list[i]['id'],
-                                        'title': list[i]['title']
-                                      };
+                                      var selectedItem = {'id': list[i]['id'], 'title': list[i]['title']};
                                       onItemSelected(selectedItem);
                                       Navigator.pop(context);
                                     },
@@ -573,6 +548,258 @@ Future<dynamic> commonBottonSheet(
                                               width: responsiveWidth(6),
                                             ),
                                             Text(list[i]['title']),
+                                            const Spacer(),
+                                            const Icon(
+                                              Icons.check_circle,
+                                              color: kPrimaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const Center(child: Text("Data Not Available"));
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ));
+}
+
+Future<dynamic> commonLocationSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected, String bottomSheetTitle, List<Map<String, dynamic>> list) {
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => Container(
+            width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        bottomSheetTitle,
+                        style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.cancel_presentation))
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: SizeConfig.screenHeight * 0.3,
+                  child: BlocBuilder<MasterDataBloc, MasterDataState>(
+                    builder: (context, state) {
+                      return list != null
+                          ? ListView.builder(
+                              itemCount: list.length,
+                              shrinkWrap: true,
+                              itemBuilder: (c, i) => Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                                  child: InkWell(
+                                    onTap: () {
+                                      // var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['lookup_det_hier_desc_en']};
+                                      var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['location_name']};
+                                      onItemSelected(selectedItem);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kContainerBack,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.circle_outlined),
+                                            SizedBox(
+                                              width: responsiveWidth(6),
+                                            ),
+                                            // Text(list[i]['lookup_det_hier_desc_en']),
+                                            Text(list[i]['location_name']),
+                                            const Spacer(),
+                                            const Icon(
+                                              Icons.check_circle,
+                                              color: kPrimaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const Center(child: Text("Data Not Available"));
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ));
+}
+
+Future<dynamic> commonDateTimeSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected, String bottomSheetTitle, List<Map<String, dynamic>> list) {
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => Container(
+            width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        bottomSheetTitle,
+                        style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.cancel_presentation))
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: SizeConfig.screenHeight * 0.3,
+                  child: BlocBuilder<MasterDataBloc, MasterDataState>(
+                    builder: (context, state) {
+                      return list != null
+                          ? ListView.builder(
+                              itemCount: list.length,
+                              shrinkWrap: true,
+                              itemBuilder: (c, i) => Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                                  child: InkWell(
+                                    onTap: () {
+                                      // var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['lookup_det_hier_desc_en']};
+                                      var selectedItem = {'id': list[i]['camp_create_request_id'], 'title': list[i]['prop_camp_date']};
+                                      onItemSelected(selectedItem);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kContainerBack,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.circle_outlined),
+                                            SizedBox(
+                                              width: responsiveWidth(6),
+                                            ),
+                                            // Text(list[i]['lookup_det_hier_desc_en']),
+                                            Text(list[i]['prop_camp_date']),
+                                            const Spacer(),
+                                            const Icon(
+                                              Icons.check_circle,
+                                              color: kPrimaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const Center(child: Text("Data Not Available"));
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ));
+}
+
+Future<dynamic> commonStackholderSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected, String bottomSheetTitle, List<Map<String, dynamic>> list) {
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => Container(
+            width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        bottomSheetTitle,
+                        style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.cancel_presentation))
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: SizeConfig.screenHeight * 0.3,
+                  child: BlocBuilder<MasterDataBloc, MasterDataState>(
+                    builder: (context, state) {
+                      return list != null
+                          ? ListView.builder(
+                              itemCount: list.length,
+                              shrinkWrap: true,
+                              itemBuilder: (c, i) => Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                                  child: InkWell(
+                                    onTap: () {
+                                      // var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['lookup_det_hier_desc_en']};
+                                      var selectedItem = {'id': list[i]['stakeholder_master_id'], 'title': list[i]['stakeholder_sub_type2_en']};
+                                      onItemSelected(selectedItem);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kContainerBack,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.circle_outlined),
+                                            SizedBox(
+                                              width: responsiveWidth(6),
+                                            ),
+                                            // Text(list[i]['lookup_det_hier_desc_en']),
+                                            Container(
+                                                width: MediaQuery.sizeOf(context).width * 0.7,
+                                                child: Text(
+                                                  list[i]['stakeholder_sub_type2_en'],
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: true,
+                                                )),
                                             const Spacer(),
                                             const Icon(
                                               Icons.check_circle,
@@ -624,8 +851,7 @@ class _CommonBottomSheetContent extends StatefulWidget {
   });
 
   @override
-  State<_CommonBottomSheetContent> createState() =>
-      _CommonBottomSheetContentState();
+  State<_CommonBottomSheetContent> createState() => _CommonBottomSheetContentState();
 }
 
 class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
@@ -711,11 +937,7 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
                             ),
                             Text(
                               widget.list[i].lookupDetHierDescEn ?? "",
-                              style: TextStyle(
-                                  fontSize: responsiveFont(14.0),
-                                  fontWeight: selectedIndex == i
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
+                              style: TextStyle(fontSize: responsiveFont(14.0), fontWeight: selectedIndex == i ? FontWeight.bold : FontWeight.w500),
                             ),
                             const Spacer(),
                             if (selectedIndex == i)
@@ -768,12 +990,10 @@ class _CommonBottomSheetContent1 extends StatefulWidget {
   });
 
   @override
-  State<_CommonBottomSheetContent1> createState() =>
-      _CommonBottomSheetContent1State();
+  State<_CommonBottomSheetContent1> createState() => _CommonBottomSheetContent1State();
 }
 
-class _CommonBottomSheetContent1State
-    extends State<_CommonBottomSheetContent1> {
+class _CommonBottomSheetContent1State extends State<_CommonBottomSheetContent1> {
   int? selectedIndex;
 
   @override
@@ -856,11 +1076,7 @@ class _CommonBottomSheetContent1State
                             ),
                             Text(
                               widget.list[i].lookupDetHierDescEn ?? "",
-                              style: TextStyle(
-                                  fontSize: responsiveFont(14.0),
-                                  fontWeight: selectedIndex == i
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
+                              style: TextStyle(fontSize: responsiveFont(14.0), fontWeight: selectedIndex == i ? FontWeight.bold : FontWeight.w500),
                             ),
                             const Spacer(),
                             if (selectedIndex == i)
