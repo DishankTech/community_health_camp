@@ -299,10 +299,10 @@ class _DashboardPatientRegistrationScreenState
                 onTap: () {
                   _showDownloadReportBottomSheet();
                 },
-                child: Image.asset(
-                  downloadIcon,
-                  height: responsiveHeight(30),
-                ),
+                // child: Image.asset(
+                //   downloadIcon,
+                //   height: responsiveHeight(30),
+                // ),
               ),
             ),
             Padding(
@@ -354,12 +354,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(30),
                                 height: responsiveHeight(30),
-                                child: Image.asset(
-                                  iccalendar,
-                                  color: isSelectedToday
-                                      ? kTodayColor
-                                      : Colors.white,
-                                ),
+                                // child: Image.asset(
+                                //   iccalendar,
+                                //   color: isSelectedToday
+                                //       ? kTodayColor
+                                //       : Colors.white,
+                                // ),
                               ),
                               SizedBox(
                                 width: responsiveHeight(10),
@@ -410,12 +410,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(30),
                                 height: responsiveHeight(30),
-                                child: Image.asset(
-                                  calendarMonth,
-                                  color: isSelectedToday
-                                      ? Colors.white
-                                      : kTodayColor,
-                                ),
+                                // child: Image.asset(
+                                //   calendarMonth,
+                                //   color: isSelectedToday
+                                //       ? Colors.white
+                                //       : kTodayColor,
+                                // ),
                               ),
                               SizedBox(
                                 width: responsiveHeight(10),
@@ -480,9 +480,9 @@ class _DashboardPatientRegistrationScreenState
                         SizedBox(
                           width: responsiveHeight(40),
                           height: responsiveHeight(40),
-                          child: Image.asset(
-                            campingtenticon,
-                          ),
+                          // child: Image.asset(
+                          //   campingtenticon,
+                          // ),
                         ),
                         Expanded(
                           child: Container(
@@ -503,7 +503,7 @@ class _DashboardPatientRegistrationScreenState
                                 Text(
                                   "Camps Conducted",
                                   style: TextStyle(
-                                    color: dashboardSubTitle,
+                                    // color: dashboardSubTitle,
                                     fontSize: responsiveFont(14),
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -543,12 +543,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(180),
                                 height: responsiveHeight(180),
-                                child: Image.asset(
-                                  isSelectedPatientsRegistered
-                                      ? selectedGrid
-                                      : unSelectedGrid,
-                                  fit: BoxFit.fill,
-                                ),
+                                // child: Image.asset(
+                                //   isSelectedPatientsRegistered
+                                //       ? selectedGrid
+                                //       : unSelectedGrid,
+                                //   fit: BoxFit.fill,
+                                // ),
                               ),
                               Column(
                                 mainAxisAlignment:
@@ -562,14 +562,14 @@ class _DashboardPatientRegistrationScreenState
                                     child: SizedBox(
                                       width: responsiveHeight(60),
                                       height: responsiveHeight(60),
-                                      child: Image.asset(icpatientregistration),
+                                      // child: Image.asset(icpatientregistration),
                                     ),
                                   ),
                                   Text(
                                     "Patients\nRegistered",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: dashboardSubTitle,
+                                      // color: dashboardSubTitle,
                                       fontSize: responsiveFont(13),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -616,12 +616,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(180),
                                 height: responsiveHeight(180),
-                                child: Image.asset(
-                                  isSelectedPatientsTreated
-                                      ? selectedGrid
-                                      : unSelectedGrid,
-                                  fit: BoxFit.fill,
-                                ),
+                                // child: Image.asset(
+                                //   isSelectedPatientsTreated
+                                //       ? selectedGrid
+                                //       : unSelectedGrid,
+                                //   fit: BoxFit.fill,
+                                // ),
                               ),
                               Column(
                                 mainAxisAlignment:
@@ -635,14 +635,14 @@ class _DashboardPatientRegistrationScreenState
                                     child: SizedBox(
                                       width: responsiveHeight(60),
                                       height: responsiveHeight(60),
-                                      child: Image.asset(icExamination),
+                                      // child: Image.asset(icExamination),
                                     ),
                                   ),
                                   Text(
                                     "Patients\nTreated",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: dashboardSubTitle,
+                                      // color: dashboardSubTitle,
                                       fontSize: responsiveFont(13),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -686,12 +686,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(180),
                                 height: responsiveHeight(180),
-                                child: Image.asset(
-                                  isSelectedPatientsReferred
-                                      ? selectedGrid
-                                      : unSelectedGrid,
-                                  fit: BoxFit.fill,
-                                ),
+                                // child: Image.asset(
+                                //   isSelectedPatientsReferred
+                                //       ? selectedGrid
+                                //       : unSelectedGrid,
+                                //   fit: BoxFit.fill,
+                                // ),
                               ),
                               Column(
                                 mainAxisAlignment:
@@ -705,14 +705,14 @@ class _DashboardPatientRegistrationScreenState
                                     child: SizedBox(
                                       width: responsiveHeight(60),
                                       height: responsiveHeight(60),
-                                      child: Image.asset(icDoctorsOffice),
+                                      // child: Image.asset(icDoctorsOffice),
                                     ),
                                   ),
                                   Text(
                                     "Patients\nReferred",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      color: dashboardSubTitle,
+                                      // color: dashboardSubTitle,
                                       fontSize: responsiveFont(13),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -791,7 +791,7 @@ class _DashboardPatientRegistrationScreenState
                                   Text(
                                     "Total Patients Registered ",
                                     style: TextStyle(
-                                      color: dashboardSubTitle,
+                                      // color: dashboardSubTitle,
                                       fontSize: responsiveFont(13),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -829,7 +829,7 @@ class _DashboardPatientRegistrationScreenState
                                         Text(
                                           "District",
                                           style: TextStyle(
-                                            color: dashboardSubTitle,
+                                            // color: dashboardSubTitle,
                                             fontSize: responsiveFont(12),
                                             fontWeight: FontWeight.w400,
                                           ),
