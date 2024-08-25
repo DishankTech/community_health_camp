@@ -1,10 +1,16 @@
+import 'dart:convert';
+
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/patient_registration/models/registered_patient_master_model.dart';
+import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
+import 'package:community_health_app/screens/user_master/models/get_user_response_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
 
 class RegisteredUserMasterScreen extends StatefulWidget {
   const RegisteredUserMasterScreen({super.key});
@@ -56,6 +62,7 @@ class _RegisteredUserMasterScreenState
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    context.read<UserMasterBloc>().add(GetUserRequest());
     return Scaffold(
         body: Container(
       decoration: const BoxDecoration(
@@ -82,199 +89,278 @@ class _RegisteredUserMasterScreenState
               ),
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-                itemCount: _list.length,
-                padding: EdgeInsets.zero,
-                itemBuilder: (c, i) {
-                  return Stack(children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                        width: SizeConfig.screenWidth,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                  offset: Offset(0, 0),
-                                  color: Colors.grey.withOpacity(0.5),
-                                  spreadRadius: 1,
-                                  blurRadius: 5)
-                            ],
-                            borderRadius:
-                                BorderRadius.circular(responsiveHeight(20))),
-                        child: Padding(
-                          padding: EdgeInsets.all(responsiveHeight(20)),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  text: "Stakeholder Type: ",
-                                  style: TextStyle(
-                                      color: kTextColor,
-                                      fontSize: responsiveFont(12),
-                                      fontWeight: FontWeight.bold),
-                                  children: [
-                                    TextSpan(
-                                        text: _list[i].stakeholderType,
-                                        style: TextStyle(
-                                            fontSize: responsiveFont(12),
-                                            color: kTextColor,
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(10),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: "Stakeholder Name: ",
-                                  style: TextStyle(
-                                      color: kTextColor,
-                                      fontSize: responsiveFont(12),
-                                      fontWeight: FontWeight.bold),
-                                  children: [
-                                    TextSpan(
-                                        text: _list[i].stakeholderName,
-                                        style: TextStyle(
-                                            fontSize: responsiveFont(12),
-                                            color: kTextColor,
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(10),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: "Full Name: ",
-                                  style: TextStyle(
-                                      color: kTextColor,
-                                      fontSize: responsiveFont(12),
-                                      fontWeight: FontWeight.bold),
-                                  children: [
-                                    TextSpan(
-                                        text: _list[i].name,
-                                        style: TextStyle(
-                                            fontSize: responsiveFont(12),
-                                            color: kTextColor,
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(10),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: "Designation/Member Type : ",
-                                  style: TextStyle(
-                                      color: kTextColor,
-                                      fontSize: responsiveFont(12),
-                                      fontWeight: FontWeight.bold),
-                                  children: [
-                                    TextSpan(
-                                        text: _list[i].designationType,
-                                        style: TextStyle(
-                                            fontSize: responsiveFont(12),
-                                            color: kTextColor,
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(10),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: "Mobile No : ",
-                                  style: TextStyle(
-                                      color: kTextColor,
-                                      fontSize: responsiveFont(12),
-                                      fontWeight: FontWeight.bold),
-                                  children: [
-                                    TextSpan(
-                                        text: _list[i].mobileNo,
-                                        style: TextStyle(
-                                            fontSize: responsiveFont(12),
-                                            color: kTextColor,
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(10),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: "Email : ",
-                                  style: TextStyle(
-                                      color: kTextColor,
-                                      fontSize: responsiveFont(12),
-                                      fontWeight: FontWeight.bold),
-                                  children: [
-                                    TextSpan(
-                                        text: _list[i].email,
-                                        style: TextStyle(
-                                            fontSize: responsiveFont(12),
-                                            color: kTextColor,
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(10),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      top: 20,
-                      right: 20,
-                      child: Row(
-                        children: [
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(5),
-                              onTap: () {
-                                Navigator.pushNamed(
-                                    context, AppRoutes.userMasterEditScreen);
-                              },
-                              child: Ink(
-                                child: Image.asset(
-                                  icEdit,
-                                  height: responsiveHeight(24),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: responsiveHeight(10),
-                          ),
-                          Material(
-                            color: Colors.transparent,
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(5),
-                              onTap: () {},
-                              child: Ink(
-                                child: Image.asset(
-                                  icEye,
-                                  height: responsiveHeight(24),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ]);
-                }),
+          BlocBuilder<UserMasterBloc, UserMasterState>(
+            builder: (context, state) {
+              GetUserMasterResponse? getUserMasterResponse;
+              if (state.getUserStatus.isSuccess) {
+                getUserMasterResponse = GetUserMasterResponse.fromJson(
+                    jsonDecode(state.getUserResponse));
+              }
+              return state.getUserStatus.isInProgress
+                  ? const CircularProgressIndicator(
+                      color: kPrimaryColor,
+                    )
+                  : getUserMasterResponse != null &&
+                          getUserMasterResponse.details!.data!.isNotEmpty
+                      ? Expanded(
+                          child: ListView.builder(
+                              itemCount:
+                                  getUserMasterResponse.details!.data!.length,
+                              padding: EdgeInsets.zero,
+                              itemBuilder: (c, i) {
+                                return Stack(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: SizeConfig.screenWidth,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                offset: const Offset(0, 0),
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 1,
+                                                blurRadius: 5)
+                                          ],
+                                          borderRadius: BorderRadius.circular(
+                                              responsiveHeight(20))),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(
+                                            responsiveHeight(20)),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            RichText(
+                                              text: TextSpan(
+                                                text: "Stakeholder Type: ",
+                                                style: TextStyle(
+                                                    color: kTextColor,
+                                                    fontSize:
+                                                        responsiveFont(12),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                children: [
+                                                  TextSpan(
+                                                      text: getUserMasterResponse!
+                                                          .details!
+                                                          .data![i]
+                                                          .lookupDetHierIdStakeholderType1
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          color: kTextColor,
+                                                          fontWeight: FontWeight
+                                                              .normal))
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(10),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: "Stakeholder Name: ",
+                                                style: TextStyle(
+                                                    color: kTextColor,
+                                                    fontSize:
+                                                        responsiveFont(12),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                children: [
+                                                  TextSpan(
+                                                      text:
+                                                          getUserMasterResponse
+                                                              .details!
+                                                              .data![i]
+                                                              .fullName,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          color: kTextColor,
+                                                          fontWeight: FontWeight
+                                                              .normal))
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(10),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: "Full Name: ",
+                                                style: TextStyle(
+                                                    color: kTextColor,
+                                                    fontSize:
+                                                        responsiveFont(12),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                children: [
+                                                  TextSpan(
+                                                      text:
+                                                          getUserMasterResponse
+                                                              .details!
+                                                              .data![i]
+                                                              .fullName,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          color: kTextColor,
+                                                          fontWeight: FontWeight
+                                                              .normal))
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(10),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text:
+                                                    "Designation/Member Type : ",
+                                                style: TextStyle(
+                                                    color: kTextColor,
+                                                    fontSize:
+                                                        responsiveFont(12),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                children: [
+                                                  TextSpan(
+                                                      text: getUserMasterResponse
+                                                          .details!
+                                                          .data![i]
+                                                          .lookupDetHierIdStakeholderType1
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          color: kTextColor,
+                                                          fontWeight: FontWeight
+                                                              .normal))
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(10),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: "Mobile No : ",
+                                                style: TextStyle(
+                                                    color: kTextColor,
+                                                    fontSize:
+                                                        responsiveFont(12),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                children: [
+                                                  TextSpan(
+                                                      text:
+                                                          getUserMasterResponse
+                                                              .details!
+                                                              .data![i]
+                                                              .mobileNumber,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          color: kTextColor,
+                                                          fontWeight: FontWeight
+                                                              .normal))
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(10),
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: "Email : ",
+                                                style: TextStyle(
+                                                    color: kTextColor,
+                                                    fontSize:
+                                                        responsiveFont(12),
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                                children: [
+                                                  TextSpan(
+                                                      text:
+                                                          getUserMasterResponse
+                                                              .details!
+                                                              .data![i]
+                                                              .emailId,
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          color: kTextColor,
+                                                          fontWeight: FontWeight
+                                                              .normal))
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(10),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                    top: 20,
+                                    right: 20,
+                                    child: Row(
+                                      children: [
+                                        Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            onTap: () {
+                                              Navigator.pushNamed(
+                                                  context,
+                                                  AppRoutes
+                                                      .userMasterEditScreen);
+                                            },
+                                            child: Ink(
+                                              child: Image.asset(
+                                                icEdit,
+                                                height: responsiveHeight(24),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: responsiveHeight(10),
+                                        ),
+                                        Material(
+                                          color: Colors.transparent,
+                                          child: InkWell(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            onTap: () {},
+                                            child: Ink(
+                                              child: Image.asset(
+                                                icEye,
+                                                height: responsiveHeight(24),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ]);
+                              }),
+                        )
+                      : const Text("No Data Found");
+            },
           )
         ],
       ),

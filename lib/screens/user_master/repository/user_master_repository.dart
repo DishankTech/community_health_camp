@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class UserMasterRepository {
   Future<http.StreamedResponse> createUser(Map<String, dynamic> payload) async {
-    var headers = {'Content-Type': 'application/x-www-form-urlencoded'};
+    var headers = {'Content-Type': 'application/json'};
     var request = http.Request('POST', Uri.parse('$kBaseUrl$kCreateUser'));
     request.body = json.encode(payload);
     request.headers.addAll(headers);
@@ -15,7 +15,9 @@ class UserMasterRepository {
     return response;
   }
 
-  Future<http.Response> getAll() async {
-    return await http.get(Uri.parse('$kBaseUrl$kGetAllUsers'));
+  Future<http.Response> getAll(Map payload) async {
+    var headers = {'Content-Type': 'application/json'};
+    return await http.post(Uri.parse('$kBaseUrl$kGetAllUsers'),
+        body: jsonEncode(payload), headers: headers);
   }
 }

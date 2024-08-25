@@ -18,6 +18,7 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
             getUserResponse: '',
             getUserStatus: FormzSubmissionStatus.initial)) {
     on<CreateUserRequest>(_onCreateUserRequest);
+    on<GetUserRequest>(_onGetUserRequest);
   }
 
   FutureOr<void> _onCreateUserRequest(
@@ -46,6 +47,42 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
       emit(state.copyWith(
           createUserResponse: e.toString(),
           createUserStatus: FormzSubmissionStatus.failure));
+    }
+  }
+
+  FutureOr<void> _onGetUserRequest(
+      GetUserRequest event, Emitter<UserMasterState> emit) async {
+    try {
+      emit(state.copyWith(
+          createUserResponse: '',
+          getUserResponse: '',
+          createUserStatus: FormzSubmissionStatus.initial,
+          getUserStatus: FormzSubmissionStatus.inProgress));
+      http.Response res = await userMasterRepository.getAll({
+        "total_pages": 1,
+        "page": 1,
+        "total_count": 1,
+        "per_page": 100,
+        "data": ""
+      });
+
+      if (res.statusCode == 200) {
+        String decodeRes = res.body;
+        emit(state.copyWith(
+            getUserResponse: decodeRes,
+            getUserStatus: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+            getUserResponse: res.reasonPhrase,
+            getUserStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(state.copyWith(
+          getUserResponse: e.toString(),
+          getUserStatus: FormzSubmissionStatus.failure));
     }
   }
 }

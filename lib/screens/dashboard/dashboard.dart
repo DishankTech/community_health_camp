@@ -69,6 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           routeName: AppRoutes.campCoordinator),
     ]);
 
+    _menuList.clear();
     _menuList.addAll([
       DashboardMenuModel(
           name: "Dashboard",

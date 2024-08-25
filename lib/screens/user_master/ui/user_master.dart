@@ -71,8 +71,8 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
     _mobileNoCountryCodeTextController = TextEditingController();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       context.read<MasterDataBloc>().add(GetMasters(payload: const {
-            "lookup_code_list1": [
-              {"lookup_code": "STO"}
+            "lookup_det_code_list1": [
+              {"lookup_det_code": "STY"}
             ]
           }));
 
