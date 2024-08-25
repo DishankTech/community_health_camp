@@ -238,7 +238,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      "243305",
+                                                      controller.doctorDeskModel?.details?.data?.first.campCreateRequestId.toString() ?? "",
                                                       style: TextStyle(
                                                         fontSize:
                                                             responsiveFont(12),
@@ -304,7 +304,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                               ),
                                             ),
                                             Text(
-                                              "Health Camp",
+                                              controller.doctorDeskModel?.details?.data?.first.stakeholderNameEn ?? "",
                                               style: TextStyle(
                                                 fontSize: responsiveFont(12),
                                                 // color: dashboardSubTitle,
@@ -332,7 +332,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                "Panchsheel Hospital, 368 /, Nana Peth, Pune 411042",
+                                                controller.doctorDeskModel?.details?.data?.first.locationName ?? "",
                                                 style: TextStyle(
                                                   fontSize: responsiveFont(12),
                                                   // color: dashboardSubTitle,
@@ -483,7 +483,9 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                                                 fontWeight: FontWeight.bold),
                                                                             children: [
                                                                               TextSpan(
-                                                                                text: controller.doctorDesk?[index].locationName ?? "",
+                                                                                text:"${controller.doctorDeskModel?.details?.data?.first.cityEn ?? ""} "
+                                                                                    "${controller.doctorDeskModel?.details?.data?.first.districtEn ?? ""} "
+                                                                                    "${controller.doctorDeskModel?.details?.data?.first.countryEn ?? ""}",
                                                                                 style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal),
                                                                               )
                                                                             ],

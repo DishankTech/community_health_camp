@@ -335,9 +335,9 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                         children: [
                                                           TextSpan(
                                                             text:
-                                                                "${widget.doctorDeskData?.districtEn}"
-                                                                "${widget.doctorDeskData?.stateEn}"
-                                                                "${widget.doctorDeskData?.cityEn}",
+                                                                "${widget.doctorDeskData?.districtEn ?? ""} "
+                                                                "${widget.doctorDeskData?.stateEn ?? ""} "
+                                                                "${widget.doctorDeskData?.cityEn ?? ""}",
                                                             style: TextStyle(
                                                               fontSize:
                                                                   responsiveFont(
@@ -667,14 +667,13 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
                                                       ?.patientDoctorDeskId =
-                                                      widget.doctorDeskData
-                                                          ?.patientDoctorDeskId;
+                                                      null;
 
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
                                                       ?.userId =
-                                                    null;
+                                                    1;
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
@@ -687,7 +686,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       controller.provisionalDiaController.text;
 
                                                   TtPatientDoctorDeskRef ttPatientDoctorDeskRef = TtPatientDoctorDeskRef();
-                                                  ttPatientDoctorDeskRef.patientDoctorDeskId = widget.doctorDeskData?.patientDoctorDeskId;
+                                                  ttPatientDoctorDeskRef.patientDoctorDeskId = null;
                                                   ttPatientDoctorDeskRef.patientDoctorDeskReferId = null;
                                                   // ttPatientDoctorDeskRef.stakeholderMasterId = controller.selectedStakeH.lookupDetHierId;
                                                   ttPatientDoctorDeskRef.stakeholderMasterId = 1;
