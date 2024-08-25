@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
-import 'package:community_health_app/core/common_bloc/models/get_master_response_model_with_hier.dart';
 import 'package:community_health_app/core/common_bloc/models/master_response_model.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
@@ -353,11 +352,12 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
                             GetUserMasterWithHierResponse.fromJson(jsonDecode(
                                 state.getStakeholderSubTypeResponse));
 
-                        return responseModel.details != null
+                        return responseModel.details != null &&
+                                responseModel.details![0].lookupDet != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel.details![0]
-                                      .lookupDetHierarchical!.length,
+                                  itemCount: responseModel
+                                      .details![0].lookupDet!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(

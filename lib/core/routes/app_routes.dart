@@ -1,9 +1,11 @@
 import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view.dart';
+import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view_new.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camps.dart';
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/referred_patients_view.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_patient_registration_screen.dart';
@@ -85,6 +87,7 @@ class AppRoutes {
   static const String campApproval = "/campApproval";
   static const String campCoordinator = "/campCoordinator";
   static const String addReferredPatient = "/addReferredPatient";
+  static const String referredPatientList = "/referredPatientList";
   static const String registrationDashboard = "/registrationDashboard";
   static const String doctorDesk = "/doctorDesk";
   static const String addTreatmentDetailsScreen = "/addTreatmentDetailsScreen";
@@ -160,10 +163,11 @@ class AppRoutes {
       case campCalendar:
         return MaterialPageRoute(
           builder: (_) => const CampCalendarPage(),
+          // builder: (_) =>  CampCalendar(),
         );
       case dateWiseCamps:
         return MaterialPageRoute(
-          builder: (_) => const DateWiseCampsScreen(),
+          builder: (_) => DateWiseCampsScreen(DateTime.now()),
         );
       case districtWiseCamps:
         return MaterialPageRoute(
@@ -196,6 +200,10 @@ class AppRoutes {
       case addReferredPatient:
         return MaterialPageRoute(
           builder: (_) => const AddReferredPatient(),
+        );
+      case referredPatientList:
+        return MaterialPageRoute(
+          builder: (_) => const ReferredPatientListScreen(),
         );
       case registrationDashboard:
         return MaterialPageRoute(
