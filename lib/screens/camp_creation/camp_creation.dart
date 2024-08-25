@@ -844,18 +844,21 @@ class _CamCreationCardState extends State<CamCreationCard> {
                 inputType: TextInputType.text,
                 onChange: (p0) {},
                 onTap: () {
-                  userBottomSheet(
-                      context,
-                          (p0) => {
-                        details.userLogin =  p0.fullName,
-                            details.userId = p0.userId,
-                            campCreationController.update()
-                        // campCreationController.userController.text =
-                        //     p0.fullName,
-                        // campCreationController.selectedUser = p0
-                      },
-                      "User Id",
-                      campCreationController.userList?.details ?? []);
+                  if(campCreationController.userList?.details != null){
+                    userBottomSheet(
+                        context,
+                            (p0) => {
+                          details.userLogin =  p0.fullName,
+                          details.userId = p0.userId,
+                          campCreationController.update()
+                          // campCreationController.userController.text =
+                          //     p0.fullName,
+                          // campCreationController.selectedUser = p0
+                        },
+                        "User Id",
+                        campCreationController.userList?.details ?? []);
+                  }
+
                 },
                 readOnly: true,
                 label: RichText(

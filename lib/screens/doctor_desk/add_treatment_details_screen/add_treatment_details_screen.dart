@@ -41,6 +41,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
 
     if (doctorDeskController.hasInternet) {
       doctorDeskController.getStakHolder();
+      doctorDeskController.getUserList();
     }
 
     doctorDeskController.update();
@@ -551,39 +552,46 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   const EdgeInsets.fromLTRB(
                                                       20, 15, 20, 0),
                                               child: AppRoundTextField(
-                                                controller: controller
-                                                    .stakeHolderController,
+                                                // initialValue: details.userLogin,
+                                                controller:
+                                                    controller.userController,
+                                                key: UniqueKey(),
+                                                inputStyle: TextStyle(
+                                                    fontSize:
+                                                        responsiveFont(14),
+                                                    color: kTextBlackColor),
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
-                                                onTap: () async {
-                                                  await commonBottomSheet(
-                                                      context,
-                                                      (p0) => {
-                                                            controller
-                                                                    .selectedStakeHVal =
-                                                                p0.lookupDetHierDescEn,
-                                                            controller
-                                                                .selectedStakeH = p0,
-                                                            controller
-                                                                .stakeHolderController
-                                                                .text = controller
-                                                                    .selectedStakeHVal ??
-                                                                "",
-                                                            controller.update()
-                                                          },
-                                                      "Stakeholder Type",
-                                                      controller
-                                                              .stakeHolderModel
-                                                              ?.details
-                                                              ?.first
-                                                              .lookupDetHierarchical ??
-                                                          []);
+                                                onTap: () {
+                                                  if (controller
+                                                          .userList?.details !=
+                                                      null) {
+                                                    userBottomSheet(
+                                                        context,
+                                                        (p0) => {
+                                                              controller
+                                                                      .userController
+                                                                      .text =
+                                                                  p0.fullName,
+                                                              controller
+                                                                      .selectedUserId =
+                                                                  p0.userId,
+                                                              controller
+                                                                  .update()
+                                                              // campCreationController.userController.text =
+                                                              //     p0.fullName,
+                                                              // campCreationController.selectedUser = p0
+                                                            },
+                                                        "Refer To",
+                                                        controller.userList
+                                                                ?.details ??
+                                                            []);
+                                                  }
                                                 },
-                                                // maxLength: 12,
                                                 readOnly: true,
                                                 label: RichText(
                                                   text: const TextSpan(
-                                                      text: 'Stakeholder Type',
+                                                      text: 'User Id',
                                                       style: TextStyle(
                                                           color: kHintColor,
                                                           fontFamily:
@@ -598,21 +606,15 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                 ),
                                                 hint: "",
                                                 suffix: SizedBox(
-                                                  height:
-                                                      getProportionateScreenHeight(
-                                                          20),
-                                                  width:
-                                                      getProportionateScreenHeight(
-                                                          20),
+                                                  height: responsiveHeight(20),
+                                                  width: responsiveHeight(20),
                                                   child: Center(
                                                     child: Image.asset(
                                                       icArrowDownOrange,
                                                       height:
-                                                          getProportionateScreenHeight(
-                                                              20),
+                                                          responsiveHeight(20),
                                                       width:
-                                                          getProportionateScreenHeight(
-                                                              20),
+                                                          responsiveHeight(20),
                                                     ),
                                                   ),
                                                 ),
@@ -636,7 +638,10 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                               flex: 1,
                                               child: AppButton(
                                                 onTap: () {
-                                                  controller.addTreatmentDetailsModel.ttPatientDoctorDesk = TtPatientDoctorDesk();
+                                                  controller
+                                                          .addTreatmentDetailsModel
+                                                          .ttPatientDoctorDesk =
+                                                      TtPatientDoctorDesk();
 
                                                   controller
                                                       .addTreatmentDetailsModel
@@ -661,40 +666,58 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
-                                                      ?.campDate =
-                                                      "2024-08-25";
+                                                      ?.campDate = "2024-08-25";
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
-                                                      ?.patientDoctorDeskId =
+                                                      ?.patientDoctorDeskId = null;
+
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .ttPatientDoctorDesk
+                                                      ?.userId = controller
+                                                          .selectedUserId ??
+                                                      1;
+                                                  controller
+                                                          .addTreatmentDetailsModel
+                                                          .ttPatientDoctorDesk
+                                                          ?.symptons =
+                                                      controller
+                                                          .symptomController
+                                                          .text;
+                                                  controller
+                                                          .addTreatmentDetailsModel
+                                                          .ttPatientDoctorDesk
+                                                          ?.provisionalDiagnosis =
+                                                      controller
+                                                          .provisionalDiaController
+                                                          .text;
+
+                                                  TtPatientDoctorDeskRef
+                                                      ttPatientDoctorDeskRef =
+                                                      TtPatientDoctorDeskRef();
+                                                  ttPatientDoctorDeskRef
+                                                          .patientDoctorDeskId =
                                                       null;
-
-                                                  controller
-                                                      .addTreatmentDetailsModel
-                                                      .ttPatientDoctorDesk
-                                                      ?.userId =
-                                                    1;
-                                                  controller
-                                                      .addTreatmentDetailsModel
-                                                      .ttPatientDoctorDesk
-                                                      ?.symptons =
-                                                      controller.symptomController.text;
-                                                  controller
-                                                      .addTreatmentDetailsModel
-                                                      .ttPatientDoctorDesk
-                                                      ?.provisionalDiagnosis =
-                                                      controller.provisionalDiaController.text;
-
-                                                  TtPatientDoctorDeskRef ttPatientDoctorDeskRef = TtPatientDoctorDeskRef();
-                                                  ttPatientDoctorDeskRef.patientDoctorDeskId = null;
-                                                  ttPatientDoctorDeskRef.patientDoctorDeskReferId = null;
+                                                  ttPatientDoctorDeskRef
+                                                          .patientDoctorDeskReferId =
+                                                      null;
                                                   // ttPatientDoctorDeskRef.stakeholderMasterId = controller.selectedStakeH.lookupDetHierId;
-                                                  ttPatientDoctorDeskRef.stakeholderMasterId = 1;
-                                                  ttPatientDoctorDeskRef.orgId = 1;
-                                                  ttPatientDoctorDeskRef.status = 1;
+                                                  ttPatientDoctorDeskRef
+                                                      .stakeholderMasterId = 1;
+                                                  ttPatientDoctorDeskRef.orgId =
+                                                      1;
+                                                  ttPatientDoctorDeskRef
+                                                      .status = 1;
 
-                                                  controller.addTreatmentDetailsModel.ttPatientDoctorDeskRef = [];
-                                                  controller.addTreatmentDetailsModel.ttPatientDoctorDeskRef?.add(ttPatientDoctorDeskRef);
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .ttPatientDoctorDeskRef = [];
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .ttPatientDoctorDeskRef
+                                                      ?.add(
+                                                          ttPatientDoctorDeskRef);
 
                                                   controller
                                                       .addTreatmentDetails();

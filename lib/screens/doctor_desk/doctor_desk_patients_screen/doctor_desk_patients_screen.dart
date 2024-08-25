@@ -271,7 +271,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      "21 Aug 2024",
+                                                      "",
                                                       style: TextStyle(
                                                         fontSize:
                                                             responsiveFont(12),

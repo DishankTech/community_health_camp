@@ -11,6 +11,7 @@ import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:http/http.dart' as http;
 
+import '../camp_creation/model/user_list_model/user_list_model.dart';
 import '../location_master/model/country/country_model.dart';
 import 'model/doctor_desk_list_model.dart';
 
@@ -27,13 +28,15 @@ class DoctorDeskController extends GetxController {
 
   CountryModel? stakeHolderModel;
 
-  TextEditingController stakeHolderController = TextEditingController();
-  String? selectedStakeHVal;
-  LookupDetHierarchical? selectedStakeH;
+  TextEditingController userController = TextEditingController();
+  int? selectedUserId;
+  // LookupDetHierarchical? selectedStakeH;
 
   TextEditingController symptomController = TextEditingController();
   TextEditingController provisionalDiaController = TextEditingController();
   AddTreatmentDetailsModel addTreatmentDetailsModel = AddTreatmentDetailsModel();
+
+  UserListModel? userList;
 
   addTreatmentDetails() async {
     isLoading = true;
@@ -170,5 +173,41 @@ class DoctorDeskController extends GetxController {
     }
     update();
   }
+
+
+  getUserList() async {
+    isLoading = true;
+    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.useList}');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      userList = UserListModel.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
 
 }
