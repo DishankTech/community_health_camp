@@ -6,42 +6,97 @@ import 'package:community_health_app/screens/doctor_desk/model/add_treatment_det
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
 import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:http/http.dart' as http;
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../camp_creation/model/user_list_model/user_list_model.dart';
 import '../location_master/model/country/country_model.dart';
 import 'model/doctor_desk_list_model.dart';
 
-
 class DoctorDeskController extends GetxController {
   bool isLoading = false;
   bool hasInternet = true;
-  static const pageSize = 10;
-
-  late PagingController<int, DoctorDeskData> pagingController;
 
   DoctorDeskListModel? doctorDeskModel;
-  List<DoctorDeskData>? doctorDesk = [];
 
   CountryModel? stakeHolderModel;
 
   TextEditingController userController = TextEditingController();
   TextEditingController stakeHolderController = TextEditingController();
   int? selectedUserId;
-  LookupDetHierarchical? selectedStakeH;
-String? selectedStakeHVal;
+  List<LookupDetHierarchical> selectedStakeH =[];
+  String? selectedStakeHVal;
   TextEditingController symptomController = TextEditingController();
   TextEditingController provisionalDiaController = TextEditingController();
-  AddTreatmentDetailsModel addTreatmentDetailsModel = AddTreatmentDetailsModel();
-
+  AddTreatmentDetailsModel addTreatmentDetailsModel =
+      AddTreatmentDetailsModel();
   UserListModel? userList;
+  static const pageSize = 10;
+  late PagingController<int, DoctorDeskData> pagingController;
+  List<DoctorDeskData> doctorDesk = [];
+
+  fetchPage(int pageKey) async {
+    try {
+      List<DoctorDeskData> newItems = await doctorDeskList(pageKey, pageSize);
+      final isLastPage = newItems.length < pageSize;
+      if (isLastPage) {
+        pagingController.appendLastPage(newItems);
+      } else {
+        int nextPageKey = pageKey + 1;
+        // int nextPageKey = pageKey + newItems.length;
+        pagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      pagingController.error = error;
+    }
+  }
+
+  doctorDeskList(pageKey, pageSize) async {
+    doctorDesk.clear();
+
+    isLoading = true;
+
+    // Make the API call here
+
+    var url = (ApiConstants.baseUrl + ApiConstants.doctorDeskList);
+    // var requestBody = {"page": currentPage, "per_page": 4};
+    var requestBody = {
+      "total_pages": 0,
+      "page": pageKey,
+      "total_count": 0,
+      "per_page": pageSize,
+      "data": ""
+    };
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: json.encode(requestBody),
+    );
+
+    // doctorDesk.clear();
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+
+      doctorDeskModel = DoctorDeskListModel.fromJson(data);
+      if (doctorDeskModel?.details != null) {
+        doctorDesk.addAll(doctorDeskModel!.details?.data ?? []);
+      }
+      isLoading = false;
+      update();
+      return doctorDesk;
+    } else {
+      isLoading = false;
+      update();
+      return [];
+    }
+  }
 
   addTreatmentDetails() async {
     isLoading = true;
-    final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.addTreatmentDetails);
+    final uri =
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.addTreatmentDetails);
 
     String jsonbody = json.encode(addTreatmentDetailsModel);
     Map<String, String> headers = {
@@ -64,14 +119,11 @@ String? selectedStakeHVal;
       CustomMessage.toast("Save Successfully");
       Get.back();
 
-
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
       CustomMessage.toast("Save Failed");
       Get.back();
-
-
     } else {
       isLoading = false;
       CustomMessage.toast("Save Failed");
@@ -81,57 +133,6 @@ String? selectedStakeHVal;
     }
     update();
   }
-
-
-  fetchPage(int pageKey) async {
-    try {
-      List<DoctorDeskData> newItems = await fetchCampApproval(pageKey, pageSize);
-      final isLastPage = newItems.length < pageSize;
-      if (isLastPage) {
-        pagingController.appendLastPage(newItems);
-      } else {
-        int nextPageKey = pageKey + newItems.length;
-        pagingController.appendPage(newItems, nextPageKey);
-      }
-    } catch (error) {
-      pagingController.error = error;
-    }
-  }
-
-  fetchCampApproval(pageKey, pageSize) async {
-    isLoading = true;
-
-    // Make the API call here
-
-    var url = (ApiConstants.baseUrl + ApiConstants.doctorDeskList);
-    // var requestBody = {"page": currentPage, "per_page": 4};
-    var requestBody = {
-      "total_pages": 1,
-      "page": pageKey,
-      "total_count": 0,
-      "per_page": pageSize,
-      "data": ""
-    };
-
-    var response = await http.post(
-      Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
-      body: json.encode(requestBody),
-    );
-
-    if (response.statusCode == 200) {
-      var data = json.decode(response.body);
-
-      doctorDeskModel = DoctorDeskListModel.fromJson(data);
-      if (doctorDeskModel?.details != null) {
-        doctorDesk?.addAll(doctorDeskModel!.details?.data ?? []);
-      }
-      isLoading = false;
-      update();
-      return doctorDesk;
-    }
-  }
-
 
   getStakHolder() async {
     isLoading = true;
@@ -165,8 +166,6 @@ String? selectedStakeHVal;
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
-
-
     } else {
       isLoading = false;
 
@@ -174,7 +173,6 @@ String? selectedStakeHVal;
     }
     update();
   }
-
 
   getUserList() async {
     isLoading = true;
@@ -201,7 +199,6 @@ String? selectedStakeHVal;
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
-
     } else {
       isLoading = false;
 
@@ -209,6 +206,4 @@ String? selectedStakeHVal;
     }
     update();
   }
-
-
 }

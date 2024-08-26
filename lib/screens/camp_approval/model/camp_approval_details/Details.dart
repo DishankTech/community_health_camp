@@ -1,31 +1,31 @@
-import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/ttdistirct_camp_approval_det_list.dart';
+import 'package:community_health_app/screens/camp_approval/model/camp_approval_details/TtCampCreateDetList.dart';
 
-import 'TtDistirctCampApproval.dart';
+import 'TtCampCreate.dart';
 
 class Details {
   Details({
-      this.ttDistirctCampApproval, 
-      this.ttDistirctCampApprovalDetList,});
+      this.ttCampCreate, 
+      this.ttCampCreateDetList,});
 
   Details.fromJson(dynamic json) {
-    ttDistirctCampApproval = json['tt_distirct_camp_approval'] != null ? TtDistirctCampApproval.fromJson(json['tt_distirct_camp_approval']) : null;
-    if (json['tt_distirct_camp_approval_det_list'] != null) {
-      ttDistirctCampApprovalDetList = [];
-      // json['tt_distirct_camp_approval_det_list'].forEach((v) {
-      //   ttDistirctCampApprovalDetList?.add(Dynamic.fromJson(v));
-      // });
+    ttCampCreate = json['tt_camp_create'] != null ? TtCampCreate.fromJson(json['tt_camp_create']) : null;
+    if (json['tt_camp_create_det_list'] != null) {
+      ttCampCreateDetList = [];
+      json['tt_camp_create_det_list'].forEach((v) {
+        ttCampCreateDetList?.add(TtCampCreateDetList.fromJson(v));
+      });
     }
   }
-  TtDistirctCampApproval? ttDistirctCampApproval;
-  List<TtDistirctCampApprovalDetList>? ttDistirctCampApprovalDetList;
+  TtCampCreate? ttCampCreate;
+  List<TtCampCreateDetList>? ttCampCreateDetList;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    if (ttDistirctCampApproval != null) {
-      map['tt_distirct_camp_approval'] = ttDistirctCampApproval?.toJson();
+    if (ttCampCreate != null) {
+      map['tt_camp_create'] = ttCampCreate?.toJson();
     }
-    if (ttDistirctCampApprovalDetList != null) {
-      map['tt_distirct_camp_approval_det_list'] = ttDistirctCampApprovalDetList?.map((v) => v.toJson()).toList();
+    if (ttCampCreateDetList != null) {
+      map['tt_camp_create_det_list'] = ttCampCreateDetList?.map((v) => v.toJson()).toList();
     }
     return map;
   }

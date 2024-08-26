@@ -6,11 +6,14 @@ import 'package:community_health_app/core/utilities/no_internet_connectivity.dar
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_approval/controller/camp_approval_controller.dart';
-import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/ttdistirct_camp_approval.dart';
+import 'package:community_health_app/screens/camp_approval/model/camp_approval_details/TtCampCreateDetList.dart';
+import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/TtDistirctCampApproval.dart';
+import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/TtDistirctCampApprovalDetList.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CampApprovalDetailsScreen extends StatefulWidget {
   final int campApprovalId;
@@ -134,7 +137,7 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                           text: controller
                                                                   .campApprovalDetailsModel
                                                                   ?.details
-                                                                  ?.ttDistirctCampApproval
+                                                                  ?.ttCampCreate
                                                                   ?.campCreateRequestId
                                                                   .toString() ??
                                                               "",
@@ -163,7 +166,12 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                             FontWeight.bold),
                                                     children: [
                                                       TextSpan(
-                                                          text: "",
+                                                          text: controller
+                                                                  .campApprovalDetailsModel
+                                                                  ?.details
+                                                                  ?.ttCampCreate
+                                                                  ?.locationName ??
+                                                              "",
                                                           style: TextStyle(
                                                               fontSize:
                                                                   responsiveFont(
@@ -192,9 +200,8 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                           text: controller
                                                                   .campApprovalDetailsModel
                                                                   ?.details
-                                                                  ?.ttDistirctCampApproval
-                                                                  ?.distirctCampApprovalId
-                                                                  .toString() ??
+                                                                  ?.ttCampCreate
+                                                                  ?.districtEn ??
                                                               "",
                                                           style: TextStyle(
                                                               fontSize:
@@ -221,7 +228,12 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                             FontWeight.bold),
                                                     children: [
                                                       TextSpan(
-                                                          text: "",
+                                                          text: controller
+                                                                  .campApprovalDetailsModel
+                                                                  ?.details
+                                                                  ?.ttCampCreate
+                                                                  ?.stakeholderNameEn ??
+                                                              "",
                                                           style: TextStyle(
                                                               fontSize:
                                                                   responsiveFont(
@@ -251,9 +263,8 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                           text: controller
                                                                   .campApprovalDetailsModel
                                                                   ?.details
-                                                                  ?.ttDistirctCampApproval
-                                                                  ?.confirmCampDate
-                                                                  .toString() ??
+                                                                  ?.ttCampCreate
+                                                                  ?.propCampDate ??
                                                               "",
                                                           style: TextStyle(
                                                               fontSize:
@@ -277,17 +288,14 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                     ),
                                   ),
                                 ),
-                                controller
-                                        .campApprovalDetailsModel!
-                                        .details!
-                                        .ttDistirctCampApprovalDetList!
-                                        .isNotEmpty
+                                controller.campApprovalDetailsModel!.details!
+                                        .ttCampCreateDetList!.isNotEmpty
                                     ? Expanded(
                                         child: ListView.builder(
                                             itemCount: controller
                                                 .campApprovalDetailsModel
                                                 ?.details
-                                                ?.ttDistirctCampApprovalDetList
+                                                ?.ttCampCreateDetList
                                                 ?.length,
                                             shrinkWrap: true,
                                             itemBuilder: (context, index) {
@@ -350,7 +358,7 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                                               FontWeight.bold),
                                                                       children: [
                                                                         TextSpan(
-                                                                            text:
+                                                                            text: controller.campApprovalDetailsModel?.details?.ttCampCreateDetList?[index].userId.toString() ??
                                                                                 "",
                                                                             style: TextStyle(
                                                                                 fontSize: responsiveFont(12),
@@ -360,9 +368,9 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                                     ),
                                                                   ),
                                                                   SizedBox(
-                                                                    height:
+                                                                    width:
                                                                         responsiveHeight(
-                                                                            10),
+                                                                            20),
                                                                   ),
                                                                   RichText(
                                                                     text:
@@ -378,7 +386,7 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                                               FontWeight.bold),
                                                                       children: [
                                                                         TextSpan(
-                                                                            text:
+                                                                            text: controller.campApprovalDetailsModel?.details?.ttCampCreateDetList?[index].lookupDetDescEn ??
                                                                                 "",
                                                                             style: TextStyle(
                                                                                 fontSize: responsiveFont(12),
@@ -409,8 +417,12 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                                               .bold),
                                                                   children: [
                                                                     TextSpan(
-                                                                        text:
-                                                                            "",
+                                                                        text: controller
+                                                                            .campApprovalDetailsModel
+                                                                            ?.details
+                                                                            ?.ttCampCreateDetList?[
+                                                                                index]
+                                                                            .userLogin,
                                                                         style: TextStyle(
                                                                             fontSize: responsiveFont(
                                                                                 12),
@@ -441,8 +453,8 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                                               .bold),
                                                                   children: [
                                                                     TextSpan(
-                                                                        text:
-                                                                            "",
+                                                                        text: controller.campApprovalDetailsModel?.details?.ttCampCreateDetList?[index].stakeholderNameEn ??
+                                                                            '',
                                                                         style: TextStyle(
                                                                             fontSize: responsiveFont(
                                                                                 12),
@@ -473,7 +485,7 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                                               .bold),
                                                                   children: [
                                                                     TextSpan(
-                                                                        text:
+                                                                        text: controller.campApprovalDetailsModel?.details?.ttCampCreateDetList?[index].userMobileNumber ??
                                                                             "",
                                                                         style: TextStyle(
                                                                             fontSize: responsiveFont(
@@ -504,91 +516,120 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                         child: const Text("No Data")
                                             .paddingOnly(top: 40),
                                       ),
-                                const Spacer(),
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      children: [
-                                        Flexible(
-                                          flex: 1,
-                                          child: AppButton(
-                                            title: "Approve",
-                                            onTap: () {
-                                              controller
-                                                      .saveCampApprovalReqModel
-                                                      ?.ttDistirctCampApproval =
-                                                  TtDistirctCampApproval();
-                                              controller
-                                                      .saveCampApprovalReqModel
-                                                      ?.ttDistirctCampApproval
-                                                      ?.confirmCampDate =
-                                                  controller
-                                                      .campApprovalDetailsModel
-                                                      ?.details
-                                                      ?.ttDistirctCampApproval
-                                                      ?.confirmCampDate;
-                                              controller
-                                                      .saveCampApprovalReqModel
-                                                      ?.ttDistirctCampApproval
-                                                      ?.distirctCampApprovalId =
-                                                  controller
-                                                      .campApprovalDetailsModel
-                                                      ?.details
-                                                      ?.ttDistirctCampApproval
-                                                      ?.distirctCampApprovalId;
-                                              controller
-                                                      .saveCampApprovalReqModel
-                                                      ?.ttDistirctCampApproval
-                                                      ?.campCreateRequestId =
-                                                  controller
-                                                      .campApprovalDetailsModel
-                                                      ?.details
-                                                      ?.ttDistirctCampApproval
-                                                      ?.campCreateRequestId;
-                                              controller
-                                                  .saveCampApprovalReqModel
-                                                  ?.ttDistirctCampApproval
-                                                  ?.status = 1;
-                                              controller
-                                                  .saveCampApprovalReqModel
-                                                  ?.ttDistirctCampApproval
-                                                  ?.orgId = 1;
+                                // const Spacer(),
+                                Visibility(
+                                  visible: controller.campApprovalDetailsModel!
+                                      .details!.ttCampCreateDetList!.isNotEmpty,
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            flex: 1,
+                                            child: AppButton(
+                                              title: "Approve",
+                                              onTap: () {
+                                                controller
+                                                        .saveCampApprovalReqModel
+                                                        .ttDistirctCampApproval =
+                                                    TtDistirctCampApproval();
+                                                controller
+                                                        .saveCampApprovalReqModel
+                                                        .ttDistirctCampApproval
+                                                        ?.confirmCampDate =
+                                                    convertToDate(controller
+                                                            .campApprovalDetailsModel
+                                                            ?.details
+                                                            ?.ttCampCreate
+                                                            ?.propCampDate ??
+                                                        "");
+                                                controller
+                                                        .saveCampApprovalReqModel
+                                                        .ttDistirctCampApproval
+                                                        ?.distirctCampApprovalId =
+                                                    null;
+                                                controller
+                                                        .saveCampApprovalReqModel
+                                                        .ttDistirctCampApproval
+                                                        ?.campCreateRequestId =
+                                                    controller
+                                                        .campApprovalDetailsModel
+                                                        ?.details
+                                                        ?.ttCampCreate
+                                                        ?.campCreateRequestId;
+                                                controller
+                                                    .saveCampApprovalReqModel
+                                                    .ttDistirctCampApproval
+                                                    ?.status = 1;
+                                                controller
+                                                    .saveCampApprovalReqModel
+                                                    .ttDistirctCampApproval
+                                                    ?.orgId = 1;
 
-                                              controller
-                                                      .saveCampApprovalReqModel
-                                                      ?.ttDistirctCampApprovalDetList =
+                                                TtDistirctCampApprovalDetList
+                                                    ttDistrictCampApproval =
+                                                    TtDistirctCampApprovalDetList();
+
+                                                controller
+                                                    .saveCampApprovalReqModel
+                                                    .ttDistirctCampApprovalDetList = [];
+                                                for (TtCampCreateDetList item
+                                                    in controller
+                                                            .campApprovalDetailsModel
+                                                            ?.details
+                                                            ?.ttCampCreateDetList ??
+                                                        []) {
                                                   controller
-                                                      .campApprovalDetailsModel
-                                                      ?.details
-                                                      ?.ttDistirctCampApprovalDetList;
-                                              controller
-                                                  .saveCampApprovalDetails();
-                                            },
-                                            iconData: Icon(
-                                              Icons.arrow_forward,
-                                              color: kWhiteColor,
-                                              size: responsiveHeight(24),
+                                                      .saveCampApprovalReqModel
+                                                      .ttDistirctCampApprovalDetList
+                                                      ?.add(TtDistirctCampApprovalDetList(
+                                                          distirctCampApprovalDetId:
+                                                              null,
+                                                          distirctCampApprovalId:
+                                                              null,
+                                                          stakeholderMasterIdRef:
+                                                              1,
+                                                          acceptedYN: '',
+                                                          suggestedDate: controller
+                                                                  .campApprovalDetailsModel
+                                                                  ?.details
+                                                                  ?.ttCampCreate
+                                                                  ?.propCampDate ??
+                                                              "",
+                                                          orgId: 1,
+                                                          status: 1,
+                                                          isInactive: null));
+                                                }
+
+                                                controller
+                                                    .saveCampApprovalDetails();
+                                              },
+                                              iconData: Icon(
+                                                Icons.arrow_forward,
+                                                color: kWhiteColor,
+                                                size: responsiveHeight(24),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: responsiveWidth(60),
-                                        ),
-                                        Flexible(
-                                          flex: 1,
-                                          child: AppButton(
-                                            title: "Cancel",
-                                            buttonColor: Colors.grey,
-                                            iconData: Icon(
-                                              Icons.arrow_forward,
-                                              color: kWhiteColor,
-                                              size: responsiveHeight(24),
+                                          SizedBox(
+                                            width: responsiveWidth(60),
+                                          ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: AppButton(
+                                              title: "Cancel",
+                                              buttonColor: Colors.grey,
+                                              iconData: Icon(
+                                                Icons.arrow_forward,
+                                                color: kWhiteColor,
+                                                size: responsiveHeight(24),
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 )
@@ -604,5 +645,11 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
         ],
       ),
     ));
+  }
+
+  String convertToDate(String dateTimeString) {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+    String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+    return formattedDate;
   }
 }

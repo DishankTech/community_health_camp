@@ -5,6 +5,7 @@ import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.da
 import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camps.dart';
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/referred_patients_view.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';

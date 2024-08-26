@@ -5,6 +5,8 @@ import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/screens/camp_creation/model/location/location_name_details.dart';
 import 'package:community_health_app/screens/camp_creation/model/member_type/member_type_model.dart';
 import 'package:community_health_app/screens/camp_creation/model/save_camp_req/save_camp_req_model.dart';
+import 'package:community_health_app/screens/camp_creation/model/stakeholder_name/stake_holder_name_model.dart';
+import 'package:community_health_app/screens/camp_creation/model/stakeholder_name/stakeholder_details.dart';
 import 'package:community_health_app/screens/camp_creation/model/user_list_model/user_details.dart';
 import 'package:community_health_app/screens/camp_creation/model/user_list_model/user_list_model.dart';
 import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
@@ -61,10 +63,12 @@ class CampCreationController extends GetxController {
   String? selectedDistVal;
 
   CountryModel? stakeHolderModel;
+  StakeHolderNameModel? stakeHolderNameModel;
 
   String? selectedStakeHVal;
 
   LookupDetHierarchical? selectedStakeH;
+  StakeHolderDetails? selectedStakeHName;
   LookupDetHierarchical? selectedStakeHolder;
 
   MemberTypeModel? memberTypeModel;
@@ -323,6 +327,49 @@ class CampCreationController extends GetxController {
       // if (data['status'] == 'Success') {
       isLoading = false;
       userList = UserListModel.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+
+  getStakHoldeName(id) async {
+    isLoading = true;
+    final uri = Uri.parse("${ApiConstants.baseUrl}${ApiConstants.getStakeholderName}/$id");
+    final Map<String, dynamic> body = {
+      "lookup_det_code_list1": [
+        {"lookup_det_code": "STY"}
+      ]
+    };
+
+    String jsonbody = json.encode(body);
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+    debugPrint(body.toString());
+
+    final response = await http.post(uri, headers: headers, body: jsonbody);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      stakeHolderNameModel = StakeHolderNameModel.fromJson(data);
 
       update();
     } else if (response.statusCode == 401) {

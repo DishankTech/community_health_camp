@@ -43,7 +43,7 @@ class _CampCreationState extends State<CampCreation> {
 
     if (campCreationController.hasInternet) {
       campCreationController.getLocationName();
-      campCreationController.getStakHolder();
+      // campCreationController.getStakHolder();
       campCreationController.getMemberType();
       campCreationController.getUserList();
     }
@@ -173,19 +173,26 @@ class _CampCreationState extends State<CampCreation> {
                                                               .selectedLocationVal =
                                                           p0.locationName,
                                                       controller
+                                                          .distNameController
+                                                          .text = controller
+                                                              .selectedLocation
+                                                              ?.lookupDetHierDescEn ??
+                                                          "",
+                                                      controller
                                                           .selectedLocation = p0,
                                                       controller
                                                           .locationNameController
                                                           .text = controller
                                                               .selectedLocationVal ??
                                                           "",
-                                                      await controller.getDist(
-                                                          controller
-                                                              .selectedLocation
-                                                              ?.lookupDetHierIdDistrict
-                                                              .toString(),
-                                                          false),
-                                                      controller.update()
+                                                  controller.update(),
+                                                      await  controller
+                                                          .getStakHoldeName(
+                                                        controller
+                                                            .selectedLocation
+                                                            ?.lookupDetHierIdDistrict
+                                                            .toString(),
+                                                      ),
                                                     },
                                                 "Location",
                                                 controller.locationNameModel
@@ -233,9 +240,11 @@ class _CampCreationState extends State<CampCreation> {
                                         AppRoundTextField(
                                           controller:
                                               controller.distNameController,
+                                          // initialValue: controller.selectedLocation?.lookupDetHierDescEn ?? "",
                                           inputType: TextInputType.text,
                                           onChange: (p0) {},
                                           onTap: () async {
+                                            return null;
                                             if (controller
                                                         .selectedLocationVal !=
                                                     null &&
@@ -305,14 +314,14 @@ class _CampCreationState extends State<CampCreation> {
                                           inputType: TextInputType.text,
                                           onChange: (p0) {},
                                           onTap: () async {
-                                            await commonBottomSheet(
+                                            await stakeHolderNameBottomSheet(
                                                 context,
                                                 (p0) => {
                                                       controller
                                                               .selectedStakeHVal =
-                                                          p0.lookupDetHierDescEn,
+                                                          p0.stakeholderNameEn,
                                                       controller
-                                                          .selectedStakeH = p0,
+                                                          .selectedStakeHName = p0,
                                                       controller
                                                           .stakeHolderController
                                                           .text = controller
@@ -321,11 +330,8 @@ class _CampCreationState extends State<CampCreation> {
                                                       controller.update()
                                                     },
                                                 "Stakeholder Name",
-                                                controller
-                                                        .stakeHolderModel
-                                                        ?.details
-                                                        ?.first
-                                                        .lookupDetHierarchical ??
+                                                controller.stakeHolderNameModel
+                                                        ?.details ??
                                                     []);
                                           },
                                           // maxLength: 12,

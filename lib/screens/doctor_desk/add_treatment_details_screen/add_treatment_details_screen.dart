@@ -4,11 +4,11 @@ import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_deskRef.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
+import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-
 import '../../../core/common_widgets/app_bar_v1.dart';
 import '../../../core/common_widgets/app_button.dart';
 import '../../../core/common_widgets/app_round_textfield.dart';
@@ -547,79 +547,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                 ),
                                               ),
                                             ),
-                                            // Padding(
-                                            //   padding:
-                                            //       const EdgeInsets.fromLTRB(
-                                            //           20, 15, 20, 0),
-                                            //   child: AppRoundTextField(
-                                            //     // initialValue: details.userLogin,
-                                            //     controller:
-                                            //         controller.userController,
-                                            //     key: UniqueKey(),
-                                            //     inputStyle: TextStyle(
-                                            //         fontSize:
-                                            //             responsiveFont(14),
-                                            //         color: kTextBlackColor),
-                                            //     inputType: TextInputType.text,
-                                            //     onChange: (p0) {},
-                                            //     onTap: () {
-                                            //       if (controller
-                                            //               .userList?.details !=
-                                            //           null) {
-                                            //         userBottomSheet(
-                                            //             context,
-                                            //             (p0) => {
-                                            //                   controller
-                                            //                           .userController
-                                            //                           .text =
-                                            //                       p0.fullName,
-                                            //                   controller
-                                            //                           .selectedUserId =
-                                            //                       p0.userId,
-                                            //                   controller
-                                            //                       .update()
-                                            //                   // campCreationController.userController.text =
-                                            //                   //     p0.fullName,
-                                            //                   // campCreationController.selectedUser = p0
-                                            //                 },
-                                            //             "Refer To",
-                                            //             controller.userList
-                                            //                     ?.details ??
-                                            //                 []);
-                                            //       }
-                                            //     },
-                                            //     readOnly: true,
-                                            //     label: RichText(
-                                            //       text: const TextSpan(
-                                            //           text: 'Refer To',
-                                            //           style: TextStyle(
-                                            //               color: kHintColor,
-                                            //               fontFamily:
-                                            //                   Montserrat),
-                                            //           children: [
-                                            //             TextSpan(
-                                            //                 text: "*",
-                                            //                 style: TextStyle(
-                                            //                     color:
-                                            //                         Colors.red))
-                                            //           ]),
-                                            //     ),
-                                            //     hint: "",
-                                            //     suffix: SizedBox(
-                                            //       height: responsiveHeight(20),
-                                            //       width: responsiveHeight(20),
-                                            //       child: Center(
-                                            //         child: Image.asset(
-                                            //           icArrowDownOrange,
-                                            //           height:
-                                            //               responsiveHeight(20),
-                                            //           width:
-                                            //               responsiveHeight(20),
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
+
                                             Padding(
                                               padding: const EdgeInsets.fromLTRB(
                                                           20, 15, 20, 0),
@@ -636,12 +564,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             .selectedStakeHVal =
                                                             p0.lookupDetHierDescEn,
                                                         controller
-                                                            .selectedStakeH = p0,
+                                                            .selectedStakeH.addIfNotExist(p0),
                                                         controller
                                                             .stakeHolderController
                                                             .text = controller
-                                                            .selectedStakeHVal ??
-                                                            "",
+                                                              .selectedStakeH.displayText(),
                                                         controller.update()
                                                       },
                                                       "Refer To",
@@ -839,5 +766,28 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
             }),
       ),
     );
+  }
+}
+
+
+extension ListExtensions on List {
+  void addIfNotExist(LookupDetHierarchical element, {bool Function(LookupDetHierarchical item)? condition}) {
+    bool exists;
+
+    if (condition != null) {
+      exists = any((item) => condition(item));
+    } else {
+      exists = contains(element);
+    }
+
+    if (!exists) {
+      add(element);
+    }
+  }
+
+  String displayText() {
+    return where((item) => item.lookupDetHierDescEn != null) // Filter out null values
+        .map((item) => item.lookupDetHierDescEn!)
+        .join(', '); // Joins with a comma and space separator
   }
 }
