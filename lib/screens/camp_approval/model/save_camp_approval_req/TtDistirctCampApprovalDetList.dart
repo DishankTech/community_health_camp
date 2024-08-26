@@ -19,9 +19,9 @@ class TtDistirctCampApprovalDetList {
     status = json['status'];
     isInactive = json['is_inactive'];
   }
-  dynamic distirctCampApprovalDetId;
+  int? distirctCampApprovalDetId;
   int? distirctCampApprovalId;
-  dynamic stakeholderMasterIdRef;
+  int? stakeholderMasterIdRef;
   String? acceptedYN;
   String? suggestedDate;
   int? orgId;

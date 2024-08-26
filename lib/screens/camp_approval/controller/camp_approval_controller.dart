@@ -2,16 +2,16 @@ import 'dart:convert';
 
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
-import 'package:community_health_app/screens/camp_approval/model/camp_approval_data.dart';
-import 'package:community_health_app/screens/camp_approval/model/camp_approval_details.dart';
-import 'package:community_health_app/screens/camp_approval/model/camp_approval_list_model.dart';
-import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/save_camp_approval_req_model.dart';
+import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
+import 'package:community_health_app/screens/camp_approval/model/camp_approval_details/CampApprovalDetailsModel.dart';
+import 'package:community_health_app/screens/camp_approval/model/camp_approval_list/camp_approval_data.dart';
+import 'package:community_health_app/screens/camp_approval/model/camp_approval_list/camp_approval_list_model.dart';
+import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/SaveCampApprovalDetails.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-import '../model/camp_approval_details/CampApprovalDetailsModel.dart';
 
 class CampApprovalController extends GetxController {
   static const pageSize = 10;
@@ -22,13 +22,13 @@ class CampApprovalController extends GetxController {
 
   CampApprovalListModel? campApprovalData;
 
-  List<CampApprovalData>? campApprovalList = [];
+  List<CampApprovalData> campApprovalList = [];
 
   bool hasInternet = true;
 
   CampApprovalDetailsModel? campApprovalDetailsModel;
 
-  SaveCampApprovalReqModel saveCampApprovalReqModel = SaveCampApprovalReqModel();
+  SaveCampApprovalDetails saveCampApprovalReqModel = SaveCampApprovalDetails();
 
   fetchPage(int pageKey) async {
     try {
@@ -37,7 +37,8 @@ class CampApprovalController extends GetxController {
       if (isLastPage) {
         pagingController.appendLastPage(newItems);
       } else {
-        int nextPageKey = pageKey + newItems.length;
+        // int nextPageKey = pageKey + newItems.length;
+        int nextPageKey = pageKey + 1;
         pagingController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
@@ -50,10 +51,10 @@ class CampApprovalController extends GetxController {
 
     // Make the API call here
 
-    var url = (ApiConstants.baseUrl + ApiConstants.campApprovalList);
+    var url = (ApiConstants.baseUrl + ApiConstants.campCreationList);
     // var requestBody = {"page": currentPage, "per_page": 4};
     var requestBody = {
-      "total_pages": 1,
+      "total_pages": 0,
       "page": pageKey,
       "total_count": 0,
       "per_page": pageSize,
@@ -65,13 +66,13 @@ class CampApprovalController extends GetxController {
       headers: {"Content-Type": "application/json"},
       body: json.encode(requestBody),
     );
-
+    campApprovalList.clear();
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
 
       campApprovalData = CampApprovalListModel.fromJson(data);
       if (campApprovalData?.details != null) {
-        campApprovalList?.addAll(campApprovalData!.details?.data ?? []);
+        campApprovalList.addAll(campApprovalData!.details?.data ?? []);
       }
       isLoading = false;
       update();
@@ -81,7 +82,7 @@ class CampApprovalController extends GetxController {
 
   getCampDetails(id) async {
     isLoading = true;
-    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.campApprovalDetails}/$id');
+    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.campCreationDetails}/$id');
 
     Map<String, String> headers = {
       "Content-Type": "application/json",
@@ -135,7 +136,7 @@ class CampApprovalController extends GetxController {
       // if (addlocationMasterResp!.statusCode == 200) {
       isLoading = false;
       CustomMessage.toast("Save Successfully");
-      Get.back();
+      Get.to(CampApprovalScreen());
 
       // } else {
       //   isLoading = false;

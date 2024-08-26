@@ -1,13 +1,13 @@
 
-import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/ttdistirct_camp_approval.dart';
-import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/ttdistirct_camp_approval_det_list.dart';
+import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/TtDistirctCampApproval.dart';
+import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/TtDistirctCampApprovalDetList.dart';
 
-class SaveCampApprovalReqModel {
-  SaveCampApprovalReqModel({
+class SaveCampApprovalDetails {
+  SaveCampApprovalDetails({
       this.ttDistirctCampApproval, 
       this.ttDistirctCampApprovalDetList,});
 
-  SaveCampApprovalReqModel.fromJson(dynamic json) {
+  SaveCampApprovalDetails.fromJson(dynamic json) {
     ttDistirctCampApproval = json['tt_distirct_camp_approval'] != null ? TtDistirctCampApproval.fromJson(json['tt_distirct_camp_approval']) : null;
     if (json['tt_distirct_camp_approval_det_list'] != null) {
       ttDistirctCampApprovalDetList = [];

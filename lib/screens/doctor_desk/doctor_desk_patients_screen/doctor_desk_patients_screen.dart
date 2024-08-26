@@ -34,25 +34,19 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
             connectivityResult.contains(ConnectivityResult.wifi));
 
     if (doctorDeskController.hasInternet) {
-      doctorDeskController.fetchPage(1);
-      // doctorDeskController.pagingController.addPageRequestListener((pageKey) {
-      //   doctorDeskController.fetchPage(pageKey);
-      // });
+      doctorDeskController.pagingController.refresh();
     }
 
     doctorDeskController.update();
   }
 
   @override
-  void dispose() {
-    // doctorDeskController.pagingController.dispose();
-    super.dispose();
-  }
-
-  @override
   void initState() {
-    doctorDeskController.doctorDesk?.clear();
+
     doctorDeskController.pagingController = PagingController(firstPageKey: 1);
+    doctorDeskController.pagingController.addPageRequestListener((pageKey) {
+      doctorDeskController.fetchPage(pageKey);
+    });
     checkInternetAndLoadData();
     super.initState();
   }
@@ -238,7 +232,13 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      controller.doctorDeskModel?.details?.data?.first.campCreateRequestId.toString() ?? "",
+                                                      // controller
+                                                      //         .doctorDeskModel
+                                                      //         ?.details
+                                                      //         ?.data?[0]
+                                                      //         .campCreateRequestId
+                                                      //         .toString() ??
+                                                      "1",
                                                       style: TextStyle(
                                                         fontSize:
                                                             responsiveFont(12),
@@ -304,7 +304,12 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                               ),
                                             ),
                                             Text(
-                                              controller.doctorDeskModel?.details?.data?.first.stakeholderNameEn ?? "",
+                                              // controller
+                                              //         .doctorDeskModel
+                                              //         ?.details
+                                              //         ?.data?[0]
+                                              //         .stakeholderNameEn ??
+                                              "",
                                               style: TextStyle(
                                                 fontSize: responsiveFont(12),
                                                 // color: dashboardSubTitle,
@@ -332,7 +337,12 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                controller.doctorDeskModel?.details?.data?.first.locationName ?? "",
+                                                // controller
+                                                //         .doctorDeskModel
+                                                //         ?.details
+                                                //         ?.data?[0]
+                                                //         .locationName ??
+                                                "",
                                                 style: TextStyle(
                                                   fontSize: responsiveFont(12),
                                                   // color: dashboardSubTitle,
@@ -444,7 +454,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                                               .start,
                                                                       children: [
                                                                         Text(
-                                                                            controller.doctorDesk?[index].patientName ??
+                                                                            item.patientName ??
                                                                                 "",
                                                                             style: TextStyle(
                                                                                 fontSize: responsiveFont(14),
@@ -464,7 +474,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                                                 fontSize: responsiveFont(12),
                                                                                 fontWeight: FontWeight.bold),
                                                                             children: [
-                                                                              TextSpan(text: controller.doctorDesk?[index].contactNumber ?? "", style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal))
+                                                                              TextSpan(text: item.contactNumber ?? "", style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal))
                                                                             ],
                                                                           ),
                                                                         ),
@@ -483,9 +493,9 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                                                 fontWeight: FontWeight.bold),
                                                                             children: [
                                                                               TextSpan(
-                                                                                text:"${controller.doctorDeskModel?.details?.data?.first.cityEn ?? ""} "
-                                                                                    "${controller.doctorDeskModel?.details?.data?.first.districtEn ?? ""} "
-                                                                                    "${controller.doctorDeskModel?.details?.data?.first.countryEn ?? ""}",
+                                                                                text: "${item.cityEn ?? ""} "
+                                                                                    "${item.districtEn ?? ""} "
+                                                                                    "${item.countryEn ?? ""}",
                                                                                 style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal),
                                                                               )
                                                                             ],
@@ -518,8 +528,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                                     Get.to(
                                                                         AddTreatmentDetailsScreen(
                                                                       doctorDeskData:
-                                                                          controller
-                                                                              .doctorDesk?[index],
+                                                                      item,
                                                                     ));
                                                                   },
                                                                   child: Ink(

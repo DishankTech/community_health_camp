@@ -68,12 +68,14 @@ class LocationMasterController extends GetxController {
 
   AddLocationMasterResp? addlocationMasterResp;
 
-  static const pageSize = 10;
 
-  late PagingController<int, LocationListData> pagingController;
   List<LocationListData> locations = [];
 
   LocationMasterListModel? locationListModel;
+
+  static const pageSize = 10;
+  late PagingController<int, LocationListData> pagingController;
+
 
   fetchPage(int pageKey) async {
     try {
@@ -82,7 +84,8 @@ class LocationMasterController extends GetxController {
       if (isLastPage) {
         pagingController.appendLastPage(newItems);
       } else {
-        int nextPageKey = pageKey + newItems.length;
+        // int nextPageKey = pageKey + newItems.length;
+        int nextPageKey = pageKey + 1;
         pagingController.appendPage(newItems, nextPageKey);
       }
     } catch (error) {
@@ -98,7 +101,7 @@ class LocationMasterController extends GetxController {
     var url = (ApiConstants.baseUrl + ApiConstants.locationList);
     // var requestBody = {"page": currentPage, "per_page": 4};
     var requestBody = {
-      "total_pages": 1,
+      "total_pages": 0,
       "page": pageKey,
       "total_count": 0,
       "per_page": pageSize,
@@ -110,7 +113,7 @@ class LocationMasterController extends GetxController {
       headers: {"Content-Type": "application/json"},
       body: json.encode(requestBody),
     );
-
+    locations.clear();
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
 
@@ -272,8 +275,8 @@ class LocationMasterController extends GetxController {
       "lookup_det_hier_id_taluka": selectedTaluka?.lookupDetHierId,
       "lookup_det_hier_id_city": selectedCity?.lookupDetHierId,
       "lookup_det_id_division": null,
-      "org_id": selectedCity?.status,
-      "status": selectedCity?.orgId
+      "org_id": selectedCity?.orgId,
+      "status": 1
     };
 
     String jsonbody = json.encode(body);

@@ -5,7 +5,7 @@ import 'package:community_health_app/core/utilities/no_internet_connectivity.dar
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/camp_approval/camp_approval_details.dart';
 import 'package:community_health_app/screens/camp_approval/controller/camp_approval_controller.dart';
-import 'package:community_health_app/screens/camp_approval/model/camp_approval_data.dart';
+import 'package:community_health_app/screens/camp_approval/model/camp_approval_list/camp_approval_data.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -33,11 +33,7 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
             connectivityResult.contains(ConnectivityResult.wifi));
 
     if (campApprovalController.hasInternet) {
-      campApprovalController.fetchPage(1);
-
-      campApprovalController.pagingController.addPageRequestListener((pageKey) {
-        campApprovalController.fetchPage(pageKey);
-      });
+      campApprovalController.pagingController.refresh();
     }
 
     campApprovalController.update();
@@ -45,8 +41,6 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
 
   @override
   void dispose() {
-
-
     // campApprovalController.pagingController.dispose();
     super.dispose();
   }
@@ -54,9 +48,12 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    campApprovalController.campApprovalList?.clear();
+    campApprovalController.campApprovalList.clear();
     campApprovalController.pagingController = PagingController(firstPageKey: 1);
 
+    campApprovalController.pagingController.addPageRequestListener((pageKey) {
+      campApprovalController.fetchPage(pageKey);
+    });
     checkInternetAndLoadData();
     super.initState();
   }
@@ -182,7 +179,9 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
                                                               FontWeight.bold),
                                                       children: [
                                                         TextSpan(
-                                                            text: "",
+                                                            text:
+                                                                item.locationName ??
+                                                                    "",
                                                             style: TextStyle(
                                                                 fontSize:
                                                                     responsiveFont(
@@ -211,10 +210,9 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
                                                               FontWeight.bold),
                                                       children: [
                                                         TextSpan(
-                                                            text: item
-                                                                    .distirctCampApprovalId
-                                                                    .toString() ??
-                                                                "",
+                                                            text:
+                                                                item.districtEn ??
+                                                                    "",
                                                             style: TextStyle(
                                                                 fontSize:
                                                                     responsiveFont(
@@ -244,7 +242,9 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
                                                               FontWeight.bold),
                                                       children: [
                                                         TextSpan(
-                                                            text: "",
+                                                            text:
+                                                                item.stakeholderNameEn ??
+                                                                    "",
                                                             style: TextStyle(
                                                                 fontSize:
                                                                     responsiveFont(
@@ -275,7 +275,7 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
                                                       children: [
                                                         TextSpan(
                                                             text:
-                                                                item.confirmCampDate ??
+                                                                item.propCampDate ??
                                                                     "",
                                                             style: TextStyle(
                                                                 fontSize:

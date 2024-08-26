@@ -33,12 +33,8 @@ class _LocationMasterListState extends State<LocationMasterList> {
             connectivityResult.contains(ConnectivityResult.wifi));
 
     if (locationMasterController.hasInternet) {
-      locationMasterController.fetchPage(1);
-
-      locationMasterController.pagingController
-          .addPageRequestListener((pageKey) {
-        locationMasterController.fetchPage(pageKey);
-      });
+      // Trigger the PagingController to load the first page
+      locationMasterController.pagingController.refresh();
     }
 
     locationMasterController.update();
@@ -54,9 +50,15 @@ class _LocationMasterListState extends State<LocationMasterList> {
   void initState() {
     // TODO: implement initState
     locationMasterController.locations.clear();
-    locationMasterController.pagingController = PagingController(firstPageKey: 1);
+    locationMasterController.pagingController =
+        PagingController(firstPageKey: 1);
+
+    locationMasterController.pagingController.addPageRequestListener((pageKey) {
+      locationMasterController.fetchPage(pageKey);
+    });
 
     checkInternetAndLoadData();
+
     super.initState();
   }
 
@@ -78,7 +80,7 @@ class _LocationMasterListState extends State<LocationMasterList> {
           mAppBarV1(
             title: "Locations",
             context: context,
-            onBackButtonPress: (){
+            onBackButtonPress: () {
               Get.to(() => const DashboardScreen());
             },
             suffix: Material(
@@ -90,6 +92,7 @@ class _LocationMasterListState extends State<LocationMasterList> {
                   //     arguments: LocDetails(false, null));
                   Get.to(() => const AddLocationMaster(
                         isView: false,
+                        isEdit: false,
                         locationId: null,
                       ));
                 },
@@ -212,7 +215,6 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                                     height:
                                                         responsiveHeight(10),
                                                   ),
-
                                                   RichText(
                                                     text: TextSpan(
                                                       text: "Contact No : ",
@@ -281,13 +283,13 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                                             text: "District: ",
                                                             style: TextStyle(
                                                                 color:
-                                                                kTextColor,
+                                                                    kTextColor,
                                                                 fontSize:
-                                                                responsiveFont(
-                                                                    12),
+                                                                    responsiveFont(
+                                                                        12),
                                                                 fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                                    FontWeight
+                                                                        .bold),
                                                             children: [
                                                               TextSpan(
                                                                   text: item
@@ -295,21 +297,21 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                                                       .toString(),
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                      responsiveFont(
-                                                                          12),
+                                                                          responsiveFont(
+                                                                              12),
                                                                       color:
-                                                                      kTextColor,
+                                                                          kTextColor,
                                                                       fontWeight:
-                                                                      FontWeight
-                                                                          .normal))
+                                                                          FontWeight
+                                                                              .normal))
                                                             ],
                                                           ),
                                                         ),
                                                       ),
                                                       SizedBox(
                                                         height:
-                                                        responsiveHeight(
-                                                            10),
+                                                            responsiveHeight(
+                                                                10),
                                                       ),
                                                       Expanded(
                                                         child: RichText(
@@ -317,13 +319,13 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                                             text: "City: ",
                                                             style: TextStyle(
                                                                 color:
-                                                                kTextColor,
+                                                                    kTextColor,
                                                                 fontSize:
-                                                                responsiveFont(
-                                                                    12),
+                                                                    responsiveFont(
+                                                                        12),
                                                                 fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                                    FontWeight
+                                                                        .bold),
                                                             children: [
                                                               TextSpan(
                                                                   text: item
@@ -331,13 +333,13 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                                                       .toString(),
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                      responsiveFont(
-                                                                          12),
+                                                                          responsiveFont(
+                                                                              12),
                                                                       color:
-                                                                      kTextColor,
+                                                                          kTextColor,
                                                                       fontWeight:
-                                                                      FontWeight
-                                                                          .normal))
+                                                                          FontWeight
+                                                                              .normal))
                                                             ],
                                                           ),
                                                         ),
@@ -346,9 +348,8 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                                   ),
                                                   SizedBox(
                                                     height:
-                                                    responsiveHeight(10),
+                                                        responsiveHeight(10),
                                                   ),
-
                                                   RichText(
                                                     text: TextSpan(
                                                       text: "Email id : ",
@@ -446,7 +447,6 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                 ]),
                               ),
                             ),
-
                           )
                     : InternetIssue(
                         onRetryPressed: () {
@@ -460,9 +460,4 @@ class _LocationMasterListState extends State<LocationMasterList> {
   }
 }
 
-class LocDetails {
-  bool? isView;
-  int? locationId;
 
-  LocDetails(this.isView, this.locationId);
-}
