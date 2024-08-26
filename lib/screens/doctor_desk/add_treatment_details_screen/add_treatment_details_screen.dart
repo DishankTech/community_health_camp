@@ -644,7 +644,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             "",
                                                         controller.update()
                                                       },
-                                                      "Stakeholder Type",
+                                                      "Refer To",
                                                       controller
                                                           .stakeHolderModel
                                                           ?.details
@@ -656,7 +656,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                 readOnly: true,
                                                 label: RichText(
                                                   text: const TextSpan(
-                                                      text: 'Stakeholder Type',
+                                                      text: 'Refer To',
                                                       style: TextStyle(
                                                           color: kHintColor,
                                                           fontFamily: Montserrat),
