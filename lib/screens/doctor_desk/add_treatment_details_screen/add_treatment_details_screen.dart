@@ -547,79 +547,147 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                 ),
                                               ),
                                             ),
+                                            // Padding(
+                                            //   padding:
+                                            //       const EdgeInsets.fromLTRB(
+                                            //           20, 15, 20, 0),
+                                            //   child: AppRoundTextField(
+                                            //     // initialValue: details.userLogin,
+                                            //     controller:
+                                            //         controller.userController,
+                                            //     key: UniqueKey(),
+                                            //     inputStyle: TextStyle(
+                                            //         fontSize:
+                                            //             responsiveFont(14),
+                                            //         color: kTextBlackColor),
+                                            //     inputType: TextInputType.text,
+                                            //     onChange: (p0) {},
+                                            //     onTap: () {
+                                            //       if (controller
+                                            //               .userList?.details !=
+                                            //           null) {
+                                            //         userBottomSheet(
+                                            //             context,
+                                            //             (p0) => {
+                                            //                   controller
+                                            //                           .userController
+                                            //                           .text =
+                                            //                       p0.fullName,
+                                            //                   controller
+                                            //                           .selectedUserId =
+                                            //                       p0.userId,
+                                            //                   controller
+                                            //                       .update()
+                                            //                   // campCreationController.userController.text =
+                                            //                   //     p0.fullName,
+                                            //                   // campCreationController.selectedUser = p0
+                                            //                 },
+                                            //             "Refer To",
+                                            //             controller.userList
+                                            //                     ?.details ??
+                                            //                 []);
+                                            //       }
+                                            //     },
+                                            //     readOnly: true,
+                                            //     label: RichText(
+                                            //       text: const TextSpan(
+                                            //           text: 'Refer To',
+                                            //           style: TextStyle(
+                                            //               color: kHintColor,
+                                            //               fontFamily:
+                                            //                   Montserrat),
+                                            //           children: [
+                                            //             TextSpan(
+                                            //                 text: "*",
+                                            //                 style: TextStyle(
+                                            //                     color:
+                                            //                         Colors.red))
+                                            //           ]),
+                                            //     ),
+                                            //     hint: "",
+                                            //     suffix: SizedBox(
+                                            //       height: responsiveHeight(20),
+                                            //       width: responsiveHeight(20),
+                                            //       child: Center(
+                                            //         child: Image.asset(
+                                            //           icArrowDownOrange,
+                                            //           height:
+                                            //               responsiveHeight(20),
+                                            //           width:
+                                            //               responsiveHeight(20),
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
                                             Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      20, 15, 20, 0),
+                                              padding: const EdgeInsets.fromLTRB(
+                                                          20, 15, 20, 0),
                                               child: AppRoundTextField(
-                                                // initialValue: details.userLogin,
                                                 controller:
-                                                    controller.userController,
-                                                key: UniqueKey(),
-                                                inputStyle: TextStyle(
-                                                    fontSize:
-                                                        responsiveFont(14),
-                                                    color: kTextBlackColor),
+                                                controller.stakeHolderController,
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
-                                                onTap: () {
-                                                  if (controller
-                                                          .userList?.details !=
-                                                      null) {
-                                                    userBottomSheet(
-                                                        context,
-                                                        (p0) => {
-                                                              controller
-                                                                      .userController
-                                                                      .text =
-                                                                  p0.fullName,
-                                                              controller
-                                                                      .selectedUserId =
-                                                                  p0.userId,
-                                                              controller
-                                                                  .update()
-                                                              // campCreationController.userController.text =
-                                                              //     p0.fullName,
-                                                              // campCreationController.selectedUser = p0
-                                                            },
-                                                        "Refer To",
-                                                        controller.userList
-                                                                ?.details ??
-                                                            []);
-                                                  }
+                                                onTap: () async {
+                                                  await commonBottomSheet(
+                                                      context,
+                                                          (p0) => {
+                                                        controller
+                                                            .selectedStakeHVal =
+                                                            p0.lookupDetHierDescEn,
+                                                        controller
+                                                            .selectedStakeH = p0,
+                                                        controller
+                                                            .stakeHolderController
+                                                            .text = controller
+                                                            .selectedStakeHVal ??
+                                                            "",
+                                                        controller.update()
+                                                      },
+                                                      "Stakeholder Type",
+                                                      controller
+                                                          .stakeHolderModel
+                                                          ?.details
+                                                          ?.first
+                                                          .lookupDetHierarchical ??
+                                                          []);
                                                 },
+                                                // maxLength: 12,
                                                 readOnly: true,
                                                 label: RichText(
                                                   text: const TextSpan(
-                                                      text: 'User Id',
+                                                      text: 'Stakeholder Type',
                                                       style: TextStyle(
                                                           color: kHintColor,
-                                                          fontFamily:
-                                                              Montserrat),
+                                                          fontFamily: Montserrat),
                                                       children: [
                                                         TextSpan(
                                                             text: "*",
                                                             style: TextStyle(
-                                                                color:
-                                                                    Colors.red))
+                                                                color: Colors.red))
                                                       ]),
                                                 ),
                                                 hint: "",
                                                 suffix: SizedBox(
-                                                  height: responsiveHeight(20),
-                                                  width: responsiveHeight(20),
+                                                  height:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                                  width: getProportionateScreenHeight(
+                                                      20),
                                                   child: Center(
                                                     child: Image.asset(
                                                       icArrowDownOrange,
                                                       height:
-                                                          responsiveHeight(20),
+                                                      getProportionateScreenHeight(
+                                                          20),
                                                       width:
-                                                          responsiveHeight(20),
+                                                      getProportionateScreenHeight(
+                                                          20),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -672,12 +740,17 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       .ttPatientDoctorDesk
                                                       ?.patientDoctorDeskId = null;
 
+                                                  // controller
+                                                  //     .addTreatmentDetailsModel
+                                                  //     .ttPatientDoctorDesk
+                                                  //     ?.userId = controller
+                                                  //         .selectedUserId ??
+                                                  //     1;
+
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
-                                                      ?.userId = controller
-                                                          .selectedUserId ??
-                                                      1;
+                                                      ?.userId = 1;
                                                   controller
                                                           .addTreatmentDetailsModel
                                                           .ttPatientDoctorDesk

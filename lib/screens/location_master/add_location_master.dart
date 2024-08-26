@@ -121,7 +121,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                       height: responsiveHeight(20),
                                     ),
                                     AppRoundTextField(
-                                      readOnly: widget?.isView,
+                                      readOnly: widget.isView,
                                       controller:
                                           locationMasterController.locationName,
                                       inputStyle: TextStyle(

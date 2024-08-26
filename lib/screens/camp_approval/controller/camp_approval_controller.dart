@@ -16,8 +16,7 @@ import '../model/camp_approval_details/CampApprovalDetailsModel.dart';
 class CampApprovalController extends GetxController {
   static const pageSize = 10;
 
-  final PagingController<int, CampApprovalData> pagingController =
-      PagingController(firstPageKey: 1);
+  late PagingController<int, CampApprovalData> pagingController;
 
   bool isLoading = false;
 

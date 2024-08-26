@@ -35,9 +35,9 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
 
     if (doctorDeskController.hasInternet) {
       doctorDeskController.fetchPage(1);
-      doctorDeskController.pagingController.addPageRequestListener((pageKey) {
-        doctorDeskController.fetchPage(pageKey);
-      });
+      // doctorDeskController.pagingController.addPageRequestListener((pageKey) {
+      //   doctorDeskController.fetchPage(pageKey);
+      // });
     }
 
     doctorDeskController.update();
