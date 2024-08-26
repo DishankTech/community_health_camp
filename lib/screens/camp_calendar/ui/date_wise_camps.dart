@@ -190,6 +190,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                                               Container(
                                                   child: Text(
                                                     campCount[index].toString(),
+                                                    // "",
                                                 style: TextStyle(color: kWhiteColor, fontWeight: FontWeight.bold, fontFamily: "Montserrat"),
                                               )),
                                             ],
@@ -249,25 +250,26 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
         // The date to filter by
         String filterDate = widget.selectedDay.toString().split(' ')[0];
 
-        // Filter the list by the date '2024-08-23'
-        List<Datum> filteredList = campDetailsList.where((camp) {
+        // Filter the list by the date '2024-08-23' //date selected
+        List<Datum> dateWiseFilteredList = campDetailsList.where((camp) {
           String campDate = camp.propCampDate.toString().split(' ')[0]; // Extract the date part
           return campDate == filterDate;
         }).toList();
 
 
-        Set<int> seenLocationIds = {};
-         uniqueLocationList = [];
+
         // Print the filtered list
         print('Filtered Camps on $filterDate:');
-        for (var camp in filteredList) {
+        for (var camp in dateWiseFilteredList) {
           print(camp);
         }
 
+        Set<int> seenLocationIds = {};
+        uniqueLocationList = [];
         // Count occurrences of each location_master_id
         Map<int, int> locationCountMap = {};
 
-        for (var camp in filteredList) {
+        for (var camp in dateWiseFilteredList) {
           if(camp.locationMasterId!=null){
             int locationId = int.parse( camp.locationMasterId.toString());
             if (locationCountMap.containsKey(locationId)) {
@@ -291,7 +293,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
         });
 
 
-        for (var camp in filteredList) {
+        for (var camp in dateWiseFilteredList) {
           if(camp.locationMasterId!=null)
             {
               int locationId = int.parse(camp.locationMasterId.toString());

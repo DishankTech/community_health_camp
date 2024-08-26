@@ -362,7 +362,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                 Navigator.pushNamed(context, AppRoutes.addReferredPatient);
                               },
                               mWidth: SizeConfig.screenWidth * 0.6,
-                              title: "Add Registered Patient",
+                              title: "Add Referred Patient",
                               iconData: Icon(
                                 Icons.arrow_forward,
                                 color: kWhiteColor,
@@ -812,7 +812,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
         if (data['status_code'] == 200) {
           setState(() {
             isSaveLoad = false;
-            clearAllFields();
+            // clearAllFields();
           });
 
           ScaffoldMessenger.of(context).showSnackBar(
