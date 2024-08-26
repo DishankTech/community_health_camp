@@ -4,12 +4,8 @@ import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camp
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
-import 'package:community_health_app/screens/camp_coordinator/ui/referred_patients_view.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
-import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_patient_registration_screen.dart';
-import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
-import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/location_master/location_master.dart';
 import 'package:community_health_app/screens/location_master/location_master_list.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration.dart';
@@ -103,7 +99,9 @@ class AppRoutes {
           builder: (_) => const UserMasterScreen(),
         );
       case userMasterEditScreen:
-        return MaterialPageRoute(builder: (_) => const UserMasterEditScreen(), settings: settings);
+        return MaterialPageRoute(
+          builder: (_) => const UserMasterEditScreen(),
+        );
       case stakeholderMasterScreen:
         return MaterialPageRoute(
           builder: (_) => const StakeHolderMasterScreen(),
@@ -113,7 +111,9 @@ class AppRoutes {
           builder: (_) => const RegisteredPatientsScreen(),
         );
       case patientRegEditScreen:
-        return MaterialPageRoute(builder: (_) => const PatientRegistrationEditScreen(), settings: settings);
+        return MaterialPageRoute(
+          builder: (_) => const PatientRegistrationEditScreen(),
+        );
       case registeredUserMaster:
         return MaterialPageRoute(
           builder: (_) => const RegisteredUserMasterScreen(),
@@ -178,7 +178,9 @@ class AppRoutes {
           builder: (_) => const StakeholderMasterList(),
         );
       case stakeholderMasterEditScreen:
-        return MaterialPageRoute(builder: (_) => const StakeHolderMasterEditScreen(), settings: settings);
+        return MaterialPageRoute(
+          builder: (_) => const StakeHolderMasterEditScreen(),
+        );
       case resetPassword:
         return MaterialPageRoute(
           builder: (_) => const ResetPasswordPage(),
