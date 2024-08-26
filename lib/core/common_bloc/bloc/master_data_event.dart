@@ -125,3 +125,12 @@ class GetStakeholderSubType extends MasterDataEvent {
 }
 
 class ResetMasterState extends MasterDataEvent {}
+
+class GetCampListDropdown extends MasterDataEvent {
+  int locationId;
+  GetCampListDropdown({required this.locationId});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [locationId];
+}

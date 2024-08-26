@@ -41,6 +41,11 @@ const String kGetAllPatients =
     "administrator/masters/all-patient-master-pagination";
 const String kGetMasters = "common/lookup/lookupCode";
 const String kGetMastersDetCode = "common/lookup/lookupDetCode";
+const String kGetMastersLookupDetId = "common/lookup/lookupDetHier/parent-id/";
+const String kGetCampListDropdown =
+    "administrator/camp/dropdown/camp-date-list/";
+
+const String kFilterCountDashboard = "administrator/masters/get/filter/count";
 
 // Stakeholder
 const String kAddStakeholder = "administrator/masters/add/stake-holder-master";

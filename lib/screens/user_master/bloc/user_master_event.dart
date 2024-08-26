@@ -15,6 +15,12 @@ class CreateUserRequest extends UserMasterEvent {
   List<Object> get props => [payload];
 }
 
-class GetUserRequest extends UserMasterEvent {}
+class GetUserRequest extends UserMasterEvent {
+  Map payload;
+  GetUserRequest({required this.payload});
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
 
 class ResetUserMasterState extends UserMasterEvent {}

@@ -204,7 +204,7 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                                         const EdgeInsets.all(
                                                             1.0),
                                                     child: Image.asset(
-                                                      _list[i].image,
+                                                      pat1,
                                                       height:
                                                           responsiveHeight(54),
                                                       width:

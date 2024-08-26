@@ -1,6 +1,9 @@
 import 'dart:convert';
 
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
+import 'package:community_health_app/core/common_bloc/models/camp_dropdown_list_response_model.dart'
+    as CommonCamp;
+import 'package:community_health_app/core/common_bloc/models/get_master_response_model_with_hier.dart';
 import 'package:community_health_app/core/common_bloc/models/master_response_model.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
@@ -8,6 +11,7 @@ import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/screens/camp_calendar/model/camp_list_response_model.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
 import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master_bloc.dart';
 import 'package:community_health_app/screens/stakeholder/models/stakeholder_name_response_model.dart';
@@ -353,11 +357,13 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
                                 state.getStakeholderSubTypeResponse));
 
                         return responseModel.details != null &&
-                                responseModel.details![0].lookupDet != null
+                                responseModel
+                                        .details![0].lookupDetHierarchical !=
+                                    null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel
-                                      .details![0].lookupDet!.length,
+                                  itemCount: responseModel.details![0]
+                                      .lookupDetHierarchical!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -1280,6 +1286,138 @@ Future<dynamic> townBottomSheet(
           ));
 }
 
+Future<dynamic> campListDropdownBottomSheet(
+    BuildContext context, Function(CommonCamp.CampDetails) onItemSelected) {
+  int selectedIndex = -1;
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => StatefulBuilder(
+            builder: (c, setState) => Container(
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(responsiveHeight(50)),
+                      topRight: Radius.circular(responsiveHeight(50)))),
+              child: Padding(
+                padding: EdgeInsets.all(responsiveHeight(30)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Camp",
+                            style: TextStyle(
+                                fontSize: responsiveFont(17),
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                icSquareClose,
+                                height: responsiveHeight(24),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(25),
+                    ),
+                    BlocBuilder<MasterDataBloc, MasterDataState>(
+                      builder: (context, state) {
+                        CommonCamp.CampDropdownReponseModel? responseModel;
+
+                        if (state.getTownListResponse.isNotEmpty) {
+                          responseModel =
+                              CommonCamp.CampDropdownReponseModel.fromJson(
+                                  jsonDecode(
+                                      state.getCampDropdownListResponse));
+                        }
+
+                        return responseModel != null &&
+                                responseModel.details != null &&
+                                responseModel.details!.isNotEmpty
+                            ? Expanded(
+                                child: ListView.builder(
+                                  itemCount: responseModel.details!.length,
+                                  itemBuilder: (c, i) => Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: () {
+                                          onItemSelected(
+                                              responseModel!.details![i]);
+                                          setState(
+                                            () {
+                                              selectedIndex = i;
+                                            },
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                        child: Ink(
+                                          decoration: BoxDecoration(
+                                            color: i == selectedIndex
+                                                ? Colors.transparent
+                                                : kListBGColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  i == selectedIndex
+                                                      ? icCircleDot
+                                                      : icCircle,
+                                                  height: responsiveHeight(20),
+                                                ),
+                                                SizedBox(
+                                                  width: responsiveWidth(20),
+                                                ),
+                                                Text(
+                                                    'Camp :-${responseModel!.details![i].campCreateRequestId}'),
+                                                const Spacer(),
+                                                i == selectedIndex
+                                                    ? Image.asset(
+                                                        icCircleCheck,
+                                                        height:
+                                                            responsiveHeight(
+                                                                20),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Center(child: Text("Data Not Available"));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
+
 Future<dynamic> stakeholderStatusBottomSheet(
     BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
   int selectedIndex = -1;
@@ -1573,8 +1711,7 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
               ],
             ),
           ),
-          SizedBox(
-            height: SizeConfig.screenHeight * 0.3,
+          Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,
               shrinkWrap: true,
@@ -1718,8 +1855,7 @@ class _CommonBottomSheetContent1State
               ],
             ),
           ),
-          SizedBox(
-            height: SizeConfig.screenHeight * 0.3,
+          Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,
               shrinkWrap: true,
@@ -1863,8 +1999,7 @@ class _CommonBottomSheetContentsState
               ],
             ),
           ),
-          SizedBox(
-            height: SizeConfig.screenHeight * 0.3,
+          Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,
               shrinkWrap: true,
@@ -2007,8 +2142,7 @@ class SheetContentsState extends State<SheetContents> {
               ],
             ),
           ),
-          SizedBox(
-            height: SizeConfig.screenHeight * 0.3,
+          Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,
               shrinkWrap: true,
@@ -2273,6 +2407,152 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
               ],
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+Future<dynamic> locationNameBottomSheet(
+  BuildContext context,
+  Function(dynamic) onItemSelected,
+  String bottomSheetTitle,
+  List<dynamic> list,
+) {
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: false,
+    builder: (c) => LocationNameBottomSheetContent(
+      onItemSelected: onItemSelected,
+      bottomSheetTitle: bottomSheetTitle,
+      list: list,
+    ),
+  );
+}
+
+class LocationNameBottomSheetContent extends StatefulWidget {
+  final Function(dynamic) onItemSelected;
+  final String bottomSheetTitle;
+  final List<dynamic> list;
+
+  const LocationNameBottomSheetContent({
+    super.key,
+    required this.onItemSelected,
+    required this.bottomSheetTitle,
+    required this.list,
+  });
+
+  @override
+  State<LocationNameBottomSheetContent> createState() =>
+      LocationNameBottomSheetContentState();
+}
+
+class LocationNameBottomSheetContentState
+    extends State<LocationNameBottomSheetContent> {
+  int? selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth,
+      decoration: BoxDecoration(
+        color: kWhiteColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(responsiveHeight(50)),
+          topRight: Radius.circular(responsiveHeight(50)),
+        ),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.bottomSheetTitle,
+                  style: TextStyle(
+                    fontSize: responsiveFont(17),
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.cancel_presentation),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: SizeConfig.screenHeight * 0.3,
+            child: ListView.builder(
+              itemCount: widget.list.length,
+              shrinkWrap: true,
+              itemBuilder: (c, i) => Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 12,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex = i;
+                      });
+
+                      widget.onItemSelected(widget.list[i]);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            selectedIndex == i
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
+                                : Icon(
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Text(
+                              widget.list[i].locationName ?? "",
+                              style: TextStyle(
+                                  fontSize: responsiveFont(14.0),
+                                  fontWeight: selectedIndex == i
+                                      ? FontWeight.bold
+                                      : FontWeight.w500),
+                            ),
+                            const Spacer(),
+                            if (selectedIndex == i)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );

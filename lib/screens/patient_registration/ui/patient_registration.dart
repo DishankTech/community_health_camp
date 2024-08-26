@@ -1,11 +1,10 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
+import 'package:community_health_app/core/common_bloc/models/camp_dropdown_list_response_model.dart';
 import 'package:community_health_app/core/common_bloc/models/get_master_response_model_with_hier.dart';
 import 'package:community_health_app/core/common_bloc/models/master_response_model.dart';
-import 'package:community_health_app/core/common_widgets/address_text_form_field.dart';
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
@@ -14,14 +13,17 @@ import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
-import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
+import 'package:community_health_app/screens/camp_creation/model/location/location_name_details.dart';
 import 'package:community_health_app/screens/patient_registration/bloc/patient_registration_bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:get/get.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -36,7 +38,8 @@ class PatientRegistrationScreen extends StatefulWidget {
 
 class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   XFile? capturedFile;
-
+  final CampCreationController campCreationController =
+      Get.put(CampCreationController());
   late TextEditingController _campIDTextController;
   late TextEditingController _campDateTextController;
   late TextEditingController _genderTextController;
@@ -59,6 +62,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   LookupDetHierarchical? _selectedDistrict = null;
   LookupDetHierarchical? _selectedTaluka = null;
   LookupDetHierarchical? _selectedCity = null;
+  LocationNameDetails? selectedLocation;
+  CampDetails? _selectedCamp;
 
   DateTime? _selectedCampDate;
 
@@ -92,8 +97,28 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
     return photo;
   }
 
+  checkInternetAndLoadData() async {
+    List<ConnectivityResult> connectivityResult =
+        await Connectivity().checkConnectivity();
+
+    campCreationController.hasInternet =
+        (connectivityResult.contains(ConnectivityResult.mobile) ||
+            connectivityResult.contains(ConnectivityResult.wifi));
+
+    if (campCreationController.hasInternet) {
+      campCreationController.getLocationName();
+      campCreationController.getStakHolder();
+      campCreationController.getMemberType();
+      campCreationController.getUserList();
+    }
+
+    campCreationController.update();
+  }
+
   @override
   void initState() {
+    checkInternetAndLoadData();
+
     super.initState();
     _campIDTextController = TextEditingController();
     _campDateTextController = TextEditingController();
@@ -147,7 +172,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
               ..showSnackBar(SnackBar(
                 content: Text(res['message']),
                 backgroundColor: Colors.green,
-                duration: Duration(seconds: 2),
+                duration: const Duration(seconds: 2),
               ));
             context.read<PatientRegistrationBloc>().add(GetPatientListRequest(
                     payload: const {
@@ -157,13 +182,15 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                       "per_page": 100,
                       "data": ""
                     }));
+
+            Navigator.pop(context);
           } else {
             ScaffoldMessenger.of(context)
               ..clearSnackBars()
               ..showSnackBar(SnackBar(
                 content: Text(res['exception']),
                 backgroundColor: Colors.red,
-                duration: Duration(seconds: 2),
+                duration: const Duration(seconds: 2),
               ));
           }
         }
@@ -174,7 +201,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
             ..showSnackBar(SnackBar(
               content: Text(state.patientRegistrationResponse),
               backgroundColor: Colors.red,
-              duration: Duration(seconds: 2),
+              duration: const Duration(seconds: 2),
             ));
         }
       },
@@ -193,6 +220,15 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
               setState(() {
                 _selectedDivision = p0;
                 _divisionTextController.text = p0.lookupDetDescEn!;
+              });
+            });
+          }
+          if (state.getCampDropdownListStatus.isSuccess) {
+            campListDropdownBottomSheet(context, (p0) {
+              setState(() {
+                _selectedCamp = p0;
+                _divisionTextController.text =
+                    p0.campCreateRequestId.toString()!;
               });
             });
           }
@@ -311,10 +347,89 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           ),
                           Column(
                             children: [
+                              GetBuilder(
+                                  init: CampCreationController(),
+                                  builder: (controller) {
+                                    return AppRoundTextField(
+                                      controller:
+                                          controller.locationNameController,
+                                      inputType: TextInputType.text,
+                                      onChange: (p0) {},
+                                      onTap: () async {
+                                        await locationNameBottomSheet(
+                                            context,
+                                            (p0) async => {
+                                                  controller
+                                                          .selectedLocationVal =
+                                                      p0.locationName,
+                                                  controller.selectedLocation =
+                                                      p0,
+                                                  controller
+                                                      .locationNameController
+                                                      .text = controller
+                                                          .selectedLocationVal ??
+                                                      "",
+                                                  await controller.getDist(
+                                                      controller
+                                                          .selectedLocation
+                                                          ?.lookupDetHierIdDistrict
+                                                          .toString(),
+                                                      false),
+                                                  controller.update()
+                                                },
+                                            "Location name",
+                                            controller.locationNameModel
+                                                    ?.details ??
+                                                []);
+                                      },
+                                      // maxLength: 12,
+                                      readOnly: true,
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Location Name',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
+                                      suffix: SizedBox(
+                                        height:
+                                            getProportionateScreenHeight(20),
+                                        width: getProportionateScreenHeight(20),
+                                        child: Center(
+                                          child: Image.asset(
+                                            icArrowDownOrange,
+                                            height:
+                                                getProportionateScreenHeight(
+                                                    20),
+                                            width: getProportionateScreenHeight(
+                                                20),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                              SizedBox(
+                                height: responsiveHeight(10),
+                              ),
                               AppRoundTextField(
                                 controller: _campIDTextController,
                                 inputType: TextInputType.number,
                                 onChange: (p0) {},
+                                readOnly: true,
+                                onTap: () {
+                                  context.read<MasterDataBloc>().add(
+                                      GetCampListDropdown(
+                                          locationId: campCreationController
+                                              .selectedLocation!
+                                              .locationMasterId!));
+                                },
                                 maxLength: 12,
                                 label: RichText(
                                   text: const TextSpan(
@@ -329,6 +444,31 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       ]),
                                 ),
                                 hint: "",
+                                suffix: BlocBuilder<MasterDataBloc,
+                                    MasterDataState>(
+                                  builder: (context, state) {
+                                    return state.getCampDropdownListStatus
+                                            .isInProgress
+                                        ? SizedBox(
+                                            height: responsiveHeight(20),
+                                            width: responsiveHeight(20),
+                                            child: const Center(
+                                                child:
+                                                    CircularProgressIndicator()),
+                                          )
+                                        : SizedBox(
+                                            height: responsiveHeight(20),
+                                            width: responsiveHeight(20),
+                                            child: Center(
+                                              child: Image.asset(
+                                                icArrowDownOrange,
+                                                height: responsiveHeight(20),
+                                                width: responsiveHeight(20),
+                                              ),
+                                            ),
+                                          );
+                                  },
+                                ),
                               ),
                               SizedBox(
                                 height: responsiveHeight(20),
@@ -907,6 +1047,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                               "org_id": null,
                                               "status": 1
                                             };
+                                            print(jsonEncode(payload));
                                             context
                                                 .read<PatientRegistrationBloc>()
                                                 .add(PatientRegistrationRequest(

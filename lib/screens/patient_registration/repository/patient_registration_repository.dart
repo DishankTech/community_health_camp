@@ -15,8 +15,6 @@ class PatientRegistrationRepository {
     print(payload);
     var headers = {
       'Content-Type': 'application/json',
-      'Authorization':
-          'bearer ${DataProvider().getParsedUserData()!.details!.last.accessToken!}'
     };
     return await http.post(Uri.parse('$kBaseUrl$kPatientRegistration'),
         body: jsonEncode(payload), headers: headers);

@@ -258,7 +258,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                   {"title": "STEM", "id": 3},
                                   {"title": "USER", "id": 4}
                                 ];
-                                commonStackholderSheet(
+                                commonBottomSheet(
                                     context,
                                     (p0) => {
                                           setState(() {

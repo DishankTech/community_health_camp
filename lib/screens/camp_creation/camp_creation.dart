@@ -424,11 +424,15 @@ class _CampCreationState extends State<CampCreation> {
                                     .map((entry) {
                                   int index = entry.key;
                                   TtCampCreateDetails cardData = entry.value;
-                                  return CamCreationCard(index: index, addCard: () {
-                                    addCard();
-                                  }, removeCard: () {
-                                    removeCard(index);
-                                  },);
+                                  return CamCreationCard(
+                                    index: index,
+                                    addCard: () {
+                                      addCard();
+                                    },
+                                    removeCard: () {
+                                      removeCard(index);
+                                    },
+                                  );
                                 }).toList(),
                               ),
                               SizedBox(
@@ -491,7 +495,11 @@ class _CampCreationState extends State<CampCreation> {
                                               .ttCampCreate
                                               ?.status = 1;
 
-                                          campCreationController.saveCampReqModel.ttCampCreateDetList = campCreationController.campCreationCardList;
+                                          campCreationController
+                                                  .saveCampReqModel
+                                                  .ttCampCreateDetList =
+                                              campCreationController
+                                                  .campCreationCardList;
 
                                           campCreationController
                                               .saveCampCreation();
@@ -637,19 +645,22 @@ class CamCreationCard extends StatefulWidget {
   final Function addCard;
   final Function removeCard;
   final int index;
-  const CamCreationCard({super.key, required this.addCard, required this.removeCard, required this.index});
+  const CamCreationCard(
+      {super.key,
+      required this.addCard,
+      required this.removeCard,
+      required this.index});
 
   @override
   State<CamCreationCard> createState() => _CamCreationCardState();
 }
 
 class _CamCreationCardState extends State<CamCreationCard> {
-
   @override
   Widget build(BuildContext context) {
-
     CampCreationController campCreationController = Get.find();
-    TtCampCreateDetails details = campCreationController.campCreationCardList[widget.index];
+    TtCampCreateDetails details =
+        campCreationController.campCreationCardList[widget.index];
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -684,14 +695,15 @@ class _CamCreationCardState extends State<CamCreationCard> {
                 onTap: () {
                   commonBottomSheets(
                       context,
-                          (p0) => {
-                            details.memberType = (p0 as MemberLookupDet).lookupDetDescEn ?? '',
-                          details.lookupDetIdType = p0.lookupDetId,
+                      (p0) => {
+                            details.memberType =
+                                (p0 as MemberLookupDet).lookupDetDescEn ?? '',
+                            details.lookupDetIdType = p0.lookupDetId,
                             setState(() {})
-                      },
+                          },
                       "Designation/Member Type",
                       campCreationController
-                          .memberTypeModel?.details?.first.lookupDet ??
+                              .memberTypeModel?.details?.first.lookupDet ??
                           []);
                 },
                 readOnly: true,
@@ -699,7 +711,7 @@ class _CamCreationCardState extends State<CamCreationCard> {
                   text: const TextSpan(
                       text: 'Designation/Member Type',
                       style:
-                      TextStyle(color: kHintColor, fontFamily: Montserrat),
+                          TextStyle(color: kHintColor, fontFamily: Montserrat),
                       children: [
                         TextSpan(text: "*", style: TextStyle(color: Colors.red))
                       ]),
@@ -735,7 +747,7 @@ class _CamCreationCardState extends State<CamCreationCard> {
                   text: const TextSpan(
                       text: 'Full Name',
                       style:
-                      TextStyle(color: kHintColor, fontFamily: Montserrat),
+                          TextStyle(color: kHintColor, fontFamily: Montserrat),
                       children: [
                         TextSpan(text: "*", style: TextStyle(color: Colors.red))
                       ]),
@@ -749,7 +761,7 @@ class _CamCreationCardState extends State<CamCreationCard> {
                 children: [
                   Expanded(
                     child: AppRoundTextField(
-                key: UniqueKey(),
+                      key: UniqueKey(),
                       initialValue: details.selectedCountry,
                       // controller: campCreationController.countryCodeController,
                       inputStyle: TextStyle(
@@ -758,20 +770,21 @@ class _CamCreationCardState extends State<CamCreationCard> {
                       onChange: (p0) {},
                       onTap: () {
                         List<Map<String, dynamic>> list = [
-                          {"title": "+91", "id": 1}, {"title": "+92", "id": 2}
+                          {"title": "+91", "id": 1},
+                          {"title": "+92", "id": 2}
                         ];
                         commonBottonSheet(
                             context,
-                                (p0) => {
-                              details.selectedCountry = p0['title'],
+                            (p0) => {
+                                  details.selectedCountry = p0['title'],
                                   campCreationController.update()
-                              // campCreationController.selectedCountryCode =
-                              //     p0,
-                              // campCreationController
-                              //     .countryCodeController.text =
-                              // campCreationController
-                              //     .selectedCountryCode!['title']
-                            },
+                                  // campCreationController.selectedCountryCode =
+                                  //     p0,
+                                  // campCreationController
+                                  //     .countryCodeController.text =
+                                  // campCreationController
+                                  //     .selectedCountryCode!['title']
+                                },
                             "Country Code",
                             list);
                       },
@@ -807,14 +820,14 @@ class _CamCreationCardState extends State<CamCreationCard> {
                   ),
                   Expanded(
                     child: AppRoundTextField(
-                key: ValueKey('TF1${widget.index}'),
+                      key: ValueKey('TF1${widget.index}'),
                       initialValue: details.userMobileNumber,
                       // controller: campCreationController.mobileController,
                       inputStyle: TextStyle(
                           fontSize: responsiveFont(14), color: kTextBlackColor),
                       inputType: TextInputType.number,
                       onChange: (p0) {
-                          details.userMobileNumber = p0;
+                        details.userMobileNumber = p0;
                       },
                       maxLength: 10,
                       label: RichText(
@@ -844,28 +857,27 @@ class _CamCreationCardState extends State<CamCreationCard> {
                 inputType: TextInputType.text,
                 onChange: (p0) {},
                 onTap: () {
-                  if(campCreationController.userList?.details != null){
+                  if (campCreationController.userList?.details != null) {
                     userBottomSheet(
                         context,
-                            (p0) => {
-                          details.userLogin =  p0.fullName,
-                          details.userId = p0.userId,
-                          campCreationController.update()
-                          // campCreationController.userController.text =
-                          //     p0.fullName,
-                          // campCreationController.selectedUser = p0
-                        },
+                        (p0) => {
+                              details.userLogin = p0.fullName,
+                              details.userId = p0.userId,
+                              campCreationController.update()
+                              // campCreationController.userController.text =
+                              //     p0.fullName,
+                              // campCreationController.selectedUser = p0
+                            },
                         "User Id",
                         campCreationController.userList?.details ?? []);
                   }
-
                 },
                 readOnly: true,
                 label: RichText(
                   text: const TextSpan(
                       text: 'User Id',
                       style:
-                      TextStyle(color: kHintColor, fontFamily: Montserrat),
+                          TextStyle(color: kHintColor, fontFamily: Montserrat),
                       children: [
                         TextSpan(text: "*", style: TextStyle(color: Colors.red))
                       ]),
@@ -895,13 +907,10 @@ class _CamCreationCardState extends State<CamCreationCard> {
                         onTap: () {
                           createUserBottomSheet(
                               context,
-                                  (p0) => {},
+                              (p0) => {},
                               "User Creation",
-                              campCreationController
-                                  .stakeHolderModel
-                                  ?.details
-                                  ?.first
-                                  .lookupDetHierarchical ??
+                              campCreationController.stakeHolderModel?.details
+                                      ?.first.lookupDetHierarchical ??
                                   [],
                               campCreationController.stakHolderUserCreation,
                               campCreationController.loginNameUserCreation);
@@ -909,7 +918,7 @@ class _CamCreationCardState extends State<CamCreationCard> {
                         iconData: Icon(
                           Icons.arrow_forward,
                           color: kWhiteColor,
-                          size: responsiveHeight(24),
+                          size: responsiveHeight(20),
                         ),
                       ),
                     ),

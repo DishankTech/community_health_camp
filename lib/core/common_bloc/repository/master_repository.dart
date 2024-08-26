@@ -83,9 +83,23 @@ class MasterDataRepository {
         headers: {'Content-Type': "application/json"});
   }
 
+  Future<http.Response> getMasterLookupDetId(int payload) async {
+    return await http.post(
+        Uri.parse('$kBaseUrl$kGetMastersLookupDetId$payload'),
+        body: jsonEncode(payload),
+        headers: {'Content-Type': "application/json"});
+  }
+
   Future<http.Response> getMasterDesignationType(Map payload) async {
     print(payload);
     return await http.post(Uri.parse('$kBaseUrl$kGetMasters'),
+        body: jsonEncode(payload),
+        headers: {'Content-Type': "application/json", 'Accept': '*/*'});
+  }
+
+  Future<http.Response> getCampListDropdown(int payload) async {
+    print(payload);
+    return await http.post(Uri.parse('$kBaseUrl$kGetCampListDropdown$payload'),
         body: jsonEncode(payload),
         headers: {'Content-Type': "application/json", 'Accept': '*/*'});
   }

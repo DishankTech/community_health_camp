@@ -160,7 +160,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                         controller: locationNameController,
                                         onChange: (p0) {},
                                         onTap: () {
-                                          commonLocationSheet(
+                                          commonBottomSheet(
                                               context,
                                               (p0) => {
                                                     setState(() {
@@ -238,7 +238,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                      fetchCampDateList();
                                   }, currentTime: DateTime.now());*/
 
-                                          commonDateTimeSheet(
+                                          commonBottomSheet(
                                               context,
                                               (p0) => {
                                                     setState(() {

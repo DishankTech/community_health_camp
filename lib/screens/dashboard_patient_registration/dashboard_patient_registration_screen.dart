@@ -1,3 +1,6 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:community_health_app/screens/dashboard_patient_registration/DashboardFilterCountResponse.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/sf_date_range_picker_view/sf_date_range_picker_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,10 +9,15 @@ import '../../core/common_widgets/app_bar_v1.dart';
 import '../../core/common_widgets/app_button.dart';
 import '../../core/common_widgets/app_round_textfield.dart';
 import '../../core/constants/fonts.dart';
+import '../../core/constants/network_constant.dart';
+import '../../core/utilities/data_provider.dart';
 import '../../core/utilities/size_config.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:community_health_app/core/constants/network_constant.dart';
 
 class DashboardPatientRegistrationScreen extends StatefulWidget {
   const DashboardPatientRegistrationScreen({super.key});
@@ -30,22 +38,10 @@ class _DashboardPatientRegistrationScreenState
 
   String selectedStartDateWithRange = "";
   String selectedEndDateWithRange = "";
-  Map<String, double> dataMap = {
-    "Food Items": 18.47,
-    "Clothes": 17.70,
-    "Technology": 4.25,
-    "Cosmetics": 3.51,
-    "Other": 2.83,
-  };
 
-  List<Color> colorList = [
-    const Color(0xffD95AF3),
-    const Color(0xff3EE094),
-    const Color(0xff3398F6),
-    const Color(0xffFA4A42),
-    const Color(0xffFE9539)
-  ];
-
+  bool _isLoading = false;
+  DashboardFilterCountDetails? detailsCount;
+  String todayTitle = "Today";
   void _showBottomSheet() {
     showModalBottomSheet(
       context: context,
@@ -63,11 +59,23 @@ class _DashboardPatientRegistrationScreenState
           height: MediaQuery.of(context).size.width * 1.33,
           child: SfDateRangePickerView(
             onDidSelectedDateRange: (startDate, endDate) {
-              selectedStartDateWithRange = startDate;
-              selectedEndDateWithRange = endDate;
+              final DateFormat formatter = DateFormat('dd MMM yyyy');
+              final String startDateL =
+                  formatter.format(DateTime.parse(startDate));
+              final String endDateL = formatter.format(DateTime.parse(endDate));
+              print('Start Date: $startDate');
+              print('End Date: $endDate');
 
-              selectedDateWithRange =
-                  "$selectedStartDateWithRange - $selectedEndDateWithRange";
+              final DateFormat formatter1 = DateFormat('yyyy-MM-dd');
+              final String startDate1 =
+                  formatter1.format(DateTime.parse(startDate));
+              final String startDate2 =
+                  formatter1.format(DateTime.parse(endDate));
+
+              selectedStartDateWithRange = startDate1;
+              selectedEndDateWithRange = startDate2;
+              selectedDateWithRange = "$startDateL - $endDateL";
+              filterCountDashboard();
               setState(() {});
             },
           ),
@@ -81,13 +89,19 @@ class _DashboardPatientRegistrationScreenState
   showTodayDate() {
     final DateFormat formatter = DateFormat('dd MMM yyyy');
     final String startDate = formatter.format(DateTime.now());
+
+    final DateFormat formatter1 = DateFormat('yyyy-MM-dd');
+    final String startDate1 = formatter1.format(DateTime.now());
+
     selectedDateWithRange = startDate;
+    selectedStartDateWithRange = startDate1;
+    selectedEndDateWithRange = startDate1;
   }
 
   void _showDownloadReportBottomSheet() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: false,
+      isScrollControlled: true,
       constraints: const BoxConstraints(
         minWidth: double.infinity,
       ),
@@ -98,7 +112,7 @@ class _DashboardPatientRegistrationScreenState
       ) {
         return Container(
           width: double.infinity,
-          // height: MediaQuery.of(context).size.width * 0.70,
+          height: MediaQuery.of(context).size.width * 0.70,
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           decoration: const BoxDecoration(
             color: Colors.white,
@@ -204,7 +218,9 @@ class _DashboardPatientRegistrationScreenState
                         ),
                       ),
                     ),
-                    const Spacer(),
+                    SizedBox(
+                      height: responsiveHeight(30),
+                    ),
                     Row(
                       children: [
                         Flexible(
@@ -214,10 +230,6 @@ class _DashboardPatientRegistrationScreenState
                               Navigator.pop(context);
                             },
                             title: "Download",
-                            textStyle: TextStyle(
-                                fontSize: responsiveFont(14),
-                                color: kWhiteColor,
-                                fontWeight: FontWeight.bold),
                             iconData: Icon(
                               Icons.arrow_forward,
                               color: kWhiteColor,
@@ -235,10 +247,6 @@ class _DashboardPatientRegistrationScreenState
                               Navigator.pop(context);
                             },
                             title: "Cancel",
-                            textStyle: TextStyle(
-                                fontSize: responsiveFont(14),
-                                color: kWhiteColor,
-                                fontWeight: FontWeight.bold),
                             buttonColor: Colors.grey,
                             iconData: Icon(
                               Icons.arrow_forward,
@@ -266,8 +274,134 @@ class _DashboardPatientRegistrationScreenState
     super.initState();
 
     showTodayDate();
+    filterCountDashboard();
   }
 
+  filterCountDashboard() async {
+    setState(() {
+      _isLoading = true; // Show loader
+    });
+
+    try {
+      var headers = {'Content-Type': 'application/json'};
+      var url = kBaseUrl + kFilterCountDashboard;
+      print(url);
+      var request = http.Request('POST', Uri.parse(url));
+      request.body = json.encode({
+        "days": 0,
+        "start_date": selectedStartDateWithRange,
+        "end_date": selectedEndDateWithRange
+      });
+      request.headers.addAll(headers);
+
+      http.StreamedResponse response = await request.send();
+      http.Response finalResponse = await http.Response.fromStream(response);
+
+      if (response.statusCode == 200) {
+        setState(() {
+          _isLoading = false;
+
+          // Hide loader
+        });
+
+        var responseBody = json.decode(finalResponse.body);
+        // Get the status code as a string
+        DashboardFilterCountResponse dashboardFilterCountResponse =
+            DashboardFilterCountResponse.fromJson(responseBody);
+
+        print(responseBody);
+        if (dashboardFilterCountResponse.details == null) {
+        } else {
+          detailsCount = dashboardFilterCountResponse.details;
+        }
+        String statusCode = responseBody['status_code'].toString();
+        if (statusCode == "200") {
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Login Failed',
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+
+        //navigate to dashboard page
+      } else {
+        setState(() {
+          _isLoading = false; // Hide loader
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Something went wrong',
+            ),
+            backgroundColor: Colors.red,
+          ),
+        );
+        print(response.reasonPhrase);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  getTotalCount() {
+    if (isSelectedPatientsRegistered) {
+      return detailsCount?.totalPatients.toString() ?? "0";
+    } else if (isSelectedPatientsTreated) {
+      return detailsCount?.totalTreatedPatients.toString() ?? "0";
+    } else {
+      return detailsCount?.totalReferredPatients.toString() ?? "0";
+    }
+  }
+
+  String getTotalTitle() {
+    if (isSelectedPatientsRegistered) {
+      return "Patients Registered";
+    } else if (isSelectedPatientsTreated) {
+      return "Patients Treated";
+    } else {
+      return "Patients Referred";
+    }
+  }
+
+  Map<String, double> getPichartData() {
+    if (isSelectedPatientsRegistered) {
+      Map<String, double> dataMap = {
+        "Amravati": 99,
+        "Ahmednagar": 10,
+        "Raigad": 95,
+        "Sindhudurga": 150,
+      };
+      return dataMap;
+    } else if (isSelectedPatientsTreated) {
+      Map<String, double> dataMap = {
+        "Amravati": 131,
+        "Ahmednagar": 5,
+        "Raigad": 50,
+        "Sindhudurga": 5,
+      };
+      return dataMap;
+    } else {
+      Map<String, double> dataMap = {
+        "Amravati": 18.47,
+        "Ahmednagar": 17.70,
+        "Raigad": 45,
+        "Sindhudurga": 1,
+      };
+      return dataMap;
+    }
+  }
+
+  List<Color> colorList = [
+    const Color(0xffD95AF3),
+    const Color(0xff3EE094),
+    const Color(0xff3398F6),
+    const Color(0xffFA4A42),
+    const Color(0xffFE9539)
+  ];
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -299,10 +433,10 @@ class _DashboardPatientRegistrationScreenState
                 onTap: () {
                   _showDownloadReportBottomSheet();
                 },
-                // child: Image.asset(
-                //   downloadIcon,
-                //   height: responsiveHeight(30),
-                // ),
+                child: Image.asset(
+                  downloadIcon,
+                  height: responsiveHeight(30),
+                ),
               ),
             ),
             Padding(
@@ -328,7 +462,9 @@ class _DashboardPatientRegistrationScreenState
                       child: GestureDetector(
                         onTap: () {
                           isSelectedToday = true;
+                          todayTitle = "Today";
                           showTodayDate();
+                          filterCountDashboard();
                           setState(() {});
                         },
                         child: Container(
@@ -354,12 +490,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(30),
                                 height: responsiveHeight(30),
-                                // child: Image.asset(
-                                //   iccalendar,
-                                //   color: isSelectedToday
-                                //       ? kTodayColor
-                                //       : Colors.white,
-                                // ),
+                                child: Image.asset(
+                                  iccalendar,
+                                  color: isSelectedToday
+                                      ? kTodayColor
+                                      : Colors.white,
+                                ),
                               ),
                               SizedBox(
                                 width: responsiveHeight(10),
@@ -383,8 +519,10 @@ class _DashboardPatientRegistrationScreenState
                       child: GestureDetector(
                         onTap: () {
                           isSelectedToday = false;
+                          todayTitle = "Date Range ";
                           showTodayDate();
                           _showBottomSheet();
+                          filterCountDashboard();
                           setState(() {});
                         },
                         child: Container(
@@ -410,12 +548,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(30),
                                 height: responsiveHeight(30),
-                                // child: Image.asset(
-                                //   calendarMonth,
-                                //   color: isSelectedToday
-                                //       ? Colors.white
-                                //       : kTodayColor,
-                                // ),
+                                child: Image.asset(
+                                  calendarMonth,
+                                  color: isSelectedToday
+                                      ? Colors.white
+                                      : kTodayColor,
+                                ),
                               ),
                               SizedBox(
                                 width: responsiveHeight(10),
@@ -463,7 +601,7 @@ class _DashboardPatientRegistrationScreenState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Today - $selectedDateWithRange",
+                      "$todayTitle - $selectedDateWithRange",
                       style: TextStyle(
                         color: kPrimaryColor,
                         fontSize: responsiveFont(16),
@@ -480,9 +618,9 @@ class _DashboardPatientRegistrationScreenState
                         SizedBox(
                           width: responsiveHeight(40),
                           height: responsiveHeight(40),
-                          // child: Image.asset(
-                          //   campingtenticon,
-                          // ),
+                          child: Image.asset(
+                            campingtenticon,
+                          ),
                         ),
                         Expanded(
                           child: Container(
@@ -492,18 +630,22 @@ class _DashboardPatientRegistrationScreenState
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  "20",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: responsiveFont(22),
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                _isLoading
+                                    ? const CircularProgressIndicator()
+                                    : Text(
+                                        detailsCount?.totalCampConduct
+                                                .toString() ??
+                                            "0",
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: responsiveFont(22),
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
                                 Text(
                                   "Camps Conducted",
                                   style: TextStyle(
-                                    // color: dashboardSubTitle,
+                                    color: dashboardSubTitle,
                                     fontSize: responsiveFont(14),
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -543,12 +685,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(180),
                                 height: responsiveHeight(180),
-                                // child: Image.asset(
-                                //   isSelectedPatientsRegistered
-                                //       ? selectedGrid
-                                //       : unSelectedGrid,
-                                //   fit: BoxFit.fill,
-                                // ),
+                                child: Image.asset(
+                                  isSelectedPatientsRegistered
+                                      ? selectedGrid
+                                      : unSelectedGrid,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                               Column(
                                 mainAxisAlignment:
@@ -562,14 +704,14 @@ class _DashboardPatientRegistrationScreenState
                                     child: SizedBox(
                                       width: responsiveHeight(60),
                                       height: responsiveHeight(60),
-                                      // child: Image.asset(icpatientregistration),
+                                      child: Image.asset(icpatientregistration),
                                     ),
                                   ),
                                   Text(
                                     "Patients\nRegistered",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      // color: dashboardSubTitle,
+                                      color: dashboardSubTitle,
                                       fontSize: responsiveFont(13),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -616,12 +758,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(180),
                                 height: responsiveHeight(180),
-                                // child: Image.asset(
-                                //   isSelectedPatientsTreated
-                                //       ? selectedGrid
-                                //       : unSelectedGrid,
-                                //   fit: BoxFit.fill,
-                                // ),
+                                child: Image.asset(
+                                  isSelectedPatientsTreated
+                                      ? selectedGrid
+                                      : unSelectedGrid,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                               Column(
                                 mainAxisAlignment:
@@ -635,14 +777,14 @@ class _DashboardPatientRegistrationScreenState
                                     child: SizedBox(
                                       width: responsiveHeight(60),
                                       height: responsiveHeight(60),
-                                      // child: Image.asset(icExamination),
+                                      child: Image.asset(icExamination),
                                     ),
                                   ),
                                   Text(
                                     "Patients\nTreated",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      // color: dashboardSubTitle,
+                                      color: dashboardSubTitle,
                                       fontSize: responsiveFont(13),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -686,12 +828,12 @@ class _DashboardPatientRegistrationScreenState
                               SizedBox(
                                 width: responsiveHeight(180),
                                 height: responsiveHeight(180),
-                                // child: Image.asset(
-                                //   isSelectedPatientsReferred
-                                //       ? selectedGrid
-                                //       : unSelectedGrid,
-                                //   fit: BoxFit.fill,
-                                // ),
+                                child: Image.asset(
+                                  isSelectedPatientsReferred
+                                      ? selectedGrid
+                                      : unSelectedGrid,
+                                  fit: BoxFit.fill,
+                                ),
                               ),
                               Column(
                                 mainAxisAlignment:
@@ -705,14 +847,14 @@ class _DashboardPatientRegistrationScreenState
                                     child: SizedBox(
                                       width: responsiveHeight(60),
                                       height: responsiveHeight(60),
-                                      // child: Image.asset(icDoctorsOffice),
+                                      child: Image.asset(icDoctorsOffice),
                                     ),
                                   ),
                                   Text(
                                     "Patients\nReferred",
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      // color: dashboardSubTitle,
+                                      color: dashboardSubTitle,
                                       fontSize: responsiveFont(13),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -781,7 +923,7 @@ class _DashboardPatientRegistrationScreenState
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    "542",
+                                    getTotalCount(),
                                     style: TextStyle(
                                       color: Colors.black,
                                       fontSize: responsiveFont(22),
@@ -789,9 +931,9 @@ class _DashboardPatientRegistrationScreenState
                                     ),
                                   ),
                                   Text(
-                                    "Total Patients Registered ",
+                                    getTotalTitle(),
                                     style: TextStyle(
-                                      // color: dashboardSubTitle,
+                                      color: dashboardSubTitle,
                                       fontSize: responsiveFont(13),
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -829,7 +971,7 @@ class _DashboardPatientRegistrationScreenState
                                         Text(
                                           "District",
                                           style: TextStyle(
-                                            // color: dashboardSubTitle,
+                                            color: dashboardSubTitle,
                                             fontSize: responsiveFont(12),
                                             fontWeight: FontWeight.w400,
                                           ),
@@ -855,6 +997,9 @@ class _DashboardPatientRegistrationScreenState
                                   ],
                                 ),
                               ),
+                              SizedBox(
+                                width: responsiveHeight(10),
+                              ),
                             ],
                           ),
                         ),
@@ -866,7 +1011,7 @@ class _DashboardPatientRegistrationScreenState
                             color: Colors.transparent,
                             padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                             child: PieChart(
-                              dataMap: dataMap,
+                              dataMap: getPichartData(),
                               colorList: colorList,
 
                               centerText: "",
