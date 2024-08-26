@@ -175,7 +175,9 @@ class AppRoutes {
           builder: (_) => const StakeholderMasterList(),
         );
       case stakeholderMasterEditScreen:
-        return MaterialPageRoute(builder: (_) => const StakeHolderMasterEditScreen(), settings: settings);
+        return MaterialPageRoute(
+          builder: (_) => const StakeHolderMasterEditScreen(),
+        );
       case resetPassword:
         return MaterialPageRoute(
           builder: (_) => const ResetPasswordPage(),
