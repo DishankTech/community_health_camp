@@ -166,12 +166,12 @@ class _CampCreationState extends State<CampCreation> {
                                           inputType: TextInputType.text,
                                           onChange: (p0) {},
                                           onTap: () async {
-                                            await commonBottomSheet(
+                                            await locationNameBottomSheet(
                                                 context,
                                                 (p0) async => {
                                                       controller
                                                               .selectedLocationVal =
-                                                          p0.lookupDetHierDescEn,
+                                                          p0.locationName,
                                                       controller
                                                           .selectedLocation = p0,
                                                       controller
@@ -187,7 +187,7 @@ class _CampCreationState extends State<CampCreation> {
                                                           false),
                                                       controller.update()
                                                     },
-                                                "Location name",
+                                                "Location",
                                                 controller.locationNameModel
                                                         ?.details ??
                                                     []);
@@ -196,7 +196,7 @@ class _CampCreationState extends State<CampCreation> {
                                           readOnly: true,
                                           label: RichText(
                                             text: const TextSpan(
-                                                text: 'Location Name',
+                                                text: 'Location ',
                                                 style: TextStyle(
                                                     color: kHintColor,
                                                     fontFamily: Montserrat),
@@ -256,7 +256,7 @@ class _CampCreationState extends State<CampCreation> {
                                                             "",
                                                         controller.update()
                                                       },
-                                                  "Dist Name",
+                                                  "District",
                                                   controller
                                                           .distModel?.details ??
                                                       []);
@@ -265,7 +265,7 @@ class _CampCreationState extends State<CampCreation> {
                                           readOnly: true,
                                           label: RichText(
                                             text: const TextSpan(
-                                                text: 'Dist Name',
+                                                text: 'District',
                                                 style: TextStyle(
                                                     color: kHintColor,
                                                     fontFamily: Montserrat),
@@ -320,7 +320,7 @@ class _CampCreationState extends State<CampCreation> {
                                                           "",
                                                       controller.update()
                                                     },
-                                                "Stakeholder Type",
+                                                "Stakeholder Name",
                                                 controller
                                                         .stakeHolderModel
                                                         ?.details
@@ -332,7 +332,7 @@ class _CampCreationState extends State<CampCreation> {
                                           readOnly: true,
                                           label: RichText(
                                             text: const TextSpan(
-                                                text: 'Stakeholder Type',
+                                                text: 'Stakeholder Name',
                                                 style: TextStyle(
                                                     color: kHintColor,
                                                     fontFamily: Montserrat),
@@ -454,14 +454,6 @@ class _CampCreationState extends State<CampCreation> {
                                               .saveCampReqModel
                                               .ttCampCreate
                                               ?.campCreateRequestId = null;
-
-                                          // campCreationController
-                                          //         .saveCampReqModel
-                                          //         .ttCampCreate
-                                          //         ?.stakeholderMasterId =
-                                          //     campCreationController
-                                          //         .selectedStakeH
-                                          //         ?.lookupDetHierId;
 
                                           campCreationController
                                               .saveCampReqModel
@@ -645,6 +637,7 @@ class CamCreationCard extends StatefulWidget {
   final Function addCard;
   final Function removeCard;
   final int index;
+
   const CamCreationCard(
       {super.key,
       required this.addCard,
@@ -770,8 +763,7 @@ class _CamCreationCardState extends State<CamCreationCard> {
                       onChange: (p0) {},
                       onTap: () {
                         List<Map<String, dynamic>> list = [
-                          {"title": "+91", "id": 1},
-                          {"title": "+92", "id": 2}
+                          {"title": "+91", "id": 1}
                         ];
                         commonBottonSheet(
                             context,

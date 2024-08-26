@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
+import 'package:community_health_app/screens/location_master/location_master_list.dart';
 import 'package:community_health_app/screens/location_master/model/add_location_mast_resp/add_location_master_resp.dart';
 import 'package:community_health_app/screens/location_master/model/country/country_model.dart';
 import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
@@ -69,8 +70,7 @@ class LocationMasterController extends GetxController {
 
   static const pageSize = 10;
 
-  final PagingController<int, LocationListData> pagingController =
-      PagingController(firstPageKey: 1);
+  late PagingController<int, LocationListData> pagingController;
   List<LocationListData> locations = [];
 
   LocationMasterListModel? locationListModel;
@@ -227,8 +227,10 @@ class LocationMasterController extends GetxController {
       if (addlocationMasterResp!.statusCode == 200) {
         isLoading = false;
         CustomMessage.toast("Save Successfully");
-        Get.back();
-        await fetchPage(1);
+        // Get.back();
+        // await fetchPage(1);
+        Get.to(const LocationMasterList());
+
       } else {
         isLoading = false;
         CustomMessage.toast("Save Failed");
@@ -293,8 +295,8 @@ class LocationMasterController extends GetxController {
       if (addlocationMasterResp!.statusCode == 200) {
         isLoading = false;
         CustomMessage.toast("Save Successfully");
-        Get.back();
-        await fetchPage(1);
+        Get.to(const LocationMasterList());
+        // await fetchPage(1);
       } else {
         isLoading = false;
         CustomMessage.toast("Save Failed");

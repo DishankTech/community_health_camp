@@ -4,7 +4,9 @@ class LocationListData {
       this.locationName, 
       this.contactNumber, 
       this.contactPersonName, 
-      this.emailId, 
+      this.districtDesEn,
+      this.cityDescEn,
+      this.emailId,
       this.address1, 
       this.address2, 
       this.lookupDetHierIdCountry, 
@@ -21,6 +23,8 @@ class LocationListData {
     locationName = json['location_name'];
     contactNumber = json['contact_number'];
     contactPersonName = json['contact_person_name'];
+    districtDesEn = json['district_desc_en'];
+    cityDescEn = json['city_desc_en'];
     emailId = json['email_id'];
     address1 = json['address1'];
     address2 = json['address2'];
@@ -37,6 +41,8 @@ class LocationListData {
   String? locationName;
   String? contactNumber;
   String? contactPersonName;
+  String? districtDesEn;
+  String? cityDescEn;
   String? emailId;
   String? address1;
   String? address2;
@@ -55,6 +61,8 @@ class LocationListData {
     map['location_name'] = locationName;
     map['contact_number'] = contactNumber;
     map['contact_person_name'] = contactPersonName;
+    map['district_desc_en'] = districtDesEn;
+    map['city_desc_en'] = cityDescEn;
     map['email_id'] = emailId;
     map['address1'] = address1;
     map['address2'] = address2;

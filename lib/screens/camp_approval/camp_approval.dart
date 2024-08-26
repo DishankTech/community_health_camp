@@ -45,13 +45,18 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
 
   @override
   void dispose() {
-    campApprovalController.pagingController.dispose();
+
+
+    // campApprovalController.pagingController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     // TODO: implement initState
+    campApprovalController.campApprovalList?.clear();
+    campApprovalController.pagingController = PagingController(firstPageKey: 1);
+
     checkInternetAndLoadData();
     super.initState();
   }
