@@ -5,6 +5,7 @@ import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/camp_calendar/model/date_wise_camps_model.dart';
+import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -128,8 +129,24 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                           // String name = getNameById(locationData, campDetailsList[index].locationMasterId);
                           return InkWell(
                             onTap: () {
-                              Navigator.pushNamed(
-                                  context, AppRoutes.districtWiseCamps);
+
+                              var locationName = getNameById(
+                                  locationData,
+                                  campDetailsList[index]
+                                      .locationMasterId);
+
+                              var totalCamps = campCount[index].toString();
+
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DistrictWiseCampsScreen(campDetailsList[index],locationName,totalCamps),
+                                ),
+                              );
+
+                             /* Navigator.pushNamed(
+                                  context, AppRoutes.districtWiseCamps,arguments: campDetailsList[index]
+                                  .locationMasterId );*/
                             },
                             child: Container(
                               margin: EdgeInsets.all(5),
@@ -258,21 +275,14 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
   }
 
   Future<List<Datum>> getAllCamps() async {
-    /* setState(() {
+     setState(() {
       isLoading = true;
-    });*/
-    var url = Uri.parse(
-        'http://210.89.42.117:8085/api/administrator/camp/all-camp-details-pagination');
+    });
+    var url = Uri.parse('http://210.89.42.117:8085/api/administrator/camp/all-camp-details-pagination');
 
     var headers = {'Content-Type': 'application/json'};
 
-    var body = json.encode({
-      "total_pages": 10,
-      "page": 1,
-      "total_count": 20,
-      "per_page": 20,
-      "data": null
-    });
+    var body = json.encode({"total_pages": 10, "page": 1, "total_count": 20, "per_page": 20, "data": null});
 
     try {
       campDetailsList = [];

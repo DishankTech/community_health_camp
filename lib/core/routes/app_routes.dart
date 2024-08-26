@@ -1,4 +1,5 @@
 import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view.dart';
+import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view_new.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camps.dart';
@@ -37,6 +38,7 @@ import 'package:community_health_app/screens/splash_screen.dart';
 import 'package:community_health_app/core/exceptions/route_exception.dart';
 
 import '../../screens/camp_calendar/ui/camp_wise_registered_patients.dart';
+import '../../screens/camp_coordinator/ui/add_referred_patient.dart';
 
 class AppRoutes {
   const AppRoutes._();
@@ -169,10 +171,10 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => DateWiseCampsScreen(DateTime.now()),
         );
-      case districtWiseCamps:
+      /*case districtWiseCamps:
         return MaterialPageRoute(
-          builder: (_) => const DistrictWiseCampsScreen(),
-        );
+          builder: (_) =>  DistrictWiseCampsScreen(""),
+        );*/
       case campWiseRegisteredPatients:
         return MaterialPageRoute(
           builder: (_) => const CampWiseRegisteredPatientsScreen(),
