@@ -50,9 +50,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icCampCreation,
           routeName: AppRoutes.campCreation),
       DashboardMenuModel(
+          name: "Camp Calendar",
+          image: icCalendarColourfull,
+          routeName: AppRoutes.campCalendar),
+      DashboardMenuModel(
           name: "Camp Approval",
           image: icCampApproval,
           routeName: AppRoutes.campApproval),
+      DashboardMenuModel(
+          name: "Camp Details",
+          image: icPersons,
+          routeName: AppRoutes.campCoordinator),
       DashboardMenuModel(
           name: "Patient Registration",
           image: icPatientRegistration,
@@ -61,14 +69,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           name: "Doctor Desk",
           image: icDoctorDesk,
           routeName: AppRoutes.doctorDesk),
-      DashboardMenuModel(
-          name: "Camp Calendar",
-          image: icCalendarColourfull,
-          routeName: AppRoutes.campCalendar),
-      DashboardMenuModel(
-          name: "Camp Co-Ordinator",
-          image: icPersons,
-          routeName: AppRoutes.campCoordinator),
     ]);
   }
 
@@ -107,7 +107,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icCampApproval,
           routeName: AppRoutes.campApproval),
       DashboardMenuModel(
-          name: "Camp Co-Ordinator",
+          name: "Camp Details",
           image: icPersons,
           routeName: AppRoutes.campCoordinator),
       DashboardMenuModel(
@@ -128,8 +128,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
           for (var element in state.loginResponseModel!.details!.last.menu!) {
             if (element.parentList != null) {
               if (element.parentList!.menuFeatureName == "Master") {
-                //statically added
-
                 if (element.childList != null) {
                   for (var element in element.childList!) {
                     for (var staticMenu in _staticMenuList) {
@@ -143,6 +141,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
 
               if (element.parentList!.menuFeatureName == "Registration") {
+                if (element.childList != null) {
+                  for (var element in element.childList!) {
+                    for (var staticMenu in _staticMenuList) {
+                      if (element.menuControllerMobile != null &&
+                          (element.menuControllerMobile == staticMenu.name)) {
+                        // _menuList.add(staticMenu);
+                      }
+                    }
+                  }
+                }
+              }
+              if (element.parentList!.menuFeatureName == "Dashboard") {
                 if (element.childList != null) {
                   for (var element in element.childList!) {
                     for (var staticMenu in _staticMenuList) {
