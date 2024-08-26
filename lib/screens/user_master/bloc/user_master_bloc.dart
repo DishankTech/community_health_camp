@@ -62,13 +62,8 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
           getUserResponse: '',
           createUserStatus: FormzSubmissionStatus.initial,
           getUserStatus: FormzSubmissionStatus.inProgress));
-      http.Response res = await userMasterRepository.getAll({
-        "total_pages": 1,
-        "page": 1,
-        "total_count": 1,
-        "per_page": 100,
-        "data": ""
-      });
+      print(event.payload);
+      http.Response res = await userMasterRepository.getAll(event.payload);
 
       if (res.statusCode == 200) {
         String decodeRes = res.body;

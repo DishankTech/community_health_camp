@@ -23,7 +23,6 @@ class CampCalendarPage extends StatefulWidget {
   _CampCalendarPageState createState() => _CampCalendarPageState();
 }
 
-
 class CampEvent {
   final int? campCreateRequestId;
   final int? stakeholderMasterId;
@@ -55,7 +54,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
   // final ValueNotifier<List<Event>> _selectedEvents = ValueNotifier([]);
 
-  List<Datum>? campDetailsList =[];
+  List<Datum>? campDetailsList = [];
 
   // Using a `LinkedHashSet` is recommended due to equality comparison override
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
@@ -65,10 +64,16 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
   late Map<DateTime, List> eventsByDate;
   late Map<DateTime, List> eventList;
+
   // late List<CampEvent> _selectedEvents;
   late Map<DateTime, List<CampEvent>> _events;
 
-  bool isLoading =false;
+  bool isLoading = false;
+
+  // List<Datum> uniqueLocationList  = [];
+  List<dynamic> uniqueLocationList = [];
+
+  Set<int> seenLocationIds = {};
 
   @override
   void dispose() {
@@ -120,13 +125,12 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
     }''';
     // eventsByDate = groupEventsByDate(jsonData);
     // _selectedEvents = _events[_selectedDay] ?? [];
-
   }
 
-  Map<DateTime, List<dynamic>> groupEventsByDate(String jsonData) {
+  /* Map<DateTime, List<dynamic>> groupEventsByDate(String jsonData) {
     eventsByDate = {};
 
-    /* // Parse JSON data
+    */ /* // Parse JSON data
     final Map<String, dynamic> jsonMap = jsonDecode(jsonData.toString());
     final List<dynamic> dataList = jsonMap['details']['data'];
 
@@ -150,10 +154,10 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
       value.forEach((datum) {
         print('  Datum ID: ${datum.campCreateRequestId}');
       });
-    });*/
+    });*/ /*
 
 
-    /* Map<String, dynamic> jsonMap = jsonDecode(jsonData.toString());
+    */ /* Map<String, dynamic> jsonMap = jsonDecode(jsonData.toString());
 
     // Step 2: Extract 'data' list
     List<dynamic> dataList = jsonMap['details']['data'];
@@ -167,7 +171,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
         eventsByDate[campEvent.propCampDate] = [];
       }
       eventsByDate[campEvent.propCampDate]!.add(campEvent);
-    }*/
+    }*/ /*
 
     final Map<String, dynamic> jsonMap = jsonDecode(jsonData);
     List<dynamic> dataList = jsonMap['details']['data'];
@@ -189,22 +193,19 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
       print(eventsByDate);
     }
 
-    /*  // Convert the map to use DateTime as the key
+    */ /*  // Convert the map to use DateTime as the key
     Map<DateTime, List> dateTimeMap = {};
 
     eventsByDate.forEach((key, value) {
       DateTime dateTimeKey = DateTime.parse(key);
       dateTimeMap[dateTimeKey] = value;
-    });*/
+    });*/ /*
 
 
     return eventsByDate;
-  }
+  }*/
 
-
-
-
- /* List<Event> _getEventsForDays(Set<DateTime> days) {
+  /* List<Event> _getEventsForDays(Set<DateTime> days) {
     // Implementation example
     // Note that days are in selection order (same applies to events)
     return [
@@ -335,81 +336,83 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      isLoading? Container(
-                        width: SizeConfig.screenWidth,
-                        height: SizeConfig.screenHeight * 0.7,
-                        color: Colors.black.withOpacity(0.3), // Semi-transparent overlay
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            CircularProgressIndicator(color: Colors.red),
-                            SizedBox(height: 10),
-                            Text(
-                              'Please wait..',
-                              style: TextStyle(
-                                color: Colors.white, // Text color for visibility
-                                fontFamily: Montserrat,
+                      isLoading
+                          ? Container(
+                              width: SizeConfig.screenWidth,
+                              height: SizeConfig.screenHeight * 0.7,
+                              color: Colors.black.withOpacity(0.3), // Semi-transparent overlay
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(color: Colors.red),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    'Please wait..',
+                                    style: TextStyle(
+                                      color: Colors.white, // Text color for visibility
+                                      fontFamily: Montserrat,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container(
+                              margin: EdgeInsets.all(10),
+                              // padding: EdgeInsets.all(12),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white, border: Border.all(color: Colors.grey)),
+                              child: TableCalendar(
+                                firstDay: kFirstDay,
+                                lastDay: kLastDay,
+                                focusedDay: _focusedDay,
+                                selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+                                rangeStartDay: _rangeStart,
+                                rangeEndDay: _rangeEnd,
+                                calendarFormat: _calendarFormat,
+                                rangeSelectionMode: _rangeSelectionMode,
+                                eventLoader: _getEventsForDay,
+                                startingDayOfWeek: StartingDayOfWeek.monday,
+                                calendarBuilders: CalendarBuilders(
+                                  markerBuilder: (context, day, events) => events.isNotEmpty
+                                      ? Container(
+                                          width: 20,
+                                          height: 20,
+                                          alignment: Alignment.center,
+                                          decoration: const BoxDecoration(
+                                            color: Colors.green,
+                                          ),
+                                          child: Text(
+                                            '${events.length}',
+                                            style: const TextStyle(color: Colors.white),
+                                          ),
+                                        )
+                                      : null,
+                                ),
+                                calendarStyle: CalendarStyle(
+                                  // cellPadding: EdgeInsets.all(2),
+                                  // cellMargin: EdgeInsets.all(2),
+                                  isTodayHighlighted: false,
+                                  weekendDecoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(4.0)),
+                                  defaultDecoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(4.0)),
+                                  markersAlignment: Alignment.bottomRight,
+                                  markerMargin: EdgeInsets.only(bottom: 15),
+                                  // Use `CalendarStyle` to customize the UI
+                                  outsideDaysVisible: false,
+                                ),
+                                onDaySelected: _onDaySelected,
+                                // onRangeSelected: _onRangeSelected,
+                                onFormatChanged: (format) {
+                                  if (_calendarFormat != format) {
+                                    setState(() {
+                                      _calendarFormat = format;
+                                    });
+                                  }
+                                },
+                                onPageChanged: (focusedDay) {
+                                  _focusedDay = focusedDay;
+                                },
                               ),
                             ),
-                          ],
-                        ),
-                      ): Container(
-                        margin: EdgeInsets.all(10),
-                        // padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: Colors.white, border: Border.all(color: Colors.grey)),
-                        child: TableCalendar(
-                          firstDay: kFirstDay,
-                          lastDay: kLastDay,
-                          focusedDay: _focusedDay,
-                          selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-                          rangeStartDay: _rangeStart,
-                          rangeEndDay: _rangeEnd,
-                          calendarFormat: _calendarFormat,
-                          rangeSelectionMode: _rangeSelectionMode,
-                          eventLoader: _getEventsForDay,
-                          startingDayOfWeek: StartingDayOfWeek.monday,
-                          calendarBuilders: CalendarBuilders(
-                            markerBuilder: (context, day, events) => events.isNotEmpty
-                                ? Container(
-                                  width: 20,
-                                  height: 20,
-                                  alignment: Alignment.center,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.green,
-                                  ),
-                                  child: Text(
-                                    '${events.length}',
-                                    style: const TextStyle(color: Colors.white),
-                                  ),
-                                )
-                                : null,
-                          ),
-                          calendarStyle: CalendarStyle(
-                            // cellPadding: EdgeInsets.all(2),
-                            // cellMargin: EdgeInsets.all(2),
-                            isTodayHighlighted: false,
-                            weekendDecoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(4.0)),
-                            defaultDecoration: BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(4.0)),
-                            markersAlignment: Alignment.bottomRight,
-                            markerMargin: EdgeInsets.only(bottom: 15),
-                            // Use `CalendarStyle` to customize the UI
-                            outsideDaysVisible: false,
-                          ),
-                          onDaySelected: _onDaySelected,
-                          // onRangeSelected: _onRangeSelected,
-                          onFormatChanged: (format) {
-                            if (_calendarFormat != format) {
-                              setState(() {
-                                _calendarFormat = format;
-                              });
-                            }
-                          },
-                          onPageChanged: (focusedDay) {
-                            _focusedDay = focusedDay;
-                          },
-                        ),
-                      ),
                     ],
                   ),
                 ],
@@ -440,22 +443,14 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
   Future<Map<DateTime, List>> getAllCamps() async {
     setState(() {
-      isLoading=true;
+      isLoading = true;
     });
     eventsByDate = {};
     var url = Uri.parse('http://210.89.42.117:8085/api/administrator/camp/all-camp-details-pagination');
 
-    var headers = {
-      'Content-Type': 'application/json'
-    };
+    var headers = {'Content-Type': 'application/json'};
 
-    var body = json.encode({
-      "total_pages": 10,
-      "page": 1,
-      "total_count": 20,
-      "per_page": 20,
-      "data": null
-    });
+    var body = json.encode({"total_pages": 20, "page": 1, "total_count": 20, "per_page": 20, "data": null});
 
     try {
       // Use the post method directly to get the response
@@ -464,7 +459,6 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
       if (response.statusCode == 200) {
         print(response.body);
         var jsonResponse = json.decode(response.body);
-
 
         // CampDetailsResponseModel campResponse = CampDetailsResponseModel.fromJson(jsonResponse);
         // List<Datum>? campDetailsList = campResponse.details?.data;
@@ -478,14 +472,27 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
           }*/
 
         List<dynamic> dataList = jsonResponse['details']['data'];
-        for (var item in dataList) {
+        uniqueLocationList = [];
+
+        for (var camp in dataList) {
+          // if(camp.locationMasterId!=null)
+          if (camp['location_master_id'] != null) {
+            int locationId = int.parse(camp['location_master_id'].toString());
+            if (!seenLocationIds.contains(locationId)) {
+              seenLocationIds.add(locationId);
+              uniqueLocationList.add(camp);
+            }
+          }
+        }
+
+        // for (var item in dataList) {
+        for (var item in uniqueLocationList) {
+          // String dateStr = item['prop_camp_date'].split('T')[0];
+          // String dateStr = item.propCampDate.timeZoneName.split('T')[0];
+          // String dateStr = item['prop_camp_date'].timeZoneName.split('T')[0];
           String dateStr = item['prop_camp_date'].split('T')[0];
           // Parse the string into a DateTime object
           DateTime dateTime = DateTime.parse(dateStr + ' 00:00:00.000Z');
-
-          // Format the DateTime object to the desired format
-          String formattedDate = dateStr;
-
 
           if (eventsByDate[dateTime] == null) {
             eventsByDate[dateTime] = [];
@@ -494,25 +501,20 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
           print(eventsByDate);
           setState(() {
-            isLoading=false;
+            isLoading = false;
           });
 
           // return campDetailsList;
-
         }
-
-
-
       } else {
         setState(() {
-          isLoading=false;
+          isLoading = false;
         });
         print('Error: ${response.reasonPhrase}');
       }
-
     } catch (e) {
       setState(() {
-        isLoading=false;
+        isLoading = false;
       });
       print('Exception: $e');
     }
@@ -522,10 +524,8 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
   Future<void> loadData() async {
     eventList = await getAllCamps();
-    if(eventList.isNotEmpty)
-      {
-        eventsByDate=eventList;
-      }
+    if (eventList.isNotEmpty) {
+      eventsByDate = eventList;
+    }
   }
-
 }

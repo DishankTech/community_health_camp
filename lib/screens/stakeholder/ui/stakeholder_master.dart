@@ -11,6 +11,7 @@ import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/core/utilities/validators.dart';
 import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master_bloc.dart';
 import 'package:community_health_app/screens/stakeholder/models/stakeholder_name_response_model.dart';
 import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
@@ -465,16 +466,13 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                 return AppRoundTextField(
                                   controller: _stakeholderNameTextController,
                                   inputType: TextInputType.name,
-                                  onTap: () {
-                                    if (_selectedStakeholderType != null) {
-                                      context.read<StakeholderMasterBloc>().add(
-                                          GetStakeholderName(
-                                              payload: _selectedStakeholderType!
-                                                  .lookupDetHierId!));
-                                    }
+                                  errorText: Validators.validateStakeholderName(
+                                      _stakeholderNameTextController.text),
+                                  validators:
+                                      Validators.validateStakeholderName,
+                                  onChange: (p0) {
+                                    setState(() {});
                                   },
-                                  onChange: (p0) {},
-                                  readOnly: true,
                                   label: RichText(
                                     text: const TextSpan(
                                         text: 'Stakeholder Name',
@@ -489,26 +487,6 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                         ]),
                                   ),
                                   hint: "",
-                                  suffix: state
-                                          .getStakeholderNameStatus.isInProgress
-                                      ? SizedBox(
-                                          height: responsiveHeight(20),
-                                          width: responsiveHeight(20),
-                                          child: const Center(
-                                            child: CircularProgressIndicator(),
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          height: responsiveHeight(20),
-                                          width: responsiveHeight(20),
-                                          child: Center(
-                                            child: Image.asset(
-                                              icArrowDownOrange,
-                                              height: responsiveHeight(20),
-                                              width: responsiveHeight(20),
-                                            ),
-                                          ),
-                                        ),
                                 );
                               },
                             ),

@@ -164,6 +164,15 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                   backgroundColor: Colors.green,
                   duration: const Duration(seconds: 2),
                 ));
+              context.read<UserMasterBloc>().add(GetUserRequest(payload: const {
+                    "total_pages": 1,
+                    "page": 1,
+                    "total_count": 1,
+                    "per_page": 100,
+                    "data": ""
+                  }));
+
+              Navigator.pop(context);
             } else {
               ScaffoldMessenger.of(context)
                 ..clearSnackBars()

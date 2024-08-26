@@ -42,14 +42,17 @@ PreferredSize mAppBarV1(
               SizedBox(
                 width: responsiveWidth(20),
               ),
-              Text(
-                title,
-                style: TextStyle(
-                    fontSize: responsiveFont(20),
-                    color: kWhiteColor,
-                    fontWeight: FontWeight.w500),
+              Expanded(
+                flex: 1,
+                child: Text(
+                  title,
+                  style: TextStyle(
+                      fontSize: responsiveFont(16),
+                      color: kWhiteColor,
+                      fontWeight: FontWeight.w500),
+                ),
               ),
-              Spacer(),
+              // Spacer(),
               suffix ?? SizedBox.shrink(),
               SizedBox(
                 width: responsiveHeight(10),

@@ -48,7 +48,7 @@ class ReportDownloadedView extends StatelessWidget {
                     SizedBox(
                       width: responsiveWidth(80),
                       height: responsiveHeight(80),
-                      child: Image.asset(verifiedicon),
+                      // child: Image.asset(verifiedicon),
                     ),
                     SizedBox(
                       height: responsiveHeight(20),

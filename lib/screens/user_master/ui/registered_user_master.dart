@@ -23,10 +23,42 @@ class RegisteredUserMasterScreen extends StatefulWidget {
 class _RegisteredUserMasterScreenState
     extends State<RegisteredUserMasterScreen> {
   List<RegisteredPatientMasterModel> _list = [];
+  ScrollController _scrollController = ScrollController();
+  int crrPage = 1;
+  int perPage = 10;
+  int totalPages = 1;
+  List<UserMasterData> data = [];
+  bool _isEndReached = false;
   @override
   void initState() {
     super.initState();
 
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          _isEndReached == false) {
+        setState(() {
+          crrPage += 1;
+        });
+        context.read<UserMasterBloc>().add(GetUserRequest(payload: {
+              "total_pages": totalPages,
+              "page": crrPage,
+              "total_count": 1,
+              "per_page": perPage,
+              "data": ""
+            }));
+      }
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<UserMasterBloc>().add(GetUserRequest(payload: {
+            "total_pages": totalPages,
+            "page": crrPage,
+            "total_count": 1,
+            "per_page": perPage,
+            "data": ""
+          }));
+    });
     _list.addAll([
       RegisteredPatientMasterModel(
           designationType: "Type 1",
@@ -62,57 +94,77 @@ class _RegisteredUserMasterScreenState
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    context.read<UserMasterBloc>().add(GetUserRequest());
-    return Scaffold(
-        body: Container(
-      decoration: const BoxDecoration(
-          image:
-              DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
-      child: Column(
-        children: [
-          mAppBarV1(
-            title: "Registered User Master",
-            onBackButtonPress: () {
-              Navigator.pop(context);
-            },
-            context: context,
-            suffix: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(5),
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.userMasterScreen);
-                },
-                child: Ink(
-                  child: Image.asset(
-                    icSquarePlus,
-                    height: responsiveHeight(24),
+
+    return BlocListener<UserMasterBloc, UserMasterState>(
+      listener: (context, state) {
+        if (state.getUserStatus.isSuccess) {
+          var res = jsonDecode(state.getUserResponse);
+          if (res['status_code'] == 200) {
+            GetUserMasterResponse? getUserMasterResponse;
+            if (state.getUserStatus.isSuccess) {
+              getUserMasterResponse = GetUserMasterResponse.fromJson(
+                  jsonDecode(state.getUserResponse));
+            }
+            if (getUserMasterResponse != null &&
+                getUserMasterResponse.details != null &&
+                getUserMasterResponse.details!.data != null &&
+                getUserMasterResponse.details!.data!.isNotEmpty) {
+              data.addAll(getUserMasterResponse.details!.data!);
+            }
+          } else {
+            setState(() {
+              _isEndReached = true;
+            });
+          }
+        }
+      },
+      child: Scaffold(
+          body: Container(
+        decoration: const BoxDecoration(
+            image:
+                DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
+        child: Column(
+          children: [
+            mAppBarV1(
+              title: "Registered User Master",
+              onBackButtonPress: () {
+                Navigator.pop(context);
+              },
+              context: context,
+              suffix: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(5),
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRoutes.userMasterScreen);
+                  },
+                  child: Ink(
+                    child: Image.asset(
+                      icSquarePlus,
+                      height: responsiveHeight(24),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          BlocBuilder<UserMasterBloc, UserMasterState>(
-            builder: (context, state) {
-              GetUserMasterResponse? getUserMasterResponse;
-              if (state.getUserStatus.isSuccess) {
-                getUserMasterResponse = GetUserMasterResponse.fromJson(
-                    jsonDecode(state.getUserResponse));
-              }
-              return state.getUserStatus.isInProgress
-                  ? const Expanded(
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: kPrimaryColor,
-                        ),
-                      ),
-                    )
-                  : getUserMasterResponse != null &&
-                          getUserMasterResponse.details!.data!.isNotEmpty
-                      ? Expanded(
+            BlocBuilder<UserMasterBloc, UserMasterState>(
+              builder: (context, state) {
+                GetUserMasterResponse? getUserMasterResponse;
+                if (state.getUserStatus.isSuccess) {
+                  getUserMasterResponse = GetUserMasterResponse.fromJson(
+                      jsonDecode(state.getUserResponse));
+                }
+                return Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Visibility(
+                        visible: data.isNotEmpty,
+                        child: Expanded(
                           child: ListView.builder(
-                              itemCount:
-                                  getUserMasterResponse.details!.data!.length,
+                              controller: _scrollController,
+                              itemCount: data.length,
+                              // shrinkWrap: true,
                               padding: EdgeInsets.zero,
                               itemBuilder: (c, i) {
                                 return Stack(children: [
@@ -150,9 +202,7 @@ class _RegisteredUserMasterScreenState
                                                         FontWeight.bold),
                                                 children: [
                                                   TextSpan(
-                                                      text: getUserMasterResponse!
-                                                          .details!
-                                                          .data![i]
+                                                      text: data[i]
                                                           .lookupDetHierIdStakeholderType1
                                                           .toString(),
                                                       style: TextStyle(
@@ -179,11 +229,7 @@ class _RegisteredUserMasterScreenState
                                                         FontWeight.bold),
                                                 children: [
                                                   TextSpan(
-                                                      text:
-                                                          getUserMasterResponse
-                                                              .details!
-                                                              .data![i]
-                                                              .fullName,
+                                                      text: data[i].fullName,
                                                       style: TextStyle(
                                                           fontSize:
                                                               responsiveFont(
@@ -208,11 +254,7 @@ class _RegisteredUserMasterScreenState
                                                         FontWeight.bold),
                                                 children: [
                                                   TextSpan(
-                                                      text:
-                                                          getUserMasterResponse
-                                                              .details!
-                                                              .data![i]
-                                                              .fullName,
+                                                      text: data[i].fullName,
                                                       style: TextStyle(
                                                           fontSize:
                                                               responsiveFont(
@@ -238,9 +280,7 @@ class _RegisteredUserMasterScreenState
                                                         FontWeight.bold),
                                                 children: [
                                                   TextSpan(
-                                                      text: getUserMasterResponse
-                                                          .details!
-                                                          .data![i]
+                                                      text: data[i]
                                                           .lookupDetHierIdStakeholderType1
                                                           .toString(),
                                                       style: TextStyle(
@@ -268,10 +308,7 @@ class _RegisteredUserMasterScreenState
                                                 children: [
                                                   TextSpan(
                                                       text:
-                                                          getUserMasterResponse
-                                                              .details!
-                                                              .data![i]
-                                                              .mobileNumber,
+                                                          data[i].mobileNumber,
                                                       style: TextStyle(
                                                           fontSize:
                                                               responsiveFont(
@@ -296,11 +333,7 @@ class _RegisteredUserMasterScreenState
                                                         FontWeight.bold),
                                                 children: [
                                                   TextSpan(
-                                                      text:
-                                                          getUserMasterResponse
-                                                              .details!
-                                                              .data![i]
-                                                              .emailId,
+                                                      text: data[i].emailId,
                                                       style: TextStyle(
                                                           fontSize:
                                                               responsiveFont(
@@ -368,12 +401,27 @@ class _RegisteredUserMasterScreenState
                                   ),
                                 ]);
                               }),
-                        )
-                      : const Text("No Data Found");
-            },
-          )
-        ],
-      ),
-    ));
+                        ),
+                      ),
+                      state.getUserStatus.isInProgress
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: kPrimaryColor,
+                              ),
+                            )
+                          : SizedBox.shrink(),
+                      Visibility(
+                          visible:
+                              data.isEmpty && !state.getUserStatus.isInProgress,
+                          child: Text("No Data Found"))
+                    ],
+                  ),
+                );
+              },
+            )
+          ],
+        ),
+      )),
+    );
   }
 }

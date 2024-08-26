@@ -1,11 +1,16 @@
-import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view.dart';
+import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view1.dart';
+import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view_new.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.dart';
 import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camps.dart';
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
-import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient1.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/referred_patients_view.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
+import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_patient_registration_screen.dart';
+import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
+import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/location_master/location_master.dart';
 import 'package:community_health_app/screens/location_master/location_master_list.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration.dart';
@@ -21,11 +26,11 @@ import 'package:community_health_app/screens/user_master/ui/registered_user_mast
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master.dart';
 import 'package:community_health_app/screens/user_master/ui/user_master.dart';
 import 'package:community_health_app/screens/user_master/ui/user_master_edit.dart';
-import 'package:community_health_app/user_auths/createnewpassword_view.dart';
-import 'package:community_health_app/user_auths/enterpin_view.dart';
-import 'package:community_health_app/user_auths/forgotpassword_view.dart';
-import 'package:community_health_app/user_auths/login.dart';
-import 'package:community_health_app/user_auths/resetpassword_view.dart';
+import 'package:community_health_app/screens/user_auths/createnewpassword_view.dart';
+import 'package:community_health_app/screens/user_auths/enterpin_view.dart';
+import 'package:community_health_app/screens/user_auths/forgotpassword_view.dart';
+import 'package:community_health_app/screens/user_auths/login.dart';
+import 'package:community_health_app/screens/user_auths/resetpassword_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:community_health_app/screens/splash_screen.dart';
@@ -67,18 +72,25 @@ class AppRoutes {
   static const String userMasterScreen = "/userMasterScreen";
   static const String userMasterEditScreen = "/userMasterEditScreen";
   static const String stakeholderMasterScreen = "/stakeholderMasterScreen";
-  static const String stakeholderMasterEditScreen = "/stakeholderMasterEditScreen";
-  static const String stakeholderMasterListScreen = "/stakeholderMasterListScreen";
+  static const String stakeholderMasterEditScreen =
+      "/stakeholderMasterEditScreen";
+  static const String stakeholderMasterListScreen =
+      "/stakeholderMasterListScreen";
   static const String registeredUserMaster = "/registeredUserMaster";
   static const String pinValidationPage = "/PinValidationPage";
   static const String updatePasswordPage = "/UpdatePasswordPage";
   static const String campCalendar = "/CampCalendarPage";
   static const String dateWiseCamps = "/DateWiseCampsScreen";
   static const String districtWiseCamps = "/DistrictWiseCampsScreen";
-  static const String campWiseRegisteredPatients = "/CampWiseRegisteredPatientsScreen";
+  static const String campWiseRegisteredPatients =
+      "/CampWiseRegisteredPatientsScreen";
   static const String campApproval = "/campApproval";
   static const String campCoordinator = "/campCoordinator";
   static const String addReferredPatient = "/addReferredPatient";
+  static const String referredPatientList = "/referredPatientList";
+  static const String registrationDashboard = "/registrationDashboard";
+  static const String doctorDesk = "/doctorDesk";
+  static const String addTreatmentDetailsScreen = "/addTreatmentDetailsScreen";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -96,8 +108,7 @@ class AppRoutes {
         );
       case userMasterEditScreen:
         return MaterialPageRoute(
-          builder: (_) => const UserMasterEditScreen(),
-        );
+            builder: (_) => const UserMasterEditScreen(), settings: settings);
       case stakeholderMasterScreen:
         return MaterialPageRoute(
           builder: (_) => const StakeHolderMasterScreen(),
@@ -108,8 +119,8 @@ class AppRoutes {
         );
       case patientRegEditScreen:
         return MaterialPageRoute(
-          builder: (_) => const PatientRegistrationEditScreen(),
-        );
+            builder: (_) => const PatientRegistrationEditScreen(),
+            settings: settings);
       case registeredUserMaster:
         return MaterialPageRoute(
           builder: (_) => const RegisteredUserMasterScreen(),
@@ -154,10 +165,10 @@ class AppRoutes {
           builder: (_) => const CampCalendarPage(),
           // builder: (_) =>  CampCalendar(),
         );
-/*      case dateWiseCamps:
+      case dateWiseCamps:
         return MaterialPageRoute(
-          builder: (_) => const DateWiseCampsScreen(),
-        );*/
+          builder: (_) => DateWiseCampsScreen(DateTime.now()),
+        );
       case districtWiseCamps:
         return MaterialPageRoute(
           builder: (_) => const DistrictWiseCampsScreen(),
@@ -176,8 +187,8 @@ class AppRoutes {
         );
       case stakeholderMasterEditScreen:
         return MaterialPageRoute(
-          builder: (_) => const StakeHolderMasterEditScreen(),
-        );
+            builder: (_) => const StakeHolderMasterEditScreen(),
+            settings: settings);
       case resetPassword:
         return MaterialPageRoute(
           builder: (_) => const ResetPasswordPage(),
@@ -190,7 +201,7 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const AddReferredPatient(),
         );
-    case referredPatientList:
+      case referredPatientList:
         return MaterialPageRoute(
           builder: (_) => const ReferredPatientListScreen(),
         );
@@ -206,15 +217,9 @@ class AppRoutes {
         return MaterialPageRoute(
           builder: (_) => const AddTreatmentDetailsScreen(),
         );
-      case referredPatientList:
-        return MaterialPageRoute(
-          builder: (_) => const ReferredPatientListScreen(),
-        );
 
       default:
         throw const RouteException('Route not found!');
     }
   }
 }
-
-

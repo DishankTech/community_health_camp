@@ -123,13 +123,26 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         if (state.loginResponseModel != null) {
+          // _menuList.clear();
+
           for (var element in state.loginResponseModel!.details!.last.menu!) {
             if (element.parentList != null) {
-              if (element.parentList!.menuControllerMobile == "Dashboard") {
-                // _menuList.clear();
-
+              if (element.parentList!.menuFeatureName == "Master") {
                 //statically added
 
+                if (element.childList != null) {
+                  for (var element in element.childList!) {
+                    for (var staticMenu in _staticMenuList) {
+                      if (element.menuControllerMobile != null &&
+                          (element.menuControllerMobile == staticMenu.name)) {
+                        // _menuList.add(staticMenu);
+                      }
+                    }
+                  }
+                }
+              }
+
+              if (element.parentList!.menuFeatureName == "Registration") {
                 if (element.childList != null) {
                   for (var element in element.childList!) {
                     for (var staticMenu in _staticMenuList) {

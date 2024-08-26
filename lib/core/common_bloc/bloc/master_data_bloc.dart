@@ -57,7 +57,9 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
             getGenderResponse: '',
             getGenderStatus: FormzSubmissionStatus.initial,
             getStakeholderSubTypeResponse: '',
-            getStakeholderSubTypeStatus: FormzSubmissionStatus.initial)) {
+            getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
+            getCampDropdownListResponse: '',
+            getCampDropdownListStatus: FormzSubmissionStatus.initial)) {
     on<GetUnitList>(_onGetUnitList);
     on<GetViralLoadStatus>(_onGetViralLoadStatus);
     on<GetIDProofList>(_onGetIDProofList);
@@ -81,6 +83,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
     on<GetGenderRequest>(_onGetGenderRequest);
     on<GetStakeholderSubType>(_onGetStakeholderSubType);
     on<ResetMasterState>(_onResetMasterState);
+    on<GetCampListDropdown>(_onGetCampListDropdown);
   }
 
   FutureOr<void> _onGetPrefix(GetPrefix event, Emitter<dynamic> emit) async {
@@ -1072,6 +1075,57 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
       emit(state.copyWith(
           getStakeholderSubTypeResponse: e.toString(),
           getStakeholderSubTypeStatus: FormzSubmissionStatus.failure));
+    }
+  }
+
+  FutureOr<void> _onGetCampListDropdown(
+      GetCampListDropdown event, Emitter<MasterDataState> emit) async {
+    try {
+      emit(state.copyWith(
+        getStakeholderSubTypeResponse: "",
+        getCampDropdownListStatus: FormzSubmissionStatus.inProgress,
+        getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
+        getGenderStatus: FormzSubmissionStatus.initial,
+        getMasterDesignationTypeStatus: FormzSubmissionStatus.initial,
+        getMasterStatus: FormzSubmissionStatus.initial,
+        getAddressByPincodeStatus: FormzSubmissionStatus.initial,
+        getTalukaListStatus: FormzSubmissionStatus.initial,
+        getTownListStatus: FormzSubmissionStatus.initial,
+        getStateListStatus: FormzSubmissionStatus.initial,
+        getDistrictListStatus: FormzSubmissionStatus.initial,
+        getDivisionListStatus: FormzSubmissionStatus.initial,
+        getSlotListStatus: FormzSubmissionStatus.initial,
+        getUnitListStatus: FormzSubmissionStatus.initial,
+        getIDProofListStatus: FormzSubmissionStatus.initial,
+        getViralLoadStatusStatus: FormzSubmissionStatus.initial,
+        schemeAdoptedStatus: FormzSubmissionStatus.initial,
+        prefixStatus: FormzSubmissionStatus.initial,
+        getMaritalStatusStatus: FormzSubmissionStatus.initial,
+        getRelationStatus: FormzSubmissionStatus.initial,
+        getBloodGroupStatus: FormzSubmissionStatus.initial,
+        getDialysisModeListStatus: FormzSubmissionStatus.initial,
+        getSchemAdoptedListStatus: FormzSubmissionStatus.initial,
+        getRefferedByStatus: FormzSubmissionStatus.initial,
+      ));
+
+      http.Response res =
+          await masterDataRepository.getCampListDropdown(event.locationId);
+
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            getCampDropdownListResponse: res.body,
+            getCampDropdownListStatus: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+            getCampDropdownListResponse: res.body,
+            getCampDropdownListStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      print(e);
+
+      emit(state.copyWith(
+          getCampDropdownListResponse: e.toString(),
+          getCampDropdownListStatus: FormzSubmissionStatus.failure));
     }
   }
 

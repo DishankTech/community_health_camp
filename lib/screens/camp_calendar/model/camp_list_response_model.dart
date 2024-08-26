@@ -4,9 +4,11 @@
 
 import 'dart:convert';
 
-CampDetailsResponseModel campDetailsResponseModelFromJson(String str) => CampDetailsResponseModel.fromJson(json.decode(str));
+CampDetailsResponseModel campDetailsResponseModelFromJson(String str) =>
+    CampDetailsResponseModel.fromJson(json.decode(str));
 
-String campDetailsResponseModelToJson(CampDetailsResponseModel data) => json.encode(data.toJson());
+String campDetailsResponseModelToJson(CampDetailsResponseModel data) =>
+    json.encode(data.toJson());
 
 class CampDetailsResponseModel {
   int statusCode;
@@ -23,21 +25,22 @@ class CampDetailsResponseModel {
     required this.details,
   });
 
-  factory CampDetailsResponseModel.fromJson(Map<String, dynamic> json) => CampDetailsResponseModel(
-    statusCode: json["status_code"],
-    message: json["message"],
-    path: json["path"],
-    dateTime: DateTime.parse(json["dateTime"]),
-    details: CampDetails.fromJson(json["details"]),
-  );
+  factory CampDetailsResponseModel.fromJson(Map<String, dynamic> json) =>
+      CampDetailsResponseModel(
+        statusCode: json["status_code"],
+        message: json["message"],
+        path: json["path"],
+        dateTime: DateTime.parse(json["dateTime"]),
+        details: CampDetails.fromJson(json["details"]),
+      );
 
   Map<String, dynamic> toJson() => {
-    "status_code": statusCode,
-    "message": message,
-    "path": path,
-    "dateTime": dateTime.toIso8601String(),
-    "details": details.toJson(),
-  };
+        "status_code": statusCode,
+        "message": message,
+        "path": path,
+        "dateTime": dateTime.toIso8601String(),
+        "details": details.toJson(),
+      };
 }
 
 class CampDetails {
@@ -56,20 +59,20 @@ class CampDetails {
   });
 
   factory CampDetails.fromJson(Map<String, dynamic> json) => CampDetails(
-    totalPages: json["total_pages"],
-    page: json["page"],
-    totalCount: json["total_count"],
-    perPage: json["per_page"],
-    data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
-  );
+        totalPages: json["total_pages"],
+        page: json["page"],
+        totalCount: json["total_count"],
+        perPage: json["per_page"],
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+      );
 
   Map<String, dynamic> toJson() => {
-    "total_pages": totalPages,
-    "page": page,
-    "total_count": totalCount,
-    "per_page": perPage,
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
+        "total_pages": totalPages,
+        "page": page,
+        "total_count": totalCount,
+        "per_page": perPage,
+        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+      };
 }
 
 class Datum {
@@ -90,20 +93,20 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-    campCreateRequestId: json["camp_create_request_id"],
-    stakeholderMasterId: json["stakeholder_master_id"],
-    locationMasterId: json["location_master_id"],
-    propCampDate: DateTime.parse(json["prop_camp_date"]),
-    orgId: json["org_id"],
-    status: json["status"],
-  );
+        campCreateRequestId: json["camp_create_request_id"],
+        stakeholderMasterId: json["stakeholder_master_id"],
+        locationMasterId: json["location_master_id"],
+        propCampDate: DateTime.parse(json["prop_camp_date"]),
+        orgId: json["org_id"],
+        status: json["status"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "camp_create_request_id": campCreateRequestId,
-    "stakeholder_master_id": stakeholderMasterId,
-    "location_master_id": locationMasterId,
-    "prop_camp_date": propCampDate.toIso8601String(),
-    "org_id": orgId,
-    "status": status,
-  };
+        "camp_create_request_id": campCreateRequestId,
+        "stakeholder_master_id": stakeholderMasterId,
+        "location_master_id": locationMasterId,
+        "prop_camp_date": propCampDate.toIso8601String(),
+        "org_id": orgId,
+        "status": status,
+      };
 }

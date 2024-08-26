@@ -9,7 +9,6 @@ import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -70,11 +69,14 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Change to your desired color
       statusBarBrightness: Brightness.light,
-      statusBarIconBrightness: Brightness.light, // For light text/icons on the status bar
+      statusBarIconBrightness:
+          Brightness.light, // For light text/icons on the status bar
     ));
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
+        decoration: const BoxDecoration(
+            image:
+                DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -95,7 +97,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                       color: Colors.grey.withOpacity(0.5), // Shadow color
                       spreadRadius: 2, // Spread radius
                       blurRadius: 7, // Blur radius
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
                 ),
@@ -105,8 +107,9 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                       ? Container(
                           width: SizeConfig.designScreenWidth,
                           height: SizeConfig.screenHeight * 0.7,
-                          color: Colors.black.withOpacity(0.3), // Semi-transparent overlay
-                          child: Column(
+                          color: Colors.black
+                              .withOpacity(0.3), // Semi-transparent overlay
+                          child: const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -115,7 +118,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                               Text(
                                 'Please wait..',
                                 style: TextStyle(
-                                  color: Colors.white, // Text color for visibility
+                                  color:
+                                      Colors.white, // Text color for visibility
                                   fontFamily: Montserrat,
                                 ),
                               ),
@@ -129,12 +133,22 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                             ),
                             AppRoundTextField(
                               controller: patientNameController,
-                              inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                              inputStyle: TextStyle(
+                                  fontSize: responsiveFont(14),
+                                  color: kTextBlackColor),
                               inputType: TextInputType.name,
                               onChange: (p0) {},
                               label: RichText(
                                 text: const TextSpan(
-                                    text: 'Patient Name', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                                    text: 'Patient Name',
+                                    style: TextStyle(
+                                        color: kHintColor,
+                                        fontFamily: Montserrat),
+                                    children: [
+                                      TextSpan(
+                                          text: "*",
+                                          style: TextStyle(color: Colors.red))
+                                    ]),
                               ),
                               hint: "",
                             ),
@@ -146,7 +160,9 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                 Expanded(
                                   child: AppRoundTextField(
                                     controller: countryCodeController,
-                                    inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                                    inputStyle: TextStyle(
+                                        fontSize: responsiveFont(14),
+                                        color: kTextBlackColor),
                                     // inputType: TextInputType.number,
                                     onChange: (p0) {},
                                     onTap: () {
@@ -158,7 +174,9 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                           (p0) => {
                                                 setState(() {
                                                   selectedCountryCode = p0;
-                                                  countryCodeController.text = selectedCountryCode!['title'];
+                                                  countryCodeController.text =
+                                                      selectedCountryCode![
+                                                          'title'];
                                                 })
                                               },
                                           "Country Code",
@@ -168,7 +186,16 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                     readOnly: true,
                                     label: RichText(
                                       text: const TextSpan(
-                                          text: 'Country Code', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                                          text: 'Country Code',
+                                          style: TextStyle(
+                                              color: kHintColor,
+                                              fontFamily: Montserrat),
+                                          children: [
+                                            TextSpan(
+                                                text: "*",
+                                                style: TextStyle(
+                                                    color: Colors.red))
+                                          ]),
                                     ),
                                     hint: "",
                                     suffix: SizedBox(
@@ -190,13 +217,24 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                 Expanded(
                                   child: AppRoundTextField(
                                     controller: mobileController,
-                                    inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                                    inputStyle: TextStyle(
+                                        fontSize: responsiveFont(14),
+                                        color: kTextBlackColor),
                                     inputType: TextInputType.number,
                                     onChange: (p0) {},
                                     maxLength: 10,
                                     label: RichText(
                                       text: const TextSpan(
-                                          text: 'Mobile No', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                                          text: 'Mobile No',
+                                          style: TextStyle(
+                                              color: kHintColor,
+                                              fontFamily: Montserrat),
+                                          children: [
+                                            TextSpan(
+                                                text: "*",
+                                                style: TextStyle(
+                                                    color: Colors.red))
+                                          ]),
                                     ),
                                     hint: "",
                                   ),
@@ -208,7 +246,9 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                             ),
                             AppRoundTextField(
                               controller: referredTo,
-                              inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                              inputStyle: TextStyle(
+                                  fontSize: responsiveFont(14),
+                                  color: kTextBlackColor),
                               onChange: (p0) {},
                               onTap: () {
                                 List<Map<String, dynamic>> list = [
@@ -222,8 +262,12 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                     (p0) => {
                                           setState(() {
                                             selectedDesignationType = p0;
-                                            referredTo.text = selectedDesignationType!['title'];
-                                            referredToId.text = selectedDesignationType!['id'].toString();
+                                            referredTo.text =
+                                                selectedDesignationType![
+                                                    'title'];
+                                            referredToId.text =
+                                                selectedDesignationType!['id']
+                                                    .toString();
                                             print(referredToId.text);
                                           })
                                         },
@@ -233,7 +277,15 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                               readOnly: true,
                               label: RichText(
                                 text: const TextSpan(
-                                    text: 'Referred To', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                                    text: 'Referred To',
+                                    style: TextStyle(
+                                        color: kHintColor,
+                                        fontFamily: Montserrat),
+                                    children: [
+                                      TextSpan(
+                                          text: "*",
+                                          style: TextStyle(color: Colors.red))
+                                    ]),
                               ),
                               hint: "",
                               suffix: SizedBox(
@@ -249,7 +301,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 12, bottom: 12, right: 12),
+                              padding: const EdgeInsets.only(
+                                  top: 12, bottom: 12, right: 12),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -257,7 +310,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                     child: Image.asset("assets/icons/add.png"),
                                     onTap: () {
                                       if (patientNameController.text.isEmpty) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           const SnackBar(
                                             content: Text(
                                               'Enter Patient Name',
@@ -265,8 +319,10 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                             backgroundColor: Colors.red,
                                           ),
                                         );
-                                      } else if (countryCodeController.text.isEmpty) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                      } else if (countryCodeController
+                                          .text.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           const SnackBar(
                                             content: Text(
                                               'Select Country Code',
@@ -274,8 +330,10 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                             backgroundColor: Colors.red,
                                           ),
                                         );
-                                      } else if (mobileController.text.isEmpty) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                      } else if (mobileController
+                                          .text.isEmpty) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
                                           const SnackBar(
                                             content: Text(
                                               'Enter Mobile Number',
@@ -313,26 +371,30 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                     shrinkWrap: true,
                     itemCount: campregisteredpatients.length,
                     itemBuilder: (context, index) {
-                      listpatientNameController.text = campregisteredpatients[index].name;
+                      listpatientNameController.text =
+                          campregisteredpatients[index].name;
                       return Container(
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         width: SizeConfig.screenWidth * 0.95,
                         // height: SizeConfig.screenHeight /3,
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(responsiveHeight(25)),
+                          borderRadius:
+                              BorderRadius.circular(responsiveHeight(25)),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.grey.withOpacity(0.5), // Shadow color
+                              color:
+                                  Colors.grey.withOpacity(0.5), // Shadow color
                               spreadRadius: 2, // Spread radius
                               blurRadius: 7, // Blur radius
-                              offset: Offset(0, 3), // changes position of shadow
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
                             ),
                           ],
                         ),
                         child: Container(
-                          margin: EdgeInsets.all(8),
-                          padding: EdgeInsets.all(8),
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -343,8 +405,19 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                 child: RichText(
                                   text: TextSpan(
                                     text: "Patient Name: ",
-                                    style: TextStyle(color: kTextColor, fontSize: responsiveFont(14), fontWeight: FontWeight.bold),
-                                    children: [TextSpan(text: campregisteredpatients[index].name, style: TextStyle(fontSize: responsiveFont(14), color: kTextColor, fontWeight: FontWeight.normal))],
+                                    style: TextStyle(
+                                        color: kTextColor,
+                                        fontSize: responsiveFont(14),
+                                        fontWeight: FontWeight.bold),
+                                    children: [
+                                      TextSpan(
+                                          text: campregisteredpatients[index]
+                                              .name,
+                                          style: TextStyle(
+                                              fontSize: responsiveFont(14),
+                                              color: kTextColor,
+                                              fontWeight: FontWeight.normal))
+                                    ],
                                   ),
                                 ),
                               ),
@@ -355,8 +428,19 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                 child: RichText(
                                   text: TextSpan(
                                     text: "Mobile Number: ",
-                                    style: TextStyle(color: kTextColor, fontSize: responsiveFont(14), fontWeight: FontWeight.bold),
-                                    children: [TextSpan(text: campregisteredpatients[index].mobile, style: TextStyle(fontSize: responsiveFont(14), color: kTextColor, fontWeight: FontWeight.normal))],
+                                    style: TextStyle(
+                                        color: kTextColor,
+                                        fontSize: responsiveFont(14),
+                                        fontWeight: FontWeight.bold),
+                                    children: [
+                                      TextSpan(
+                                          text: campregisteredpatients[index]
+                                              .mobile,
+                                          style: TextStyle(
+                                              fontSize: responsiveFont(14),
+                                              color: kTextColor,
+                                              fontWeight: FontWeight.normal))
+                                    ],
                                   ),
                                 ),
                               ),
@@ -367,16 +451,26 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                 child: RichText(
                                   text: TextSpan(
                                     text: "Referred To: ",
-                                    style: TextStyle(color: kTextColor, fontSize: responsiveFont(14), fontWeight: FontWeight.bold),
+                                    style: TextStyle(
+                                        color: kTextColor,
+                                        fontSize: responsiveFont(14),
+                                        fontWeight: FontWeight.bold),
                                     children: [
-                                      TextSpan(text: campregisteredpatients[index].referredTo, style: TextStyle(fontSize: responsiveFont(14), color: kTextColor, fontWeight: FontWeight.normal))
+                                      TextSpan(
+                                          text: campregisteredpatients[index]
+                                              .referredTo,
+                                          style: TextStyle(
+                                              fontSize: responsiveFont(14),
+                                              color: kTextColor,
+                                              fontWeight: FontWeight.normal))
                                     ],
                                   ),
                                 ),
                               ),
                               Container(
                                 child: Padding(
-                                  padding: const EdgeInsets.only(top: 5, bottom: 5, right: 12),
+                                  padding: const EdgeInsets.only(
+                                      top: 5, bottom: 5, right: 12),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -387,7 +481,9 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                         ),
                                         onTap: () {
                                           // removeCard(carbonCommentsList.length - 1);
-                                          removeCard(campregisteredpatients.length - 1);
+                                          removeCard(
+                                              campregisteredpatients.length -
+                                                  1);
                                         },
                                       ),
                                     ],
@@ -462,8 +558,11 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
   void addCard() {
     // carbonCommentsList.add(CardData(""));
     setState(() {
-      campregisteredpatients
-          .add(CampCoordRegisteredPatientModel(mobile: mobileController.text.trim(), name: patientNameController.text.trim(), referredTo: referredTo.text, referredToId: referredToId.text));
+      campregisteredpatients.add(CampCoordRegisteredPatientModel(
+          mobile: mobileController.text.trim(),
+          name: patientNameController.text.trim(),
+          referredTo: referredTo.text,
+          referredToId: referredToId.text));
       print(campregisteredpatients);
       patientNameController.text = "";
       countryCodeController.text = "";
@@ -487,16 +586,24 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
       isLoading = true;
     });
 
-    final url = Uri.parse('http://210.89.42.117:8085/api/administrator/masters/all-stake-holder-master-pagination');
+    final url = Uri.parse(
+        'http://210.89.42.117:8085/api/administrator/masters/all-stake-holder-master-pagination');
     var headers = {'Content-Type': 'application/json'};
     try {
       // final response = await http.post(url);
 
-      var body = json.encode({"total_pages": 20, "page": 1, "total_count": 10, "per_page": 10, "data": null});
+      var body = json.encode({
+        "total_pages": 20,
+        "page": 1,
+        "total_count": 10,
+        "per_page": 10,
+        "data": null
+      });
 
       print(body);
 
-      http.Response response = await http.post(url, headers: headers, body: body);
+      http.Response response =
+          await http.post(url, headers: headers, body: body);
 
       if (response.statusCode == 200) {
         Map<String, dynamic> decodedJson = jsonDecode(response.body);
@@ -512,7 +619,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
         extractedStackholderData = dataArray.map((item) {
           return {
             'stakeholder_master_id': item['stakeholder_master_id'],
-            'stakeholder_sub_type2_en': item['stakeholder_sub_type2_en'].toString(),
+            'stakeholder_sub_type2_en':
+                item['stakeholder_sub_type2_en'].toString(),
           };
         }).toList();
         print(extractedStackholderData);
@@ -558,7 +666,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                 "dashboard_ref_patients_det_id": null,
                 "dashboard_ref_patients_id": null,
                 "lookup_det_hier_id_stakeholder_sub_type2": null,
-                "stakeholder_master_id": int.parse(campregisteredpatients[i].referredToId.toString()),
+                "stakeholder_master_id": int.parse(
+                    campregisteredpatients[i].referredToId.toString()),
                 "org_id": 1,
                 "status": 1
               }
@@ -568,7 +677,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
       });
       print(body);
       var response = await http.post(
-        Uri.parse('http://210.89.42.117:8085/api/administrator/masters/add/dashboard-patient-ref-details'),
+        Uri.parse(
+            'http://210.89.42.117:8085/api/administrator/masters/add/dashboard-patient-ref-details'),
         headers: headers,
         body: body,
       );
@@ -582,7 +692,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
           });
         }
       } else {
-        print('Request failed with status: ${response.statusCode}. ${response.reasonPhrase}');
+        print(
+            'Request failed with status: ${response.statusCode}. ${response.reasonPhrase}');
       }
     }
 

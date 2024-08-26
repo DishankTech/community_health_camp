@@ -46,13 +46,16 @@ class _LocationMasterListState extends State<LocationMasterList> {
 
   @override
   void dispose() {
-    locationMasterController.pagingController.dispose();
+    // locationMasterController.pagingController.dispose();
     super.dispose();
   }
 
   @override
   void initState() {
     // TODO: implement initState
+    locationMasterController.locations.clear();
+    locationMasterController.pagingController = PagingController(firstPageKey: 1);
+
     checkInternetAndLoadData();
     super.initState();
   }
@@ -205,85 +208,11 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                                       ],
                                                     ),
                                                   ),
-                                                  // SizedBox(
-                                                  //   height:
-                                                  //       responsiveHeight(10),
-                                                  // ),
-                                                  // Row(
-                                                  //   children: [
-                                                  //     Expanded(
-                                                  //       child: RichText(
-                                                  //         text: TextSpan(
-                                                  //           text: "District: ",
-                                                  //           style: TextStyle(
-                                                  //               color:
-                                                  //                   kTextColor,
-                                                  //               fontSize:
-                                                  //                   responsiveFont(
-                                                  //                       12),
-                                                  //               fontWeight:
-                                                  //                   FontWeight
-                                                  //                       .bold),
-                                                  //           children: [
-                                                  //             TextSpan(
-                                                  //                 text: item
-                                                  //                     .lookupDetHierIdDistrict
-                                                  //                     .toString(),
-                                                  //                 style: TextStyle(
-                                                  //                     fontSize:
-                                                  //                         responsiveFont(
-                                                  //                             12),
-                                                  //                     color:
-                                                  //                         kTextColor,
-                                                  //                     fontWeight:
-                                                  //                         FontWeight
-                                                  //                             .normal))
-                                                  //           ],
-                                                  //         ),
-                                                  //       ),
-                                                  //     ),
-                                                  //     SizedBox(
-                                                  //       height:
-                                                  //           responsiveHeight(
-                                                  //               10),
-                                                  //     ),
-                                                  //     Expanded(
-                                                  //       child: RichText(
-                                                  //         text: TextSpan(
-                                                  //           text: "City: ",
-                                                  //           style: TextStyle(
-                                                  //               color:
-                                                  //                   kTextColor,
-                                                  //               fontSize:
-                                                  //                   responsiveFont(
-                                                  //                       12),
-                                                  //               fontWeight:
-                                                  //                   FontWeight
-                                                  //                       .bold),
-                                                  //           children: [
-                                                  //             TextSpan(
-                                                  //                 text: item
-                                                  //                     .lookupDetHierIdCountry
-                                                  //                     .toString(),
-                                                  //                 style: TextStyle(
-                                                  //                     fontSize:
-                                                  //                         responsiveFont(
-                                                  //                             12),
-                                                  //                     color:
-                                                  //                         kTextColor,
-                                                  //                     fontWeight:
-                                                  //                         FontWeight
-                                                  //                             .normal))
-                                                  //           ],
-                                                  //         ),
-                                                  //       ),
-                                                  //     ),
-                                                  //   ],
-                                                  // ),
                                                   SizedBox(
                                                     height:
                                                         responsiveHeight(10),
                                                   ),
+
                                                   RichText(
                                                     text: TextSpan(
                                                       text: "Contact No : ",
@@ -344,6 +273,82 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                                     height:
                                                         responsiveHeight(10),
                                                   ),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: RichText(
+                                                          text: TextSpan(
+                                                            text: "District: ",
+                                                            style: TextStyle(
+                                                                color:
+                                                                kTextColor,
+                                                                fontSize:
+                                                                responsiveFont(
+                                                                    12),
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: item
+                                                                      .districtDesEn
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                      responsiveFont(
+                                                                          12),
+                                                                      color:
+                                                                      kTextColor,
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .normal))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        height:
+                                                        responsiveHeight(
+                                                            10),
+                                                      ),
+                                                      Expanded(
+                                                        child: RichText(
+                                                          text: TextSpan(
+                                                            text: "City: ",
+                                                            style: TextStyle(
+                                                                color:
+                                                                kTextColor,
+                                                                fontSize:
+                                                                responsiveFont(
+                                                                    12),
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: item
+                                                                      .cityDescEn
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                      responsiveFont(
+                                                                          12),
+                                                                      color:
+                                                                      kTextColor,
+                                                                      fontWeight:
+                                                                      FontWeight
+                                                                          .normal))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                    responsiveHeight(10),
+                                                  ),
+
                                                   RichText(
                                                     text: TextSpan(
                                                       text: "Email id : ",
