@@ -273,7 +273,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                           })
                                         },
                                     "Referred To",
-                                    extractedStackholderData);
+                                    list);
                               },
                               readOnly: true,
                               label: RichText(

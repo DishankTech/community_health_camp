@@ -302,12 +302,12 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
         Set<int> seenLocationIds = {};
         uniqueLocationList = [];
         // Print the filtered list
-        print('Filtered Camps on $filterDate:');
-        for (var camp in dateWiseFilteredList) {
-          print(camp);
-        }
+        // print('Filtered Camps on $filterDate:');
+        // for (var camp in dateWiseFilteredList) {
+        //   print(camp);
+        // }
 
-        Set<int> seenLocationIds = {};
+        // Set<int> seenLocationIds = {};
         uniqueLocationList = [];
         // Count occurrences of each location_master_id
         Map<int, int> locationCountMap = {};

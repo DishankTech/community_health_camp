@@ -101,7 +101,6 @@ class _DashboardPatientRegistrationScreenState
   void _showDownloadReportBottomSheet() {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
       constraints: const BoxConstraints(
         minWidth: double.infinity,
       ),
@@ -112,7 +111,7 @@ class _DashboardPatientRegistrationScreenState
       ) {
         return Container(
           width: double.infinity,
-          height: MediaQuery.of(context).size.width * 0.70,
+          // height: MediaQuery.of(context).size.width * 0.70,
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
           decoration: const BoxDecoration(
             color: Colors.white,

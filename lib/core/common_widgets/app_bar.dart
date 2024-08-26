@@ -30,7 +30,7 @@ PreferredSize? mAppBar(
             ? Text(
                 scTitle,
                 style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 11,
                     fontWeight: FontWeight.normal,
                     color: kBlackColor),
               )
