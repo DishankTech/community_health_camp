@@ -968,7 +968,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
         if (data['status_code'] == 200) {
           setState(() {
             isSaveLoad = false;
-            clearAllFields();
+            // clearAllFields();
           });
 
           ScaffoldMessenger.of(context).showSnackBar(

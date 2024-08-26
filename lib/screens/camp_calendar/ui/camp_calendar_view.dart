@@ -456,7 +456,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
     var headers = {'Content-Type': 'application/json'};
 
     var body = json.encode({
-      "total_pages": 10,
+      "total_pages": 20,
       "page": 1,
       "total_count": 20,
       "per_page": 20,

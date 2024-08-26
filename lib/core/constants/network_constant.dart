@@ -33,12 +33,11 @@ const String kGetMyAppointments = "getAutoSuggetionDetails";
 const String userLogin = "public/account/login";
 const String userResetPassword =
     "api/profile/account/update/user-password-reset";
-const String kCreateUser = "profile/account/new/";
+//Community
+const String kCreateUser = "profile/account/new";
 const String kUpdateUser = "profile/account/update/user-account-details";
 const String kGetAllUsers = "profile/account/all-user-details-pagination";
-const String kPatientRegistration = "administrator/masters/add/patient-master";
-const String kGetAllPatients =
-    "administrator/masters/all-patient-master-pagination";
+const String kPatientRegistration = "administator/master/add/patient-master";
 const String kGetMasters = "common/lookup/lookupCode";
 const String kGetMastersDetCode = "common/lookup/lookupDetCode";
 const String kGetMastersLookupDetId = "common/lookup/lookupDetHier/parent-id/";
