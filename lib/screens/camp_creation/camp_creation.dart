@@ -196,7 +196,7 @@ class _CampCreationState extends State<CampCreation> {
                                           readOnly: true,
                                           label: RichText(
                                             text: const TextSpan(
-                                                text: 'Location Name',
+                                                text: 'Location ',
                                                 style: TextStyle(
                                                     color: kHintColor,
                                                     fontFamily: Montserrat),
