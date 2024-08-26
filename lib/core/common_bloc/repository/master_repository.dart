@@ -85,9 +85,8 @@ class MasterDataRepository {
 
   Future<http.Response> getMasterLookupDetId(int payload) async {
     return await http.post(
-        Uri.parse('$kBaseUrl$kGetMastersLookupDetId$payload'),
-        body: jsonEncode(payload),
-        headers: {'Content-Type': "application/json"});
+      Uri.parse('$kBaseUrl$kGetMastersLookupDetId$payload'),
+    );
   }
 
   Future<http.Response> getMasterDesignationType(Map payload) async {
@@ -99,8 +98,16 @@ class MasterDataRepository {
 
   Future<http.Response> getCampListDropdown(int payload) async {
     print(payload);
-    return await http.post(Uri.parse('$kBaseUrl$kGetCampListDropdown$payload'),
-        body: jsonEncode(payload),
-        headers: {'Content-Type': "application/json", 'Accept': '*/*'});
+    return await http.post(
+      Uri.parse('$kBaseUrl$kGetCampListDropdown$payload'),
+    );
+  }
+
+  Future<http.Response> getDistrictOnDivision(int payload) async {
+    print(payload);
+    return await http.post(
+      Uri.parse(
+          'http://210.89.42.117:8085/api/common/get/district-by-division/$payload'),
+    );
   }
 }

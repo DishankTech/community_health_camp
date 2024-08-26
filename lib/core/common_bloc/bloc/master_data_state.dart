@@ -48,6 +48,8 @@ class MasterDataState extends Equatable {
     required this.getStakeholderSubTypeStatus,
     required this.getCampDropdownListResponse,
     required this.getCampDropdownListStatus,
+    required this.getSectorTypeResponse,
+    required this.getSectorTypeStatus,
   });
 
   final FormzSubmissionStatus prefixStatus;
@@ -117,6 +119,9 @@ class MasterDataState extends Equatable {
   final FormzSubmissionStatus getCampDropdownListStatus;
   final String getCampDropdownListResponse;
 
+  final FormzSubmissionStatus getSectorTypeStatus;
+  final String getSectorTypeResponse;
+
   MasterDataState copyWith({
     FormzSubmissionStatus? getUnitListStatus,
     String? getUnitListResponse,
@@ -164,79 +169,85 @@ class MasterDataState extends Equatable {
     String? getStakeholderSubTypeResponse,
     FormzSubmissionStatus? getCampDropdownListStatus,
     String? getCampDropdownListResponse,
+    FormzSubmissionStatus? getSectorTypeStatus,
+    String? getSectorTypeResponse,
   }) {
     return MasterDataState(
-        prefixResponse: prefixResponse ?? this.prefixResponse,
-        prefixStatus: prefixStatus ?? this.prefixStatus,
-        getUnitListStatus: getUnitListStatus ?? this.getUnitListStatus,
-        getUnitListResponse: getUnitListResponse ?? this.getUnitListResponse,
-        getViralLoadStatusStatus:
-            getViralLoadStatusStatus ?? this.getViralLoadStatusStatus,
-        getViralLoadStatusResponse:
-            getViralLoadStatusResponse ?? this.getViralLoadStatusResponse,
-        getIDProofListStatus: getIDProofListStatus ?? this.getIDProofListStatus,
-        getIDProofListResponse:
-            getIDProofListResponse ?? this.getIDProofListResponse,
-        schemeAdoptedStatus: schemeAdoptedStatus ?? this.schemeAdoptedStatus,
-        schemeAdoptedResponse:
-            schemeAdoptedResponse ?? this.schemeAdoptedResponse,
-        getSlotListStatus: getSlotListStatus ?? this.getSlotListStatus,
-        getSlotListResponse: getSlotListResponse ?? this.getSlotListResponse,
-        getMaritalStatusResponse:
-            getMaritalStatusResponse ?? this.getMaritalStatusResponse,
-        getMaritalStatusStatus:
-            getMaritalStatusStatus ?? this.getMaritalStatusStatus,
-        getRelationResponse: getRelationResponse ?? this.getRelationResponse,
-        getRelationStatus: getRelationStatus ?? this.getRelationStatus,
-        getDistrictListResponse:
-            getDistrictListResponse ?? this.getDistrictListResponse,
-        getDistrictListStatus:
-            getDistrictListStatus ?? this.getDistrictListStatus,
-        getDivisionListResponse:
-            getDivisionListResponse ?? this.getDivisionListResponse,
-        getDivisionListStatus:
-            getDivisionListStatus ?? this.getDivisionListStatus,
-        getStateListResponse: getStateListResponse ?? this.getStateListResponse,
-        getStateListStatus: getStateListStatus ?? this.getStateListStatus,
-        getTalukaListResponse:
-            getTalukaListResponse ?? this.getTalukaListResponse,
-        getTalukaListStatus: getTalukaListStatus ?? this.getTalukaListStatus,
-        getTownListResponse: getTownListResponse ?? this.getTownListResponse,
-        getTownListStatus: getTownListStatus ?? this.getTownListStatus,
-        getSchemAdoptedListResponse:
-            getSchemAdoptedListResponse ?? this.getSchemAdoptedListResponse,
-        getSchemAdoptedListStatus:
-            getSchemAdoptedListStatus ?? this.getSchemAdoptedListStatus,
-        getBloodGroupResponse:
-            getBloodGroupResponse ?? this.getBloodGroupResponse,
-        getBloodGroupStatus: getBloodGroupStatus ?? this.getBloodGroupStatus,
-        getDialysisModeListResponse:
-            getDialysisModeListResponse ?? this.getDialysisModeListResponse,
-        getDialysisModeListStatus:
-            getDialysisModeListStatus ?? this.getDialysisModeListStatus,
-        getRefferedByResponse:
-            getRefferedByResponse ?? this.getRefferedByResponse,
-        getRefferedByStatus: getRefferedByStatus ?? this.getRefferedByStatus,
-        getAddressByPincodeResponse:
-            getAddressByPincodeResponse ?? this.getAddressByPincodeResponse,
-        getAddressByPincodeStatus:
-            getAddressByPincodeStatus ?? this.getAddressByPincodeStatus,
-        getMasterResponse: getMasterResponse ?? this.getMasterResponse,
-        getMasterStatus: getMasterStatus ?? this.getMasterStatus,
-        getMasterDesignationTypeResponse: getMasterDesignationTypeResponse ??
-            this.getMasterDesignationTypeResponse,
-        getMasterDesignationTypeStatus: getMasterDesignationTypeStatus ??
-            this.getMasterDesignationTypeStatus,
-        getGenderResponse: getGenderResponse ?? this.getGenderResponse,
-        getGenderStatus: getGenderStatus ?? this.getGenderStatus,
-        getStakeholderSubTypeResponse:
-            getStakeholderSubTypeResponse ?? this.getStakeholderSubTypeResponse,
-        getStakeholderSubTypeStatus:
-            getStakeholderSubTypeStatus ?? this.getStakeholderSubTypeStatus,
-        getCampDropdownListResponse:
-            getCampDropdownListResponse ?? this.getCampDropdownListResponse,
-        getCampDropdownListStatus:
-            getCampDropdownListStatus ?? this.getCampDropdownListStatus);
+      prefixResponse: prefixResponse ?? this.prefixResponse,
+      prefixStatus: prefixStatus ?? this.prefixStatus,
+      getUnitListStatus: getUnitListStatus ?? this.getUnitListStatus,
+      getUnitListResponse: getUnitListResponse ?? this.getUnitListResponse,
+      getViralLoadStatusStatus:
+          getViralLoadStatusStatus ?? this.getViralLoadStatusStatus,
+      getViralLoadStatusResponse:
+          getViralLoadStatusResponse ?? this.getViralLoadStatusResponse,
+      getIDProofListStatus: getIDProofListStatus ?? this.getIDProofListStatus,
+      getIDProofListResponse:
+          getIDProofListResponse ?? this.getIDProofListResponse,
+      schemeAdoptedStatus: schemeAdoptedStatus ?? this.schemeAdoptedStatus,
+      schemeAdoptedResponse:
+          schemeAdoptedResponse ?? this.schemeAdoptedResponse,
+      getSlotListStatus: getSlotListStatus ?? this.getSlotListStatus,
+      getSlotListResponse: getSlotListResponse ?? this.getSlotListResponse,
+      getMaritalStatusResponse:
+          getMaritalStatusResponse ?? this.getMaritalStatusResponse,
+      getMaritalStatusStatus:
+          getMaritalStatusStatus ?? this.getMaritalStatusStatus,
+      getRelationResponse: getRelationResponse ?? this.getRelationResponse,
+      getRelationStatus: getRelationStatus ?? this.getRelationStatus,
+      getDistrictListResponse:
+          getDistrictListResponse ?? this.getDistrictListResponse,
+      getDistrictListStatus:
+          getDistrictListStatus ?? this.getDistrictListStatus,
+      getDivisionListResponse:
+          getDivisionListResponse ?? this.getDivisionListResponse,
+      getDivisionListStatus:
+          getDivisionListStatus ?? this.getDivisionListStatus,
+      getStateListResponse: getStateListResponse ?? this.getStateListResponse,
+      getStateListStatus: getStateListStatus ?? this.getStateListStatus,
+      getTalukaListResponse:
+          getTalukaListResponse ?? this.getTalukaListResponse,
+      getTalukaListStatus: getTalukaListStatus ?? this.getTalukaListStatus,
+      getTownListResponse: getTownListResponse ?? this.getTownListResponse,
+      getTownListStatus: getTownListStatus ?? this.getTownListStatus,
+      getSchemAdoptedListResponse:
+          getSchemAdoptedListResponse ?? this.getSchemAdoptedListResponse,
+      getSchemAdoptedListStatus:
+          getSchemAdoptedListStatus ?? this.getSchemAdoptedListStatus,
+      getBloodGroupResponse:
+          getBloodGroupResponse ?? this.getBloodGroupResponse,
+      getBloodGroupStatus: getBloodGroupStatus ?? this.getBloodGroupStatus,
+      getDialysisModeListResponse:
+          getDialysisModeListResponse ?? this.getDialysisModeListResponse,
+      getDialysisModeListStatus:
+          getDialysisModeListStatus ?? this.getDialysisModeListStatus,
+      getRefferedByResponse:
+          getRefferedByResponse ?? this.getRefferedByResponse,
+      getRefferedByStatus: getRefferedByStatus ?? this.getRefferedByStatus,
+      getAddressByPincodeResponse:
+          getAddressByPincodeResponse ?? this.getAddressByPincodeResponse,
+      getAddressByPincodeStatus:
+          getAddressByPincodeStatus ?? this.getAddressByPincodeStatus,
+      getMasterResponse: getMasterResponse ?? this.getMasterResponse,
+      getMasterStatus: getMasterStatus ?? this.getMasterStatus,
+      getMasterDesignationTypeResponse: getMasterDesignationTypeResponse ??
+          this.getMasterDesignationTypeResponse,
+      getMasterDesignationTypeStatus:
+          getMasterDesignationTypeStatus ?? this.getMasterDesignationTypeStatus,
+      getGenderResponse: getGenderResponse ?? this.getGenderResponse,
+      getGenderStatus: getGenderStatus ?? this.getGenderStatus,
+      getStakeholderSubTypeResponse:
+          getStakeholderSubTypeResponse ?? this.getStakeholderSubTypeResponse,
+      getStakeholderSubTypeStatus:
+          getStakeholderSubTypeStatus ?? this.getStakeholderSubTypeStatus,
+      getCampDropdownListResponse:
+          getCampDropdownListResponse ?? this.getCampDropdownListResponse,
+      getCampDropdownListStatus:
+          getCampDropdownListStatus ?? this.getCampDropdownListStatus,
+      getSectorTypeResponse:
+          getSectorTypeResponse ?? this.getSectorTypeResponse,
+      getSectorTypeStatus: getSectorTypeStatus ?? this.getSectorTypeStatus,
+    );
   }
 
   @override
@@ -286,6 +297,8 @@ class MasterDataState extends Equatable {
         getStakeholderSubTypeResponse,
         getStakeholderSubTypeStatus,
         getCampDropdownListResponse,
-        getCampDropdownListStatus
+        getCampDropdownListStatus,
+        getSectorTypeResponse,
+        getSectorTypeStatus
       ];
 }

@@ -109,6 +109,9 @@ class _RegisteredUserMasterScreenState
                 getUserMasterResponse.details != null &&
                 getUserMasterResponse.details!.data != null &&
                 getUserMasterResponse.details!.data!.isNotEmpty) {
+              setState(() {
+                totalPages = getUserMasterResponse!.details!.totalPages!;
+              });
               data.addAll(getUserMasterResponse.details!.data!);
             }
           } else {

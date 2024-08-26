@@ -42,6 +42,7 @@ const String kGetAllPatients =
 const String kGetMasters = "common/lookup/lookupCode";
 const String kGetMastersDetCode = "common/lookup/lookupDetCode";
 const String kGetMastersLookupDetId = "common/lookup/lookupDetHier/parent-id/";
+const String kGetDistrictOnDivision = "common/get/district-by-division/";
 const String kGetCampListDropdown =
     "administrator/camp/dropdown/camp-date-list/";
 

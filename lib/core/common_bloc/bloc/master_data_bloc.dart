@@ -14,52 +14,55 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
   MasterDataRepository masterDataRepository;
   MasterDataBloc({required this.masterDataRepository})
       : super(const MasterDataState(
-            getUnitListStatus: FormzSubmissionStatus.initial,
-            getUnitListResponse: '',
-            getIDProofListResponse: '',
-            getIDProofListStatus: FormzSubmissionStatus.initial,
-            getSlotListResponse: '',
-            getSlotListStatus: FormzSubmissionStatus.initial,
-            getViralLoadStatusResponse: '',
-            getViralLoadStatusStatus: FormzSubmissionStatus.initial,
-            schemeAdoptedResponse: '',
-            schemeAdoptedStatus: FormzSubmissionStatus.initial,
-            prefixResponse: '',
-            prefixStatus: FormzSubmissionStatus.initial,
-            getMaritalStatusResponse: '',
-            getMaritalStatusStatus: FormzSubmissionStatus.initial,
-            getRelationResponse: '',
-            getRelationStatus: FormzSubmissionStatus.initial,
-            getDistrictListResponse: '',
-            getDistrictListStatus: FormzSubmissionStatus.initial,
-            getDivisionListResponse: '',
-            getDivisionListStatus: FormzSubmissionStatus.initial,
-            getStateListResponse: '',
-            getStateListStatus: FormzSubmissionStatus.initial,
-            getTalukaListResponse: '',
-            getTalukaListStatus: FormzSubmissionStatus.initial,
-            getTownListResponse: '',
-            getTownListStatus: FormzSubmissionStatus.initial,
-            getSchemAdoptedListResponse: '',
-            getSchemAdoptedListStatus: FormzSubmissionStatus.initial,
-            getBloodGroupResponse: '',
-            getBloodGroupStatus: FormzSubmissionStatus.initial,
-            getDialysisModeListResponse: '',
-            getDialysisModeListStatus: FormzSubmissionStatus.initial,
-            getRefferedByResponse: '',
-            getRefferedByStatus: FormzSubmissionStatus.initial,
-            getAddressByPincodeResponse: '',
-            getAddressByPincodeStatus: FormzSubmissionStatus.initial,
-            getMasterResponse: '',
-            getMasterStatus: FormzSubmissionStatus.initial,
-            getMasterDesignationTypeResponse: '',
-            getMasterDesignationTypeStatus: FormzSubmissionStatus.initial,
-            getGenderResponse: '',
-            getGenderStatus: FormzSubmissionStatus.initial,
-            getStakeholderSubTypeResponse: '',
-            getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
-            getCampDropdownListResponse: '',
-            getCampDropdownListStatus: FormzSubmissionStatus.initial)) {
+          getUnitListStatus: FormzSubmissionStatus.initial,
+          getUnitListResponse: '',
+          getIDProofListResponse: '',
+          getIDProofListStatus: FormzSubmissionStatus.initial,
+          getSlotListResponse: '',
+          getSlotListStatus: FormzSubmissionStatus.initial,
+          getViralLoadStatusResponse: '',
+          getViralLoadStatusStatus: FormzSubmissionStatus.initial,
+          schemeAdoptedResponse: '',
+          schemeAdoptedStatus: FormzSubmissionStatus.initial,
+          prefixResponse: '',
+          prefixStatus: FormzSubmissionStatus.initial,
+          getMaritalStatusResponse: '',
+          getMaritalStatusStatus: FormzSubmissionStatus.initial,
+          getRelationResponse: '',
+          getRelationStatus: FormzSubmissionStatus.initial,
+          getDistrictListResponse: '',
+          getDistrictListStatus: FormzSubmissionStatus.initial,
+          getDivisionListResponse: '',
+          getDivisionListStatus: FormzSubmissionStatus.initial,
+          getStateListResponse: '',
+          getStateListStatus: FormzSubmissionStatus.initial,
+          getTalukaListResponse: '',
+          getTalukaListStatus: FormzSubmissionStatus.initial,
+          getTownListResponse: '',
+          getTownListStatus: FormzSubmissionStatus.initial,
+          getSchemAdoptedListResponse: '',
+          getSchemAdoptedListStatus: FormzSubmissionStatus.initial,
+          getBloodGroupResponse: '',
+          getBloodGroupStatus: FormzSubmissionStatus.initial,
+          getDialysisModeListResponse: '',
+          getDialysisModeListStatus: FormzSubmissionStatus.initial,
+          getRefferedByResponse: '',
+          getRefferedByStatus: FormzSubmissionStatus.initial,
+          getAddressByPincodeResponse: '',
+          getAddressByPincodeStatus: FormzSubmissionStatus.initial,
+          getMasterResponse: '',
+          getMasterStatus: FormzSubmissionStatus.initial,
+          getMasterDesignationTypeResponse: '',
+          getMasterDesignationTypeStatus: FormzSubmissionStatus.initial,
+          getGenderResponse: '',
+          getGenderStatus: FormzSubmissionStatus.initial,
+          getStakeholderSubTypeResponse: '',
+          getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
+          getCampDropdownListResponse: '',
+          getCampDropdownListStatus: FormzSubmissionStatus.initial,
+          getSectorTypeResponse: '',
+          getSectorTypeStatus: FormzSubmissionStatus.initial,
+        )) {
     on<GetUnitList>(_onGetUnitList);
     on<GetViralLoadStatus>(_onGetViralLoadStatus);
     on<GetIDProofList>(_onGetIDProofList);
@@ -84,6 +87,8 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
     on<GetStakeholderSubType>(_onGetStakeholderSubType);
     on<ResetMasterState>(_onResetMasterState);
     on<GetCampListDropdown>(_onGetCampListDropdown);
+    on<GetDistrictOnDivision>(_onGetDistrictOnDivision);
+    on<GetSectorType>(_onGetSectorType);
   }
 
   FutureOr<void> _onGetPrefix(GetPrefix event, Emitter<dynamic> emit) async {
@@ -507,8 +512,59 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getAddressByPincodeStatus: FormzSubmissionStatus.initial,
         getGenderStatus: FormzSubmissionStatus.initial,
         getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
+        getCampDropdownListStatus: FormzSubmissionStatus.initial,
+        getMasterStatus: FormzSubmissionStatus.initial,
       ));
       http.Response res = await masterDataRepository.getMaster(event.payload);
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            getDistrictListResponse: res.body,
+            getDistrictListStatus: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+            getDistrictListResponse: res.body,
+            getDistrictListStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(state.copyWith(
+          getDistrictListResponse: e.toString(),
+          getDistrictListStatus: FormzSubmissionStatus.failure));
+    }
+  }
+
+  FutureOr<void> _onGetDistrictOnDivision(
+      GetDistrictOnDivision event, Emitter<MasterDataState> emit) async {
+    try {
+      emit(state.copyWith(
+        getDistrictListResponse: '',
+        getDistrictListStatus: FormzSubmissionStatus.inProgress,
+        getDivisionListStatus: FormzSubmissionStatus.initial,
+        getSlotListStatus: FormzSubmissionStatus.initial,
+        getUnitListStatus: FormzSubmissionStatus.initial,
+        getIDProofListStatus: FormzSubmissionStatus.initial,
+        getViralLoadStatusStatus: FormzSubmissionStatus.initial,
+        schemeAdoptedStatus: FormzSubmissionStatus.initial,
+        prefixStatus: FormzSubmissionStatus.initial,
+        getMaritalStatusStatus: FormzSubmissionStatus.initial,
+        getRelationStatus: FormzSubmissionStatus.initial,
+        getStateListStatus: FormzSubmissionStatus.initial,
+        getTalukaListStatus: FormzSubmissionStatus.initial,
+        getTownListStatus: FormzSubmissionStatus.initial,
+        getSchemAdoptedListStatus: FormzSubmissionStatus.initial,
+        getBloodGroupStatus: FormzSubmissionStatus.initial,
+        getDialysisModeListStatus: FormzSubmissionStatus.initial,
+        getRefferedByStatus: FormzSubmissionStatus.initial,
+        getAddressByPincodeStatus: FormzSubmissionStatus.initial,
+        getGenderStatus: FormzSubmissionStatus.initial,
+        getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
+        getCampDropdownListStatus: FormzSubmissionStatus.initial,
+        getMasterStatus: FormzSubmissionStatus.initial,
+      ));
+      http.Response res =
+          await masterDataRepository.getDistrictOnDivision(event.payload);
       if (res.statusCode == 200) {
         emit(state.copyWith(
             getDistrictListResponse: res.body,
@@ -598,8 +654,10 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getAddressByPincodeStatus: FormzSubmissionStatus.initial,
         getGenderStatus: FormzSubmissionStatus.initial,
         getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
+        getMasterStatus: FormzSubmissionStatus.initial,
       ));
-      http.Response res = await masterDataRepository.getMaster(event.payload);
+      http.Response res =
+          await masterDataRepository.getMasterLookupDetId(event.payload);
       if (res.statusCode == 200) {
         emit(state.copyWith(
             getTownListResponse: res.body,
@@ -625,6 +683,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
       emit(state.copyWith(
         getTalukaListResponse: '',
         getTalukaListStatus: FormzSubmissionStatus.inProgress,
+        getMasterStatus: FormzSubmissionStatus.initial,
         getTownListStatus: FormzSubmissionStatus.initial,
         getStateListStatus: FormzSubmissionStatus.initial,
         getDistrictListStatus: FormzSubmissionStatus.initial,
@@ -645,7 +704,8 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getGenderStatus: FormzSubmissionStatus.initial,
         getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
       ));
-      http.Response res = await masterDataRepository.getMaster(event.payload);
+      http.Response res =
+          await masterDataRepository.getMasterLookupDetId(event.payload);
       if (res.statusCode == 200) {
         emit(state.copyWith(
             getTalukaListResponse: res.body,
@@ -1155,7 +1215,82 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getMasterDesignationTypeStatus: FormzSubmissionStatus.initial,
         getGenderStatus: FormzSubmissionStatus.initial,
         getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
+        getSectorTypeStatus: FormzSubmissionStatus.initial,
+        getCampDropdownListStatus: FormzSubmissionStatus.initial,
       ));
     } catch (e) {}
+  }
+
+  FutureOr<void> _onGetSectorType(
+      GetSectorType event, Emitter<MasterDataState> emit) async {
+    try {
+      emit(state.copyWith(
+        getUnitListStatus: FormzSubmissionStatus.initial,
+        getUnitListResponse: '',
+        getIDProofListResponse: '',
+        getIDProofListStatus: FormzSubmissionStatus.initial,
+        getSlotListResponse: '',
+        getSlotListStatus: FormzSubmissionStatus.initial,
+        getViralLoadStatusResponse: '',
+        getViralLoadStatusStatus: FormzSubmissionStatus.initial,
+        schemeAdoptedResponse: '',
+        schemeAdoptedStatus: FormzSubmissionStatus.initial,
+        prefixResponse: '',
+        prefixStatus: FormzSubmissionStatus.initial,
+        getMaritalStatusResponse: '',
+        getMaritalStatusStatus: FormzSubmissionStatus.initial,
+        getRelationResponse: '',
+        getRelationStatus: FormzSubmissionStatus.initial,
+        getDistrictListResponse: '',
+        getDistrictListStatus: FormzSubmissionStatus.initial,
+        getDivisionListResponse: '',
+        getDivisionListStatus: FormzSubmissionStatus.initial,
+        getStateListResponse: '',
+        getStateListStatus: FormzSubmissionStatus.initial,
+        getTalukaListResponse: '',
+        getTalukaListStatus: FormzSubmissionStatus.initial,
+        getTownListResponse: '',
+        getTownListStatus: FormzSubmissionStatus.initial,
+        getSchemAdoptedListResponse: '',
+        getSchemAdoptedListStatus: FormzSubmissionStatus.initial,
+        getBloodGroupResponse: '',
+        getBloodGroupStatus: FormzSubmissionStatus.initial,
+        getDialysisModeListResponse: '',
+        getDialysisModeListStatus: FormzSubmissionStatus.initial,
+        getRefferedByResponse: '',
+        getRefferedByStatus: FormzSubmissionStatus.initial,
+        getAddressByPincodeResponse: '',
+        getAddressByPincodeStatus: FormzSubmissionStatus.initial,
+        getMasterResponse: '',
+        getMasterStatus: FormzSubmissionStatus.initial,
+        getMasterDesignationTypeResponse: '',
+        getMasterDesignationTypeStatus: FormzSubmissionStatus.initial,
+        getGenderResponse: '',
+        getGenderStatus: FormzSubmissionStatus.initial,
+        getStakeholderSubTypeResponse: '',
+        getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
+        getCampDropdownListResponse: '',
+        getCampDropdownListStatus: FormzSubmissionStatus.initial,
+        getSectorTypeResponse: '',
+        getSectorTypeStatus: FormzSubmissionStatus.inProgress,
+      ));
+      http.Response res =
+          await masterDataRepository.getMasterDesignationType(event.payload);
+
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            getSectorTypeResponse: res.body,
+            getSectorTypeStatus: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+            getSectorTypeResponse: res.body,
+            getSectorTypeStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(
+          getSectorTypeResponse: e.toString(),
+          getSectorTypeStatus: FormzSubmissionStatus.failure));
+    }
   }
 }

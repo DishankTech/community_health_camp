@@ -1,5 +1,6 @@
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/common_bloc/models/get_master_response_model_with_hier.dart';
+import 'package:community_health_app/core/common_bloc/models/master_lookup_det_hier_response_model.dart';
 import 'package:community_health_app/core/common_bloc/models/master_response_model.dart';
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
@@ -55,8 +56,8 @@ class _StakeHolderMasterEditScreenState
   bool _isObscure = true;
   LookupDet? _selectedDivision;
   LookupDetHierarchical? _selectedDistrict;
-  LookupDetHierarchical? _selectedTaluka;
-  LookupDetHierarchical? _selectedCity;
+  LookupDetHierDetails? _selectedTaluka;
+  LookupDetHierDetails? _selectedCity;
   StakeholderNameDetails? stakeholderNameDetails;
 
   StakeholderMasterData? stakeholderMasterData;
@@ -271,7 +272,7 @@ class _StakeHolderMasterEditScreenState
           });
         }
         if (state.getTalukaListStatus.isSuccess) {
-          talukaBottomSheet(context, (p0) {
+          talukaBottomSheetV1(context, (p0) {
             setState(() {
               _selectedTaluka = p0;
               _talukaTextController.text = p0.lookupDetHierDescEn!;
@@ -280,7 +281,7 @@ class _StakeHolderMasterEditScreenState
           });
         }
         if (state.getTownListStatus.isSuccess) {
-          townBottomSheet(context, (p0) {
+          townBottomSheetV1(context, (p0) {
             setState(() {
               _selectedCity = p0;
               _cityTextController.text = p0.lookupDetHierDescEn!;
@@ -840,7 +841,9 @@ class _StakeHolderMasterEditScreenState
                                             ]
                                           };
                                           context.read<MasterDataBloc>().add(
-                                              GetTalukaList(payload: payload));
+                                              GetTalukaList(
+                                                  payload: _selectedDistrict!
+                                                      .lookupDetHierId!));
                                         },
                                         suffix: BlocBuilder<MasterDataBloc,
                                             MasterDataState>(
@@ -918,7 +921,9 @@ class _StakeHolderMasterEditScreenState
                                             ]
                                           };
                                           context.read<MasterDataBloc>().add(
-                                              GetTownList(payload: payload));
+                                              GetTownList(
+                                                  payload: _selectedTaluka!
+                                                      .lookupDetHierId!));
                                         },
                                         suffix: BlocBuilder<MasterDataBloc,
                                             MasterDataState>(

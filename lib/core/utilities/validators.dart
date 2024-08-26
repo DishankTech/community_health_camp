@@ -41,7 +41,15 @@ class Validators {
 
   static String? validateStakeholderType(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Please select stakeholder';
+      return 'Please select Stakeholder Type';
+    }
+
+    return null;
+  }
+
+  static String? validateStakeholderSubType(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select Stakeholder Sub Type';
     }
 
     return null;
@@ -58,6 +66,14 @@ class Validators {
   static String? validateStakeholderName(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please select stakeholder name';
+    }
+
+    return null;
+  }
+
+  static String? validateSectorType(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select Sector Type';
     }
 
     return null;

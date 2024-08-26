@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/common_bloc/models/get_master_response_model_with_hier.dart';
+import 'package:community_health_app/core/common_bloc/models/master_lookup_det_hier_response_model.dart';
 import 'package:community_health_app/core/common_bloc/models/master_response_model.dart';
 import 'package:community_health_app/core/common_widgets/address_text_form_field.dart';
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
@@ -16,12 +17,15 @@ import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
 import 'package:community_health_app/screens/patient_registration/bloc/patient_registration_bloc.dart';
 import 'package:community_health_app/screens/patient_registration/models/registered_patient_response_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -37,7 +41,8 @@ class PatientRegistrationEditScreen extends StatefulWidget {
 class _PatientRegistrationEditScreenState
     extends State<PatientRegistrationEditScreen> {
   XFile? capturedFile;
-
+  final CampCreationController campCreationController =
+      Get.put(CampCreationController());
   late TextEditingController _campIDTextController;
   late TextEditingController _campDateTextController;
   late TextEditingController _genderTextController;
@@ -58,8 +63,8 @@ class _PatientRegistrationEditScreenState
   LookupDet? _selectedDivision = null;
   LookupDet? _selectedGender = null;
   LookupDetHierarchical? _selectedDistrict = null;
-  LookupDetHierarchical? _selectedTaluka = null;
-  LookupDetHierarchical? _selectedCity = null;
+  LookupDetHierDetails? _selectedTaluka = null;
+  LookupDetHierDetails? _selectedCity = null;
   DateTime? _selectedCampDate;
   PatientData? patientDetails;
 
@@ -260,7 +265,7 @@ class _PatientRegistrationEditScreenState
             });
           }
           if (state.getTalukaListStatus.isSuccess) {
-            talukaBottomSheet(context, (p0) {
+            talukaBottomSheetV1(context, (p0) {
               setState(() {
                 _selectedTaluka = p0;
                 _talukaTextController.text = p0.lookupDetHierDescEn!;
@@ -268,7 +273,7 @@ class _PatientRegistrationEditScreenState
             });
           }
           if (state.getTownListStatus.isSuccess) {
-            townBottomSheet(context, (p0) {
+            townBottomSheetV1(context, (p0) {
               setState(() {
                 _selectedCity = p0;
                 _cityTextController.text = p0.lookupDetHierDescEn!;
@@ -357,10 +362,89 @@ class _PatientRegistrationEditScreenState
                           ),
                           Column(
                             children: [
+                              GetBuilder(
+                                  init: CampCreationController(),
+                                  builder: (controller) {
+                                    return AppRoundTextField(
+                                      controller:
+                                          controller.locationNameController,
+                                      inputType: TextInputType.text,
+                                      onChange: (p0) {},
+                                      onTap: () async {
+                                        await locationNameBottomSheet(
+                                            context,
+                                            (p0) async => {
+                                                  controller
+                                                          .selectedLocationVal =
+                                                      p0.locationName,
+                                                  controller.selectedLocation =
+                                                      p0,
+                                                  controller
+                                                      .locationNameController
+                                                      .text = controller
+                                                          .selectedLocationVal ??
+                                                      "",
+                                                  await controller.getDist(
+                                                      controller
+                                                          .selectedLocation
+                                                          ?.lookupDetHierIdDistrict
+                                                          .toString(),
+                                                      false),
+                                                  controller.update()
+                                                },
+                                            "Location name",
+                                            controller.locationNameModel
+                                                    ?.details ??
+                                                []);
+                                      },
+                                      // maxLength: 12,
+                                      readOnly: true,
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Location Name',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
+                                      suffix: SizedBox(
+                                        height:
+                                            getProportionateScreenHeight(20),
+                                        width: getProportionateScreenHeight(20),
+                                        child: Center(
+                                          child: Image.asset(
+                                            icArrowDownOrange,
+                                            height:
+                                                getProportionateScreenHeight(
+                                                    20),
+                                            width: getProportionateScreenHeight(
+                                                20),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                              SizedBox(
+                                height: responsiveHeight(10),
+                              ),
                               AppRoundTextField(
                                 controller: _campIDTextController,
                                 inputType: TextInputType.number,
                                 onChange: (p0) {},
+                                readOnly: true,
+                                onTap: () {
+                                  context.read<MasterDataBloc>().add(
+                                      GetCampListDropdown(
+                                          locationId: campCreationController
+                                              .selectedLocation!
+                                              .locationMasterId!));
+                                },
                                 maxLength: 12,
                                 label: RichText(
                                   text: const TextSpan(
@@ -375,6 +459,31 @@ class _PatientRegistrationEditScreenState
                                       ]),
                                 ),
                                 hint: "",
+                                suffix: BlocBuilder<MasterDataBloc,
+                                    MasterDataState>(
+                                  builder: (context, state) {
+                                    return state.getCampDropdownListStatus
+                                            .isInProgress
+                                        ? SizedBox(
+                                            height: responsiveHeight(20),
+                                            width: responsiveHeight(20),
+                                            child: const Center(
+                                                child:
+                                                    CircularProgressIndicator()),
+                                          )
+                                        : SizedBox(
+                                            height: responsiveHeight(20),
+                                            width: responsiveHeight(20),
+                                            child: Center(
+                                              child: Image.asset(
+                                                icArrowDownOrange,
+                                                height: responsiveHeight(20),
+                                                width: responsiveHeight(20),
+                                              ),
+                                            ),
+                                          );
+                                  },
+                                ),
                               ),
                               SizedBox(
                                 height: responsiveHeight(20),
@@ -800,7 +909,9 @@ class _PatientRegistrationEditScreenState
                                           ]
                                         };
                                         context.read<MasterDataBloc>().add(
-                                            GetTalukaList(payload: payload));
+                                            GetTalukaList(
+                                                payload: _selectedDistrict!
+                                                    .lookupDetHierId!));
                                       },
                                       suffix: BlocBuilder<MasterDataBloc,
                                           MasterDataState>(
@@ -857,9 +968,10 @@ class _PatientRegistrationEditScreenState
                                             {"lookup_det_code": "CTV"}
                                           ]
                                         };
-                                        context
-                                            .read<MasterDataBloc>()
-                                            .add(GetTownList(payload: payload));
+                                        context.read<MasterDataBloc>().add(
+                                            GetTownList(
+                                                payload: _selectedTaluka!
+                                                    .lookupDetHierId!));
                                       },
                                       suffix: BlocBuilder<MasterDataBloc,
                                           MasterDataState>(
