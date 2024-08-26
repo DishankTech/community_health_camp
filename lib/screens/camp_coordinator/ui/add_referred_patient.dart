@@ -9,7 +9,6 @@ import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -98,7 +97,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                       color: Colors.grey.withOpacity(0.5), // Shadow color
                       spreadRadius: 2, // Spread radius
                       blurRadius: 7, // Blur radius
-                      offset: Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
                 ),
@@ -110,7 +109,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                           height: SizeConfig.screenHeight * 0.7,
                           color: Colors.black
                               .withOpacity(0.3), // Semi-transparent overlay
-                          child: Column(
+                          child: const Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -258,7 +257,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                   {"title": "STEM", "id": 3},
                                   {"title": "USER", "id": 4}
                                 ];
-                                commonBottomSheet(
+                                commonStackholderSheet(
                                     context,
                                     (p0) => {
                                           setState(() {
@@ -273,7 +272,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                           })
                                         },
                                     "Referred To",
-                                    list);
+                                    extractedStackholderData);
                               },
                               readOnly: true,
                               label: RichText(
@@ -375,7 +374,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                       listpatientNameController.text =
                           campregisteredpatients[index].name;
                       return Container(
-                        margin: EdgeInsets.all(8),
+                        margin: const EdgeInsets.all(8),
                         width: SizeConfig.screenWidth * 0.95,
                         // height: SizeConfig.screenHeight /3,
                         decoration: BoxDecoration(
@@ -388,14 +387,14 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                   Colors.grey.withOpacity(0.5), // Shadow color
                               spreadRadius: 2, // Spread radius
                               blurRadius: 7, // Blur radius
-                              offset:
-                                  Offset(0, 3), // changes position of shadow
+                              offset: const Offset(
+                                  0, 3), // changes position of shadow
                             ),
                           ],
                         ),
                         child: Container(
-                          margin: EdgeInsets.all(8),
-                          padding: EdgeInsets.all(8),
+                          margin: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

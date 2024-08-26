@@ -2559,148 +2559,307 @@ class LocationNameBottomSheetContentState
   }
 }
 
-Future<dynamic> locationNameBottomSheet(
-  BuildContext context,
-  Function(dynamic) onItemSelected,
-  String bottomSheetTitle,
-  List<dynamic> list,
-) {
+Future<dynamic> commonLocationSheet(
+    BuildContext context,
+    Function(Map<String, dynamic>) onItemSelected,
+    String bottomSheetTitle,
+    List<Map<String, dynamic>> list) {
   return showModalBottomSheet(
-    context: context,
-    isScrollControlled: false,
-    builder: (c) => LocationNameBottomSheetContent(
-      onItemSelected: onItemSelected,
-      bottomSheetTitle: bottomSheetTitle,
-      list: list,
-    ),
-  );
-}
-
-class LocationNameBottomSheetContent extends StatefulWidget {
-  final Function(dynamic) onItemSelected;
-  final String bottomSheetTitle;
-  final List<dynamic> list;
-
-  const LocationNameBottomSheetContent({
-    super.key,
-    required this.onItemSelected,
-    required this.bottomSheetTitle,
-    required this.list,
-  });
-
-  @override
-  State<LocationNameBottomSheetContent> createState() =>
-      LocationNameBottomSheetContentState();
-}
-
-class LocationNameBottomSheetContentState
-    extends State<LocationNameBottomSheetContent> {
-  int? selectedIndex;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: SizeConfig.screenWidth,
-      decoration: BoxDecoration(
-        color: kWhiteColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(responsiveHeight(50)),
-          topRight: Radius.circular(responsiveHeight(50)),
-        ),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => Container(
+            width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(
+                color: kWhiteColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(responsiveHeight(50)),
+                    topRight: Radius.circular(responsiveHeight(50)))),
+            child: Column(
               children: [
-                Text(
-                  widget.bottomSheetTitle,
-                  style: TextStyle(
-                    fontSize: responsiveFont(17),
-                    fontWeight: FontWeight.bold,
-                    color: kPrimaryColor,
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        bottomSheetTitle,
+                        style: TextStyle(
+                            fontSize: responsiveFont(17),
+                            fontWeight: FontWeight.bold,
+                            color: kPrimaryColor),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.cancel_presentation))
+                    ],
                   ),
                 ),
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.cancel_presentation),
+                SizedBox(
+                  height: SizeConfig.screenHeight * 0.3,
+                  child: BlocBuilder<MasterDataBloc, MasterDataState>(
+                    builder: (context, state) {
+                      return list != null
+                          ? ListView.builder(
+                              itemCount: list.length,
+                              shrinkWrap: true,
+                              itemBuilder: (c, i) => Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6, horizontal: 12),
+                                  child: InkWell(
+                                    onTap: () {
+                                      // var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['lookup_det_hier_desc_en']};
+                                      var selectedItem = {
+                                        'id': list[i]['location_master_id'],
+                                        'title': list[i]['location_name']
+                                      };
+                                      onItemSelected(selectedItem);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kContainerBack,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.circle_outlined),
+                                            SizedBox(
+                                              width: responsiveWidth(6),
+                                            ),
+                                            // Text(list[i]['lookup_det_hier_desc_en']),
+                                            Text(list[i]['location_name']),
+                                            const Spacer(),
+                                            const Icon(
+                                              Icons.check_circle,
+                                              color: kPrimaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const Center(child: Text("Data Not Available"));
+                    },
+                  ),
                 ),
               ],
             ),
-          ),
-          SizedBox(
-            height: SizeConfig.screenHeight * 0.3,
-            child: ListView.builder(
-              itemCount: widget.list.length,
-              shrinkWrap: true,
-              itemBuilder: (c, i) => Padding(
-                padding: const EdgeInsets.all(2.0),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 6,
-                    horizontal: 12,
-                  ),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        selectedIndex = i;
-                      });
+          ));
+}
 
-                      widget.onItemSelected(widget.list[i]);
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: kContainerBack,
-                        borderRadius: BorderRadius.circular(10),
+Future<dynamic> commonStackholderSheet(
+    BuildContext context,
+    Function(Map<String, dynamic>) onItemSelected,
+    String bottomSheetTitle,
+    List<Map<String, dynamic>> list) {
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => Container(
+            width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(
+                color: kWhiteColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(responsiveHeight(50)),
+                    topRight: Radius.circular(responsiveHeight(50)))),
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        bottomSheetTitle,
+                        style: TextStyle(
+                            fontSize: responsiveFont(17),
+                            fontWeight: FontWeight.bold,
+                            color: kPrimaryColor),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            selectedIndex == i
-                                ? Icon(
-                                    Icons.radio_button_checked,
-                                    color: kPrimaryColor,
-                                    size: responsiveFont(14.0),
-                                  )
-                                : Icon(
-                                    Icons.circle_outlined,
-                                    size: responsiveFont(14.0),
-                                  ),
-                            SizedBox(
-                              width: responsiveWidth(6),
-                            ),
-                            Text(
-                              widget.list[i].locationName ?? "",
-                              style: TextStyle(
-                                  fontSize: responsiveFont(14.0),
-                                  fontWeight: selectedIndex == i
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
-                            ),
-                            const Spacer(),
-                            if (selectedIndex == i)
-                              Icon(
-                                Icons.check_circle,
-                                color: kPrimaryColor,
-                                size: responsiveFont(14.0),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.cancel_presentation))
+                    ],
                   ),
                 ),
-              ),
+                SizedBox(
+                  height: SizeConfig.screenHeight * 0.3,
+                  child: BlocBuilder<MasterDataBloc, MasterDataState>(
+                    builder: (context, state) {
+                      return list != null
+                          ? ListView.builder(
+                              itemCount: list.length,
+                              shrinkWrap: true,
+                              itemBuilder: (c, i) => Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6, horizontal: 12),
+                                  child: InkWell(
+                                    onTap: () {
+                                      // var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['lookup_det_hier_desc_en']};
+                                      var selectedItem = {
+                                        'id': list[i]['stakeholder_master_id'],
+                                        'title': list[i]
+                                            ['stakeholder_sub_type2_en']
+                                      };
+                                      onItemSelected(selectedItem);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kContainerBack,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.circle_outlined),
+                                            SizedBox(
+                                              width: responsiveWidth(6),
+                                            ),
+                                            // Text(list[i]['lookup_det_hier_desc_en']),
+                                            Container(
+                                                width:
+                                                    MediaQuery.sizeOf(context)
+                                                            .width *
+                                                        0.7,
+                                                child: Text(
+                                                  list[i][
+                                                      'stakeholder_sub_type2_en'],
+                                                  textAlign: TextAlign.start,
+                                                  softWrap: true,
+                                                )),
+                                            const Spacer(),
+                                            const Icon(
+                                              Icons.check_circle,
+                                              color: kPrimaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const Center(child: Text("Data Not Available"));
+                    },
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
+          ));
+}
+
+Future<dynamic> commonDateTimeSheet(
+    BuildContext context,
+    Function(Map<String, dynamic>) onItemSelected,
+    String bottomSheetTitle,
+    List<Map<String, dynamic>> list) {
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => Container(
+            width: SizeConfig.screenWidth,
+            decoration: BoxDecoration(
+                color: kWhiteColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(responsiveHeight(50)),
+                    topRight: Radius.circular(responsiveHeight(50)))),
+            child: Column(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        bottomSheetTitle,
+                        style: TextStyle(
+                            fontSize: responsiveFont(17),
+                            fontWeight: FontWeight.bold,
+                            color: kPrimaryColor),
+                      ),
+                      IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: const Icon(Icons.cancel_presentation))
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: SizeConfig.screenHeight * 0.3,
+                  child: BlocBuilder<MasterDataBloc, MasterDataState>(
+                    builder: (context, state) {
+                      return list != null
+                          ? ListView.builder(
+                              itemCount: list.length,
+                              shrinkWrap: true,
+                              itemBuilder: (c, i) => Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 6, horizontal: 12),
+                                  child: InkWell(
+                                    onTap: () {
+                                      // var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['lookup_det_hier_desc_en']};
+                                      var selectedItem = {
+                                        'id': list[i]['camp_create_request_id'],
+                                        'title': list[i]['prop_camp_date']
+                                      };
+                                      onItemSelected(selectedItem);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: kContainerBack,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.circle_outlined),
+                                            SizedBox(
+                                              width: responsiveWidth(6),
+                                            ),
+                                            // Text(list[i]['lookup_det_hier_desc_en']),
+                                            Text(list[i]['prop_camp_date']),
+                                            const Spacer(),
+                                            const Icon(
+                                              Icons.check_circle,
+                                              color: kPrimaryColor,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : const Center(child: Text("Data Not Available"));
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ));
 }

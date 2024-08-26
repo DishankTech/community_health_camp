@@ -160,7 +160,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                         controller: locationNameController,
                                         onChange: (p0) {},
                                         onTap: () {
-                                          commonBottomSheet(
+                                          commonLocationSheet(
                                               context,
                                               (p0) => {
                                                     setState(() {
@@ -238,7 +238,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                      fetchCampDateList();
                                   }, currentTime: DateTime.now());*/
 
-                                          commonBottomSheet(
+                                          commonDateTimeSheet(
                                               context,
                                               (p0) => {
                                                     setState(() {
@@ -477,7 +477,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                           AppRoutes.addReferredPatient);
                                     },
                                     mWidth: SizeConfig.screenWidth * 0.6,
-                                    title: "Add Registered Patient",
+                                    title: "Add Referred Patient",
                                     iconData: Icon(
                                       Icons.arrow_forward,
                                       color: kWhiteColor,
