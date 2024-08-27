@@ -47,6 +47,15 @@ class GetDistrictList extends MasterDataEvent {
   List<Object> get props => [payload];
 }
 
+class GetDistrictOnDivision extends MasterDataEvent {
+  int payload;
+  GetDistrictOnDivision({required this.payload});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
+
 class GetStateList extends MasterDataEvent {
   Map payload;
   GetStateList({required this.payload});
@@ -57,7 +66,7 @@ class GetStateList extends MasterDataEvent {
 }
 
 class GetTownList extends MasterDataEvent {
-  Map payload;
+  int payload;
   GetTownList({required this.payload});
 
   @override
@@ -66,7 +75,7 @@ class GetTownList extends MasterDataEvent {
 }
 
 class GetTalukaList extends MasterDataEvent {
-  Map payload;
+  int payload;
   GetTalukaList({required this.payload});
 
   @override
@@ -119,6 +128,14 @@ class GetGenderRequest extends MasterDataEvent {
 class GetStakeholderSubType extends MasterDataEvent {
   Map payload;
   GetStakeholderSubType({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}
+
+class GetSectorType extends MasterDataEvent {
+  Map payload;
+  GetSectorType({required this.payload});
 
   @override
   List<Object> get props => [payload];

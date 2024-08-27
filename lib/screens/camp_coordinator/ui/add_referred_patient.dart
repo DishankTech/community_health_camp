@@ -49,6 +49,9 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
 
   List<Map<String, dynamic>> extractedStackholderData = [];
 
+  List selectedItems=[];
+  List selectedItemsString=[];
+
   @override
   void initState() {
     // TODO: implement initState
@@ -77,479 +80,495 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
         decoration: const BoxDecoration(
             image:
                 DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            mAppBarV1(title: "Add Referred Patient", context: context),
-            SizedBox(
-              height: responsiveHeight(10),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: SizeConfig.screenWidth * 0.95,
-                // height: SizeConfig.screenHeight /3,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(responsiveHeight(25)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5), // Shadow color
-                      spreadRadius: 2, // Spread radius
-                      blurRadius: 7, // Blur radius
-                      offset: const Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: isLoading
-                      ? Container(
-                          width: SizeConfig.designScreenWidth,
-                          height: SizeConfig.screenHeight * 0.7,
-                          color: Colors.black
-                              .withOpacity(0.3), // Semi-transparent overlay
-                          child: const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              CircularProgressIndicator(color: Colors.red),
-                              SizedBox(height: 10),
-                              Text(
-                                'Please wait..',
-                                style: TextStyle(
-                                  color:
-                                      Colors.white, // Text color for visibility
-                                  fontFamily: Montserrat,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      : Column(
-                          children: [
-                            SizedBox(
-                              height: responsiveHeight(20),
-                            ),
-                            AppRoundTextField(
-                              controller: patientNameController,
-                              inputStyle: TextStyle(
-                                  fontSize: responsiveFont(14),
-                                  color: kTextBlackColor),
-                              inputType: TextInputType.name,
-                              onChange: (p0) {},
-                              label: RichText(
-                                text: const TextSpan(
-                                    text: 'Patient Name',
-                                    style: TextStyle(
-                                        color: kHintColor,
-                                        fontFamily: Montserrat),
-                                    children: [
-                                      TextSpan(
-                                          text: "*",
-                                          style: TextStyle(color: Colors.red))
-                                    ]),
-                              ),
-                              hint: "",
-                            ),
-                            SizedBox(
-                              height: responsiveHeight(30),
-                            ),
-                            Row(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              mAppBarV1(title: "Add Referred Patient", context: context),
+              SizedBox(
+                height: responsiveHeight(10),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  width: SizeConfig.screenWidth * 0.95,
+                  // height: SizeConfig.screenHeight /3,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(responsiveHeight(25)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5), // Shadow color
+                        spreadRadius: 2, // Spread radius
+                        blurRadius: 7, // Blur radius
+                        offset: const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: isLoading
+                        ? Container(
+                            width: SizeConfig.designScreenWidth,
+                            height: SizeConfig.screenHeight * 0.7,
+                            color: Colors.black
+                                .withOpacity(0.3), // Semi-transparent overlay
+                            child: const Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Expanded(
-                                  child: AppRoundTextField(
-                                    controller: countryCodeController,
-                                    inputStyle: TextStyle(
-                                        fontSize: responsiveFont(14),
-                                        color: kTextBlackColor),
-                                    // inputType: TextInputType.number,
-                                    onChange: (p0) {},
-                                    onTap: () {
-                                      List<Map<String, dynamic>> list = [
-                                        {"title": "+91", "id": 1},
-                                      ];
-                                      commonBottonSheet(
-                                          context,
-                                          (p0) => {
-                                                setState(() {
-                                                  selectedCountryCode = p0;
-                                                  countryCodeController.text =
-                                                      selectedCountryCode![
-                                                          'title'];
-                                                })
-                                              },
-                                          "Country Code",
-                                          list);
-                                    },
-                                    maxLength: 3,
-                                    readOnly: true,
-                                    label: RichText(
-                                      text: const TextSpan(
-                                          text: 'Country Code',
-                                          style: TextStyle(
-                                              color: kHintColor,
-                                              fontFamily: Montserrat),
-                                          children: [
-                                            TextSpan(
-                                                text: "*",
-                                                style: TextStyle(
-                                                    color: Colors.red))
-                                          ]),
-                                    ),
-                                    hint: "",
-                                    suffix: SizedBox(
-                                      height: responsiveHeight(20),
-                                      width: responsiveHeight(20),
-                                      child: Center(
-                                        child: Image.asset(
-                                          icArrowDownOrange,
-                                          height: responsiveHeight(20),
-                                          width: responsiveHeight(20),
+                                CircularProgressIndicator(color: Colors.red),
+                                SizedBox(height: 10),
+                                Text(
+                                  'Please wait..',
+                                  style: TextStyle(
+                                    color:
+                                        Colors.white, // Text color for visibility
+                                    fontFamily: Montserrat,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : Column(
+                            children: [
+                              SizedBox(
+                                height: responsiveHeight(20),
+                              ),
+                              AppRoundTextField(
+                                controller: patientNameController,
+                                inputStyle: TextStyle(
+                                    fontSize: responsiveFont(14),
+                                    color: kTextBlackColor),
+                                inputType: TextInputType.name,
+                                onChange: (p0) {},
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Patient Name',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: [
+                                        TextSpan(
+                                            text: "*",
+                                            style: TextStyle(color: Colors.red))
+                                      ]),
+                                ),
+                                hint: "",
+                              ),
+                              SizedBox(
+                                height: responsiveHeight(30),
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: AppRoundTextField(
+                                      controller: countryCodeController,
+                                      inputStyle: TextStyle(
+                                          fontSize: responsiveFont(14),
+                                          color: kTextBlackColor),
+                                      // inputType: TextInputType.number,
+                                      onChange: (p0) {},
+                                      onTap: () {
+                                        List<Map<String, dynamic>> list = [
+                                          {"title": "+91", "id": 1},
+                                        ];
+                                        commonBottonSheet(
+                                            context,
+                                            (p0) => {
+                                                  setState(() {
+                                                    selectedCountryCode = p0;
+                                                    countryCodeController.text =
+                                                        selectedCountryCode![
+                                                            'title'];
+                                                  })
+                                                },
+                                            "Country Code",
+                                            list);
+                                      },
+                                      maxLength: 3,
+                                      readOnly: true,
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Country Code',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
+                                      suffix: SizedBox(
+                                        height: responsiveHeight(20),
+                                        width: responsiveHeight(20),
+                                        child: Center(
+                                          child: Image.asset(
+                                            icArrowDownOrange,
+                                            height: responsiveHeight(20),
+                                            width: responsiveHeight(20),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: responsiveWidth(10),
-                                ),
-                                Expanded(
-                                  child: AppRoundTextField(
-                                    controller: mobileController,
-                                    inputStyle: TextStyle(
-                                        fontSize: responsiveFont(14),
-                                        color: kTextBlackColor),
-                                    inputType: TextInputType.number,
-                                    onChange: (p0) {},
-                                    maxLength: 10,
-                                    label: RichText(
-                                      text: const TextSpan(
-                                          text: 'Mobile No',
-                                          style: TextStyle(
-                                              color: kHintColor,
-                                              fontFamily: Montserrat),
-                                          children: [
-                                            TextSpan(
-                                                text: "*",
-                                                style: TextStyle(
-                                                    color: Colors.red))
-                                          ]),
-                                    ),
-                                    hint: "",
-                                  ),
-                                )
-                              ],
-                            ),
-                            SizedBox(
-                              height: responsiveHeight(30),
-                            ),
-                            AppRoundTextField(
-                              controller: referredTo,
-                              inputStyle: TextStyle(
-                                  fontSize: responsiveFont(14),
-                                  color: kTextBlackColor),
-                              onChange: (p0) {},
-                              onTap: () {
-                                List<Map<String, dynamic>> list = [
-                                  {"title": "Hospital", "id": 1},
-                                  {"title": "NGO", "id": 2},
-                                  {"title": "STEM", "id": 3},
-                                  {"title": "USER", "id": 4}
-                                ];
-                                commonStackholderSheet(
-                                    context,
-                                    (p0) => {
-                                          setState(() {
-                                            selectedDesignationType = p0;
-                                            referredTo.text =
-                                                selectedDesignationType![
-                                                    'title'];
-                                            referredToId.text =
-                                                selectedDesignationType!['id']
-                                                    .toString();
-                                            print(referredToId.text);
-                                          })
-                                        },
-                                    "Referred To",
-                                    extractedStackholderData);
-                              },
-                              readOnly: true,
-                              label: RichText(
-                                text: const TextSpan(
-                                    text: 'Referred To',
-                                    style: TextStyle(
-                                        color: kHintColor,
-                                        fontFamily: Montserrat),
-                                    children: [
-                                      TextSpan(
-                                          text: "*",
-                                          style: TextStyle(color: Colors.red))
-                                    ]),
-                              ),
-                              hint: "",
-                              suffix: SizedBox(
-                                height: responsiveHeight(20),
-                                width: responsiveHeight(20),
-                                child: Center(
-                                  child: Image.asset(
-                                    icArrowDownOrange,
-                                    height: responsiveHeight(20),
-                                    width: responsiveHeight(20),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 12, bottom: 12, right: 12),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  InkWell(
-                                    child: Image.asset("assets/icons/add.png"),
-                                    onTap: () {
-                                      if (patientNameController.text.isEmpty) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Enter Patient Name',
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      } else if (countryCodeController
-                                          .text.isEmpty) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Select Country Code',
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      } else if (mobileController
-                                          .text.isEmpty) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Enter Mobile Number',
-                                            ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
-                                      } else {
-                                        addCard();
-                                      }
-                                    },
                                   ),
                                   SizedBox(
                                     width: responsiveWidth(10),
                                   ),
-                                  /*InkWell(
-                                    child: Image.asset("assets/icons/remove.png"),
-                                    onTap: () {
-                                      removeCard(carbonCommentsList.length );
-                                    },
-                                  ),*/
+                                  Expanded(
+                                    child: AppRoundTextField(
+                                      controller: mobileController,
+                                      inputStyle: TextStyle(
+                                          fontSize: responsiveFont(14),
+                                          color: kTextBlackColor),
+                                      inputType: TextInputType.number,
+                                      onChange: (p0) {},
+                                      maxLength: 10,
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Mobile No',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
+                                    ),
+                                  )
                                 ],
                               ),
-                            )
-                          ],
-                        ),
-                ),
-              ),
-            ),
-            Visibility(
-              visible: campregisteredpatients.isNotEmpty ? true : false,
-              child: Expanded(
-                child: ListView.builder(
-                    padding: EdgeInsets.zero,
-                    shrinkWrap: true,
-                    itemCount: campregisteredpatients.length,
-                    itemBuilder: (context, index) {
-                      listpatientNameController.text =
-                          campregisteredpatients[index].name;
-                      return Container(
-                        margin: const EdgeInsets.all(8),
-                        width: SizeConfig.screenWidth * 0.95,
-                        // height: SizeConfig.screenHeight /3,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius:
-                              BorderRadius.circular(responsiveHeight(25)),
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  Colors.grey.withOpacity(0.5), // Shadow color
-                              spreadRadius: 2, // Spread radius
-                              blurRadius: 7, // Blur radius
-                              offset: const Offset(
-                                  0, 3), // changes position of shadow
-                            ),
-                          ],
-                        ),
-                        child: Container(
-                          margin: const EdgeInsets.all(8),
-                          padding: const EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
                               SizedBox(
-                                height: responsiveHeight(10),
+                                height: responsiveHeight(30),
                               ),
-                              Container(
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: "Patient Name: ",
-                                    style: TextStyle(
-                                        color: kTextColor,
-                                        fontSize: responsiveFont(14),
-                                        fontWeight: FontWeight.bold),
-                                    children: [
-                                      TextSpan(
-                                          text: campregisteredpatients[index]
-                                              .name,
-                                          style: TextStyle(
-                                              fontSize: responsiveFont(14),
-                                              color: kTextColor,
-                                              fontWeight: FontWeight.normal))
-                                    ],
+                              AppRoundTextField(
+                                controller: referredTo,
+                                maxLines: 3,
+                                inputStyle: TextStyle(
+                                    fontSize: responsiveFont(14),
+                                    color: kTextBlackColor),
+                                onChange: (p0) {},
+                                onTap: () async{
+          
+                                  //multi select
+          
+                                  await multiSelectBottomSheet(
+                                    context,
+                                        (List<dynamic> items) {
+                                      setState(() {
+                                        selectedItems = items;
+                                        referredToId.text = selectedItems.map((item) => item['stakeholder_master_id']).join(', ');
+                                        referredTo.text = selectedItems.map((item) => item['stakeholder_sub_type2_en']).join(', ');
+          
+                                        // referredTo.text = selectedItems.join(', ');
+                                      });
+                                    },"Referred To",
+                                      extractedStackholderData, // Example items
+                                  );
+          
+          
+                                /*await  multiSelectBottomSheet(
+                                      context,
+                                      (p0) => {
+                                            setState(() {
+                                              // selectedDesignationType = p0 ;
+                                              referredTo.text =
+                                                  selectedDesignationType![
+                                                      'title'];
+                                              referredToId.text =
+                                                  selectedDesignationType!['id']
+                                                      .toString();
+                                              print(referredToId.text);
+                                            })
+                                          },
+                                      "Referred To",
+                                      extractedStackholderData);*/
+                                },
+                                readOnly: true,
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Referred To',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: [
+                                        TextSpan(
+                                            text: "*",
+                                            style: TextStyle(color: Colors.red))
+                                      ]),
+                                ),
+                                hint: "",
+                                suffix: SizedBox(
+                                  height: responsiveHeight(20),
+                                  width: responsiveHeight(20),
+                                  child: Center(
+                                    child: Image.asset(
+                                      icArrowDownOrange,
+                                      height: responsiveHeight(20),
+                                      width: responsiveHeight(20),
+                                    ),
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                height: responsiveHeight(10),
-                              ),
-                              Container(
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: "Mobile Number: ",
-                                    style: TextStyle(
-                                        color: kTextColor,
-                                        fontSize: responsiveFont(14),
-                                        fontWeight: FontWeight.bold),
-                                    children: [
-                                      TextSpan(
-                                          text: campregisteredpatients[index]
-                                              .mobile,
-                                          style: TextStyle(
-                                              fontSize: responsiveFont(14),
-                                              color: kTextColor,
-                                              fontWeight: FontWeight.normal))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(10),
-                              ),
-                              Container(
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: "Referred To: ",
-                                    style: TextStyle(
-                                        color: kTextColor,
-                                        fontSize: responsiveFont(14),
-                                        fontWeight: FontWeight.bold),
-                                    children: [
-                                      TextSpan(
-                                          text: campregisteredpatients[index]
-                                              .referredTo,
-                                          style: TextStyle(
-                                              fontSize: responsiveFont(14),
-                                              color: kTextColor,
-                                              fontWeight: FontWeight.normal))
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 5, bottom: 5, right: 12),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      InkWell(
-                                        child: Image.asset(
-                                          "assets/icons/remove.png",
-                                          color: Colors.red,
-                                        ),
-                                        onTap: () {
-                                          // removeCard(carbonCommentsList.length - 1);
-                                          removeCard(
-                                              campregisteredpatients.length -
-                                                  1);
-                                        },
-                                      ),
-                                    ],
-                                  ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 12, bottom: 12, right: 12),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      child: Image.asset("assets/icons/add.png"),
+                                      onTap: () {
+                                        if (patientNameController.text.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Enter Patient Name',
+                                              ),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        } else if (countryCodeController
+                                            .text.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Select Country Code',
+                                              ),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        } else if (mobileController
+                                            .text.isEmpty) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                'Enter Mobile Number',
+                                              ),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        } else {
+                                          addCard();
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: responsiveWidth(10),
+                                    ),
+                                    /*InkWell(
+                                      child: Image.asset("assets/icons/remove.png"),
+                                      onTap: () {
+                                        removeCard(carbonCommentsList.length );
+                                      },
+                                    ),*/
+                                  ],
                                 ),
                               )
                             ],
                           ),
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: campregisteredpatients.isNotEmpty ? true : false,
+                child: Expanded(
+                  child: ListView.builder(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      itemCount: campregisteredpatients.length,
+                      itemBuilder: (context, index) {
+                        listpatientNameController.text =
+                            campregisteredpatients[index].name;
+                        return Container(
+                          margin: const EdgeInsets.all(8),
+                          width: SizeConfig.screenWidth * 0.95,
+                          // height: SizeConfig.screenHeight /3,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.circular(responsiveHeight(25)),
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                    Colors.grey.withOpacity(0.5), // Shadow color
+                                spreadRadius: 2, // Spread radius
+                                blurRadius: 7, // Blur radius
+                                offset: const Offset(
+                                    0, 3), // changes position of shadow
+                              ),
+                            ],
+                          ),
+                          child: Container(
+                            margin: const EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: responsiveHeight(10),
+                                ),
+                                Container(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: "Patient Name: ",
+                                      style: TextStyle(
+                                          color: kTextColor,
+                                          fontSize: responsiveFont(14),
+                                          fontWeight: FontWeight.bold),
+                                      children: [
+                                        TextSpan(
+                                            text: campregisteredpatients[index]
+                                                .name,
+                                            style: TextStyle(
+                                                fontSize: responsiveFont(14),
+                                                color: kTextColor,
+                                                fontWeight: FontWeight.normal))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: responsiveHeight(10),
+                                ),
+                                Container(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: "Mobile Number: ",
+                                      style: TextStyle(
+                                          color: kTextColor,
+                                          fontSize: responsiveFont(14),
+                                          fontWeight: FontWeight.bold),
+                                      children: [
+                                        TextSpan(
+                                            text: campregisteredpatients[index]
+                                                .mobile,
+                                            style: TextStyle(
+                                                fontSize: responsiveFont(14),
+                                                color: kTextColor,
+                                                fontWeight: FontWeight.normal))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: responsiveHeight(10),
+                                ),
+                                Container(
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text: "Referred To: ",
+                                      style: TextStyle(
+                                          color: kTextColor,
+                                          fontSize: responsiveFont(14),
+                                          fontWeight: FontWeight.bold),
+                                      children: [
+                                        TextSpan(
+                                            text: campregisteredpatients[index]
+                                                .referredTo,
+                                            style: TextStyle(
+                                                fontSize: responsiveFont(14),
+                                                color: kTextColor,
+                                                fontWeight: FontWeight.normal))
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 5, bottom: 5, right: 12),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        InkWell(
+                                          child: Image.asset(
+                                            "assets/icons/remove.png",
+                                            color: Colors.red,
+                                          ),
+                                          onTap: () {
+                                            // removeCard(carbonCommentsList.length - 1);
+                                            removeCard(
+                                                campregisteredpatients.length -
+                                                    1);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+              ),
+              /*  Column(
+                children: carbonCommentsList
+                    .asMap()
+                    .entries
+                    .map((entry) {
+                  int index = entry.key;
+                  CardData cardData = entry.value;
+                  return campCard(index, cardData);
+                }).toList(),
+              ),*/
+              SizedBox(
+                height: responsiveHeight(10),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    Flexible(
+                      flex: 1,
+                      child: AppButton(
+                        onTap: () {
+                          addCard();
+                          sendPostRequest();
+                        },
+                        title: "Save",
+                        iconData: Icon(
+                          Icons.arrow_forward,
+                          color: kWhiteColor,
+                          size: responsiveHeight(24),
                         ),
-                      );
-                    }),
-              ),
-            ),
-            /*  Column(
-              children: carbonCommentsList
-                  .asMap()
-                  .entries
-                  .map((entry) {
-                int index = entry.key;
-                CardData cardData = entry.value;
-                return campCard(index, cardData);
-              }).toList(),
-            ),*/
-            SizedBox(
-              height: responsiveHeight(10),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: AppButton(
-                      onTap: () {
-                        sendPostRequest();
-                      },
-                      title: "Save",
-                      iconData: Icon(
-                        Icons.arrow_forward,
-                        color: kWhiteColor,
-                        size: responsiveHeight(24),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: responsiveWidth(60),
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: AppButton(
-                      onTap: () {
-                        clearAllFields();
-                      },
-                      title: "Clear",
-                      buttonColor: Colors.grey,
-                      iconData: Icon(
-                        Icons.arrow_forward,
-                        color: kWhiteColor,
-                        size: responsiveHeight(24),
+                    SizedBox(
+                      width: responsiveWidth(60),
+                    ),
+                    Flexible(
+                      flex: 1,
+                      child: AppButton(
+                        onTap: () {
+                          clearAllFields();
+                        },
+                        title: "Clear",
+                        buttonColor: Colors.grey,
+                        iconData: Icon(
+                          Icons.arrow_forward,
+                          color: kWhiteColor,
+                          size: responsiveHeight(24),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -690,6 +709,18 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
           setState(() {
             campregisteredpatients.removeAt(i);
           });
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Patients Saved Successfully',
+                ),
+                backgroundColor: Colors.green,
+              ),
+            );
+            Navigator.pop(context);
+            // Navigator.pushNamed(context, AppRoutes.campCoordinator);
+
         }
       } else {
         print(
@@ -697,17 +728,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
       }
     }
 
-    if (campregisteredpatients.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Patients Saved Successfully',
-          ),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pushNamed(context, AppRoutes.campCoordinator);
-    }
+
   }
 
   void clearAllFields() {

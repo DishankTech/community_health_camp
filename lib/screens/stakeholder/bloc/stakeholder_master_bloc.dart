@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:community_health_app/screens/stakeholder/repository/stakeholder_repository.dart';
@@ -41,7 +42,7 @@ class StakeholderMasterBloc
       http.Response res = await stakeholderRepository.getAll(event.payload);
       if (res.statusCode == 200) {
         emit(state.copyWith(
-            getAllStakeholderResponse: res.body,
+            getAllStakeholderResponse: utf8.decode(res.bodyBytes),
             getAllStakeholderStatus: FormzSubmissionStatus.success));
       } else {
         emit(state.copyWith(

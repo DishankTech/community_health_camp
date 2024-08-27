@@ -36,9 +36,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
     List<ConnectivityResult> connectivityResult =
         await Connectivity().checkConnectivity();
 
-    doctorDeskController.hasInternet =
-        (connectivityResult.contains(ConnectivityResult.mobile) ||
-            connectivityResult.contains(ConnectivityResult.wifi));
+    doctorDeskController.hasInternet = (connectivityResult.contains(ConnectivityResult.mobile) || connectivityResult.contains(ConnectivityResult.wifi));
 
     if (doctorDeskController.hasInternet) {
       doctorDeskController.getStakHolder();

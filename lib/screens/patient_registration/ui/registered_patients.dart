@@ -410,23 +410,23 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                               ),
                                             ),
                                           ),
-                                          SizedBox(
-                                            width: responsiveHeight(10),
-                                          ),
-                                          Material(
-                                            color: Colors.transparent,
-                                            child: InkWell(
-                                              borderRadius:
-                                                  BorderRadius.circular(5),
-                                              onTap: () {},
-                                              child: Ink(
-                                                child: Image.asset(
-                                                  icEye,
-                                                  height: responsiveHeight(24),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                                          // SizedBox(
+                                          //   width: responsiveHeight(10),
+                                          // ),
+                                          // Material(
+                                          //   color: Colors.transparent,
+                                          //   child: InkWell(
+                                          //     borderRadius:
+                                          //         BorderRadius.circular(5),
+                                          //     onTap: () {},
+                                          //     child: Ink(
+                                          //       child: Image.asset(
+                                          //         icEye,
+                                          //         height: responsiveHeight(24),
+                                          //       ),
+                                          //     ),
+                                          //   ),
+                                          // ),
                                         ],
                                       ),
                                     ),

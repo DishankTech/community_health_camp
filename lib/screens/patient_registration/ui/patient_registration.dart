@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/common_bloc/models/camp_dropdown_list_response_model.dart';
 import 'package:community_health_app/core/common_bloc/models/get_master_response_model_with_hier.dart';
+import 'package:community_health_app/core/common_bloc/models/master_lookup_det_hier_response_model.dart';
 import 'package:community_health_app/core/common_bloc/models/master_response_model.dart';
 import 'package:community_health_app/core/common_widgets/app_bar_v1.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
@@ -60,8 +61,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   LookupDet? _selectedDivision = null;
   LookupDet? _selectedGender = null;
   LookupDetHierarchical? _selectedDistrict = null;
-  LookupDetHierarchical? _selectedTaluka = null;
-  LookupDetHierarchical? _selectedCity = null;
+  LookupDetHierDetails? _selectedTaluka = null;
+  LookupDetHierDetails? _selectedCity = null;
   LocationNameDetails? selectedLocation;
   CampDetails? _selectedCamp;
 
@@ -213,6 +214,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                 _selectedGender = p0;
                 _genderTextController.text = p0.lookupDetDescEn!;
               });
+              context.read<MasterDataBloc>().add(ResetMasterState());
             });
           }
           if (state.getDivisionListStatus.isSuccess) {
@@ -221,15 +223,16 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                 _selectedDivision = p0;
                 _divisionTextController.text = p0.lookupDetDescEn!;
               });
+              context.read<MasterDataBloc>().add(ResetMasterState());
             });
           }
           if (state.getCampDropdownListStatus.isSuccess) {
             campListDropdownBottomSheet(context, (p0) {
               setState(() {
                 _selectedCamp = p0;
-                _divisionTextController.text =
-                    p0.campCreateRequestId.toString()!;
+                _campIDTextController.text = p0.campCreateRequestId.toString()!;
               });
+              context.read<MasterDataBloc>().add(ResetMasterState());
             });
           }
           if (state.getDivisionListStatus.isSuccess) {
@@ -238,6 +241,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                 _selectedDivision = p0;
                 _divisionTextController.text = p0.lookupDetDescEn!;
               });
+              context.read<MasterDataBloc>().add(ResetMasterState());
             });
           }
 
@@ -247,22 +251,25 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                 _selectedDistrict = p0;
                 _districtTextController.text = p0.lookupDetHierDescEn!;
               });
+              context.read<MasterDataBloc>().add(ResetMasterState());
             });
           }
           if (state.getTalukaListStatus.isSuccess) {
-            talukaBottomSheet(context, (p0) {
+            talukaBottomSheetV1(context, (p0) {
               setState(() {
                 _selectedTaluka = p0;
                 _talukaTextController.text = p0.lookupDetHierDescEn!;
               });
+              context.read<MasterDataBloc>().add(ResetMasterState());
             });
           }
           if (state.getTownListStatus.isSuccess) {
-            townBottomSheet(context, (p0) {
+            townBottomSheetV1(context, (p0) {
               setState(() {
                 _selectedCity = p0;
                 _cityTextController.text = p0.lookupDetHierDescEn!;
               });
+              context.read<MasterDataBloc>().add(ResetMasterState());
             });
           }
         },
@@ -894,7 +901,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                           ]
                                         };
                                         context.read<MasterDataBloc>().add(
-                                            GetTalukaList(payload: payload));
+                                            GetTalukaList(
+                                                payload: _selectedDistrict!
+                                                    .lookupDetHierId!));
                                       },
                                       suffix: BlocBuilder<MasterDataBloc,
                                           MasterDataState>(
@@ -951,9 +960,10 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                             {"lookup_det_code": "CTV"}
                                           ]
                                         };
-                                        context
-                                            .read<MasterDataBloc>()
-                                            .add(GetTownList(payload: payload));
+                                        context.read<MasterDataBloc>().add(
+                                            GetTownList(
+                                                payload: _selectedTaluka!
+                                                    .lookupDetHierId!));
                                       },
                                       suffix: BlocBuilder<MasterDataBloc,
                                           MasterDataState>(
@@ -1006,7 +1016,11 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                             var payload = {
                                               "patient_id": null,
                                               "camp_create_request_id":
-                                                  _campIDTextController.text,
+                                                  _campIDTextController
+                                                          .text.isEmpty
+                                                      ? 1
+                                                      : _selectedCamp
+                                                          ?.campCreateRequestId,
                                               "camp_date": DateFormat(
                                                       'yyyy-MM-dd')
                                                   .format(_selectedCampDate!),
