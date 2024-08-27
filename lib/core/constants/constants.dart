@@ -49,6 +49,12 @@ const kHintColor = Color(0xFF666666);
 const kTodayColor = Color(0XFFF27A0C);
 const dashboardSubTitle = Color(0XFF666666);
 const noInternetTextColor = Color(0XFF333333);
+const dasboardCardTitleColor = Color(0XFF1D6582);
+const totlPaitentRegisterdPieChartColor = Color(0XFF5597DF);
+const totlPaitentTreatementPieChartColor = Color(0XFFE5897F);
+const totlPaitentReferredPieChartColor = Color(0XFFF7DF6F);
+const totlPaitentSubReferredPieChartColor = Color(0XFF7077AA);
+const campConductedDistrictWiseBarChartcolor = Color(0XFF00008B);
 // final headingStyle = TextStyle(
 //   fontSize: getProportionateScreenWidth(28),
 //   fontWeight: FontWeight.bold,

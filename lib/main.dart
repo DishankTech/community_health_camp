@@ -1,5 +1,7 @@
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/common_bloc/repository/master_repository.dart';
+import 'package:community_health_app/screens/dashboard_patient_registration/bloc/dashboard_bloc.dart';
+import 'package:community_health_app/screens/dashboard_patient_registration/repository/dashboard_repository.dart';
 import 'package:community_health_app/screens/patient_registration/bloc/patient_registration_bloc.dart';
 import 'package:community_health_app/screens/patient_registration/repository/patient_registration_repository.dart';
 import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master_bloc.dart';
@@ -31,7 +33,8 @@ void main() {
         RepositoryProvider(create: (context) => UserMasterRepository()),
         RepositoryProvider(
             create: (context) => PatientRegistrationRepository()),
-        RepositoryProvider(create: (context) => StakeholderRepository())
+        RepositoryProvider(create: (context) => StakeholderRepository()),
+        RepositoryProvider(create: (context) => DashboardRepository())
       ],
       child: MultiBlocProvider(providers: [
         BlocProvider(create: (context) => ProfileCubit()),
@@ -52,6 +55,10 @@ void main() {
             create: (context) => StakeholderMasterBloc(
                 stakeholderRepository:
                     RepositoryProvider.of<StakeholderRepository>(context))),
+        BlocProvider(
+            create: (context) => DashboardBloc(
+                dashboardRepository:
+                    RepositoryProvider.of<DashboardRepository>(context))),
       ], child: const MyApp())));
   // Set the status bar color
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(

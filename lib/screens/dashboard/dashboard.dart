@@ -84,6 +84,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           for (var element in state.loginResponseModel!.details!.last.menu!) {
             if (element.parentList != null) {
+              if (element.parentList!.menuFeatureName == "Dashboard") {
+                if (element.childList != null) {
+                  for (var element in element.childList!) {
+                    for (var staticMenu in _staticMenuList) {
+                      if (element.menuControllerMobile != null &&
+                          (element.menuControllerMobile == staticMenu.name)) {
+                        _menuList.add(staticMenu);
+                      }
+                    }
+                  }
+                }
+              }
               if (element.parentList!.menuFeatureName == "Master") {
                 if (element.childList != null) {
                   for (var element in element.childList!) {
@@ -98,18 +110,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
 
               if (element.parentList!.menuFeatureName == "Registration") {
-                if (element.childList != null) {
-                  for (var element in element.childList!) {
-                    for (var staticMenu in _staticMenuList) {
-                      if (element.menuControllerMobile != null &&
-                          (element.menuControllerMobile == staticMenu.name)) {
-                        _menuList.add(staticMenu);
-                      }
-                    }
-                  }
-                }
-              }
-              if (element.parentList!.menuFeatureName == "Dashboard") {
                 if (element.childList != null) {
                   for (var element in element.childList!) {
                     for (var staticMenu in _staticMenuList) {

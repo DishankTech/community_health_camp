@@ -70,14 +70,14 @@ class AppTheme {
       primary: kPrimaryColor,
       secondary: kPrimaryDarkColor,
       surface: shrineSurfaceWhite,
-      surfaceContainer: kWhiteColor,
+      background: kWhiteColor,
       error: Colors.red,
       onPrimary: kWhiteColor,
       onSecondary: kWhiteColor,
       onSurface: kBlackColor,
       onError: shrineSurfaceWhite,
       brightness: Brightness.light,
-      surfaceContainerHighest: kWhiteColor);
+      onBackground: kWhiteColor);
 
   static Color shrinePink50 = const Color(0xFFFEEAE6);
   static Color shrinePink100 = const Color(0xFFFEDBD0);
