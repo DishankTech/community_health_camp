@@ -3539,3 +3539,99 @@ class StakeHolderNameBottomSheetContentState
     );
   }
 }
+
+Future<dynamic> multiSelectBottomSheet(
+  BuildContext context,
+  Function(List<dynamic>) onItemsSelected, // Callback for selected items
+  String bottomSheetTitle,
+  List<dynamic> list,
+) {
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: false,
+    builder: (c) => _MultiSelectBottomSheetContent(
+      onItemsSelected: onItemsSelected,
+      bottomSheetTitle: bottomSheetTitle,
+      list: list,
+    ),
+  );
+}
+
+class _MultiSelectBottomSheetContent extends StatefulWidget {
+  final Function(List<dynamic>) onItemsSelected;
+  final String bottomSheetTitle;
+  final List<dynamic> list;
+
+  _MultiSelectBottomSheetContent({
+    required this.onItemsSelected,
+    required this.bottomSheetTitle,
+    required this.list,
+  });
+
+  @override
+  _MultiSelectBottomSheetContentState createState() =>
+      _MultiSelectBottomSheetContentState();
+}
+
+class _MultiSelectBottomSheetContentState
+    extends State<_MultiSelectBottomSheetContent> {
+  List<dynamic> selectedItems = [];
+  List<dynamic> selectedItemsName = [];
+  List<dynamic> selectedItemsId = [];
+
+  void _onItemTapped(dynamic item) {
+    setState(() {
+      if (selectedItems.contains(item)) {
+        selectedItems.remove(item);
+      } else {
+        selectedItems.add(item);
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            widget.bottomSheetTitle,
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: widget.list.length,
+            itemBuilder: (context, index) {
+              final item = widget.list[index];
+              final isSelected = selectedItems.contains(item);
+              return ListTile(
+                title: Text(item['stakeholder_sub_type2_en'].toString()),
+                trailing: isSelected
+                    ? Icon(Icons.check_box)
+                    : Icon(Icons.check_box_outline_blank),
+                onTap: () => _onItemTapped(item),
+              );
+            },
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            child: Text('Confirm'),
+            onPressed: () {
+              widget.onItemsSelected(selectedItems);
+              Navigator.of(context).pop();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}

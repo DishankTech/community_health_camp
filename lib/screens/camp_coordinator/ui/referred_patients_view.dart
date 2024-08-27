@@ -73,77 +73,76 @@ class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
                       ],
                     ),
                   )
-                : Expanded(
-                    child: ListView.builder(
-                        itemCount: patientsList.length,
-                        padding: EdgeInsets.zero,
-                        itemBuilder: (context, index) {
-                          // String name = getNameById(locationData, patientsList[index].locationMasterId);
-                          return Container(
-                            margin: EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [BoxShadow(offset: Offset(0, 0), color: Colors.grey.withOpacity(0.5), spreadRadius: 1, blurRadius: 5)],
-                                borderRadius: BorderRadius.circular(responsiveHeight(20))),
-                            child: Padding(
-                              padding: const EdgeInsets.all(10.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                : patientsList.isEmpty
+                    ? Center(
+                      child: Container(
+                        width: SizeConfig.designScreenWidth * 0.7,
+                        height: SizeConfig.screenHeight * 0.7,
+                                    color: Colors.white,
+                                    child: Center(child: Text("Data Not Available")),
+                                  ),
+                    )
+                    : Expanded(
+                        child: ListView.builder(
+                            itemCount: patientsList.length,
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              // String name = getNameById(locationData, patientsList[index].locationMasterId);
+                              return Container(
+                                margin: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [BoxShadow(offset: Offset(0, 0), color: Colors.grey.withOpacity(0.5), spreadRadius: 1, blurRadius: 5)],
+                                    borderRadius: BorderRadius.circular(responsiveHeight(20))),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      Text(
-                                        patientsList[index].patientName,
-                                        style: TextStyle(fontWeight: FontWeight.bold),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            patientsList[index].patientName,
+                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Mobile No. : ",
+                                            style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold),
+                                          ),
+                                          Text(patientsList[index].contactNumber.toString()),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 2,
+                                      ),
+                                      RichText(
+                                        text: TextSpan(
+                                          text: "Referred To : ",
+                                          style: TextStyle(color: kTextColor, fontFamily: Montserrat, fontSize: responsiveFont(15), fontWeight: FontWeight.bold),
+                                          children: [
+                                            TextSpan(
+                                                text: patientsList[index].stakeholderNamesEn.toString(),
+                                                style: TextStyle(fontFamily: Montserrat, fontSize: responsiveFont(15), color: kTextColor, fontWeight: FontWeight.normal))
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(
-                                    height: 2,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Mobile No. : ",
-                                        style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(patientsList[index].contactNumber.toString()),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 2,
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: "Referred To : ",
-                                      style: TextStyle(
-                                          color: kTextColor,
-                                          fontFamily: Montserrat,
-                                          fontSize: responsiveFont(15),
-                                          fontWeight: FontWeight.bold),
-                                      children: [
-                                        TextSpan(
-                                            text:patientsList[index].stakeholderNamesEn.toString(),
-                                            style: TextStyle(
-                                              fontFamily: Montserrat,
-                                                  fontSize: responsiveFont(15),
-                                                color: kTextColor,
-                                                fontWeight:
-                                                FontWeight.normal))
-                                      ],
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                          );
-                        }))
+                                ),
+                              );
+                            }))
           ],
         ),
       ),
