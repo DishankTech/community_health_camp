@@ -46,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icStakeholderMaster,
           routeName: AppRoutes.stakeholderMasterListScreen),
       DashboardMenuModel(
-          name: "Camp Creation",
+          name: "Camp Request",
           image: icCampCreation,
           routeName: AppRoutes.campCreation),
       DashboardMenuModel(
@@ -166,10 +166,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               onTap: () {
                                                 DataProvider().clearUserData();
 
-                                                Navigator.pushNamedAndRemoveUntil(
+                                                Navigator
+                                                    .pushNamedAndRemoveUntil(
                                                   context,
                                                   AppRoutes.loginScreen,
-                                                      (Route<dynamic> route) => false, // This condition removes all previous routes
+                                                  (Route<dynamic> route) =>
+                                                      false, // This condition removes all previous routes
                                                 );
 
                                                 // Navigator.pushNamed(context,

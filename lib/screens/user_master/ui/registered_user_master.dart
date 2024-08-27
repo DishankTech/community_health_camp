@@ -11,6 +11,7 @@ import 'package:community_health_app/screens/patient_registration/models/registe
 import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master_bloc.dart';
 import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
 import 'package:community_health_app/screens/user_master/models/get_user_response_model.dart';
+import 'package:community_health_app/screens/user_master/ui/user_master.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -166,8 +167,24 @@ class _RegisteredUserMasterScreenState
                   color: Colors.transparent,
                   child: InkWell(
                     borderRadius: BorderRadius.circular(5),
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.userMasterScreen);
+                    onTap: () async {
+                      var res = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UserMasterScreen()),
+                      );
+                      if (res != null && mounted) {
+                        data.clear();
+                        context
+                            .read<UserMasterBloc>()
+                            .add(GetUserRequest(payload: {
+                              "total_pages": totalPages,
+                              "page": crrPage,
+                              "total_count": 1,
+                              "per_page": perPage,
+                              "data": ""
+                            }));
+                      }
                     },
                     child: Ink(
                       child: Image.asset(

@@ -159,15 +159,15 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                   backgroundColor: Colors.green,
                   duration: const Duration(seconds: 2),
                 ));
-              context.read<UserMasterBloc>().add(GetUserRequest(payload: const {
-                    "total_pages": 1,
-                    "page": 1,
-                    "total_count": 1,
-                    "per_page": 100,
-                    "data": ""
-                  }));
+              // context.read<UserMasterBloc>().add(GetUserRequest(payload: const {
+              //       "total_pages": 1,
+              //       "page": 1,
+              //       "total_count": 1,
+              //       "per_page": 10,
+              //       "data": ""
+              //     }));
 
-              Navigator.pop(context);
+              Navigator.pop(context, "refresh");
             } else {
               ScaffoldMessenger.of(context)
                 ..clearSnackBars()
@@ -176,9 +176,8 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                   backgroundColor: Colors.red,
                   duration: const Duration(seconds: 2),
                 ));
+              context.read<UserMasterBloc>().add(ResetUserMasterState());
             }
-
-            context.read<UserMasterBloc>().add(ResetUserMasterState());
           }
         },
         child: BlocListener<MasterDataBloc, MasterDataState>(

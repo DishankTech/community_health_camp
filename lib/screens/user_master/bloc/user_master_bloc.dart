@@ -65,13 +65,11 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
           getUserResponse: '',
           createUserStatus: FormzSubmissionStatus.initial,
           getUserStatus: FormzSubmissionStatus.inProgress));
-      print(event.payload);
       http.Response res = await userMasterRepository.getAll(event.payload);
 
       if (res.statusCode == 200) {
-        String decodeRes = res.body;
         emit(state.copyWith(
-            getUserResponse: decodeRes,
+            getUserResponse: res.body,
             getUserStatus: FormzSubmissionStatus.success));
       } else {
         emit(state.copyWith(
