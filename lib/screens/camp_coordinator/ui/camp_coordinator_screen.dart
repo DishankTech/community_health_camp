@@ -8,7 +8,9 @@ import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
+import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +19,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as picker;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/camp_coordinator_registered_patient_model.dart';
 
 class CampCoordinator extends StatefulWidget {
   const CampCoordinator({super.key});
@@ -84,6 +89,8 @@ class _CampCoordinatorState extends State<CampCoordinator> {
   bool isLoadingLocation = false;
   bool isSaveLoad = false;
 
+  // bool isLoading=false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -117,7 +124,10 @@ class _CampCoordinatorState extends State<CampCoordinator> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                mAppBarV1(title: "Camp Details", context: context),
+                mAppBarV1(title: "Camp Details", context: context,onBackButtonPress: (){
+                  Navigator.pushNamedAndRemoveUntil(context, "/dashboard_view", (Route<dynamic> route) => false);
+
+                }),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -966,6 +976,18 @@ class _CampCoordinatorState extends State<CampCoordinator> {
 
         final data = json.decode(response.body);
         if (data['status_code'] == 200) {
+          
+          DataProvider().storeCampDashboardId(data['uniquerId']);
+
+          Future<List<CampCoordRegisteredPatientModel>> campRefPatientList = DataProvider().getPatientList()  ;
+
+          List<CampCoordRegisteredPatientModel> tempList = await campRefPatientList;
+          if(tempList.isNotEmpty)
+            {
+              sendPostRequest(data['uniquerId'],tempList);
+            }
+
+          
           setState(() {
             isSaveLoad = false;
             // clearAllFields();
@@ -981,6 +1003,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
           );
 
           Navigator.pushNamed(context, AppRoutes.referredPatientList);
+
         }
       } else {
         setState(() {
@@ -1009,6 +1032,75 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       patientsReferred.text = "";
     });
   }
+
+  Future<void> sendPostRequest(data, List campRefPatientList) async {
+    // List<CampCoordRegisteredPatientModel> campregisteredpatients = campRefPatientList;
+    setState(() {
+      isSaveLoad = true;
+    });
+
+    for (int i = 0; i < campRefPatientList.length; i++) {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      var body = json.encode({
+        "tt_camp_dashboard_ref_patients_list": [
+          {
+            "dashboard_ref_patients_id": null,
+            "camp_dashboard_id": data,
+            "patient_id": null,
+            "patient_name": campRefPatientList[i].name,
+            "age": 0,
+            "lookup_det_id_gender": null,
+            "contact_number": campRefPatientList[i].mobile,
+            "org_id": 1,
+            "status": 1,
+            "tt_camp_dashboard_ref_patients_det_list": [
+              {
+                "dashboard_ref_patients_det_id": null,
+                "dashboard_ref_patients_id": null,
+                "lookup_det_hier_id_stakeholder_sub_type2": null,
+                "stakeholder_master_id": int.parse(campRefPatientList[i].referredToId.toString()),
+                "org_id": 1,
+                "status": 1
+              }
+            ]
+          }
+        ]
+      });
+      print(body);
+      var response = await http.post(
+        Uri.parse('http://210.89.42.117:8085/api/administrator/masters/add/dashboard-patient-ref-details'),
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        final data = json.decode(response.body);
+        if (data['status_code'] == 200) {
+
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Patients Saved Successfully',
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
+          // Navigator.pop(context);
+          SharedPreferences prefrences = await SharedPreferences.getInstance();
+          await prefrences.remove('patients');
+          Navigator.pushNamed(context, AppRoutes.referredPatientList);
+        }
+      } else {
+        print('Request failed with status: ${response.statusCode}. ${response.reasonPhrase}');
+      }
+    }
+  }
+
 }
 
 class CardData {

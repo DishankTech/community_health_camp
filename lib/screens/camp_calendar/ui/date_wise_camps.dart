@@ -282,7 +282,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
 
     var headers = {'Content-Type': 'application/json'};
 
-    var body = json.encode({"total_pages": 10, "page": 1, "total_count": 20, "per_page": 20, "data": null});
+    var body = json.encode({"total_pages": 1, "page": 1, "total_count": null, "per_page": 100, "data": null});
 
     try {
       campDetailsList = [];

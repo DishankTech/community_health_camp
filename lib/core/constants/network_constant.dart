@@ -32,7 +32,7 @@ const String kGetMyAppointments = "getAutoSuggetionDetails";
 
 const String userLogin = "public/account/login";
 const String userResetPassword =
-    "api/profile/account/update/user-password-reset";
+    "profile/account/update/user-password-reset";
 const String kCreateUser = "profile/account/new/";
 const String kUpdateUser = "profile/account/update/user-account-details";
 const String kLoginNameValidation =

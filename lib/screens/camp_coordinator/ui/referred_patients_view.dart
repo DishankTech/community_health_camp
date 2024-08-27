@@ -5,9 +5,11 @@ import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../core/constants/images.dart';
@@ -51,6 +53,9 @@ class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
             mAppBarV1(
               title: "Patient Referred List",
               context: context,
+            onBackButtonPress: (){
+              Get.to(() => const CampCoordinator());
+            }
             ),
             isLoading
                 ? Container(
@@ -96,47 +101,61 @@ class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
                                     borderRadius: BorderRadius.circular(responsiveHeight(20))),
                                 child: Padding(
                                   padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                  child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
+                                      Image.asset("assets/images/user.png"),
+                                      SizedBox(width: responsiveWidth(10),),
+                                      Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Text(
-                                            patientsList[index].patientName,
-                                            style: TextStyle(fontWeight: FontWeight.bold),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                patientsList[index].patientName,
+                                                style: TextStyle(fontWeight: FontWeight.bold),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Mobile No. : ",
+                                                style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold),
+                                              ),
+                                              Text(patientsList[index].contactNumber.toString()),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+
+
+                                          Container(
+                                            width: SizeConfig.screenWidth * 0.7,
+                                            child: RichText(
+                                              text: TextSpan(
+                                                text: "Referred To : ",
+                                                style: TextStyle(color: kTextColor, fontFamily: Montserrat, fontSize: responsiveFont(15), fontWeight: FontWeight.bold),
+                                                children: [
+                                                  TextSpan(
+                                                      text: patientsList[index].stakeholderNamesEn.toString(),
+                                                      style: TextStyle(fontFamily: Montserrat, fontSize: responsiveFont(15), color: kTextColor, fontWeight: FontWeight.normal),)
+                                                ],
+                                              ),
+                                              softWrap: true,
+                                              overflow: TextOverflow.clip,
+                                            ),
                                           ),
                                         ],
-                                      ),
-                                      SizedBox(
-                                        height: 2,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "Mobile No. : ",
-                                            style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold),
-                                          ),
-                                          Text(patientsList[index].contactNumber.toString()),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 2,
-                                      ),
-                                      RichText(
-                                        text: TextSpan(
-                                          text: "Referred To : ",
-                                          style: TextStyle(color: kTextColor, fontFamily: Montserrat, fontSize: responsiveFont(15), fontWeight: FontWeight.bold),
-                                          children: [
-                                            TextSpan(
-                                                text: patientsList[index].stakeholderNamesEn.toString(),
-                                                style: TextStyle(fontFamily: Montserrat, fontSize: responsiveFont(15), color: kTextColor, fontWeight: FontWeight.normal))
-                                          ],
-                                        ),
                                       ),
                                     ],
                                   ),

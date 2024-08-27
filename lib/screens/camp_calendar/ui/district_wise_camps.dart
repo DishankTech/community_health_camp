@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
+import 'package:community_health_app/core/utilities/date_not_found.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/camp_calendar/model/camp_list_response_model.dart';
 import 'package:community_health_app/screens/camp_calendar/model/date_wise_camps_model.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:pinput/pinput.dart';
 
 import '../../../core/common_widgets/app_bar_v1.dart';
 import '../../../core/constants/constants.dart';
@@ -179,48 +181,31 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                 ),
               ),
             ),
-            Expanded(
-                child: ListView.builder(
-                    itemCount: _districtWiseCampList.length,
-                    padding: EdgeInsets.zero,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(context, AppRoutes.campWiseRegisteredPatients);
-                        },
-                        child: isLoading
-                            ? Container(
-                                width: SizeConfig.designScreenWidth,
-                                height: SizeConfig.screenHeight * 0.7,
-                                color: Colors.black.withOpacity(0.3), // Semi-transparent overlay
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    CircularProgressIndicator(color: Colors.red),
-                                    SizedBox(height: 10),
-                                    Text(
-                                      'Please wait..',
-                                      style: TextStyle(
-                                        color: Colors.white, // Text color for visibility
-                                        fontFamily: Montserrat,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : _districtWiseCampList.isEmpty
+            _districtWiseCampList.isEmpty
+                ? DataNotFound()
+                : Expanded(
+                    child: ListView.builder(
+                        itemCount: _districtWiseCampList.length,
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          print("_districtWiseCampList" + _districtWiseCampList.length.toString());
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(context, AppRoutes.campWiseRegisteredPatients);
+                            },
+                            child: isLoading
                                 ? Container(
                                     width: SizeConfig.designScreenWidth,
                                     height: SizeConfig.screenHeight * 0.7,
-                                    color: Colors.white, // Semi-transparent overlay
+                                    color: Colors.black.withOpacity(0.3), // Semi-transparent overlay
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       crossAxisAlignment: CrossAxisAlignment.center,
                                       children: [
+                                        CircularProgressIndicator(color: Colors.red),
                                         SizedBox(height: 10),
                                         Text(
-                                          'Details Not Found',
+                                          'Please wait..',
                                           style: TextStyle(
                                             color: Colors.white, // Text color for visibility
                                             fontFamily: Montserrat,
@@ -324,8 +309,8 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
                                       ),
                                     ),
                                   ),
-                      );
-                    }))
+                          );
+                        }))
           ],
         ),
       ),
@@ -355,6 +340,14 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
 
         if (jsonResponse['message'] == "Data Not Found") {
           _districtWiseCampList = [];
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Data Not Found',
+              ),
+              backgroundColor: Colors.red,
+            ),
+          );
         } else {
           DistrictWiseCampsModel districtWiseCampsModel = DistrictWiseCampsModel.fromJson(jsonResponse);
 
