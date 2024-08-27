@@ -42,7 +42,6 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
 
   @override
   void initState() {
-
     doctorDeskController.pagingController = PagingController(firstPageKey: 1);
     doctorDeskController.pagingController.addPageRequestListener((pageKey) {
       doctorDeskController.fetchPage(pageKey);
@@ -186,8 +185,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    controller
-                                                            .doctorDesk?.length
+                                                    controller.doctorDesk.length
                                                             .toString() ??
                                                         "",
                                                     style: const TextStyle(
@@ -232,13 +230,9 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      // controller
-                                                      //         .doctorDeskModel
-                                                      //         ?.details
-                                                      //         ?.data?[0]
-                                                      //         .campCreateRequestId
-                                                      //         .toString() ??
-                                                      "1",
+                                                      controller.campId
+                                                          .toString(),
+                                                      // "1",
                                                       style: TextStyle(
                                                         fontSize:
                                                             responsiveFont(12),
@@ -246,7 +240,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                         fontWeight:
                                                             FontWeight.w500,
                                                       ),
-                                                    ),
+                                                    )
                                                   ],
                                                 ),
                                               ),
@@ -271,7 +265,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      "",
+                                                      controller.campDate ?? '',
                                                       style: TextStyle(
                                                         fontSize:
                                                             responsiveFont(12),
@@ -304,18 +298,13 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                               ),
                                             ),
                                             Text(
-                                              // controller
-                                              //         .doctorDeskModel
-                                              //         ?.details
-                                              //         ?.data?[0]
-                                              //         .stakeholderNameEn ??
-                                              "",
+                                              controller.campName ?? "",
                                               style: TextStyle(
                                                 fontSize: responsiveFont(12),
                                                 // color: dashboardSubTitle,
                                                 fontWeight: FontWeight.w500,
                                               ),
-                                            ),
+                                            )
                                           ],
                                         ),
                                         SizedBox(
@@ -337,11 +326,8 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                             ),
                                             Expanded(
                                               child: Text(
-                                                // controller
-                                                //         .doctorDeskModel
-                                                //         ?.details
-                                                //         ?.data?[0]
-                                                //         .locationName ??
+                                                controller
+                                                        .campLocation ??
                                                 "",
                                                 style: TextStyle(
                                                   fontSize: responsiveFont(12),
@@ -361,191 +347,207 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                             Expanded(
                               child: PagedListView<int, DoctorDeskData>(
                                   pagingController: controller.pagingController,
-                                  builderDelegate:
-                                      PagedChildBuilderDelegate<DoctorDeskData>(
-                                          itemBuilder:
-                                              (context, item, index) => Stack(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .only(
-                                                                  left: 8.0,
-                                                                  right: 8.0,
-                                                                  bottom: 8.0),
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              color:
-                                                                  Colors.white,
-                                                              boxShadow: [
-                                                                BoxShadow(
-                                                                  offset:
-                                                                      const Offset(
-                                                                          0, 0),
+                                  builderDelegate: PagedChildBuilderDelegate<
+                                          DoctorDeskData>(
+                                      itemBuilder: (context, item, index) =>
+                                          Stack(children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 8.0,
+                                                  right: 8.0,
+                                                  bottom: 8.0),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      offset:
+                                                          const Offset(0, 0),
+                                                      color: Colors.grey
+                                                          .withOpacity(0.5),
+                                                      spreadRadius: 1,
+                                                      blurRadius: 5,
+                                                    )
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                    responsiveHeight(20),
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.all(
+                                                    responsiveHeight(20),
+                                                  ),
+                                                  child: Row(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Flexible(
+                                                        flex: 1,
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                              border: Border.all(
                                                                   color: Colors
-                                                                      .grey
-                                                                      .withOpacity(
-                                                                          0.5),
-                                                                  spreadRadius:
-                                                                      1,
-                                                                  blurRadius: 5,
-                                                                )
-                                                              ],
+                                                                      .blue),
                                                               borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                responsiveHeight(
-                                                                    20),
-                                                              ),
+                                                                  BorderRadius.circular(
+                                                                      responsiveHeight(
+                                                                          10))),
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(1.0),
+                                                            child: Image.asset(
+                                                              "assets/username.png",
+                                                              color:
+                                                                  Colors.grey,
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                              // _list[i].image,
+                                                              height:
+                                                                  responsiveHeight(
+                                                                      54),
+                                                              width:
+                                                                  responsiveWidth(
+                                                                      54),
                                                             ),
-                                                            child: Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .all(
-                                                                responsiveHeight(
-                                                                    20),
-                                                              ),
-                                                              child: Row(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      SizedBox(
+                                                        width:
+                                                            responsiveWidth(16),
+                                                      ),
+                                                      Flexible(
+                                                        flex: 3,
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Text(
+                                                                item.patientName ??
+                                                                    "",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        responsiveFont(
+                                                                            14),
+                                                                    color:
+                                                                        kBlackColor,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500)),
+                                                            SizedBox(
+                                                              height:
+                                                                  responsiveHeight(
+                                                                      10),
+                                                            ),
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                text:
+                                                                    "Mobile No: ",
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        kTextColor,
+                                                                    fontSize:
+                                                                        responsiveFont(
+                                                                            12),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
                                                                 children: [
-                                                                  Flexible(
-                                                                    flex: 1,
-                                                                    child:
-                                                                        Container(
-                                                                      decoration: BoxDecoration(
-                                                                          border:
-                                                                              Border.all(color: Colors.blue),
-                                                                          borderRadius: BorderRadius.circular(responsiveHeight(10))),
-                                                                      child:
-                                                                          Padding(
-                                                                        padding: const EdgeInsets
-                                                                            .all(
-                                                                            1.0),
-                                                                        child: Image
-                                                                            .asset(
-                                                                          "assets/username.png",
+                                                                  TextSpan(
+                                                                      text: item
+                                                                              .contactNumber ??
+                                                                          "",
+                                                                      style: TextStyle(
+                                                                          fontSize: responsiveFont(
+                                                                              12),
                                                                           color:
-                                                                              Colors.grey,
-                                                                          fit: BoxFit
-                                                                              .contain,
-                                                                          // _list[i].image,
-                                                                          height:
-                                                                              responsiveHeight(54),
-                                                                          width:
-                                                                              responsiveWidth(54),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    width:
-                                                                        responsiveWidth(
-                                                                            16),
-                                                                  ),
-                                                                  Flexible(
-                                                                    flex: 3,
-                                                                    child:
-                                                                        Column(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      children: [
-                                                                        Text(
-                                                                            item.patientName ??
-                                                                                "",
-                                                                            style: TextStyle(
-                                                                                fontSize: responsiveFont(14),
-                                                                                color: kBlackColor,
-                                                                                fontWeight: FontWeight.w500)),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              responsiveHeight(10),
-                                                                        ),
-                                                                        RichText(
-                                                                          text:
-                                                                              TextSpan(
-                                                                            text:
-                                                                                "Mobile No: ",
-                                                                            style: TextStyle(
-                                                                                color: kTextColor,
-                                                                                fontSize: responsiveFont(12),
-                                                                                fontWeight: FontWeight.bold),
-                                                                            children: [
-                                                                              TextSpan(text: item.contactNumber ?? "", style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal))
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                        SizedBox(
-                                                                          height:
-                                                                              responsiveHeight(10),
-                                                                        ),
-                                                                        RichText(
-                                                                          text:
-                                                                              TextSpan(
-                                                                            text:
-                                                                                "Address: ",
-                                                                            style: TextStyle(
-                                                                                color: kTextColor,
-                                                                                fontSize: responsiveFont(12),
-                                                                                fontWeight: FontWeight.bold),
-                                                                            children: [
-                                                                              TextSpan(
-                                                                                text: "${item.cityEn ?? ""} "
-                                                                                    "${item.districtEn ?? ""} "
-                                                                                    "${item.countryEn ?? ""}",
-                                                                                style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal),
-                                                                              )
-                                                                            ],
-                                                                          ),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
+                                                                              kTextColor,
+                                                                          fontWeight:
+                                                                              FontWeight.normal))
                                                                 ],
                                                               ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                        Positioned(
-                                                          top: 20,
-                                                          right: 20,
-                                                          child: Row(
-                                                            children: [
-                                                              Material(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                child: InkWell(
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              5),
-                                                                  onTap: () {
-                                                                    // Navigator.pushNamed(context,
-                                                                    //     AppRoutes.addTreatmentDetailsScreen);
-                                                                    Get.to(
-                                                                        AddTreatmentDetailsScreen(
-                                                                      doctorDeskData:
-                                                                      item,
-                                                                    ));
-                                                                  },
-                                                                  child: Ink(
-                                                                    child: Image
-                                                                        .asset(
-                                                                      icEdit,
-                                                                      height:
-                                                                          responsiveHeight(
-                                                                              36),
-                                                                    ),
-                                                                  ),
-                                                                ),
+                                                            SizedBox(
+                                                              height:
+                                                                  responsiveHeight(
+                                                                      10),
+                                                            ),
+                                                            RichText(
+                                                              text: TextSpan(
+                                                                text:
+                                                                    "Address: ",
+                                                                style: TextStyle(
+                                                                    color:
+                                                                        kTextColor,
+                                                                    fontSize:
+                                                                        responsiveFont(
+                                                                            12),
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text:
+                                                                        "${item.cityEn ?? ""} "
+                                                                        "${item.districtEn ?? ""} "
+                                                                        "${item.countryEn ?? ""}",
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            responsiveFont(
+                                                                                12),
+                                                                        color:
+                                                                            kTextColor,
+                                                                        fontWeight:
+                                                                            FontWeight.normal),
+                                                                  )
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ]))),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Positioned(
+                                              top: 20,
+                                              right: 20,
+                                              child: Row(
+                                                children: [
+                                                  Material(
+                                                    color: Colors.transparent,
+                                                    child: InkWell(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5),
+                                                      onTap: () {
+                                                        // Navigator.pushNamed(context,
+                                                        //     AppRoutes.addTreatmentDetailsScreen);
+                                                        Get.to(
+                                                            AddTreatmentDetailsScreen(
+                                                          doctorDeskData: item,
+                                                        ));
+                                                      },
+                                                      child: Ink(
+                                                        child: Image.asset(
+                                                          icEdit,
+                                                          height:
+                                                              responsiveHeight(
+                                                                  36),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ]))),
                             ),
                           ],
                         )

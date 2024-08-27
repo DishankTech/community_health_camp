@@ -9,6 +9,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
 import '../../../core/common_widgets/app_bar_v1.dart';
 import '../../../core/common_widgets/app_button.dart';
 import '../../../core/common_widgets/app_round_textfield.dart';
@@ -235,7 +236,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                     children: [
                                                                       TextSpan(
                                                                           text:
-                                                                              "",
+                                                                          widget.doctorDeskData?.age.toString() ?? "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
                                                                               color: kTextColor,
@@ -268,7 +269,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                             FontWeight.bold),
                                                                     children: [
                                                                       TextSpan(
-                                                                          text:
+                                                                          text: widget.doctorDeskData?.lookupDetDescEn ??
                                                                               "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
@@ -545,36 +546,40 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                 ),
                                               ),
                                             ),
-
                                             Padding(
-                                              padding: const EdgeInsets.fromLTRB(
-                                                          20, 15, 20, 0),
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
                                               child: AppRoundTextField(
-                                                controller:
-                                                controller.stakeHolderController,
+                                                controller: controller
+                                                    .stakeHolderController,
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
                                                 onTap: () async {
                                                   await commonBottomSheet(
                                                       context,
-                                                          (p0) => {
-                                                        controller
-                                                            .selectedStakeHVal =
-                                                            p0.lookupDetHierDescEn,
-                                                        controller
-                                                            .selectedStakeH.addIfNotExist(p0),
-                                                        controller
-                                                            .stakeHolderController
-                                                            .text = controller
-                                                              .selectedStakeH.displayText(),
-                                                        controller.update()
-                                                      },
+                                                      (p0) => {
+                                                            controller
+                                                                    .selectedStakeHVal =
+                                                                p0.lookupDetHierDescEn,
+                                                            controller
+                                                                .selectedStakeH
+                                                                .addIfNotExist(
+                                                                    p0),
+                                                            controller
+                                                                    .stakeHolderController
+                                                                    .text =
+                                                                controller
+                                                                    .selectedStakeH
+                                                                    .displayText(),
+                                                            controller.update()
+                                                          },
                                                       "Refer To",
                                                       controller
-                                                          .stakeHolderModel
-                                                          ?.details
-                                                          ?.first
-                                                          .lookupDetHierarchical ??
+                                                              .stakeHolderModel
+                                                              ?.details
+                                                              ?.first
+                                                              .lookupDetHierarchical ??
                                                           []);
                                                 },
                                                 // maxLength: 12,
@@ -584,30 +589,33 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       text: 'Refer To',
                                                       style: TextStyle(
                                                           color: kHintColor,
-                                                          fontFamily: Montserrat),
+                                                          fontFamily:
+                                                              Montserrat),
                                                       children: [
                                                         TextSpan(
                                                             text: "*",
                                                             style: TextStyle(
-                                                                color: Colors.red))
+                                                                color:
+                                                                    Colors.red))
                                                       ]),
                                                 ),
                                                 hint: "",
                                                 suffix: SizedBox(
                                                   height:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                                  width: getProportionateScreenHeight(
-                                                      20),
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
                                                   child: Center(
                                                     child: Image.asset(
                                                       icArrowDownOrange,
                                                       height:
-                                                      getProportionateScreenHeight(
-                                                          20),
+                                                          getProportionateScreenHeight(
+                                                              20),
                                                       width:
-                                                      getProportionateScreenHeight(
-                                                          20),
+                                                          getProportionateScreenHeight(
+                                                              20),
                                                     ),
                                                   ),
                                                 ),
@@ -767,9 +775,9 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
   }
 }
 
-
 extension ListExtensions on List {
-  void addIfNotExist(LookupDetHierarchical element, {bool Function(LookupDetHierarchical item)? condition}) {
+  void addIfNotExist(LookupDetHierarchical element,
+      {bool Function(LookupDetHierarchical item)? condition}) {
     bool exists;
 
     if (condition != null) {
@@ -784,7 +792,8 @@ extension ListExtensions on List {
   }
 
   String displayText() {
-    return where((item) => item.lookupDetHierDescEn != null) // Filter out null values
+    return where((item) =>
+            item.lookupDetHierDescEn != null) // Filter out null values
         .map((item) => item.lookupDetHierDescEn!)
         .join(', '); // Joins with a comma and space separator
   }

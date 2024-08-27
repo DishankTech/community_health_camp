@@ -43,7 +43,7 @@ class _CampCreationState extends State<CampCreation> {
 
     if (campCreationController.hasInternet) {
       campCreationController.getLocationName();
-      // campCreationController.getStakHolder();
+      campCreationController.getStakHolder();
       campCreationController.getMemberType();
       campCreationController.getUserList();
     }
@@ -464,7 +464,8 @@ class _CampCreationState extends State<CampCreation> {
                                           campCreationController
                                               .saveCampReqModel
                                               .ttCampCreate
-                                              ?.stakeholderMasterId = 1;
+                                              ?.stakeholderMasterId = controller
+                                              .selectedStakeHName?.stakeholderMasterId;
 
                                           campCreationController
                                                   .saveCampReqModel
@@ -907,6 +908,9 @@ class _CamCreationCardState extends State<CamCreationCard> {
                               context,
                               (p0) => {},
                               "User Creation",
+                              details.userName ?? '',
+                              details.userMobileNumber ?? "",
+                              details.lookupDetIdType ?? null,
                               campCreationController.stakeHolderModel?.details
                                       ?.first.lookupDetHierarchical ??
                                   [],

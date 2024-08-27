@@ -24,6 +24,8 @@ class DoctorDeskData {
       this.stakeholderNameEn, 
       this.stakeholderNameRg, 
       this.locationName, 
+      this.age,
+      this.propCampDate,
       this.status,});
 
   DoctorDeskData.fromJson(dynamic json) {
@@ -51,6 +53,8 @@ class DoctorDeskData {
     stakeholderNameEn = json['stakeholder_name_en'];
     stakeholderNameRg = json['stakeholder_name_rg'];
     locationName = json['location_name'];
+    age = json['age'];
+    propCampDate = json['prop_camp_date'];
     status = json['status'];
   }
   int? patientDoctorDeskId;
@@ -77,6 +81,8 @@ class DoctorDeskData {
   String? stakeholderNameEn;
   String? stakeholderNameRg;
   String? locationName;
+  int? age;
+  String? propCampDate;
   int? status;
 
   Map<String, dynamic> toJson() {
@@ -105,6 +111,8 @@ class DoctorDeskData {
     map['stakeholder_name_en'] = stakeholderNameEn;
     map['stakeholder_name_rg'] = stakeholderNameRg;
     map['location_name'] = locationName;
+    map['age'] = age;
+    map['prop_camp_date'] = propCampDate;
     map['status'] = status;
     return map;
   }

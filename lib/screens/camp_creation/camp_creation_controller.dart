@@ -124,7 +124,7 @@ class CampCreationController extends GetxController {
     update();
   }
 
-  userCreation(loginName) async {
+  userCreation(loginName,fullName,mobileNo,memberTypeId) async {
     isLoading = true;
     final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.userCreation);
 
@@ -132,16 +132,16 @@ class CampCreationController extends GetxController {
       "user_id": null,
       "stakeholder_master_id": 1,
       // "stakeholder_master_id": selectedStakeHolder?.lookupDetHierId,
-      "full_name": loginName,
+      "full_name": fullName,
       "login_name": loginName,
       "passwords": "",
-      "mobile_number": "",
+      "mobile_number": mobileNo,
       "email_id": "",
       "first_login_pass_reset": "Y",
       "status": 1,
       "org_id": 1,
       "lookup_det_hier_id_stakeholder_type1": null,
-      "lookup_det_id_membertype": null
+      "lookup_det_id_membertype": memberTypeId.toString()
     };
 
     String jsonbody = json.encode(body);
