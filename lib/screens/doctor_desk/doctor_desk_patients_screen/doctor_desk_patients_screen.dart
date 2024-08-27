@@ -185,9 +185,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    controller.doctorDesk.length
-                                                            .toString() ??
-                                                        "",
+                                                    controller.totalPatientCount ?? '',
                                                     style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.w400,
@@ -400,6 +398,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                                     .all(1.0),
                                                             child: Image.asset(
                                                               "assets/username.png",
+                                                              // "assets/username.png",
                                                               color:
                                                                   Colors.grey,
                                                               fit: BoxFit
@@ -491,10 +490,11 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                                             .bold),
                                                                 children: [
                                                                   TextSpan(
-                                                                    text:
-                                                                        "${item.cityEn ?? ""} "
-                                                                        "${item.districtEn ?? ""} "
-                                                                        "${item.countryEn ?? ""}",
+                                                                    // text:
+                                                                    //     "${item.cityEn ?? ""} "
+                                                                    //     "${item.districtEn ?? ""} "
+                                                                    //     "${item.countryEn ?? ""}",
+                                                                    text: "",
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             responsiveFont(

@@ -17,6 +17,7 @@ class ApiConstants {
   static const String campApprovalDetails = "/administrator/camp/camp-approval-district-details";
   static const String saveCampApprovalDetails = "/administrator/camp/add/camp-district-approval-details";
   static const String doctorDeskList = "/administrator/camp/all-doctor-desk-details-pagination";
+  static const String doctorDeskPatientList = "/administrator/masters/all-patient-master-pagination";
   static const String addTreatmentDetails = "/administrator/camp/add/doctor-desk-details";
   static const String campCreationList = "/administrator/camp/all-camp-details-pagination";
   static const String campCreationDetails = "/administrator/camp/camp-request-details";

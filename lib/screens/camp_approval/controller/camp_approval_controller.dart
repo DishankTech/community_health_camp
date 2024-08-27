@@ -131,18 +131,11 @@ class CampApprovalController extends GetxController {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      // addlocationMasterResp = AddLocationMasterResp.fromJson(data);
 
-      // if (addlocationMasterResp!.statusCode == 200) {
       isLoading = false;
       CustomMessage.toast("Save Successfully");
-      Get.to(CampApprovalScreen());
+      Get.to(const CampApprovalScreen());
 
-      // } else {
-      //   isLoading = false;
-      //   CustomMessage.toast("Save Failed");
-      //   Get.back();
-      // }
 
       update();
     } else if (response.statusCode == 401) {

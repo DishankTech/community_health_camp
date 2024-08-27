@@ -42,6 +42,7 @@ class DoctorDeskController extends GetxController {
   String? campName;
   String? campLocation;
   String? campDate;
+  String? totalPatientCount;
 
   fetchPage(int pageKey) async {
     try {
@@ -66,7 +67,7 @@ class DoctorDeskController extends GetxController {
 
     // Make the API call here
 
-    var url = (ApiConstants.baseUrl + ApiConstants.doctorDeskList);
+    var url = (ApiConstants.baseUrl + ApiConstants.doctorDeskPatientList);
     // var requestBody = {"page": currentPage, "per_page": 4};
     var requestBody = {
       "total_pages": 0,
@@ -87,14 +88,16 @@ class DoctorDeskController extends GetxController {
       var data = json.decode(response.body);
 
       doctorDeskModel = DoctorDeskListModel.fromJson(data);
-      if (doctorDeskModel?.details != null) {
+      final details = doctorDeskModel?.details;
+      if (details != null) {
+        totalPatientCount= details.totalCount.toString() ?? "0";
         doctorDesk.addAll(doctorDeskModel!.details?.data ?? []);
         if (doctorDesk.isNotEmpty) {
           campId = doctorDesk[0].campCreateRequestId;
-          campName = doctorDesk[0].stakeholderNameEn;
-          campLocation = doctorDesk[0].locationName;
-          if (doctorDesk[0].propCampDate != null) {
-            campDate = convertToDate(doctorDesk[0].propCampDate!);
+          // campName = doctorDesk[0].stakeholderNameEn;
+          // campLocation = doctorDesk[0].locationName;
+          if (doctorDesk[0].campDate != null) {
+            campDate = doctorDesk[0].campDate;
           }
         }
       }

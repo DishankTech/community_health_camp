@@ -149,8 +149,7 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
                                                         TextSpan(
                                                             text: item
                                                                     .campCreateRequestId
-                                                                    .toString() ??
-                                                                "",
+                                                                    .toString(),
                                                             style: TextStyle(
                                                                 fontSize:
                                                                     responsiveFont(

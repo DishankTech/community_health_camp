@@ -1,118 +1,86 @@
 class DoctorDeskData {
   DoctorDeskData({
-      this.patientDoctorDeskId, 
-      this.campCreateRequestId, 
-      this.patientId, 
-      this.patientName, 
-      this.contactNumber, 
-      this.lookupDetDescEn, 
-      this.lookupDetDescRg, 
-      this.lookupDetHierIdDistrict, 
-      this.lookupDetHierIdTaluka, 
-      this.lookupDetHierIdCity, 
-      this.countryEn, 
-      this.countryRg, 
-      this.stateEn, 
-      this.stateRg, 
-      this.districtEn, 
-      this.districtRg, 
-      this.talukaEn, 
-      this.talukaRg, 
-      this.cityEn, 
-      this.cityRg, 
-      this.pinCode, 
-      this.stakeholderNameEn, 
-      this.stakeholderNameRg, 
-      this.locationName, 
-      this.age,
-      this.propCampDate,
-      this.status,});
+    this.patientId,
+    this.campCreateRequestId,
+    this.campDate,
+    this.userIdRegisterBy,
+    this.patientName,
+    this.age,
+    this.lookupDetIdGender,
+    this.contactNumber,
+    this.addharCard,
+    this.abhaCard,
+    this.lookupDetHierIdCountry,
+    this.lookupDetHierIdState,
+    this.lookupDetHierIdDistrict,
+    this.lookupDetHierIdTaluka,
+    this.lookupDetHierIdCity,
+    this.lookupDetIdDivision,
+    this.pinCode,
+    this.orgId,
+    this.status,});
 
   DoctorDeskData.fromJson(dynamic json) {
-    patientDoctorDeskId = json['patient_doctor_desk_id'];
-    campCreateRequestId = json['camp_create_request_id'];
     patientId = json['patient_id'];
+    campCreateRequestId = json['camp_create_request_id'];
+    campDate = json['camp_date'];
+    userIdRegisterBy = json['user_id_register_by'];
     patientName = json['patient_name'];
+    age = json['age'];
+    lookupDetIdGender = json['lookup_det_id_gender'];
     contactNumber = json['contact_number'];
-    lookupDetDescEn = json['lookup_det_desc_en'];
-    lookupDetDescRg = json['lookup_det_desc_rg'];
+    addharCard = json['addhar_card'];
+    abhaCard = json['abha_card'];
+    lookupDetHierIdCountry = json['lookup_det_hier_id_country'];
+    lookupDetHierIdState = json['lookup_det_hier_id_state'];
     lookupDetHierIdDistrict = json['lookup_det_hier_id_district'];
     lookupDetHierIdTaluka = json['lookup_det_hier_id_taluka'];
     lookupDetHierIdCity = json['lookup_det_hier_id_city'];
-    countryEn = json['country_en'];
-    countryRg = json['country_rg'];
-    stateEn = json['state_en'];
-    stateRg = json['state_rg'];
-    districtEn = json['district_en'];
-    districtRg = json['district_rg'];
-    talukaEn = json['taluka_en'];
-    talukaRg = json['taluka_rg'];
-    cityEn = json['city_en'];
-    cityRg = json['city_rg'];
+    lookupDetIdDivision = json['lookup_det_id_division'];
     pinCode = json['pin_code'];
-    stakeholderNameEn = json['stakeholder_name_en'];
-    stakeholderNameRg = json['stakeholder_name_rg'];
-    locationName = json['location_name'];
-    age = json['age'];
-    propCampDate = json['prop_camp_date'];
+    orgId = json['org_id'];
     status = json['status'];
   }
-  int? patientDoctorDeskId;
+  int? patientId;
   int? campCreateRequestId;
-  dynamic patientId;
+  String? campDate;
+  int? userIdRegisterBy;
   String? patientName;
-  String? contactNumber;
-  dynamic lookupDetDescEn;
-  dynamic lookupDetDescRg;
-  int? lookupDetHierIdDistrict;
-  dynamic lookupDetHierIdTaluka;
-  dynamic lookupDetHierIdCity;
-  String? countryEn;
-  String? countryRg;
-  String? stateEn;
-  String? stateRg;
-  String? districtEn;
-  String? districtRg;
-  dynamic talukaEn;
-  dynamic talukaRg;
-  dynamic cityEn;
-  dynamic cityRg;
-  String? pinCode;
-  String? stakeholderNameEn;
-  String? stakeholderNameRg;
-  String? locationName;
   int? age;
-  String? propCampDate;
+  int? lookupDetIdGender;
+  String? contactNumber;
+  String? addharCard;
+  String? abhaCard;
+  dynamic lookupDetHierIdCountry;
+  int? lookupDetHierIdState;
+  int? lookupDetHierIdDistrict;
+  int? lookupDetHierIdTaluka;
+  int? lookupDetHierIdCity;
+  dynamic lookupDetIdDivision;
+  String? pinCode;
+  dynamic orgId;
   int? status;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['patient_doctor_desk_id'] = patientDoctorDeskId;
-    map['camp_create_request_id'] = campCreateRequestId;
     map['patient_id'] = patientId;
+    map['camp_create_request_id'] = campCreateRequestId;
+    map['camp_date'] = campDate;
+    map['user_id_register_by'] = userIdRegisterBy;
     map['patient_name'] = patientName;
+    map['age'] = age;
+    map['lookup_det_id_gender'] = lookupDetIdGender;
     map['contact_number'] = contactNumber;
-    map['lookup_det_desc_en'] = lookupDetDescEn;
-    map['lookup_det_desc_rg'] = lookupDetDescRg;
+    map['addhar_card'] = addharCard;
+    map['abha_card'] = abhaCard;
+    map['lookup_det_hier_id_country'] = lookupDetHierIdCountry;
+    map['lookup_det_hier_id_state'] = lookupDetHierIdState;
     map['lookup_det_hier_id_district'] = lookupDetHierIdDistrict;
     map['lookup_det_hier_id_taluka'] = lookupDetHierIdTaluka;
     map['lookup_det_hier_id_city'] = lookupDetHierIdCity;
-    map['country_en'] = countryEn;
-    map['country_rg'] = countryRg;
-    map['state_en'] = stateEn;
-    map['state_rg'] = stateRg;
-    map['district_en'] = districtEn;
-    map['district_rg'] = districtRg;
-    map['taluka_en'] = talukaEn;
-    map['taluka_rg'] = talukaRg;
-    map['city_en'] = cityEn;
-    map['city_rg'] = cityRg;
+    map['lookup_det_id_division'] = lookupDetIdDivision;
     map['pin_code'] = pinCode;
-    map['stakeholder_name_en'] = stakeholderNameEn;
-    map['stakeholder_name_rg'] = stakeholderNameRg;
-    map['location_name'] = locationName;
-    map['age'] = age;
-    map['prop_camp_date'] = propCampDate;
+    map['org_id'] = orgId;
     map['status'] = status;
     return map;
   }

@@ -185,8 +185,8 @@ class _CampCreationState extends State<CampCreation> {
                                                           .text = controller
                                                               .selectedLocationVal ??
                                                           "",
-                                                  controller.update(),
-                                                      await  controller
+                                                      controller.update(),
+                                                      await controller
                                                           .getStakHoldeName(
                                                         controller
                                                             .selectedLocation
@@ -245,31 +245,6 @@ class _CampCreationState extends State<CampCreation> {
                                           onChange: (p0) {},
                                           onTap: () async {
                                             return null;
-                                            if (controller
-                                                        .selectedLocationVal !=
-                                                    null &&
-                                                controller.distModel?.details !=
-                                                    null) {
-                                              await commonBottomSheet(
-                                                  context,
-                                                  (p0) => {
-                                                        controller
-                                                                .selectedDistVal =
-                                                            p0.lookupDetHierDescEn,
-                                                        controller
-                                                            .selectedDist = p0,
-                                                        controller
-                                                            .distNameController
-                                                            .text = controller
-                                                                .selectedDistVal ??
-                                                            "",
-                                                        controller.update()
-                                                      },
-                                                  "District",
-                                                  controller
-                                                          .distModel?.details ??
-                                                      []);
-                                            }
                                           },
                                           readOnly: true,
                                           label: RichText(
@@ -462,10 +437,11 @@ class _CampCreationState extends State<CampCreation> {
                                               ?.campCreateRequestId = null;
 
                                           campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreate
-                                              ?.stakeholderMasterId = controller
-                                              .selectedStakeHName?.stakeholderMasterId;
+                                                  .saveCampReqModel
+                                                  .ttCampCreate
+                                                  ?.stakeholderMasterId =
+                                              controller.selectedStakeHName
+                                                  ?.stakeholderMasterId;
 
                                           campCreationController
                                                   .saveCampReqModel

@@ -170,6 +170,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             1.0),
                                                     child: Image.asset(
                                                       "assets/username.png",
+                                                      // "assets/username.png",
                                                       color: Colors.grey,
                                                       fit: BoxFit.contain,
                                                       // _list[i].image,
@@ -269,8 +270,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                             FontWeight.bold),
                                                                     children: [
                                                                       TextSpan(
-                                                                          text: widget.doctorDeskData?.lookupDetDescEn ??
-                                                                              "",
+                                                                          // text: widget.doctorDeskData?.lookupDetDescEn ?? "",
+                                                                          text: "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
                                                                               color: kTextColor,
@@ -334,10 +335,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                            text:
-                                                                "${widget.doctorDeskData?.districtEn ?? ""} "
-                                                                "${widget.doctorDeskData?.stateEn ?? ""} "
-                                                                "${widget.doctorDeskData?.cityEn ?? ""}",
+                                                            // text:
+                                                            //     "${widget.doctorDeskData?.districtEn ?? ""} "
+                                                            //     "${widget.doctorDeskData?.stateEn ?? ""} "
+                                                            //     "${widget.doctorDeskData?.cityEn ?? ""}",
+                                                            text: "",
                                                             style: TextStyle(
                                                               fontSize:
                                                                   responsiveFont(
