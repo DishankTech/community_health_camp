@@ -590,7 +590,11 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                           distirctCampApprovalId:
                                                               null,
                                                           stakeholderMasterIdRef:
-                                                              1,
+                                                              controller
+                                                                  .campApprovalDetailsModel
+                                                                  ?.details
+                                                                  ?.ttCampCreate
+                                                                  ?.stakeholderMasterId,
                                                           acceptedYN: '',
                                                           suggestedDate: controller
                                                                   .campApprovalDetailsModel
