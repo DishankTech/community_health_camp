@@ -15,7 +15,7 @@ class DataNotFound extends StatelessWidget {
     final screenWidth = Get.width;
     return Card(
         elevation: 3.0,
-        margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 40),
+        margin: const EdgeInsets.only(left: 10.0, right: 10.0, top: 70),
         child: GestureDetector(
           onTap: () {},
           child: Container(
