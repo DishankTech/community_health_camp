@@ -301,7 +301,7 @@ class _LoginPageState extends State<LoginPage> {
           var firstLogin = usersList.firstLoginPassReset;
           print(userId);
           DataProvider().storeUserCredential(userId!);
-          /*   if(firstLogin.toString()=="N")
+             if(firstLogin.toString()=="Y")
             {
               Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.resetPassword, (route) => false);
             }else{
@@ -316,10 +316,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
             );
             Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
-          }*/
+          }
 
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
+        /*  Navigator.of(context)
+              .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);*/
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

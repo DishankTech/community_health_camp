@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:community_health_app/screens/camp_coordinator/models/camp_coordinator_registered_patient_model.dart';
 import 'package:community_health_app/screens/user_auths/models/login_response_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class DataProvider {
   static late SharedPreferences _prefs;
@@ -33,6 +35,19 @@ class DataProvider {
     print(data);
     return data;
   }
+ Future<void> storeCampDashboardId(int data) async {
+    await _prefs.setInt("camp_master_id", data);
+    print("data stored ${data}");
+  }
+
+  int? getCampDashboardId() {
+    int? data = _prefs.getInt("camp_master_id");
+    print('camp_master_id');
+    print(data);
+    return data;
+  }
+
+
 
 
   String? getUserData() {
@@ -211,6 +226,30 @@ class DataProvider {
 
     return res;
   }
+
+
+  Future<void> storePatientList(List<CampCoordRegisteredPatientModel> patients) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Convert List<CampCoordRegisteredPatientModel> to List<Map<String, dynamic>>
+    List<String> jsonList = patients.map((patient) => jsonEncode(patient.toJson())).toList();
+
+    // Store the List<String> in SharedPreferences
+    await prefs.setStringList('patients', jsonList);
+  }
+
+  Future<List<CampCoordRegisteredPatientModel>> getPatientList() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Retrieve the List<String> from SharedPreferences
+    List<String>? jsonList = prefs.getStringList('patients');
+
+    if (jsonList == null) return [];
+
+    // Convert List<String> to List<CampCoordRegisteredPatientModel>
+    return jsonList.map((jsonString) => CampCoordRegisteredPatientModel.fromJson(jsonDecode(jsonString))).toList();
+  }
+
 
   // int? getUserId() {
   //   // print(getUserData()!.data![0].id);
