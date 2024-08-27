@@ -36,7 +36,9 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
     List<ConnectivityResult> connectivityResult =
         await Connectivity().checkConnectivity();
 
-    doctorDeskController.hasInternet = (connectivityResult.contains(ConnectivityResult.mobile) || connectivityResult.contains(ConnectivityResult.wifi));
+    doctorDeskController.hasInternet =
+        (connectivityResult.contains(ConnectivityResult.mobile) ||
+            connectivityResult.contains(ConnectivityResult.wifi));
 
     if (doctorDeskController.hasInternet) {
       doctorDeskController.getStakHolder();
@@ -169,15 +171,12 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                         const EdgeInsets.all(
                                                             1.0),
                                                     child: Image.asset(
-                                                      "assets/username.png",
-                                                      // "assets/username.png",
-                                                      color: Colors.grey,
+                                                      pat1,
                                                       fit: BoxFit.contain,
-                                                      // _list[i].image,
                                                       height:
-                                                          responsiveHeight(54),
+                                                      responsiveHeight(54),
                                                       width:
-                                                          responsiveWidth(54),
+                                                      responsiveWidth(54),
                                                     ),
                                                   ),
                                                 ),
@@ -236,8 +235,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                             FontWeight.bold),
                                                                     children: [
                                                                       TextSpan(
-                                                                          text:
-                                                                          widget.doctorDeskData?.age.toString() ?? "",
+                                                                          text: widget.doctorDeskData?.age.toString() ??
+                                                                              "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
                                                                               color: kTextColor,
@@ -271,7 +270,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                     children: [
                                                                       TextSpan(
                                                                           // text: widget.doctorDeskData?.lookupDetDescEn ?? "",
-                                                                          text: "",
+                                                                          text:
+                                                                              "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
                                                                               color: kTextColor,
@@ -669,18 +669,14 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
-                                                      ?.campDate = "2024-08-25";
+                                                      ?.campDate = widget
+                                                          .doctorDeskData
+                                                          ?.campDate ??
+                                                      "";
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
                                                       ?.patientDoctorDeskId = null;
-
-                                                  // controller
-                                                  //     .addTreatmentDetailsModel
-                                                  //     .ttPatientDoctorDesk
-                                                  //     ?.userId = controller
-                                                  //         .selectedUserId ??
-                                                  //     1;
 
                                                   controller
                                                       .addTreatmentDetailsModel
@@ -700,32 +696,50 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       controller
                                                           .provisionalDiaController
                                                           .text;
-
-                                                  TtPatientDoctorDeskRef
-                                                      ttPatientDoctorDeskRef =
-                                                      TtPatientDoctorDeskRef();
-                                                  ttPatientDoctorDeskRef
-                                                          .patientDoctorDeskId =
-                                                      null;
-                                                  ttPatientDoctorDeskRef
-                                                          .patientDoctorDeskReferId =
-                                                      null;
-                                                  // ttPatientDoctorDeskRef.stakeholderMasterId = controller.selectedStakeH.lookupDetHierId;
-                                                  ttPatientDoctorDeskRef
-                                                      .stakeholderMasterId = 1;
-                                                  ttPatientDoctorDeskRef.orgId =
-                                                      1;
-                                                  ttPatientDoctorDeskRef
-                                                      .status = 1;
-
+                                                  //
+                                                  // TtPatientDoctorDeskRef
+                                                  //     ttPatientDoctorDeskRef =
+                                                  //     TtPatientDoctorDeskRef();
+                                                  // ttPatientDoctorDeskRef
+                                                  //         .patientDoctorDeskId =
+                                                  //     null;
+                                                  // ttPatientDoctorDeskRef
+                                                  //         .patientDoctorDeskReferId =
+                                                  //     null;
+                                                  //
+                                                  // ttPatientDoctorDeskRef
+                                                  //     .stakeholderMasterId = 1;
+                                                  // ttPatientDoctorDeskRef.orgId =
+                                                  //     1;
+                                                  // ttPatientDoctorDeskRef
+                                                  //     .status = 1;
+                                                  //
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDeskRef = [];
-                                                  controller
-                                                      .addTreatmentDetailsModel
-                                                      .ttPatientDoctorDeskRef
-                                                      ?.add(
-                                                          ttPatientDoctorDeskRef);
+                                                  for (LookupDetHierarchical item
+                                                      in controller
+                                                      .selectedStakeH) {
+                                                    controller
+                                                        .addTreatmentDetailsModel
+                                                        .ttPatientDoctorDeskRef
+                                                        ?.add(TtPatientDoctorDeskRef(
+                                                            patientDoctorDeskId:
+                                                                null,
+                                                            patientDoctorDeskReferId:
+                                                                null,
+                                                            stakeholderMasterId:
+                                                                item.lookupDetHierId,
+                                                            orgId: 1,
+                                                            status: 1,
+                                                            isInactive: null));
+                                                  }
+
+                                                  // controller
+                                                  //     .addTreatmentDetailsModel
+                                                  //     .ttPatientDoctorDeskRef
+                                                  //     ?.add(
+                                                  //         ttPatientDoctorDeskRef);
 
                                                   controller
                                                       .addTreatmentDetails();

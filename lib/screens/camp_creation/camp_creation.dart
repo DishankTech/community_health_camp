@@ -91,7 +91,7 @@ class _CampCreationState extends State<CampCreation> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             mAppBarV1(
-                              title: "Camp Creation",
+                              title: "Camp Request",
                               context: context,
                               onBackButtonPress: () {
                                 Navigator.pop(context);
@@ -126,7 +126,7 @@ class _CampCreationState extends State<CampCreation> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               mAppBarV1(
-                                title: "Camp Creation",
+                                title: "Camp Request",
                                 context: context,
                                 onBackButtonPress: () {
                                   Navigator.pop(context);

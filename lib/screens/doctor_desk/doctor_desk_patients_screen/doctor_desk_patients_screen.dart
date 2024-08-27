@@ -1,6 +1,7 @@
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
+import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_details.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -52,13 +53,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig().init(context);
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent, // Change to your desired color
-      statusBarBrightness: Brightness.light,
-      statusBarIconBrightness:
-          Brightness.light, // For light text/icons on the status bar
-    ));
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -118,230 +113,239 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                   height: responsiveHeight(30),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                              child: IntrinsicHeight(
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                          offset: const Offset(0, 0),
-                                          color: Colors.grey.withOpacity(0.5),
-                                          spreadRadius: 1,
-                                          blurRadius: 5)
-                                    ],
-                                    borderRadius: BorderRadius.circular(
-                                      responsiveHeight(25),
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 8.0,
-                                        right: 8.0,
-                                        left: 8.0,
-                                        bottom: 8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            const Spacer(),
-                                            const Text(
-                                              "Total Registered Patients",
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 12,
-                                                color: Colors.black,
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: responsiveWidth(8),
-                                            ),
-                                            Container(
-                                              // width: 40,
-                                              // height: 40,
-                                              clipBehavior: Clip.hardEdge,
-                                              padding: const EdgeInsets.only(
-                                                  left: 12,
-                                                  right: 12,
-                                                  top: 8,
-                                                  bottom: 8),
-                                              decoration: const BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                    Radius.circular(5),
-                                                  ),
-                                                  color: kPrimaryColor),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    controller.totalPatientCount ?? '',
-                                                    style: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      fontSize: 14,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Expanded(
-                                              child: Container(
-                                                width: double.infinity,
-                                                color: Colors.transparent,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Camp ID : ",
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            responsiveFont(12),
-                                                        color: kBlackColor,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      controller.campId
-                                                          .toString(),
-                                                      // "1",
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            responsiveFont(12),
-                                                        // color: dashboardSubTitle,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                color: Colors.transparent,
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Camp Date : ",
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            responsiveFont(12),
-                                                        color: kBlackColor,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      controller.campDate ?? '',
-                                                      style: TextStyle(
-                                                        fontSize:
-                                                            responsiveFont(12),
-                                                        // color: dashboardSubTitle,
-                                                        fontWeight:
-                                                            FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Camp Name : ",
-                                              style: TextStyle(
-                                                fontSize: responsiveFont(12),
-                                                color: kBlackColor,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Text(
-                                              controller.campName ?? "",
-                                              style: TextStyle(
-                                                fontSize: responsiveFont(12),
-                                                // color: dashboardSubTitle,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "Camp Location : ",
-                                              style: TextStyle(
-                                                fontSize: responsiveFont(12),
-                                                color: kBlackColor,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                controller
-                                                        .campLocation ??
-                                                "",
-                                                style: TextStyle(
-                                                  fontSize: responsiveFont(12),
-                                                  // color: dashboardSubTitle,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                              suffix: GestureDetector(
+                                onTap: () {
+                                  Get.to(const DoctorDeskDetailsScreen());
+                                },
+                                child: Image.asset(
+                                  "assets/stethoscope.png",
+                                  height: responsiveHeight(30),
                                 ),
-                              ),
+                              )
                             ),
+                            // Padding(
+                            //   padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                            //   child: IntrinsicHeight(
+                            //     child: Container(
+                            //       width: MediaQuery.of(context).size.width,
+                            //       decoration: BoxDecoration(
+                            //         color: Colors.white,
+                            //         boxShadow: [
+                            //           BoxShadow(
+                            //               offset: const Offset(0, 0),
+                            //               color: Colors.grey.withOpacity(0.5),
+                            //               spreadRadius: 1,
+                            //               blurRadius: 5)
+                            //         ],
+                            //         borderRadius: BorderRadius.circular(
+                            //           responsiveHeight(25),
+                            //         ),
+                            //       ),
+                            //       child: Padding(
+                            //         padding: const EdgeInsets.only(
+                            //             top: 8.0,
+                            //             right: 8.0,
+                            //             left: 8.0,
+                            //             bottom: 8.0),
+                            //         child: Column(
+                            //           crossAxisAlignment:
+                            //               CrossAxisAlignment.start,
+                            //           children: [
+                            //             Row(
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.start,
+                            //               crossAxisAlignment:
+                            //                   CrossAxisAlignment.center,
+                            //               children: [
+                            //                 const Spacer(),
+                            //                 const Text(
+                            //                   "Total Registered Patients",
+                            //                   style: TextStyle(
+                            //                     fontWeight: FontWeight.w500,
+                            //                     fontSize: 12,
+                            //                     color: Colors.black,
+                            //                   ),
+                            //                 ),
+                            //                 SizedBox(
+                            //                   width: responsiveWidth(8),
+                            //                 ),
+                            //                 Container(
+                            //                   // width: 40,
+                            //                   // height: 40,
+                            //                   clipBehavior: Clip.hardEdge,
+                            //                   padding: const EdgeInsets.only(
+                            //                       left: 12,
+                            //                       right: 12,
+                            //                       top: 8,
+                            //                       bottom: 8),
+                            //                   decoration: const BoxDecoration(
+                            //                       borderRadius:
+                            //                           BorderRadius.all(
+                            //                         Radius.circular(5),
+                            //                       ),
+                            //                       color: kPrimaryColor),
+                            //                   child: Column(
+                            //                     mainAxisAlignment:
+                            //                         MainAxisAlignment.center,
+                            //                     children: [
+                            //                       Text(
+                            //                         controller.totalPatientCount ?? '',
+                            //                         style: const TextStyle(
+                            //                           fontWeight:
+                            //                               FontWeight.w400,
+                            //                           fontSize: 14,
+                            //                           color: Colors.white,
+                            //                         ),
+                            //                       ),
+                            //                     ],
+                            //                   ),
+                            //                 ),
+                            //               ],
+                            //             ),
+                            //             SizedBox(
+                            //               height: responsiveHeight(10),
+                            //             ),
+                            //             Row(
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.start,
+                            //               crossAxisAlignment:
+                            //                   CrossAxisAlignment.start,
+                            //               children: [
+                            //                 Expanded(
+                            //                   child: Container(
+                            //                     width: double.infinity,
+                            //                     color: Colors.transparent,
+                            //                     child: Row(
+                            //                       mainAxisAlignment:
+                            //                           MainAxisAlignment.start,
+                            //                       crossAxisAlignment:
+                            //                           CrossAxisAlignment.start,
+                            //                       children: [
+                            //                         Text(
+                            //                           "Camp ID : ",
+                            //                           style: TextStyle(
+                            //                             fontSize:
+                            //                                 responsiveFont(12),
+                            //                             color: kBlackColor,
+                            //                             fontWeight:
+                            //                                 FontWeight.w500,
+                            //                           ),
+                            //                         ),
+                            //                         Text(
+                            //                           controller.campId
+                            //                               .toString(),
+                            //                           // "1",
+                            //                           style: TextStyle(
+                            //                             fontSize:
+                            //                                 responsiveFont(12),
+                            //                             // color: dashboardSubTitle,
+                            //                             fontWeight:
+                            //                                 FontWeight.w500,
+                            //                           ),
+                            //                         )
+                            //                       ],
+                            //                     ),
+                            //                   ),
+                            //                 ),
+                            //                 Expanded(
+                            //                   child: Container(
+                            //                     color: Colors.transparent,
+                            //                     child: Row(
+                            //                       mainAxisAlignment:
+                            //                           MainAxisAlignment.start,
+                            //                       crossAxisAlignment:
+                            //                           CrossAxisAlignment.start,
+                            //                       children: [
+                            //                         Text(
+                            //                           "Camp Date : ",
+                            //                           style: TextStyle(
+                            //                             fontSize:
+                            //                                 responsiveFont(12),
+                            //                             color: kBlackColor,
+                            //                             fontWeight:
+                            //                                 FontWeight.w500,
+                            //                           ),
+                            //                         ),
+                            //                         Text(
+                            //                           controller.campDate ?? '',
+                            //                           style: TextStyle(
+                            //                             fontSize:
+                            //                                 responsiveFont(12),
+                            //                             // color: dashboardSubTitle,
+                            //                             fontWeight:
+                            //                                 FontWeight.w500,
+                            //                           ),
+                            //                         ),
+                            //                       ],
+                            //                     ),
+                            //                   ),
+                            //                 ),
+                            //               ],
+                            //             ),
+                            //             SizedBox(
+                            //               height: responsiveHeight(10),
+                            //             ),
+                            //             Row(
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.start,
+                            //               crossAxisAlignment:
+                            //                   CrossAxisAlignment.start,
+                            //               children: [
+                            //                 Text(
+                            //                   "Camp Name : ",
+                            //                   style: TextStyle(
+                            //                     fontSize: responsiveFont(12),
+                            //                     color: kBlackColor,
+                            //                     fontWeight: FontWeight.w500,
+                            //                   ),
+                            //                 ),
+                            //                 Text(
+                            //                   controller.campName ?? "",
+                            //                   style: TextStyle(
+                            //                     fontSize: responsiveFont(12),
+                            //                     // color: dashboardSubTitle,
+                            //                     fontWeight: FontWeight.w500,
+                            //                   ),
+                            //                 )
+                            //               ],
+                            //             ),
+                            //             SizedBox(
+                            //               height: responsiveHeight(10),
+                            //             ),
+                            //             Row(
+                            //               mainAxisAlignment:
+                            //                   MainAxisAlignment.start,
+                            //               crossAxisAlignment:
+                            //                   CrossAxisAlignment.start,
+                            //               children: [
+                            //                 Text(
+                            //                   "Camp Location : ",
+                            //                   style: TextStyle(
+                            //                     fontSize: responsiveFont(12),
+                            //                     color: kBlackColor,
+                            //                     fontWeight: FontWeight.w500,
+                            //                   ),
+                            //                 ),
+                            //                 Expanded(
+                            //                   child: Text(
+                            //                     controller
+                            //                             .campLocation ??
+                            //                     "",
+                            //                     style: TextStyle(
+                            //                       fontSize: responsiveFont(12),
+                            //                       // color: dashboardSubTitle,
+                            //                       fontWeight: FontWeight.w500,
+                            //                     ),
+                            //                   ),
+                            //                 ),
+                            //               ],
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
                             Expanded(
                               child: PagedListView<int, DoctorDeskData>(
                                   pagingController: controller.pagingController,
@@ -397,19 +401,12 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                                                 const EdgeInsets
                                                                     .all(1.0),
                                                             child: Image.asset(
-                                                              "assets/username.png",
-                                                              // "assets/username.png",
-                                                              color:
-                                                                  Colors.grey,
-                                                              fit: BoxFit
-                                                                  .contain,
-                                                              // _list[i].image,
+                                                              pat1,
+                                                              fit: BoxFit.contain,
                                                               height:
-                                                                  responsiveHeight(
-                                                                      54),
+                                                              responsiveHeight(54),
                                                               width:
-                                                                  responsiveWidth(
-                                                                      54),
+                                                              responsiveWidth(54),
                                                             ),
                                                           ),
                                                         ),

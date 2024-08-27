@@ -568,9 +568,9 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                     .ttDistirctCampApproval
                                                     ?.orgId = 1;
 
-                                                TtDistirctCampApprovalDetList
-                                                    ttDistrictCampApproval =
-                                                    TtDistirctCampApprovalDetList();
+                                                // TtDistirctCampApprovalDetList
+                                                //     ttDistrictCampApproval =
+                                                //     TtDistirctCampApprovalDetList();
 
                                                 controller
                                                     .saveCampApprovalReqModel
