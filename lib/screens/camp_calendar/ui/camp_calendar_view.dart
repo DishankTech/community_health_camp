@@ -287,7 +287,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
     var headers = {'Content-Type': 'application/json'};
 
-    var body = json.encode({"total_pages": 20, "page": 1, "total_count": 20, "per_page": 20, "data": null});
+    var body = json.encode({"total_pages": 1, "page": 1, "total_count": null, "per_page": 100, "data": null});
 
     try {
       // Use the post method directly to get the response
@@ -311,7 +311,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
         List<dynamic> dataList = jsonResponse['details']['data'];
         uniqueLocationList = [];
 
-        for (var camp in dataList) {
+      /*  for (var camp in dataList) {
           // if(camp.locationMasterId!=null)
           if (camp['location_master_id'] != null) {
             int locationId = int.parse(camp['location_master_id'].toString());
@@ -320,10 +320,33 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
               uniqueLocationList.add(camp);
             }
           }
+        }*/
+
+        // Set to track unique location_master_id and date combinations
+        final Set<String> uniqueEntries = {};
+        final List<Map<String, dynamic>> filteredData = [];
+
+        for (var entry in dataList) {
+          // Extract location_master_id and date (yyyy-MM-dd)
+          final locationMasterId = entry['location_master_id'].toString();
+          final propCampDate = entry['prop_camp_date'].substring(0, 10);
+
+          // Create a unique key using location_master_id and date
+          final uniqueKey = '$locationMasterId-$propCampDate';
+
+          // Check if this combination is already in the set
+          if (!uniqueEntries.contains(uniqueKey)) {
+            // If not, add it to the set and filtered list
+            uniqueEntries.add(uniqueKey);
+            filteredData.add(entry);
+          }
         }
 
+
+
         // for (var item in dataList) {
-        for (var item in uniqueLocationList) {
+        // for (var item in uniqueLocationList) {
+        for (var item in filteredData) {
           // String dateStr = item['prop_camp_date'].split('T')[0];
           // String dateStr = item.propCampDate.timeZoneName.split('T')[0];
           // String dateStr = item['prop_camp_date'].timeZoneName.split('T')[0];
