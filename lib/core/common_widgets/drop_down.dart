@@ -1869,7 +1869,7 @@ Future<dynamic> campListDropdownBottomSheet(
                       builder: (context, state) {
                         CommonCamp.CampDropdownReponseModel? responseModel;
 
-                        if (state.getTownListResponse.isNotEmpty) {
+                        if (state.getCampDropdownListResponse.isNotEmpty) {
                           responseModel =
                               CommonCamp.CampDropdownReponseModel.fromJson(
                                   jsonDecode(
@@ -3017,8 +3017,7 @@ class LocationNameBottomSheetContentState
               ],
             ),
           ),
-          SizedBox(
-            height: SizeConfig.screenHeight * 0.3,
+          Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,
               shrinkWrap: true,
@@ -3395,14 +3394,12 @@ Future<dynamic> commonDateTimeSheet(
           ));
 }
 
-
-
 Future<dynamic> stakeHolderNameBottomSheet(
-    BuildContext context,
-    Function(dynamic) onItemSelected,
-    String bottomSheetTitle,
-    List<dynamic> list,
-    ) {
+  BuildContext context,
+  Function(dynamic) onItemSelected,
+  String bottomSheetTitle,
+  List<dynamic> list,
+) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: false,
@@ -3502,14 +3499,14 @@ class StakeHolderNameBottomSheetContentState
                           children: [
                             selectedIndex == i
                                 ? Icon(
-                              Icons.radio_button_checked,
-                              color: kPrimaryColor,
-                              size: responsiveFont(14.0),
-                            )
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
                                 : Icon(
-                              Icons.circle_outlined,
-                              size: responsiveFont(14.0),
-                            ),
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
                             SizedBox(
                               width: responsiveWidth(6),
                             ),

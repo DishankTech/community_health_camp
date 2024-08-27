@@ -1142,7 +1142,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
       GetCampListDropdown event, Emitter<MasterDataState> emit) async {
     try {
       emit(state.copyWith(
-        getStakeholderSubTypeResponse: "",
+        getCampDropdownListResponse: "",
         getCampDropdownListStatus: FormzSubmissionStatus.inProgress,
         getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
         getGenderStatus: FormzSubmissionStatus.initial,
@@ -1172,6 +1172,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
           await masterDataRepository.getCampListDropdown(event.locationId);
 
       if (res.statusCode == 200) {
+        print(res.body);
         emit(state.copyWith(
             getCampDropdownListResponse: res.body,
             getCampDropdownListStatus: FormzSubmissionStatus.success));

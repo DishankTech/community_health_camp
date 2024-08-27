@@ -230,8 +230,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
             campListDropdownBottomSheet(context, (p0) {
               setState(() {
                 _selectedCamp = p0;
-                _divisionTextController.text =
-                    p0.campCreateRequestId.toString()!;
+                _campIDTextController.text = p0.campCreateRequestId.toString()!;
               });
               context.read<MasterDataBloc>().add(ResetMasterState());
             });
