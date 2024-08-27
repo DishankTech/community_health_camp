@@ -10,7 +10,6 @@ import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
-import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/core/utilities/validators.dart';
 import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master_bloc.dart';
@@ -377,7 +376,12 @@ class _StakeHolderMasterEditScreenState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    mAppBarV1(title: "Stakeholder Master", context: context),
+                    mAppBarV1(
+                        title: "Stakeholder Master",
+                        context: context,
+                        onBackButtonPress: () {
+                          Navigator.pop(context);
+                        }),
                     Padding(
                       padding: EdgeInsets.only(bottom: responsiveHeight(30)),
                       child: Container(

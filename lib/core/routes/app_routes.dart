@@ -13,7 +13,6 @@ import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_patient_registration_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
-import 'package:community_health_app/screens/location_master/location_master.dart';
 import 'package:community_health_app/screens/location_master/location_master_list.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration_edit.dart';

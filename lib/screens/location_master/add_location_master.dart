@@ -34,20 +34,24 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
 
     List<ConnectivityResult> connectivityResult =
         await Connectivity().checkConnectivity();
-    // setState(() {
+
     locationMasterController.hasInternet =
         (connectivityResult.contains(ConnectivityResult.mobile) ||
             connectivityResult.contains(ConnectivityResult.wifi));
-    // });
-    locationMasterController.update();
+
+    if (mounted) {
+      locationMasterController.update();
+    }
     if (locationMasterController.hasInternet) {
       await locationMasterController.getCountry(false);
       if (widget.isView == true || widget.isEdit == true) {
-        locationMasterController.getLocationDetails(widget.locationId);
+        await  locationMasterController.getLocationDetails(widget.locationId);
       }
     }
-    // setState(() {});
-    locationMasterController.update();
+    if (mounted) {
+      locationMasterController.update();
+    }
+    // locationMasterController.update();
   }
 
   @override
@@ -86,7 +90,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                     : "Location Master",
                 context: context,
             onBackButtonPress: (){
-                  Get.to(() => LocationMasterList());
+                  Get.to(() => const LocationMasterList());
             }
             ),
             SizedBox(

@@ -76,49 +76,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     context.read<ProfileCubit>().getProfile();
-    // _menuList.clear();
-    // _menuList.addAll([
-    //   DashboardMenuModel(
-    //       name: "Dashboard",
-    //       image: icDashboard,
-    //       routeName: AppRoutes.registrationDashboard),
-    //   DashboardMenuModel(
-    //       name: "User Master",
-    //       image: icUserMaster,
-    //       routeName: AppRoutes.registeredUserMaster),
-    //   DashboardMenuModel(
-    //       name: "Location Master",
-    //       image: icLocationMaster,
-    //       routeName: AppRoutes.locationMasterList),
-    //   DashboardMenuModel(
-    //       name: "Stakeholder Master",
-    //       image: icStakeholderMaster,
-    //       routeName: AppRoutes.stakeholderMasterListScreen),
-    //   DashboardMenuModel(
-    //       name: "Camp Creation",
-    //       image: icCampCreation,
-    //       routeName: AppRoutes.campCreation),
-    //   DashboardMenuModel(
-    //       name: "Camp Calendar",
-    //       image: icCalendarColourfull,
-    //       routeName: AppRoutes.campCalendar),
-    //   DashboardMenuModel(
-    //       name: "Camp Approval",
-    //       image: icCampApproval,
-    //       routeName: AppRoutes.campApproval),
-    //   DashboardMenuModel(
-    //       name: "Camp Details",
-    //       image: icPersons,
-    //       routeName: AppRoutes.campCoordinator),
-    //   DashboardMenuModel(
-    //       name: "Patient Registration",
-    //       image: icPatientRegistration,
-    //       routeName: AppRoutes.patientRegListScreen),
-    //   DashboardMenuModel(
-    //       name: "Doctor Desk",
-    //       image: icDoctorDesk,
-    //       routeName: AppRoutes.doctorDesk),
-    // ]);
 
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {

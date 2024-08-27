@@ -483,8 +483,8 @@ class LocationMasterController extends GetxController {
       // if (data['status'] == 'Success') {
       isLoading = false;
       talukaModel = SubLocationModel.fromJson(data);
-      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
-      if (isView == true) {
+
+      if (isView == true && talukaModel!.details!.isNotEmpty) {
         talukaController.text =
             talukaModel?.details?.first.lookupDetHierDescEn ?? "";
         selectedTaluka = talukaModel?.details?.first;

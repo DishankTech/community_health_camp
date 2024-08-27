@@ -37,7 +37,9 @@ class _LocationMasterListState extends State<LocationMasterList> {
       locationMasterController.pagingController.refresh();
     }
 
-    locationMasterController.update();
+    if (mounted) {
+      locationMasterController.update();
+    }
   }
 
   @override
