@@ -182,14 +182,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           showDialog(
                               builder: (ctxt) {
                                 return AlertDialog(
-                                    title: Text(
+                                    title: const Text(
                                       "Logout",
                                       textAlign: TextAlign.center,
                                     ),
                                     content: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Text("Do you want to logout?"),
+                                        const Text("Do you want to logout?"),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
@@ -202,14 +202,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               mWidth:
                                                   SizeConfig.screenWidth * 0.3,
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
                                             AppButton(
                                               onTap: () {
                                                 DataProvider().clearUserData();
-                                                Navigator.pushNamed(context,
-                                                    AppRoutes.loginScreen);
+
+                                                Navigator.pushNamedAndRemoveUntil(
+                                                  context,
+                                                  AppRoutes.loginScreen,
+                                                      (Route<dynamic> route) => false, // This condition removes all previous routes
+                                                );
+
+                                                // Navigator.pushNamed(context,
+                                                //     AppRoutes.loginScreen);
                                               },
                                               title: "Logout",
                                               mWidth:
