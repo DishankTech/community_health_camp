@@ -1,3 +1,10 @@
+import 'dart:convert';
+
+import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:formz/formz.dart';
+
 class Validators {
   bool isValidEmail(String email) {
     final bool emailValid = RegExp(
@@ -87,9 +94,17 @@ class Validators {
     return null;
   }
 
-  static String? validateLoginName(String? value) {
+  static String? validateLoginName(
+      String? value, FormzSubmissionStatus status, String response) {
     if (value == null || value.isEmpty) {
       return 'Please enter Login Name';
+    }
+
+    if (status.isSuccess && response.isNotEmpty) {
+      var res = jsonDecode(response);
+      if (res['details'] == 1) {
+        return 'Login Name not available';
+      }
     }
 
     return null;

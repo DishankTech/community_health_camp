@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -22,6 +23,7 @@ import 'package:community_health_app/screens/stakeholder/models/stakeholder_name
 import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
 import 'package:community_health_app/screens/user_master/models/get_user_response_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:image_picker/image_picker.dart';
@@ -47,6 +49,7 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
   late TextEditingController _confirmPsswordTextController;
   late TextEditingController _mobileNoTextController;
   late TextEditingController _mobileNoCountryCodeTextController;
+  Timer? _debounce;
 
   bool _isObscure = true;
   LookupDetHierarchical? _selectedStakeholderType;
@@ -89,19 +92,19 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
       _mobileNoTextController.text = userMasterData!.mobileNumber ?? '';
 
       setState(() {});
-      context.read<MasterDataBloc>().add(GetMasters(payload: const {
-            "lookup_det_code_list1": [
-              {"lookup_det_code": "STY"}
-            ]
-          }));
+      // context.read<MasterDataBloc>().add(GetMasters(payload: const {
+      //       "lookup_det_code_list1": [
+      //         {"lookup_det_code": "STY"}
+      //       ]
+      //     }));
 
-      context
-          .read<MasterDataBloc>()
-          .add(GetMastersDesignationType(payload: const {
-            "lookup_code_list1": [
-              {"lookup_code": "MTY"}
-            ]
-          }));
+      // context
+      //     .read<MasterDataBloc>()
+      //     .add(GetMastersDesignationType(payload: const {
+      //       "lookup_code_list1": [
+      //         {"lookup_code": "MTY"}
+      //       ]
+      //     }));
     });
   }
 
@@ -167,6 +170,13 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
               ));
             context.read<UserMasterBloc>().add(ResetUserMasterState());
           }
+          // if (state.loginNameCheckStatus.isSuccess) {
+          //   var res = jsonDecode(state.loginNameCheckResponse);
+          //   if (res['details'] == 1) {
+          //     _loginNameTextController.clear();
+          //   }
+          //   context.read<UserMasterBloc>().add(ResetUserMasterState());
+          // }
           if (state.createUserStatus.isSuccess) {
             var res = jsonDecode(state.createUserResponse);
             if (res['status_code'] == 200) {
@@ -177,6 +187,15 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
                   backgroundColor: Colors.green,
                   duration: const Duration(seconds: 2),
                 ));
+              context.read<UserMasterBloc>().add(GetUserRequest(payload: const {
+                    "total_pages": 1,
+                    "page": 1,
+                    "total_count": 1,
+                    "per_page": 100,
+                    "data": ""
+                  }));
+
+              Navigator.pop(context);
             } else {
               ScaffoldMessenger.of(context)
                 ..clearSnackBars()
@@ -241,7 +260,12 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    mAppBarV1(title: "User Master", context: context),
+                    mAppBarV1(
+                        title: "User Master",
+                        context: context,
+                        onBackButtonPress: () {
+                          Navigator.pop(context);
+                        }),
                     SizedBox(
                       height: responsiveHeight(10),
                     ),
@@ -270,21 +294,6 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
                                 },
                                 validators: Validators.validateStakeholderType,
                                 onTap: () {
-                                  // stakeholderBottomSheet(context, (p0) {
-                                  //   setState(() {
-                                  //     _selectedStakeholder = p0;
-                                  //     _stakeholderTypeTextController.text =
-                                  //         p0['title'];
-                                  //   });
-                                  // });
-                                  // context
-                                  //     .read<MasterDataBloc>()
-                                  //     .add(GetMasters(payload: const {
-                                  //       "lookup_det_code_list1": [
-                                  //         {"lookup_det_code": "STY"}
-                                  //       ]
-                                  //     }));
-
                                   stakeholderBottomSheet(context, (p0) {
                                     setState(() {
                                       _selectedStakeholderType = p0;
@@ -435,28 +444,65 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
                               SizedBox(
                                 height: responsiveHeight(20),
                               ),
-                              AppRoundTextField(
-                                controller: _loginNameTextController,
-                                inputType: TextInputType.name,
-                                errorText: Validators.validateLoginName(
-                                    _loginNameTextController.text),
-                                onChange: (p0) {
-                                  setState(() {});
+                              BlocBuilder<UserMasterBloc, UserMasterState>(
+                                builder: (context, state) {
+                                  return AppRoundTextField(
+                                    controller: _loginNameTextController,
+                                    inputType: TextInputType.name,
+                                    inputFormatter:
+                                        FilteringTextInputFormatter.deny(
+                                            RegExp(r'\s')),
+                                    errorText: Validators.validateLoginName(
+                                        _loginNameTextController.text,
+                                        state.loginNameCheckStatus,
+                                        state.loginNameCheckResponse),
+                                    readOnly: true,
+                                    onChange: (p0) {
+                                      if (_debounce?.isActive ?? false)
+                                        _debounce?.cancel();
+                                      _debounce = Timer(
+                                          const Duration(milliseconds: 500),
+                                          () {
+                                        context.read<UserMasterBloc>().add(
+                                            CheckLoginNameRequest(
+                                                loginName:
+                                                    _loginNameTextController
+                                                        .text));
+                                      });
+                                    },
+                                    validators: (s) {
+                                      return Validators.validateLoginName(
+                                          _loginNameTextController.text,
+                                          state.loginNameCheckStatus,
+                                          state.loginNameCheckResponse);
+                                    },
+                                    label: RichText(
+                                      text: const TextSpan(
+                                          text: 'Login Name',
+                                          style: TextStyle(
+                                              color: kHintColor,
+                                              fontFamily: Montserrat),
+                                          children: [
+                                            TextSpan(
+                                                text: "*",
+                                                style: TextStyle(
+                                                    color: Colors.red))
+                                          ]),
+                                    ),
+                                    hint: "",
+                                    suffix:
+                                        state.loginNameCheckStatus.isInProgress
+                                            ? SizedBox(
+                                                height: responsiveHeight(20),
+                                                width: responsiveHeight(20),
+                                                child: const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              )
+                                            : const SizedBox.shrink(),
+                                  );
                                 },
-                                validators: Validators.validateLoginName,
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: 'Login Name',
-                                      style: TextStyle(
-                                          color: kHintColor,
-                                          fontFamily: Montserrat),
-                                      children: [
-                                        TextSpan(
-                                            text: "*",
-                                            style: TextStyle(color: Colors.red))
-                                      ]),
-                                ),
-                                hint: "",
                               ),
                               SizedBox(
                                 height: responsiveHeight(20),
@@ -707,8 +753,12 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
                                                     "user_id":
                                                         userMasterData?.userId,
                                                     "stakeholder_master_id":
-                                                        stakeholderNameDetails
-                                                            ?.stakeholderMasterId,
+                                                        stakeholderNameDetails !=
+                                                                null
+                                                            ? stakeholderNameDetails
+                                                                ?.stakeholderMasterId
+                                                            : userMasterData
+                                                                ?.stakeholderMasterId,
                                                     "full_name":
                                                         _fullnameTextController
                                                             .text,
@@ -729,8 +779,15 @@ class _UserMasterEditScreenState extends State<UserMasterEditScreen> {
                                                     "status": 1,
                                                     "org_id": 1,
                                                     "lookup_det_hier_id_stakeholder_type1":
-                                                        _selectedStakeholderType
-                                                            ?.lookupDetHierId
+                                                        _selectedStakeholderType !=
+                                                                null
+                                                            ? _selectedStakeholderType
+                                                                ?.lookupDetHierId
+                                                            : userMasterData
+                                                                ?.lookupDetHierIdStakeholderType1,
+                                                    // "lookup_det_id_membertype":_selectedDesignationType!=null?
+                                                    //     _selectedDesignationType?[
+                                                    //         'id']:userMasterData?.
                                                   };
 
                                                   context

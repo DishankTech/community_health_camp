@@ -19,10 +19,13 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
             createUserResponse: '',
             createUserStatus: FormzSubmissionStatus.initial,
             getUserResponse: '',
-            getUserStatus: FormzSubmissionStatus.initial)) {
+            getUserStatus: FormzSubmissionStatus.initial,
+            loginNameCheckResponse: '',
+            loginNameCheckStatus: FormzSubmissionStatus.initial)) {
     on<CreateUserRequest>(_onCreateUserRequest);
     on<GetUserRequest>(_onGetUserRequest);
     on<ResetUserMasterState>(_onResetUserMasterState);
+    on<CheckLoginNameRequest>(_onCheckLoginNameRequest);
   }
 
   FutureOr<void> _onCreateUserRequest(
@@ -92,7 +95,39 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
           createUserResponse: '',
           createUserStatus: FormzSubmissionStatus.initial,
           getUserResponse: '',
-          getUserStatus: FormzSubmissionStatus.initial));
+          getUserStatus: FormzSubmissionStatus.initial,
+          loginNameCheckStatus: FormzSubmissionStatus.initial,
+          loginNameCheckResponse: ''));
     } catch (e) {}
+  }
+
+  FutureOr<void> _onCheckLoginNameRequest(
+      CheckLoginNameRequest event, Emitter<UserMasterState> emit) async {
+    try {
+      emit(state.copyWith(
+          createUserResponse: '',
+          createUserStatus: FormzSubmissionStatus.initial,
+          getUserResponse: '',
+          getUserStatus: FormzSubmissionStatus.initial,
+          loginNameCheckStatus: FormzSubmissionStatus.inProgress,
+          loginNameCheckResponse: ''));
+
+      http.Response res =
+          await userMasterRepository.getLoginNameValidation(event.loginName);
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            loginNameCheckResponse: res.body,
+            loginNameCheckStatus: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+            loginNameCheckResponse: res.reasonPhrase,
+            loginNameCheckStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(
+          loginNameCheckResponse: e.toString(),
+          loginNameCheckStatus: FormzSubmissionStatus.failure));
+    }
   }
 }

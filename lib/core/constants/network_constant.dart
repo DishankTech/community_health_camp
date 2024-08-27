@@ -35,6 +35,8 @@ const String userResetPassword =
     "api/profile/account/update/user-password-reset";
 const String kCreateUser = "profile/account/new/";
 const String kUpdateUser = "profile/account/update/user-account-details";
+const String kLoginNameValidation =
+    "profile/account/get/login-name-validation/";
 const String kGetAllUsers = "profile/account/all-user-details-pagination";
 const String kPatientRegistration = "administrator/masters/add/patient-master";
 const String kGetAllPatients =

@@ -126,27 +126,29 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
         child: Column(
           children: [
             mAppBarV1(
-              title: "Registered Patients",
-              context: context,
-              suffix: Material(
-                color: Colors.transparent,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(5),
-                  onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.patientRegScreen);
-                  },
-                  child: Ink(
-                    child: Center(
-                      child: Image.asset(
-                        icSquarePlus,
-                        fit: BoxFit.cover,
-                        height: responsiveHeight(24),
+                title: "Registered Patients",
+                context: context,
+                suffix: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(5),
+                    onTap: () {
+                      Navigator.pushNamed(context, AppRoutes.patientRegScreen);
+                    },
+                    child: Ink(
+                      child: Center(
+                        child: Image.asset(
+                          icSquarePlus,
+                          fit: BoxFit.cover,
+                          height: responsiveHeight(24),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
+                onBackButtonPress: () {
+                  Navigator.pop(context);
+                }),
             BlocBuilder<PatientRegistrationBloc, PatientRegistrationState>(
               builder: (context, state) {
                 print(state);
@@ -203,12 +205,10 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             1.0),
-                                                    child: Image.asset(
-                                                      pat1,
-                                                      height:
+                                                    child: Icon(
+                                                      Icons.person,
+                                                      size:
                                                           responsiveHeight(54),
-                                                      width:
-                                                          responsiveWidth(54),
                                                     ),
                                                   ),
                                                 ),
