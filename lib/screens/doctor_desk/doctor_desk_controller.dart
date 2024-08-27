@@ -2,8 +2,11 @@ import 'dart:convert';
 
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
+import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/add_treatment_details_model.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
+import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_details/doc_desk_data.dart';
+import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_details/doc_desk_details_list_model.dart';
 import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -20,6 +23,7 @@ class DoctorDeskController extends GetxController {
   bool hasInternet = true;
 
   DoctorDeskListModel? doctorDeskModel;
+  DocDeskDetailsListModel? doctorDetailsDeskListModel;
 
   CountryModel? stakeHolderModel;
 
@@ -35,7 +39,9 @@ class DoctorDeskController extends GetxController {
   UserListModel? userList;
   static const pageSize = 10;
   late PagingController<int, DoctorDeskData> pagingController;
+  late PagingController<int, DocDeskData> docPagingController;
   List<DoctorDeskData> doctorDesk = [];
+  List<DocDeskData> doctorDetailsDesk = [];
 
   int? campId;
 
@@ -90,7 +96,7 @@ class DoctorDeskController extends GetxController {
       doctorDeskModel = DoctorDeskListModel.fromJson(data);
       final details = doctorDeskModel?.details;
       if (details != null) {
-        totalPatientCount= details.totalCount.toString() ?? "0";
+        totalPatientCount = details.totalCount.toString() ?? "0";
         doctorDesk.addAll(doctorDeskModel!.details?.data ?? []);
         if (doctorDesk.isNotEmpty) {
           campId = doctorDesk[0].campCreateRequestId;
@@ -104,6 +110,75 @@ class DoctorDeskController extends GetxController {
       isLoading = false;
       update();
       return doctorDesk;
+    } else {
+      isLoading = false;
+      update();
+      return [];
+    }
+  }
+
+  fetchPagedoctorDeskDetailsList(int pageKey) async {
+    try {
+      List<DocDeskData> newItems =
+          await doctorDeskDetailsList(pageKey, pageSize);
+      final isLastPage = newItems.length < pageSize;
+      if (isLastPage) {
+        docPagingController.appendLastPage(newItems);
+      } else {
+        int nextPageKey = pageKey + 1;
+        // int nextPageKey = pageKey + newItems.length;
+        docPagingController.appendPage(newItems, nextPageKey);
+      }
+    } catch (error) {
+      docPagingController.error = error;
+    }
+  }
+
+  doctorDeskDetailsList(pageKey, pageSize) async {
+    doctorDetailsDesk.clear();
+
+    isLoading = true;
+
+    // Make the API call here
+
+    var url = (ApiConstants.baseUrl + ApiConstants.doctorDeskList);
+    // var requestBody = {"page": currentPage, "per_page": 4};
+    var requestBody = {
+      "total_pages": 0,
+      "page": pageKey,
+      "total_count": 0,
+      "per_page": pageSize,
+      "data": ""
+    };
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: json.encode(requestBody),
+    );
+
+    // doctorDesk.clear();
+    if (response.statusCode == 200) {
+      var data = json.decode(response.body);
+
+      doctorDetailsDeskListModel = DocDeskDetailsListModel.fromJson(data);
+      final details = doctorDetailsDeskListModel?.details;
+      if (details != null) {
+        // totalPatientCount= details.totalCount.toString() ?? "0";
+        doctorDetailsDesk
+            .addAll(doctorDetailsDeskListModel!.details?.data ?? []);
+        // if (doctorDetailsDesk.isNotEmpty) {
+        //   campId = doctorDetailsDesk[0].campCreateRequestId;
+        //   // campName = doctorDesk[0].stakeholderNameEn;
+        //   // campLocation = doctorDesk[0].locationName;
+        //   if (doctorDetailsDesk[0].campDate != null) {
+        //     campDate = doctorDetailsDesk[0].campDate;
+        //   }
+        // }
+      }
+      isLoading = false;
+      update();
+      return doctorDetailsDesk;
     } else {
       isLoading = false;
       update();
@@ -141,7 +216,7 @@ class DoctorDeskController extends GetxController {
       // if (addlocationMasterResp!.statusCode == 200) {
       isLoading = false;
       CustomMessage.toast("Save Successfully");
-      Get.back();
+      Get.to(const DoctorDeskPatientsScreen());
 
       update();
     } else if (response.statusCode == 401) {
@@ -163,7 +238,7 @@ class DoctorDeskController extends GetxController {
     final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.getAllAddress);
     final Map<String, dynamic> body = {
       "lookup_det_code_list1": [
-        {"lookup_det_code": "STY"}
+        {"lookup_det_code": "SUY"}
       ]
     };
 
