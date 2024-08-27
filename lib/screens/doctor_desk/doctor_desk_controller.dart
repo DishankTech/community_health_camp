@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:intl/intl.dart';
 
 import '../camp_creation/model/user_list_model/user_list_model.dart';
 import '../location_master/model/country/country_model.dart';
@@ -25,7 +26,7 @@ class DoctorDeskController extends GetxController {
   TextEditingController userController = TextEditingController();
   TextEditingController stakeHolderController = TextEditingController();
   int? selectedUserId;
-  List<LookupDetHierarchical> selectedStakeH =[];
+  List<LookupDetHierarchical> selectedStakeH = [];
   String? selectedStakeHVal;
   TextEditingController symptomController = TextEditingController();
   TextEditingController provisionalDiaController = TextEditingController();
@@ -35,6 +36,12 @@ class DoctorDeskController extends GetxController {
   static const pageSize = 10;
   late PagingController<int, DoctorDeskData> pagingController;
   List<DoctorDeskData> doctorDesk = [];
+
+  int? campId;
+
+  String? campName;
+  String? campLocation;
+  String? campDate;
 
   fetchPage(int pageKey) async {
     try {
@@ -82,6 +89,14 @@ class DoctorDeskController extends GetxController {
       doctorDeskModel = DoctorDeskListModel.fromJson(data);
       if (doctorDeskModel?.details != null) {
         doctorDesk.addAll(doctorDeskModel!.details?.data ?? []);
+        if (doctorDesk.isNotEmpty) {
+          campId = doctorDesk[0].campCreateRequestId;
+          campName = doctorDesk[0].stakeholderNameEn;
+          campLocation = doctorDesk[0].locationName;
+          if (doctorDesk[0].propCampDate != null) {
+            campDate = convertToDate(doctorDesk[0].propCampDate!);
+          }
+        }
       }
       isLoading = false;
       update();
@@ -91,6 +106,12 @@ class DoctorDeskController extends GetxController {
       update();
       return [];
     }
+  }
+
+  String convertToDate(String dateTimeString) {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+    String formattedDate = DateFormat('yyyy-MM-dd').format(dateTime);
+    return formattedDate;
   }
 
   addTreatmentDetails() async {

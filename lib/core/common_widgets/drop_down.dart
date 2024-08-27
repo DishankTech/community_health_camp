@@ -2218,15 +2218,22 @@ Future<dynamic> createUserBottomSheet(
     BuildContext context,
     Function(dynamic) onItemSelected,
     String bottomSheetTitle,
+    String fullName,
+    String mobileNo,
+    int? memberTypeId,
     List<dynamic> list,
     TextEditingController stakeH,
-    TextEditingController loginName) {
+    TextEditingController loginName,
+    ) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: false,
     builder: (c) => CreateUserBottomSheet(
       onItemSelected: onItemSelected,
       bottomSheetTitle: bottomSheetTitle,
+      fullName: fullName,
+      mobileNo: mobileNo,
+      memberTypeId : memberTypeId,
       list: list,
       stakeH: stakeH,
       loginName: loginName,
@@ -2237,6 +2244,9 @@ Future<dynamic> createUserBottomSheet(
 class CreateUserBottomSheet extends StatefulWidget {
   final Function(dynamic) onItemSelected;
   final String bottomSheetTitle;
+  final String fullName;
+  final String mobileNo;
+  final int? memberTypeId;
   final List<dynamic> list;
   final TextEditingController stakeH;
   final TextEditingController loginName;
@@ -2247,7 +2257,7 @@ class CreateUserBottomSheet extends StatefulWidget {
     required this.bottomSheetTitle,
     required this.list,
     required this.stakeH,
-    required this.loginName,
+    required this.loginName, required this.fullName, required this.mobileNo,this.memberTypeId,
   });
 
   @override
@@ -2308,17 +2318,7 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
                         widget.stakeH.text = p0.lookupDetHierDescEn,
                         campCreationController.selectedStakeHolder = p0,
                         setState(() {})
-                        // controller
-                        //     .selectedStakeHVal =
-                        //     p0.lookupDetHierDescEn,
-                        // controller
-                        //     .selectedStakeH = p0,
-                        // controller
-                        //     .stakeHolderController
-                        //     .text = controller
-                        //     .selectedStakeHVal ??
-                        //     "",
-                        // controller.update()
+
                       },
                   "Stakeholder Type",
                   widget.list);
@@ -2378,7 +2378,7 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
                     title: "Save",
                     onTap: () {
                       campCreationController
-                          .userCreation(widget.loginName.text);
+                          .userCreation(widget.loginName.text,widget.fullName,widget.mobileNo,widget.memberTypeId);
                     },
                     iconData: Icon(
                       Icons.arrow_forward,
