@@ -535,6 +535,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                       flex: 1,
                       child: AppButton(
                         onTap: () {
+                          addCard();
                           sendPostRequest();
                         },
                         title: "Save",
@@ -708,6 +709,18 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
           setState(() {
             campregisteredpatients.removeAt(i);
           });
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text(
+                  'Patients Saved Successfully',
+                ),
+                backgroundColor: Colors.green,
+              ),
+            );
+            Navigator.pop(context);
+            // Navigator.pushNamed(context, AppRoutes.campCoordinator);
+
         }
       } else {
         print(
@@ -715,18 +728,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
       }
     }
 
-    if (campregisteredpatients.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Patients Saved Successfully',
-          ),
-          backgroundColor: Colors.green,
-        ),
-      );
-      Navigator.pop(context);
-      // Navigator.pushNamed(context, AppRoutes.campCoordinator);
-    }
+
   }
 
   void clearAllFields() {
