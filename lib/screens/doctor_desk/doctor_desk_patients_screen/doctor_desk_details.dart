@@ -115,6 +115,7 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                               child: PagedListView<int, DocDeskData>(
                                   pagingController:
                                       controller.docPagingController,
+                                  padding: EdgeInsets.zero,
                                   builderDelegate:
                                       PagedChildBuilderDelegate<DocDeskData>(
                                           itemBuilder:
@@ -182,13 +183,9 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                             padding:
                                                                                 const EdgeInsets.all(1.0),
                                                                             child:
-                                                                            Image.asset(
-                                                                              pat1,
-                                                                              fit: BoxFit.contain,
-                                                                              height:
-                                                                              responsiveHeight(54),
-                                                                              width:
-                                                                              responsiveWidth(54),
+                                                                                Icon(
+                                                                              Icons.person,
+                                                                              size: responsiveHeight(54),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -270,8 +267,12 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                               FontWeight.bold),
                                                                       children: [
                                                                         TextSpan(
-                                                                            text: item.locationName ??
-                                                                                "",
+                                                                            text:
+                                                                                "${item.locationName ?? ""} "
+                                                                                "${item.cityEn ?? ""} "
+                                                                                "${item.districtEn ?? ""} "
+                                                                                "${item.talukaEn ?? ""} "
+                                                                                "${item.stateEn ?? ""}",
                                                                             style: TextStyle(
                                                                                 fontSize: responsiveFont(12),
                                                                                 color: kTextColor,
@@ -298,7 +299,7 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                               FontWeight.bold),
                                                                       children: [
                                                                         TextSpan(
-                                                                            text:
+                                                                            text: item.symptons ??
                                                                                 "",
                                                                             style: TextStyle(
                                                                                 fontSize: responsiveFont(12),
@@ -326,7 +327,7 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                               FontWeight.bold),
                                                                       children: [
                                                                         TextSpan(
-                                                                            text:
+                                                                            text: item.provisionalDiagnosis ??
                                                                                 "",
                                                                             style: TextStyle(
                                                                                 fontSize: responsiveFont(12),

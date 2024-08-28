@@ -123,6 +123,7 @@ class _LocationMasterListState extends State<LocationMasterList> {
                                 child: CircularProgressIndicator()))
                         : Expanded(
                             child: PagedListView<int, LocationListData>(
+                              padding: EdgeInsets.zero,
                               pagingController:
                                   locationMasterController.pagingController,
                               builderDelegate:
