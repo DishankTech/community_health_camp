@@ -170,13 +170,10 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             1.0),
-                                                    child: Image.asset(
-                                                      pat1,
-                                                      fit: BoxFit.contain,
-                                                      height:
-                                                      responsiveHeight(54),
-                                                      width:
-                                                      responsiveWidth(54),
+                                                    child: Icon(
+                                                      Icons.person,
+                                                      size:
+                                                          responsiveHeight(54),
                                                     ),
                                                   ),
                                                 ),
@@ -201,7 +198,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             color: kBlackColor,
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .w500)),
+                                                                    .bold)),
                                                     SizedBox(
                                                       height:
                                                           responsiveHeight(10),
@@ -269,8 +266,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                             FontWeight.bold),
                                                                     children: [
                                                                       TextSpan(
-                                                                          // text: widget.doctorDeskData?.lookupDetDescEn ?? "",
-                                                                          text:
+                                                                          text: widget.doctorDeskData?.gender ??
                                                                               "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
@@ -335,11 +331,12 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                            // text:
-                                                            //     "${widget.doctorDeskData?.districtEn ?? ""} "
-                                                            //     "${widget.doctorDeskData?.stateEn ?? ""} "
-                                                            //     "${widget.doctorDeskData?.cityEn ?? ""}",
-                                                            text: "",
+                                                            text:
+                                                                "${widget.doctorDeskData?.locationName ?? ""} "
+                                                                "${widget.doctorDeskData?.city ?? ""} "
+                                                                "${widget.doctorDeskData?.destrict ?? ""} "
+                                                                "${widget.doctorDeskData?.taluka ?? ""} "
+                                                                "${widget.doctorDeskData?.state ?? ""}",
                                                             style: TextStyle(
                                                               fontSize:
                                                                   responsiveFont(
@@ -696,30 +693,13 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       controller
                                                           .provisionalDiaController
                                                           .text;
-                                                  //
-                                                  // TtPatientDoctorDeskRef
-                                                  //     ttPatientDoctorDeskRef =
-                                                  //     TtPatientDoctorDeskRef();
-                                                  // ttPatientDoctorDeskRef
-                                                  //         .patientDoctorDeskId =
-                                                  //     null;
-                                                  // ttPatientDoctorDeskRef
-                                                  //         .patientDoctorDeskReferId =
-                                                  //     null;
-                                                  //
-                                                  // ttPatientDoctorDeskRef
-                                                  //     .stakeholderMasterId = 1;
-                                                  // ttPatientDoctorDeskRef.orgId =
-                                                  //     1;
-                                                  // ttPatientDoctorDeskRef
-                                                  //     .status = 1;
-                                                  //
+
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDeskRef = [];
                                                   for (LookupDetHierarchical item
                                                       in controller
-                                                      .selectedStakeH) {
+                                                          .selectedStakeH) {
                                                     controller
                                                         .addTreatmentDetailsModel
                                                         .ttPatientDoctorDeskRef
@@ -734,12 +714,6 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             status: 1,
                                                             isInactive: null));
                                                   }
-
-                                                  // controller
-                                                  //     .addTreatmentDetailsModel
-                                                  //     .ttPatientDoctorDeskRef
-                                                  //     ?.add(
-                                                  //         ttPatientDoctorDeskRef);
 
                                                   controller
                                                       .addTreatmentDetails();

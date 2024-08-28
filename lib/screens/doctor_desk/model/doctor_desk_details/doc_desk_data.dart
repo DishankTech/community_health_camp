@@ -4,7 +4,9 @@ class DocDeskData {
       this.campCreateRequestId, 
       this.patientId, 
       this.patientName, 
-      this.contactNumber, 
+      this.symptons,
+      this.provisionalDiagnosis,
+      this.contactNumber,
       this.lookupDetDescEn, 
       this.lookupDetDescRg, 
       this.lookupDetHierIdDistrict, 
@@ -33,6 +35,8 @@ class DocDeskData {
     campCreateRequestId = json['camp_create_request_id'];
     patientId = json['patient_id'];
     patientName = json['patient_name'];
+    symptons = json['symptons'];
+    provisionalDiagnosis = json['provisional_diagnosis'];
     contactNumber = json['contact_number'];
     lookupDetDescEn = json['lookup_det_desc_en'];
     lookupDetDescRg = json['lookup_det_desc_rg'];
@@ -61,6 +65,8 @@ class DocDeskData {
   int? campCreateRequestId;
   dynamic patientId;
   String? patientName;
+  String? symptons;
+  String? provisionalDiagnosis;
   String? contactNumber;
   String? lookupDetDescEn;
   String? lookupDetDescRg;
@@ -91,6 +97,8 @@ class DocDeskData {
     map['camp_create_request_id'] = campCreateRequestId;
     map['patient_id'] = patientId;
     map['patient_name'] = patientName;
+    map['symptons'] = symptons;
+    map['provisional_diagnosis'] = provisionalDiagnosis;
     map['contact_number'] = contactNumber;
     map['lookup_det_desc_en'] = lookupDetDescEn;
     map['lookup_det_desc_rg'] = lookupDetDescRg;
