@@ -107,7 +107,7 @@ class DashboardCardView extends StatelessWidget {
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: responsiveFont(20),
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                           // Text(
