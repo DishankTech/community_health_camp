@@ -11,6 +11,7 @@ class DashboardRepository {
   }
 
   Future<http.Response> getDateWiseDistrictCount(Map payload) async {
+    print(payload);
     var header = {'Content-Type': 'application/json'};
     return await http.post(Uri.parse('$kBaseUrl$kGetDateWiseDistrictCount'),
         body: jsonEncode(payload), headers: header);

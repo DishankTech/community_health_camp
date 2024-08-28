@@ -108,7 +108,7 @@ class _DashboardPatientRegistrationScreenState
               context
                   .read<DashboardBloc>()
                   .add(GetDateWiseDistrictCount(payload: {
-                    "days": 0,
+                    "district_id": null,
                     "start_date": selectedStartDateWithRange,
                     "end_date": selectedEndDateWithRange
                   }));
@@ -487,7 +487,7 @@ class _DashboardPatientRegistrationScreenState
             "end_date": selectedEndDateWithRange
           }));
       context.read<DashboardBloc>().add(GetDateWiseDistrictCount(payload: {
-            "days": 0,
+            "district_id": null,
             "start_date": selectedStartDateWithRange,
             "end_date": selectedEndDateWithRange
           }));
@@ -522,7 +522,8 @@ class _DashboardPatientRegistrationScreenState
           xValueMapper: (ChartData data, _) => data.category,
           yValueMapper: (ChartData data, _) => data.value,
           color: campConductedDistrictWiseBarChartcolor,
-          width: 0.8,
+          width: 0.8, // Width of the bars
+          // spacing: 0.1, // Spacing between the bars
         );
       },
     );
@@ -858,15 +859,17 @@ class _DashboardPatientRegistrationScreenState
         child: SfCartesianChart(
           isTransposed: true,
           primaryXAxis: CategoryAxis(
-            labelRotation: -45,
+            axisLine: const AxisLine(color: Colors.grey),
+            labelStyle: TextStyle(fontSize: responsiveFont(10)),
+            labelRotation: -30,
+            autoScrollingDelta: 5,
             autoScrollingMode: AutoScrollingMode.start,
-            initialVisibleMinimum: (campConductedDistrictWiseList.length - 20),
-            initialVisibleMaximum: (campConductedDistrictWiseList.length - 0),
           ),
           primaryYAxis: const NumericAxis(
             minimum: 0,
             // maximum: 40,
             interval: 10,
+            axisLine: AxisLine(color: Colors.grey),
           ),
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,
@@ -880,15 +883,17 @@ class _DashboardPatientRegistrationScreenState
         child: SfCartesianChart(
           isTransposed: true,
           primaryXAxis: CategoryAxis(
-            labelRotation: -45,
+            axisLine: const AxisLine(color: Colors.grey),
+            labelStyle: TextStyle(fontSize: responsiveFont(10)),
+            labelRotation: -30,
+            autoScrollingDelta: 5,
             autoScrollingMode: AutoScrollingMode.start,
-            initialVisibleMinimum: (campConductedDistrictWiseList.length - 20),
-            initialVisibleMaximum: (campConductedDistrictWiseList.length - 0),
           ),
           primaryYAxis: const NumericAxis(
             minimum: 0,
             // maximum: 40,
             interval: 10,
+            axisLine: AxisLine(color: Colors.grey),
           ),
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,
@@ -902,15 +907,17 @@ class _DashboardPatientRegistrationScreenState
         child: SfCartesianChart(
           isTransposed: true,
           primaryXAxis: CategoryAxis(
-            labelRotation: -45,
+            axisLine: const AxisLine(color: Colors.grey),
+            labelStyle: TextStyle(fontSize: responsiveFont(10)),
+            labelRotation: -30,
+            autoScrollingDelta: 5,
             autoScrollingMode: AutoScrollingMode.start,
-            initialVisibleMinimum: (campConductedDistrictWiseList.length - 20),
-            initialVisibleMaximum: (campConductedDistrictWiseList.length - 0),
           ),
           primaryYAxis: const NumericAxis(
             minimum: 0,
             // maximum: 40,
-            interval: 10,
+            interval: 1,
+            axisLine: AxisLine(color: Colors.grey),
           ),
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,
@@ -924,15 +931,17 @@ class _DashboardPatientRegistrationScreenState
         child: SfCartesianChart(
           isTransposed: true,
           primaryXAxis: CategoryAxis(
-            labelRotation: -45,
+            axisLine: const AxisLine(color: Colors.grey),
+            labelStyle: TextStyle(fontSize: responsiveFont(7)),
+            labelRotation: -30,
+            autoScrollingDelta: 5,
             autoScrollingMode: AutoScrollingMode.start,
-            initialVisibleMinimum: (campConductedDistrictWiseList.length - 20),
-            initialVisibleMaximum: (campConductedDistrictWiseList.length - 0),
           ),
           primaryYAxis: const NumericAxis(
             minimum: 0,
             // maximum: 40,
             interval: 10,
+            axisLine: AxisLine(color: Colors.grey),
           ),
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,
@@ -1027,7 +1036,7 @@ class _DashboardPatientRegistrationScreenState
                                     .format(DateTime.now()),
                                 "end_date": DateFormat('yyyy-MM-dd')
                                     .format(DateTime.now()),
-                                "district_id": 0
+                                "district_id": null
                               }));
                           context
                               .read<DashboardBloc>()
@@ -1085,6 +1094,7 @@ class _DashboardPatientRegistrationScreenState
                     const VerticalDivider(
                       color: Colors.grey,
                       width: 0,
+                      thickness: 0.5,
                     ),
                     Expanded(
                       child: GestureDetector(
@@ -1157,6 +1167,7 @@ class _DashboardPatientRegistrationScreenState
                     const VerticalDivider(
                       color: Colors.grey,
                       width: 0,
+                      thickness: 0.5,
                     ),
                     Expanded(
                       child: GestureDetector(
@@ -1594,8 +1605,8 @@ class _DashboardPatientRegistrationScreenState
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                             child: Container(
-                              width: double.infinity,
-                              height: responsiveHeight(480),
+                              // width: SizeConfig.screenWidth,
+                              // height: responsiveHeight(600),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 boxShadow: [
@@ -1692,21 +1703,32 @@ class _DashboardPatientRegistrationScreenState
                                                 : SfCartesianChart(
                                                     isTransposed: true,
                                                     primaryXAxis: CategoryAxis(
-                                                      labelRotation: -70,
+                                                      // labelPlacement: LabelPlacement.onTicks,
+                                                      labelStyle: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  10)),
+                                                      // ignore: prefer_const_constructors
+                                                      axisLine: AxisLine(
+                                                          color: Colors.grey),
+                                                      labelRotation: -45,
+                                                      autoScrollingDelta: 5,
                                                       autoScrollingMode:
                                                           AutoScrollingMode
                                                               .start,
-                                                      initialVisibleMinimum:
-                                                          (campConductedDistrictWiseList
-                                                                  .length -
-                                                              20),
-                                                      initialVisibleMaximum:
-                                                          (campConductedDistrictWiseList
-                                                                  .length -
-                                                              0),
+                                                      // initialVisibleMinimum:
+                                                      //     (campConductedDistrictWiseList
+                                                      //             .length -
+                                                      //         20),
+                                                      // initialVisibleMaximum:
+                                                      //     (campConductedDistrictWiseList
+                                                      //             .length -
+                                                      //         0),
                                                     ),
                                                     primaryYAxis:
                                                         const NumericAxis(
+                                                      axisLine: AxisLine(
+                                                          color: Colors.grey),
                                                       minimum: 0,
                                                       // maximum: 40,
                                                       interval: 3,

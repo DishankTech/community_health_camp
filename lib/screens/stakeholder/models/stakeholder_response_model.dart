@@ -176,41 +176,41 @@ class StakeholderMasterData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['stakeholder_master_id'] = stakeholderMasterId;
+    data['stakeholder_master_id'] = this.stakeholderMasterId;
     data['lookup_det_hier_id_stakeholder_type1'] =
-        lookupDetHierIdStakeholderType1;
-    data['stakeholder_name_en'] = stakeholderNameEn;
-    data['contact_number'] = contactNumber;
-    data['contact_person_name'] = contactPersonName;
-    data['email_id'] = emailId;
-    data['lookup_det_hier_id_country'] = lookupDetHierIdCountry;
-    data['lookup_det_hier_id_state'] = lookupDetHierIdState;
-    data['lookup_det_hier_id_district'] = lookupDetHierIdDistrict;
-    data['lookup_det_hier_id_taluka'] = lookupDetHierIdTaluka;
-    data['lookup_det_hier_id_city'] = lookupDetHierIdCity;
-    data['lookup_det_id_division'] = lookupDetIdDivision;
-    data['pin_code'] = pinCode;
-    data['address1'] = address1;
-    data['address2'] = address2;
-    data['number_of_bed'] = numberOfBed;
+        this.lookupDetHierIdStakeholderType1;
+    data['stakeholder_name_en'] = this.stakeholderNameEn;
+    data['contact_number'] = this.contactNumber;
+    data['contact_person_name'] = this.contactPersonName;
+    data['email_id'] = this.emailId;
+    data['lookup_det_hier_id_country'] = this.lookupDetHierIdCountry;
+    data['lookup_det_hier_id_state'] = this.lookupDetHierIdState;
+    data['lookup_det_hier_id_district'] = this.lookupDetHierIdDistrict;
+    data['lookup_det_hier_id_taluka'] = this.lookupDetHierIdTaluka;
+    data['lookup_det_hier_id_city'] = this.lookupDetHierIdCity;
+    data['lookup_det_id_division'] = this.lookupDetIdDivision;
+    data['pin_code'] = this.pinCode;
+    data['address1'] = this.address1;
+    data['address2'] = this.address2;
+    data['number_of_bed'] = this.numberOfBed;
     data['lookup_det_hier_id_stakeholder_sub_type2'] =
-        lookupDetHierIdStakeholderSubType2;
-    data['stakeholder_name_rg'] = stakeholderNameRg;
-    data['country_desc_en'] = countryDescEn;
-    data['country_desc_rg'] = countryDescRg;
-    data['state_desc_en'] = stateDescEn;
-    data['state_desc_rg'] = stateDescRg;
-    data['district_desc_en'] = districtDescEn;
-    data['district_desc_rg'] = districtDescRg;
-    data['taluka_desc_en'] = talukaDescEn;
-    data['taluka_desc_rg'] = talukaDescRg;
-    data['city_desc_en'] = cityDescEn;
-    data['city_desc_rg'] = cityDescRg;
-    data['stakeholder_type1_en'] = stakeholderType1En;
-    data['stakeholder_type1_rg'] = stakeholderType1Rg;
-    data['stakeholder_sub_type2_en'] = stakeholderSubType2En;
-    data['stakeholder_sub_type2_rg'] = stakeholderSubType2Rg;
-    data['status'] = status;
+        this.lookupDetHierIdStakeholderSubType2;
+    data['stakeholder_name_rg'] = this.stakeholderNameRg;
+    data['country_desc_en'] = this.countryDescEn;
+    data['country_desc_rg'] = this.countryDescRg;
+    data['state_desc_en'] = this.stateDescEn;
+    data['state_desc_rg'] = this.stateDescRg;
+    data['district_desc_en'] = this.districtDescEn;
+    data['district_desc_rg'] = this.districtDescRg;
+    data['taluka_desc_en'] = this.talukaDescEn;
+    data['taluka_desc_rg'] = this.talukaDescRg;
+    data['city_desc_en'] = this.cityDescEn;
+    data['city_desc_rg'] = this.cityDescRg;
+    data['stakeholder_type1_en'] = this.stakeholderType1En;
+    data['stakeholder_type1_rg'] = this.stakeholderType1Rg;
+    data['stakeholder_sub_type2_en'] = this.stakeholderSubType2En;
+    data['stakeholder_sub_type2_rg'] = this.stakeholderSubType2Rg;
+    data['status'] = this.status;
     return data;
   }
 }

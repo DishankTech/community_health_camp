@@ -126,6 +126,10 @@ class _StakeHolderMasterEditScreenState
       _address1TextController.text = stakeholderMasterData!.address1 ?? '';
       _address2TextController.text = stakeholderMasterData!.address2 ?? '';
       _pincodeTextController.text = stakeholderMasterData!.pinCode ?? '';
+      _noOfBedTextController.text =
+          stakeholderMasterData!.numberOfBed?.toString() ?? '';
+      _stateTextController.text = stakeholderMasterData!.stateDescEn ?? '';
+      _countryTextController.text = stakeholderMasterData!.countryDescEn ?? '';
       _districtTextController.text =
           stakeholderMasterData!.districtDescEn ?? '';
       _talukaTextController.text = stakeholderMasterData!.talukaDescEn ?? '';
@@ -1183,9 +1187,6 @@ class _StakeHolderMasterEditScreenState
                               ),
                               AppRoundTextField(
                                 controller: _pincodeTextController,
-                                inputStyle: TextStyle(
-                                    fontSize: responsiveFont(14),
-                                    color: kTextBlackColor),
                                 inputType: TextInputType.number,
                                 onChange: (p0) {},
                                 maxLength: 6,

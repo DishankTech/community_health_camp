@@ -36,8 +36,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       GetCount event, Emitter<DashboardState> emit) async {
     try {
       emit(state.copyWith(
-          getExcelDataStatus: FormzSubmissionStatus.initial,
-          getExcelDataResponse: '',
+          // getExcelDataStatus: FormzSubmissionStatus.initial,
+          // getExcelDataResponse: '',
           getCountResponse: '',
           getCountStatus: FormzSubmissionStatus.inProgress));
       http.Response res = await dashboardRepository.getCount(event.payload);
@@ -64,11 +64,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       GetDateWiseDistrictCount event, Emitter<DashboardState> emit) async {
     try {
       emit(state.copyWith(
-          getDateWiseDistrictCountResponse: '',
-          getExcelDataStatus: FormzSubmissionStatus.initial,
-          getExcelDataResponse: '',
-          getCountStatus: FormzSubmissionStatus.initial,
-          getDateWiseDistrictCountStatus: FormzSubmissionStatus.inProgress));
+        getDateWiseDistrictCountResponse: '',
+        // getExcelDataStatus: FormzSubmissionStatus.initial,
+        // getExcelDataResponse: '',
+        // getCountStatus: FormzSubmissionStatus.initial,
+        getDateWiseDistrictCountStatus: FormzSubmissionStatus.inProgress,
+      ));
       http.Response res =
           await dashboardRepository.getDateWiseDistrictCount(event.payload);
       if (res.statusCode == 200) {
@@ -162,9 +163,9 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       GetDistrictWisePatientsCount event, Emitter<DashboardState> emit) async {
     try {
       emit(state.copyWith(
-          getCountStatus: FormzSubmissionStatus.initial,
-          getExcelDataStatus: FormzSubmissionStatus.initial,
-          getDateWiseDistrictCountStatus: FormzSubmissionStatus.initial,
+          // getCountStatus: FormzSubmissionStatus.initial,
+          // getExcelDataStatus: FormzSubmissionStatus.initial,
+          // getDateWiseDistrictCountStatus: FormzSubmissionStatus.initial,
           getDistrictWisePatientStatus: FormzSubmissionStatus.inProgress));
       http.Response res =
           await dashboardRepository.getDistrictWisePatientCount();
