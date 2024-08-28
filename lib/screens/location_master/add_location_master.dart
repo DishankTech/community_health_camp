@@ -725,6 +725,9 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                             flex: 1,
                                             child: AppButton(
                                               title: "Clear",
+                                              onTap: (){
+                                                Get.back();
+                                              },
                                               buttonColor: Colors.grey,
                                               iconData: Icon(
                                                 Icons.arrow_forward,

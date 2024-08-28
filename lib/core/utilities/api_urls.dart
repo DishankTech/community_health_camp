@@ -22,5 +22,7 @@ class ApiConstants {
   static const String campCreationList = "/administrator/camp/all-camp-details-pagination";
   static const String campCreationDetails = "/administrator/camp/camp-request-details";
   static const String getStakeholderName = "/administrator/masters/dropdown/stake-holder-list-by-district";
+  static const String generateCampNumber = "/administrator/camp/generate-camp-number";
+  static const String referTo = "/administrator/masters/dropdown/stake-holder-by-sub-type-list";
 
 }

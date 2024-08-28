@@ -9,6 +9,7 @@ import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_pa
 import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/referred_patients_view.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
+import 'package:community_health_app/screens/camp_creation/camp_creation_new.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_patient_registration_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
@@ -152,11 +153,13 @@ class AppRoutes {
         );
       case locationMasterList:
         return MaterialPageRoute(
+          // builder: (_) => const CampCreationNew(),
           builder: (_) => const LocationMasterList(),
         );
       case campCreation:
         return MaterialPageRoute(
-          builder: (_) => const CampCreation(),
+          // builder: (_) => const CampCreation(),
+          builder: (_) => const CampCreationNew(),
         );
       case dashboard:
         return MaterialPageRoute(

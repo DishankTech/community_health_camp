@@ -2303,11 +2303,9 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
                             SizedBox(
                               width: responsiveWidth(6),
                             ),
-                            Container(
-                              width: SizeConfig.designScreenWidth * 0.7,
+                            Expanded(
                               child: Text(
                                 widget.list[i].lookupDetHierDescEn ?? "",
-                                softWrap: true,
                                 style: TextStyle(
                                     fontSize: responsiveFont(14.0),
                                     fontWeight: selectedIndex == i
