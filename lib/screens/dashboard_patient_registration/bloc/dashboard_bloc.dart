@@ -109,7 +109,8 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
 
           // Get the application's documents directory
           // final directory = await getDownloadsDirectory();
-          final directory = Directory('/storage/emulated/0/Download');
+          // final directory = Directory('/storage/emulated/0/Download');
+          final directory = await getApplicationDocumentsDirectory();
 
           // Create the file
           final file = File('${directory.path}/$filename');

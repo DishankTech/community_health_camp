@@ -1551,19 +1551,20 @@ class _DashboardPatientRegistrationScreenState
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          8, 30, 8, 8),
-                                      child: BlocBuilder<DashboardBloc,
-                                          DashboardState>(
-                                        builder: (context, state) {
-                                          bool noData = true;
-                                          DistrictDateWiseCampResponseModel?
-                                              districtDateWiseCampResponseModel;
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 30, 8, 8),
+                                    child: BlocBuilder<DashboardBloc,
+                                        DashboardState>(
+                                      builder: (context, state) {
+                                        bool noData = true;
+                                        DistrictDateWiseCampResponseModel?
+                                            districtDateWiseCampResponseModel;
+                                        if (state.getDateWiseDistrictCountStatus
+                                            .isSuccess) {
                                           if (state
-                                              .getDateWiseDistrictCountStatus
-                                              .isSuccess) {
+                                              .getDateWiseDistrictCountResponse
+                                              .isNotEmpty) {
                                             districtDateWiseCampResponseModel =
                                                 DistrictDateWiseCampResponseModel
                                                     .fromJson(jsonDecode(state
@@ -1601,53 +1602,51 @@ class _DashboardPatientRegistrationScreenState
                                               noData = true;
                                             }
                                           }
+                                        }
 
-                                          return state
-                                                  .getDateWiseDistrictCountStatus
-                                                  .isInProgress
-                                              ? const Center(
-                                                  child:
-                                                      CircularProgressIndicator())
-                                              : noData
-                                                  ? const Align(
-                                                      alignment:
-                                                          FractionalOffset
-                                                              .center,
-                                                      child: Text(
-                                                          "Data not available for selected date"),
-                                                    )
-                                                  : SfCartesianChart(
-                                                      isTransposed: true,
-                                                      primaryXAxis:
-                                                          CategoryAxis(
-                                                        labelRotation: -70,
-                                                        autoScrollingMode:
-                                                            AutoScrollingMode
-                                                                .start,
-                                                        initialVisibleMinimum:
-                                                            (campConductedDistrictWiseList
-                                                                    .length -
-                                                                20),
-                                                        initialVisibleMaximum:
-                                                            (campConductedDistrictWiseList
-                                                                    .length -
-                                                                0),
-                                                      ),
-                                                      primaryYAxis:
-                                                          const NumericAxis(
-                                                        minimum: 0,
-                                                        // maximum: 40,
-                                                        interval: 3,
-                                                      ),
-                                                      zoomPanBehavior:
-                                                          ZoomPanBehavior(
-                                                        enablePanning: true,
-                                                      ),
-                                                      series:
-                                                          _getBarCampConductedDistrictWiseSeries(),
-                                                    );
-                                        },
-                                      ),
+                                        return state
+                                                .getDateWiseDistrictCountStatus
+                                                .isInProgress
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : noData
+                                                ? const Align(
+                                                    alignment:
+                                                        FractionalOffset.center,
+                                                    child: Text(
+                                                        "Data not available for selected date"),
+                                                  )
+                                                : SfCartesianChart(
+                                                    isTransposed: true,
+                                                    primaryXAxis: CategoryAxis(
+                                                      labelRotation: -70,
+                                                      autoScrollingMode:
+                                                          AutoScrollingMode
+                                                              .start,
+                                                      initialVisibleMinimum:
+                                                          (campConductedDistrictWiseList
+                                                                  .length -
+                                                              20),
+                                                      initialVisibleMaximum:
+                                                          (campConductedDistrictWiseList
+                                                                  .length -
+                                                              0),
+                                                    ),
+                                                    primaryYAxis:
+                                                        const NumericAxis(
+                                                      minimum: 0,
+                                                      // maximum: 40,
+                                                      interval: 3,
+                                                    ),
+                                                    zoomPanBehavior:
+                                                        ZoomPanBehavior(
+                                                      enablePanning: true,
+                                                    ),
+                                                    series:
+                                                        _getBarCampConductedDistrictWiseSeries(),
+                                                  );
+                                      },
                                     ),
                                   ),
                                 ],
