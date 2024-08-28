@@ -1,4 +1,7 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
+import 'dart:io';
+
+import 'package:community_health_app/core/utilities/permission_service.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/bloc/dashboard_bloc.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_card_view/dashboard_card_view.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/models/dashboard_filter_count_response.dart';
@@ -9,6 +12,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../core/common_widgets/app_bar_v1.dart';
 import '../../core/common_widgets/app_button.dart';
@@ -157,60 +162,33 @@ class _DashboardPatientRegistrationScreenState
               if (state.getExcelDataStatus.isFailure) {
                 ScaffoldMessenger.of(context)
                   ..clearSnackBars()
-                  ..showSnackBar(SnackBar(
-                    behavior: SnackBarBehavior.floating,
-                    margin: EdgeInsets.only(
-                      bottom: SizeConfig.screenHeight *
-                          0.85, // Adjust this as needed
-                    ),
-                    content: const Text('Unable to get report'),
-                    duration: const Duration(seconds: 3),
+                  ..showSnackBar(const SnackBar(
+                    content: Text('Unable to get report'),
+                    duration: Duration(seconds: 3),
                     backgroundColor: Colors.red,
                   ));
+                Navigator.pop(context);
               }
               if (state.getExcelDataStatus.isSuccess) {
-                var res = jsonDecode(state.getExcelDataResponse);
-                if (res['status_code'] == 200) {
-                  if (res['message'] != 'Data Not Found') {
-                    ScaffoldMessenger.of(context)
-                      ..clearSnackBars()
-                      ..showSnackBar(SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        content: const Text("Downloading report.."),
-                        margin: EdgeInsets.only(
-                          bottom: SizeConfig.screenHeight *
-                              0.85, // Adjust this as needed
-                        ),
-                        duration: const Duration(seconds: 3),
-                        backgroundColor: Colors.green,
-                      ));
-                  } else {
-                    ScaffoldMessenger.of(context)
-                      ..clearSnackBars()
-                      ..showSnackBar(SnackBar(
-                        behavior: SnackBarBehavior.floating,
-                        content: Text(res['message']),
-                        margin: EdgeInsets.only(
-                          bottom: SizeConfig.screenHeight *
-                              0.85, // Adjust this as needed
-                        ),
-                        duration: const Duration(seconds: 3),
-                        backgroundColor: Colors.red,
-                      ));
-                  }
+                if (state.getExcelDataResponse ==
+                    'File Downloaded Successfully') {
+                  ScaffoldMessenger.of(context)
+                    ..clearSnackBars()
+                    ..showSnackBar(SnackBar(
+                      content: Text(state.getExcelDataResponse),
+                      duration: const Duration(seconds: 3),
+                      backgroundColor: Colors.green,
+                    ));
+                  Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context)
                     ..clearSnackBars()
                     ..showSnackBar(SnackBar(
-                      behavior: SnackBarBehavior.floating,
-                      margin: EdgeInsets.only(
-                        bottom: SizeConfig.screenHeight *
-                            0.85, // Adjust this as needed
-                      ),
-                      content: Text(res['exception']),
+                      content: Text(state.getExcelDataResponse),
                       duration: const Duration(seconds: 3),
                       backgroundColor: Colors.red,
                     ));
+                  Navigator.pop(context);
                 }
               }
             },
@@ -488,6 +466,45 @@ class _DashboardPatientRegistrationScreenState
         );
       },
     );
+  }
+
+  Future<void> downloadFile() async {
+    // Request storage permissions
+    if (await Permission.storage.request().isGranted) {
+      try {
+        // The URL from which to download the file
+        final url =
+            'http://210.89.42.117:8085/api/administrator/masters/download-excel/';
+
+        // Make the request
+        final response = await http.get(Uri.parse(url));
+
+        if (response.statusCode == 200) {
+          // Get the filename from the headers if needed
+          final contentDisposition = response.headers['content-disposition'];
+          final filename = contentDisposition?.split('filename=')?.last ??
+              'downloaded_file.xlsx';
+
+          // Get the application's documents directory
+          final directory = await getApplicationDocumentsDirectory();
+
+          // Create the file
+          final file = File('${directory.path}/$filename');
+
+          // Write the file
+          await file.writeAsBytes(response.bodyBytes);
+
+          print('File saved to ${file.path}');
+        } else {
+          print('Failed to download file: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error: $e');
+        PermissionService().requestPermissions();
+      }
+    } else {
+      print('Storage permission denied.');
+    }
   }
 
   @override
@@ -1113,19 +1130,17 @@ class _DashboardPatientRegistrationScreenState
                           isShowPatientsTreatments = false;
                           isShowPatientsReferred = false;
                           // filterCountDashboard();
-                          context.read<DashboardBloc>().add(GetCount(payload: {
-                                "days": 0,
-                                "start_date": "2024-01-01",
-                                "end_date": DateFormat('yyyy-MM-dd')
-                                    .format(DateTime.now())
-                              }));
-                          context
-                              .read<DashboardBloc>()
-                              .add(GetDateWiseDistrictCount(payload: {
-                                "start_date": "2024-01-01",
-                                "end_date": DateFormat('yyyy-MM-dd')
-                                    .format(DateTime.now()),
-                                "district_id": 0
+                          context.read<DashboardBloc>().add(GetCount(
+                                  payload: const {
+                                    "days": null,
+                                    "start_date": null,
+                                    "end_date": null
+                                  }));
+                          context.read<DashboardBloc>().add(
+                                  GetDateWiseDistrictCount(payload: const {
+                                "start_date": null,
+                                "end_date": null,
+                                "district_id": null
                               }));
                           setState(() {});
                         },
@@ -1536,19 +1551,20 @@ class _DashboardPatientRegistrationScreenState
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                          8, 30, 8, 8),
-                                      child: BlocBuilder<DashboardBloc,
-                                          DashboardState>(
-                                        builder: (context, state) {
-                                          bool noData = true;
-                                          DistrictDateWiseCampResponseModel?
-                                              districtDateWiseCampResponseModel;
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 30, 8, 8),
+                                    child: BlocBuilder<DashboardBloc,
+                                        DashboardState>(
+                                      builder: (context, state) {
+                                        bool noData = true;
+                                        DistrictDateWiseCampResponseModel?
+                                            districtDateWiseCampResponseModel;
+                                        if (state.getDateWiseDistrictCountStatus
+                                            .isSuccess) {
                                           if (state
-                                              .getDateWiseDistrictCountStatus
-                                              .isSuccess) {
+                                              .getDateWiseDistrictCountResponse
+                                              .isNotEmpty) {
                                             districtDateWiseCampResponseModel =
                                                 DistrictDateWiseCampResponseModel
                                                     .fromJson(jsonDecode(state
@@ -1586,53 +1602,51 @@ class _DashboardPatientRegistrationScreenState
                                               noData = true;
                                             }
                                           }
+                                        }
 
-                                          return state
-                                                  .getDateWiseDistrictCountStatus
-                                                  .isInProgress
-                                              ? const Center(
-                                                  child:
-                                                      CircularProgressIndicator())
-                                              : noData
-                                                  ? const Align(
-                                                      alignment:
-                                                          FractionalOffset
-                                                              .center,
-                                                      child: Text(
-                                                          "Data not available for selected date"),
-                                                    )
-                                                  : SfCartesianChart(
-                                                      isTransposed: true,
-                                                      primaryXAxis:
-                                                          CategoryAxis(
-                                                        labelRotation: -45,
-                                                        autoScrollingMode:
-                                                            AutoScrollingMode
-                                                                .start,
-                                                        initialVisibleMinimum:
-                                                            (campConductedDistrictWiseList
-                                                                    .length -
-                                                                20),
-                                                        initialVisibleMaximum:
-                                                            (campConductedDistrictWiseList
-                                                                    .length -
-                                                                0),
-                                                      ),
-                                                      primaryYAxis:
-                                                          const NumericAxis(
-                                                        minimum: 0,
-                                                        // maximum: 40,
-                                                        interval: 10,
-                                                      ),
-                                                      zoomPanBehavior:
-                                                          ZoomPanBehavior(
-                                                        enablePanning: true,
-                                                      ),
-                                                      series:
-                                                          _getBarCampConductedDistrictWiseSeries(),
-                                                    );
-                                        },
-                                      ),
+                                        return state
+                                                .getDateWiseDistrictCountStatus
+                                                .isInProgress
+                                            ? const Center(
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : noData
+                                                ? const Align(
+                                                    alignment:
+                                                        FractionalOffset.center,
+                                                    child: Text(
+                                                        "Data not available for selected date"),
+                                                  )
+                                                : SfCartesianChart(
+                                                    isTransposed: true,
+                                                    primaryXAxis: CategoryAxis(
+                                                      labelRotation: -70,
+                                                      autoScrollingMode:
+                                                          AutoScrollingMode
+                                                              .start,
+                                                      initialVisibleMinimum:
+                                                          (campConductedDistrictWiseList
+                                                                  .length -
+                                                              20),
+                                                      initialVisibleMaximum:
+                                                          (campConductedDistrictWiseList
+                                                                  .length -
+                                                              0),
+                                                    ),
+                                                    primaryYAxis:
+                                                        const NumericAxis(
+                                                      minimum: 0,
+                                                      // maximum: 40,
+                                                      interval: 3,
+                                                    ),
+                                                    zoomPanBehavior:
+                                                        ZoomPanBehavior(
+                                                      enablePanning: true,
+                                                    ),
+                                                    series:
+                                                        _getBarCampConductedDistrictWiseSeries(),
+                                                  );
+                                      },
                                     ),
                                   ),
                                 ],

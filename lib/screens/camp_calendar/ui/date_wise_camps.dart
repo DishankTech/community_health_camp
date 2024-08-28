@@ -17,23 +17,26 @@ import '../model/camp_list_response_model.dart';
 
 class DateWiseCampsScreen extends StatefulWidget {
   DateTime selectedDay;
+  List<Map<String, dynamic>> filteredData;
 
-  DateWiseCampsScreen(this.selectedDay, {super.key});
+  DateWiseCampsScreen(this.selectedDay, this.filteredData, {super.key});
 
   @override
   State<DateWiseCampsScreen> createState() => _DateWiseCampsScreenState();
 }
 
 class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
-  List<DateWiseCampsModel> _dateWiseCampList = [];
+  // List<DateWiseCampsModel> _dateWiseCampList = [];
 
   List<Map<String, dynamic>> locationData = [];
   late Future<List<Map<String, dynamic>>> _locationData;
 
   bool isLoading = false;
 
-  List<Datum> campDetailsList = [];
-  List<Datum> uniqueLocationList = [];
+  // List<Datum> campDetailsList = [];
+  List<Map<String, dynamic>> campDetailsList = [];
+  // List<Datum> uniqueLocationList = [];
+  List<Map<String, dynamic>> uniqueLocationList = [];
 
   List<String> campCount = [];
 
@@ -45,7 +48,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
 
     loadInit();
 
-    _dateWiseCampList.addAll([
+    /*  _dateWiseCampList.addAll([
       DateWiseCampsModel(district: "Pune", date: "1 Aug 2024", noOfCamps: "6"),
       DateWiseCampsModel(
           district: "Kolhapur", date: "1 Aug 2024", noOfCamps: "3"),
@@ -58,7 +61,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
       DateWiseCampsModel(
           district: "Nagpur", date: "1 Aug 2024", noOfCamps: "4"),
       DateWiseCampsModel(district: "Akola", date: "1 Aug 2024", noOfCamps: "1"),
-    ]);
+    ]);*/
   }
 
   @override
@@ -68,15 +71,12 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Change to your desired color
       statusBarBrightness: Brightness.light,
-      statusBarIconBrightness:
-          Brightness.light, // For light text/icons on the status bar
+      statusBarIconBrightness: Brightness.light, // For light text/icons on the status bar
     ));
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-            image:
-                DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
+        decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -103,8 +103,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                 ? Container(
                     width: SizeConfig.designScreenWidth,
                     height: SizeConfig.screenHeight * 0.7,
-                    color: Colors.black
-                        .withOpacity(0.3), // Semi-transparent overlay
+                    color: Colors.black.withOpacity(0.3), // Semi-transparent overlay
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -129,22 +128,18 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                           // String name = getNameById(locationData, campDetailsList[index].locationMasterId);
                           return InkWell(
                             onTap: () {
-
-                              var locationName = getNameById(
-                                  locationData,
-                                  campDetailsList[index]
-                                      .locationMasterId);
+                              // var locationName = getNameById(locationData, campDetailsList[index]['location_name']);
 
                               var totalCamps = campCount[index].toString();
 
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => DistrictWiseCampsScreen(campDetailsList[index],locationName,totalCamps),
+                                  builder: (context) => DistrictWiseCampsScreen(widget.filteredData, campDetailsList[index]['location_name'], totalCamps),
                                 ),
                               );
 
-                             /* Navigator.pushNamed(
+                              /* Navigator.pushNamed(
                                   context, AppRoutes.districtWiseCamps,arguments: campDetailsList[index]
                                   .locationMasterId );*/
                             },
@@ -152,62 +147,36 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                               margin: EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                   color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                        offset: Offset(0, 0),
-                                        color: Colors.grey.withOpacity(0.5),
-                                        spreadRadius: 1,
-                                        blurRadius: 5)
-                                  ],
-                                  borderRadius: BorderRadius.circular(
-                                      responsiveHeight(20))),
+                                  boxShadow: [BoxShadow(offset: Offset(0, 0), color: Colors.grey.withOpacity(0.5), spreadRadius: 1, blurRadius: 5)],
+                                  borderRadius: BorderRadius.circular(responsiveHeight(20))),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),
                                 child: Row(
                                   children: [
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            Text("District : ",
-                                                style: TextStyle(
-                                                    fontSize:
-                                                        responsiveFont(14),
-                                                    color: kBlackColor,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
-                                            // Text(campDetailsList[index].locationMasterId.toString()),
-                                            Text(getNameById(
-                                                locationData,
-                                                campDetailsList[index]
-                                                    .locationMasterId)),
+                                            Text("District : ", style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold)),
+                                            Text(campDetailsList[index]['location_name'].toString()),
+                                            // Text(getNameById(locationData, campDetailsList[index].)),
                                           ],
                                         ),
                                         SizedBox(
                                           height: 2,
                                         ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               "Date : ",
-                                              style: TextStyle(
-                                                  fontSize: responsiveFont(14),
-                                                  color: kBlackColor,
-                                                  fontWeight: FontWeight.bold),
+                                              style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold),
                                             ),
-                                            Text(campDetailsList[index]
-                                                .propCampDate
-                                                .toString()),
+                                            Text(campDetailsList[index]['confirm_camp_date'].toString()),
                                           ],
                                         ),
                                       ],
@@ -219,8 +188,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                                       children: [
                                         Text(
                                           "Total Camps",
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontWeight: FontWeight.bold),
                                         ),
                                         SizedBox(
                                           height: 4,
@@ -240,14 +208,10 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
                                               Container(
                                                   child: Text(
                                                 campCount[index].toString(),
-                                                style: TextStyle(
-                                                    color: kWhiteColor,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: "Montserrat"),
+                                                style: TextStyle(color: kWhiteColor, fontWeight: FontWeight.bold, fontFamily: "Montserrat"),
                                               )),
                                             ],
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                           ),
                                         ),
                                       ],
@@ -274,7 +238,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
     getAllCamps();
   }
 
-  Future<List<Datum>> getAllCamps() async {
+  /*Future<List<Datum>> getAllCamps() async {
      setState(() {
       isLoading = true;
     });
@@ -336,7 +300,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
         // Print the count of occurrences of each location_master_id
         print('Count of occurrences of each location_master_id:');
         locationCountMap.forEach((locationId, count) {
-          print('location_master_id: $locationId, count: $count');
+          print('lookup_det_hier_id: $locationId, count: $count');
           campCount.add(count.toString());
         });
 
@@ -355,7 +319,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
         }
 
         // Print the final filtered list with unique location_master_id
-        print('Filtered Camps on $filterDate with unique location_master_id:');
+        print('Filtered Camps on $campDetailsList with unique location_master_id:');
         for (var camp in uniqueLocationList) {
           print(camp);
         }
@@ -381,14 +345,122 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
     }
 
     return campDetailsList;
+  }*/
+
+
+  Future<List<Map<String, dynamic>>> getAllCamps() async {
+    setState(() {
+      isLoading = true;
+    });
+
+
+    try {
+      // Use the post method directly to get the response
+
+
+
+
+
+
+        // The date to filter by
+        String filterDate = widget.selectedDay.toString().split(' ')[0];
+
+        // Filter the list by the date '2024-08-23'
+        List<Map<String, dynamic>> filteredList = widget.filteredData.where((camp) {
+          String campDate = camp['confirm_camp_date']
+              .toString()
+              ; // Extract the date part
+          return campDate == filterDate;
+        }).toList();
+
+        Set<int> seenLocationIds = {};
+        uniqueLocationList = [];
+        // Print the filtered list
+        // print('Filtered Camps on $filterDate:');
+        // for (var camp in dateWiseFilteredList) {
+        //   print(camp);
+        // }
+
+        // Set<int> seenLocationIds = {};
+        uniqueLocationList = [];
+        // Count occurrences of each location_master_id
+        Map<String, int> locationCountMap = {};
+
+   /*     for (var camp in filteredList) {
+          if (camp['lookup_det_hier_id'] != null) {
+            int locationId = camp['lookup_det_hier_id'];
+            if (locationCountMap.containsKey(locationId)) {
+              locationCountMap[locationId] = locationCountMap[locationId]! + 1;
+            } else {
+              locationCountMap[locationId] = 1;
+            }
+          }
+        }*/
+
+
+        for (var camp in filteredList) {
+          if (camp['location_name'] != null) {
+            String locationName = camp['location_name']; // Use location_name instead of lookup_det_hier_id
+            if (locationCountMap.containsKey(locationName)) {
+              locationCountMap[locationName] = locationCountMap[locationName]! + 1;
+            } else {
+              locationCountMap[locationName] = 1;
+            }
+          }
+        }
+
+
+        // Print the count of occurrences of each location_master_id
+        print('Count of occurrences of each location_master_id:');
+        locationCountMap.forEach((locationId, count) {
+          print('lookup_det_hier_id: $locationId, count: $count');
+          campCount.add(count.toString());
+        });
+
+        setState(() {
+          campCount;
+        });
+
+        for (var camp in filteredList) {
+          if (camp['lookup_det_hier_id'] != null) {
+            int locationId = camp['lookup_det_hier_id'];
+            if (!seenLocationIds.contains(locationId)) {
+              seenLocationIds.add(locationId);
+              uniqueLocationList.add(camp);
+            }
+          }
+        }
+
+        // Print the final filtered list with unique location_master_id
+        print('Filtered Camps on $campDetailsList with unique location_master_id:');
+        for (var camp in uniqueLocationList) {
+          print(camp);
+        }
+
+        campDetailsList = [];
+        // campDetailsList.addAll(filteredList);
+        campDetailsList.addAll(uniqueLocationList);
+
+        setState(() {
+          isLoading = false;
+        });
+
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      print('Exception: $e');
+    }
+
+    return campDetailsList;
   }
+
 
   Future<List<Map<String, dynamic>>> fetchLocationData() async {
     setState(() {
       isLoading = true;
     });
-    final url = Uri.parse(
-        'http://210.89.42.117:8085/api/administrator/masters/dropdown/location-list');
+    final url = Uri.parse('http://210.89.42.117:8085/api/administrator/masters/dropdown/location-list');
 
     try {
       final response = await http.post(url);
@@ -425,8 +497,7 @@ class _DateWiseCampsScreenState extends State<DateWiseCampsScreen> {
   String getNameById(List<Map<String, dynamic>> data, int? id) {
     try {
       // Find the map where id matches
-      Map<String, dynamic> item =
-          data.firstWhere((map) => map['location_master_id'] == id);
+      Map<String, dynamic> item = data.firstWhere((map) => map['location_master_id'] == id);
 
       // Return the name associated with the id
       return item['location_name'] as String;

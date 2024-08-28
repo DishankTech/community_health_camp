@@ -7,6 +7,7 @@ import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/network_constant.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
+import 'package:community_health_app/core/utilities/permission_service.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/user_auths/forgotpassword_view.dart';
 import 'package:community_health_app/screens/user_auths/models/login_response_model.dart';
@@ -17,6 +18,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/common_widgets/app_round_textfield.dart';
 
@@ -53,6 +55,7 @@ class _LoginPageState extends State<LoginPage> {
     _usernameController.text = '';
     _passwordController.text = '';
     super.initState();
+    PermissionService().requestPermissions();
   }
 
   @override
@@ -238,7 +241,39 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void validateFields() {
+  void _openAppSettings() async {
+    await openAppSettings();
+  }
+
+  void validateFields() async {
+    if (await PermissionService().hasAllPermission() == false) {
+      showDialog(
+          context: context,
+          builder: (c) => AlertDialog(
+                title: const Text('Permissions needed'),
+                content: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text("Please allow all the permissions, to continue")
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("Cancel"),
+                  ),
+                  TextButton(
+                      onPressed: () {
+                        _openAppSettings();
+                        Navigator.pop(context);
+                      },
+                      child: const Text("Yes"))
+                ],
+              ));
+      return;
+    }
     if (_usernameController.value.text.isEmpty) {
       Fluttertoast.showToast(
           msg: "Enter Username",
@@ -301,12 +336,10 @@ class _LoginPageState extends State<LoginPage> {
           var firstLogin = usersList.firstLoginPassReset;
           print(userId);
           DataProvider().storeUserCredential(userId!);
-             if(firstLogin.toString()=="Y")
-            {
-              Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.resetPassword, (route) => false);
-            }else{
-
-
+          if (firstLogin.toString() == "Y") {
+            Navigator.of(context).pushNamedAndRemoveUntil(
+                AppRoutes.resetPassword, (route) => false);
+          } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
@@ -315,10 +348,11 @@ class _LoginPageState extends State<LoginPage> {
                 backgroundColor: Colors.green,
               ),
             );
-            Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
+            Navigator.of(context)
+                .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
           }
 
-        /*  Navigator.of(context)
+          /*  Navigator.of(context)
               .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);*/
         } else {
           ScaffoldMessenger.of(context).showSnackBar(

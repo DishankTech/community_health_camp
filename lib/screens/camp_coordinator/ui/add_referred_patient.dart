@@ -587,6 +587,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
     if (campregisteredpatients.isNotEmpty) {
       setState(() {
         campregisteredpatients.removeAt(index);
+        campDetailsController.campReferredPatientList.removeAt(index);
         print(campregisteredpatients);
         // carbonCommentsList.removeAt(index);
       });

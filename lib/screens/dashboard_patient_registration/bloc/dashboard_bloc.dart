@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/repository/dashboard_repository.dart';
@@ -6,6 +8,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'package:share_plus/share_plus.dart';
 part 'dashboard_event.dart';
 part 'dashboard_state.dart';
 
@@ -92,9 +96,39 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           getExcelDataResponse: ''));
       http.Response res = await dashboardRepository.getExcelData(event.payload);
       if (res.statusCode == 200) {
-        emit(state.copyWith(
-            getExcelDataResponse: res.body,
-            getExcelDataStatus: FormzSubmissionStatus.success));
+        if (res.headers['content-type'] == 'application/json') {
+          var parsedResponse = jsonDecode(res.body);
+          emit(state.copyWith(
+              getExcelDataResponse: parsedResponse['message'],
+              getExcelDataStatus: FormzSubmissionStatus.success));
+        } else {
+          // Get the filename from the headers if needed
+          final contentDisposition = res.headers['content-disposition'];
+          final filename = contentDisposition?.split('filename=')?.last ??
+              '${event.payload['start_date']}_${event.payload['end_date']}.xlsx';
+
+          // Get the application's documents directory
+          // final directory = await getDownloadsDirectory();
+          // final directory = Directory('/storage/emulated/0/Download');
+          final directory = await getApplicationDocumentsDirectory();
+
+          // Create the file
+          final file = File('${directory.path}/$filename');
+
+          // Write the file
+          await file.writeAsBytes(res.bodyBytes);
+          emit(state.copyWith(
+              getExcelDataResponse: "File Downloaded Successfully",
+              getExcelDataStatus: FormzSubmissionStatus.success));
+          final result = await Share.shareXFiles(
+              [XFile('${directory?.path}/$filename')],
+              text: 'Community Health Report');
+
+          if (result.status == ShareResultStatus.success) {
+            print('Thank you for sharing the picture!');
+          }
+          print('File saved to ${file.path}');
+        }
       } else {
         emit(state.copyWith(
             getExcelDataResponse: res.reasonPhrase,

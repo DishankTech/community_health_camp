@@ -73,6 +73,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    context.read<ProfileCubit>().getProfile();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     context.read<ProfileCubit>().getProfile();
@@ -84,43 +90,43 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           for (var element in state.loginResponseModel!.details!.last.menu!) {
             if (element.parentList != null) {
-              if (element.parentList!.menuFeatureName == "Dashboard") {
-                if (element.childList != null) {
-                  for (var element in element.childList!) {
-                    for (var staticMenu in _staticMenuList) {
-                      if (element.menuControllerMobile != null &&
-                          (element.menuControllerMobile == staticMenu.name)) {
-                        _menuList.add(staticMenu);
-                      }
+              // if (element.parentList!.menuFeatureName == "Dashboard") {
+              if (element.childList != null) {
+                for (var element in element.childList!) {
+                  for (var staticMenu in _staticMenuList) {
+                    if (element.menuControllerMobile != null &&
+                        (element.menuControllerMobile == staticMenu.name)) {
+                      _menuList.add(staticMenu);
                     }
                   }
                 }
               }
-              if (element.parentList!.menuFeatureName == "Master") {
-                if (element.childList != null) {
-                  for (var element in element.childList!) {
-                    for (var staticMenu in _staticMenuList) {
-                      if (element.menuControllerMobile != null &&
-                          (element.menuControllerMobile == staticMenu.name)) {
-                        _menuList.add(staticMenu);
-                      }
-                    }
-                  }
-                }
-              }
+              // }
+              // if (element.parentList!.menuFeatureName == "Master") {
+              // if (element.childList != null) {
+              //   for (var element in element.childList!) {
+              //     for (var staticMenu in _staticMenuList) {
+              //       if (element.menuControllerMobile != null &&
+              //           (element.menuControllerMobile == staticMenu.name)) {
+              //         _menuList.add(staticMenu);
+              //       }
+              //     }
+              //   }
+              // }
+              // }
 
-              if (element.parentList!.menuFeatureName == "Registration") {
-                if (element.childList != null) {
-                  for (var element in element.childList!) {
-                    for (var staticMenu in _staticMenuList) {
-                      if (element.menuControllerMobile != null &&
-                          (element.menuControllerMobile == staticMenu.name)) {
-                        _menuList.add(staticMenu);
-                      }
-                    }
-                  }
-                }
-              }
+              // if (element.parentList!.menuFeatureName == "Registration") {
+              // if (element.childList != null) {
+              //   for (var element in element.childList!) {
+              //     for (var staticMenu in _staticMenuList) {
+              //       if (element.menuControllerMobile != null &&
+              //           (element.menuControllerMobile == staticMenu.name)) {
+              //         _menuList.add(staticMenu);
+              //       }
+              //     }
+              //   }
+              // }
+              // }
             }
           }
         }
@@ -216,101 +222,118 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           left: responsiveHeight(12),
                           right: responsiveHeight(12)),
                       child: Container(
-                          decoration: BoxDecoration(
-                            color: kWhiteColor,
-                            borderRadius: BorderRadius.circular(
-                              responsiveHeight(20),
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5),
-                                  offset: const Offset(0, 0),
-                                  blurRadius: 5,
-                                  spreadRadius: 1)
-                            ],
+                        decoration: BoxDecoration(
+                          color: kWhiteColor,
+                          borderRadius: BorderRadius.circular(
+                            responsiveHeight(20),
                           ),
-                          child: Padding(
-                              padding: EdgeInsets.only(
-                                  top: responsiveHeight(40),
-                                  bottom: responsiveHeight(40)),
-                              child: GridView.builder(
-                                  padding: EdgeInsets.zero,
-                                  shrinkWrap: true,
-                                  itemCount: _menuList.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2),
-                                  itemBuilder: (c, i) {
-                                    return Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        splashFactory: InkRipple.splashFactory,
-                                        onTap: () {
-                                          if (_menuList[i].routeName != null) {
-                                            Navigator.pushNamed(context,
-                                                _menuList[i].routeName!);
-                                          }
-                                        },
-                                        child: Ink(
-                                          decoration: BoxDecoration(
-                                            border: Border(
-                                              bottom: i ==
-                                                          _menuList.length -
-                                                              1 ||
-                                                      _menuList.length % 2 ==
-                                                              0 &&
-                                                          i ==
-                                                              _menuList.length -
-                                                                  2
-                                                  ? BorderSide.none
-                                                  : const BorderSide(
-                                                      color: Colors.grey,
-                                                      // Set the color of the bottom border
-                                                      width:
-                                                          0.5, // Set the width of the bottom border
-                                                    ),
-                                              right: i % 2 == 1
-                                                  ? BorderSide.none
-                                                  : const BorderSide(
-                                                      color: Colors.grey,
-                                                      // Set the color of the right border
-                                                      width:
-                                                          0.5, // Set the width of the right border
-                                                    ),
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                offset: const Offset(0, 0),
+                                blurRadius: 5,
+                                spreadRadius: 1)
+                          ],
+                        ),
+                        child: Padding(
+                            padding: EdgeInsets.only(
+                                top: responsiveHeight(40),
+                                bottom: responsiveHeight(40)),
+                            child: _menuList.isNotEmpty
+                                ? GridView.builder(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    itemCount: _menuList.length,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2),
+                                    itemBuilder: (c, i) {
+                                      return Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          splashFactory:
+                                              InkRipple.splashFactory,
+                                          onTap: () {
+                                            if (_menuList[i].routeName !=
+                                                null) {
+                                              Navigator.pushNamed(context,
+                                                  _menuList[i].routeName!);
+                                            }
+                                          },
+                                          child: Ink(
+                                            decoration: BoxDecoration(
+                                              border: Border(
+                                                bottom: i ==
+                                                            _menuList.length -
+                                                                1 ||
+                                                        _menuList.length % 2 ==
+                                                                0 &&
+                                                            i ==
+                                                                _menuList
+                                                                        .length -
+                                                                    2
+                                                    ? BorderSide.none
+                                                    : const BorderSide(
+                                                        color: Colors.grey,
+                                                        // Set the color of the bottom border
+                                                        width:
+                                                            0.5, // Set the width of the bottom border
+                                                      ),
+                                                right: i % 2 == 1
+                                                    ? BorderSide.none
+                                                    : const BorderSide(
+                                                        color: Colors.grey,
+                                                        // Set the color of the right border
+                                                        width:
+                                                            0.5, // Set the width of the right border
+                                                      ),
+                                              ),
+                                            ),
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                SizedBox(
+                                                  height: responsiveHeight(22),
+                                                ),
+                                                Image.asset(
+                                                  _menuList[i].image,
+                                                  height: responsiveHeight(40),
+                                                  width: responsiveHeight(40),
+                                                ),
+                                                SizedBox(
+                                                  height: responsiveHeight(10),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 22),
+                                                  child:
+                                                      Text(_menuList[i].name),
+                                                ),
+                                                // const Divider(
+                                                //   color: Colors.grey,
+                                                //   thickness: 0.5,
+                                                //   height: 0,
+                                                // ),
+                                              ],
                                             ),
                                           ),
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                height: responsiveHeight(22),
-                                              ),
-                                              Image.asset(
-                                                _menuList[i].image,
-                                                height: responsiveHeight(40),
-                                                width: responsiveHeight(40),
-                                              ),
-                                              SizedBox(
-                                                height: responsiveHeight(10),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.only(
-                                                    bottom: 22),
-                                                child: Text(_menuList[i].name),
-                                              ),
-                                              // const Divider(
-                                              //   color: Colors.grey,
-                                              //   thickness: 0.5,
-                                              //   height: 0,
-                                              // ),
-                                            ],
-                                          ),
                                         ),
-                                      ),
-                                    );
-                                  }))),
+                                      );
+                                    })
+                                : Center(
+                                    child: TextButton(
+                                        onPressed: () {
+                                          context
+                                              .read<ProfileCubit>()
+                                              .getProfile();
+                                          setState(() {});
+                                        },
+                                        child: const Text('Refresh')),
+                                  )),
+                      ),
                     ),
                   ),
                   const Spacer(),
