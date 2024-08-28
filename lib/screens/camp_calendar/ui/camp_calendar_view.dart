@@ -283,11 +283,15 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
       isLoading = true;
     });
     eventsByDate = {};
-    var url = Uri.parse('http://210.89.42.117:8085/api/administrator/camp/all-camp-details-pagination');
+    // var url = Uri.parse('http://210.89.42.117:8085/api/administrator/camp/all-camp-details-pagination');
+    var url = Uri.parse('http://210.89.42.117:8085/api/administrator/camp/all-camp-approval-details-by-date');
 
     var headers = {'Content-Type': 'application/json'};
 
-    var body = json.encode({"total_pages": 1, "page": 1, "total_count": null, "per_page": 100, "data": null});
+    var body = json.encode({{
+      "start_date": "2024-08-01",
+      "end_date": "2024-08-31"
+    }});
 
     try {
       // Use the post method directly to get the response

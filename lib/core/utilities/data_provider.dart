@@ -236,6 +236,10 @@ class DataProvider {
 
     // Store the List<String> in SharedPreferences
     await prefs.setStringList('patients', jsonList);
+
+
+
+
   }
 
   Future<List<CampCoordRegisteredPatientModel>> getPatientList() async {

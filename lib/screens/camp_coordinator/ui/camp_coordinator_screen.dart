@@ -10,10 +10,12 @@ import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/screens/camp_coordinator/controller/camp_details_controller.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as picker;
@@ -90,6 +92,8 @@ class _CampCoordinatorState extends State<CampCoordinator> {
   bool isSaveLoad = false;
 
   // bool isLoading=false;
+
+  final CampDetailsController campDetailsController = Get.put(CampDetailsController());
 
   @override
   void initState() {
@@ -843,7 +847,8 @@ class _CampCoordinatorState extends State<CampCoordinator> {
               backgroundColor: Colors.green,
             ),
           );
-
+          campDetailsController.campReferredPatientList.clear();
+          campDetailsController.campReferredPatientStakeholderList.clear();
           Navigator.pushNamed(context, AppRoutes.referredPatientList);
         }
       } else {
@@ -880,12 +885,50 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       isSaveLoad = true;
     });
 
-    for (int i = 0; i < campRefPatientList.length; i++) {
+    for (var patient in campDetailsController.campReferredPatientList) {
+      patient.campDashboardId ??= data;
+    }
+
+    Map<String, dynamic> json = {"tt_camp_dashboard_ref_patients_list": campDetailsController.campReferredPatientList.map((patient) => patient.toJson()).toList()};
+
+    // Convert the JSON map to a string
+    String jsonString = jsonEncode(json);
+
+    print('tt_camp_dashboard_ref_patients_list');
+    print(jsonString);
+
+    // Define the URL
+    String url = 'http://210.89.42.117:8085/api/administrator/masters/add/dashboard-patient-ref-details';
+
+    try {
+      // Make the POST request
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json", // Specify JSON content type
+        },
+        body: jsonString, // Attach the JSON data as the request body
+      );
+
+      // Check the response status
+      if (response.statusCode == 200) {
+        print('Request successful: ${response.body}');
+      } else {
+        print('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+
+    /* for (int i = 0; i < campRefPatientList.length; i++) {
       var headers = {
         'Content-Type': 'application/json',
       };
 
-      var body = json.encode({
+
+
+
+   */ /*   var body = json.encode({
         "tt_camp_dashboard_ref_patients_list": [
           {
             "dashboard_ref_patients_id": null,
@@ -909,17 +952,17 @@ class _CampCoordinatorState extends State<CampCoordinator> {
             ]
           }
         ]
-      });
-      print(body);
+      });*/ /*
+      print(json);
       var response = await http.post(
         Uri.parse('http://210.89.42.117:8085/api/administrator/masters/add/dashboard-patient-ref-details'),
         headers: headers,
-        body: body,
+        body: json,
       );
 
       if (response.statusCode == 200) {
         print(response.body);
-        final data = json.decode(response.body);
+      */ /*  final data = json.decode(response.body);
         if (data['status_code'] == 200) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -933,11 +976,11 @@ class _CampCoordinatorState extends State<CampCoordinator> {
           SharedPreferences prefrences = await SharedPreferences.getInstance();
           await prefrences.remove('patients');
           Navigator.pushNamed(context, AppRoutes.referredPatientList);
-        }
+        }*/ /*
       } else {
         print('Request failed with status: ${response.statusCode}. ${response.reasonPhrase}');
       }
-    }
+    }*/
   }
 }
 

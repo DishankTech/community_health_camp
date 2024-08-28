@@ -43,9 +43,9 @@ class CampsReferredPatientsRespModel {
 class ReferredPatientList {
   String patientName;
   String contactNumber;
-  int age;
-  String? genderEn;
-  String? genderRg;
+  dynamic age;
+  dynamic genderEn;
+  dynamic genderRg;
   dynamic stakeholderSubTypeEn;
   dynamic stakeholderSubTypeRg;
   String stakeholderNamesEn;
