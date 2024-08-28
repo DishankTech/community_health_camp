@@ -18,14 +18,14 @@ import 'package:intl/intl.dart';
 
 import 'model/save_camp_req/tt_camp_create_det_list.dart';
 
-class CampCreation extends StatefulWidget {
-  const CampCreation({super.key});
+class CampCreationNew extends StatefulWidget {
+  const CampCreationNew({super.key});
 
   @override
-  State<CampCreation> createState() => _CampCreationState();
+  State<CampCreationNew> createState() => _CampCreationNewState();
 }
 
-class _CampCreationState extends State<CampCreation> {
+class _CampCreationNewState extends State<CampCreationNew> {
   final CampCreationController campCreationController =
       Get.put(CampCreationController());
 
@@ -43,6 +43,7 @@ class _CampCreationState extends State<CampCreation> {
 
     if (campCreationController.hasInternet) {
       campCreationController.getLocationName();
+      campCreationController.getUserCode();
       campCreationController.getStakHolder();
       campCreationController.getMemberType();
       campCreationController.getUserList();
@@ -59,6 +60,7 @@ class _CampCreationState extends State<CampCreation> {
     campCreationController.distNameController.text = "";
 
     campCreationController.designationType.text = "";
+    campCreationController.talukaController.text = "";
 
     campCreationController.stakeHolderController.text = '';
 
@@ -160,8 +162,6 @@ class _CampCreationState extends State<CampCreation> {
                                         vertical: 12, horizontal: 12),
                                     child: Column(
                                       children: [
-
-
                                         AppRoundTextField(
                                           controller:
                                               controller.locationNameController,
@@ -174,12 +174,6 @@ class _CampCreationState extends State<CampCreation> {
                                                       controller
                                                               .selectedLocationVal =
                                                           p0.locationName,
-                                                      controller
-                                                          .distNameController
-                                                          .text = controller
-                                                              .selectedLocation
-                                                              ?.lookupDetHierDescEn ??
-                                                          "",
                                                       controller
                                                           .selectedLocation = p0,
                                                       controller
@@ -195,6 +189,35 @@ class _CampCreationState extends State<CampCreation> {
                                                             ?.lookupDetHierIdDistrict
                                                             .toString(),
                                                       ),
+                                                      controller
+                                                          .distNameController
+                                                          .text = controller
+                                                              .selectedLocation
+                                                              ?.lookupDetHierDescEn ??
+                                                          "",
+                                                      controller
+                                                          .talukaController
+                                                          .text = controller
+                                                              .selectedLocation
+                                                              ?.talukaEn ??
+                                                          "",
+                                                      controller
+                                                              .campCreationCardList[
+                                                                  0]
+                                                              .memberType =
+                                                          campCreationController
+                                                              .memberTypeModel
+                                                              ?.details
+                                                              ?.first
+                                                              .lookupDet
+                                                              ?.firstWhere((e) =>
+                                                                  e.lookupDetDescEn ==
+                                                                  "Co-ordinators")
+                                                              .lookupDetDescEn,
+                                                      controller.username =
+                                                          "${controller.locationNameController.text.trim()}"
+                                                              "${controller.campNumber}",
+                                                      controller.update(),
                                                     },
                                                 "Location",
                                                 controller.locationNameModel
@@ -245,13 +268,59 @@ class _CampCreationState extends State<CampCreation> {
                                           // initialValue: controller.selectedLocation?.lookupDetHierDescEn ?? "",
                                           inputType: TextInputType.text,
                                           onChange: (p0) {},
+                                          // onTap: () async {
+                                          //   return null;
+                                          // },
+                                          readOnly: true,
+                                          label: RichText(
+                                            text: const TextSpan(
+                                                text: 'District',
+                                                style: TextStyle(
+                                                    color: kHintColor,
+                                                    fontFamily: Montserrat),
+                                                children: [
+                                                  TextSpan(
+                                                      text: "*",
+                                                      style: TextStyle(
+                                                          color: Colors.red))
+                                                ]),
+                                          ),
+                                          hint: "",
+                                          suffix: SizedBox(
+                                            height:
+                                                getProportionateScreenHeight(
+                                                    20),
+                                            width: getProportionateScreenHeight(
+                                                20),
+                                            child: Center(
+                                              child: Image.asset(
+                                                icArrowDownOrange,
+                                                height:
+                                                    getProportionateScreenHeight(
+                                                        20),
+                                                width:
+                                                    getProportionateScreenHeight(
+                                                        20),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: responsiveHeight(10),
+                                        ),
+                                        AppRoundTextField(
+                                          controller:
+                                              controller.talukaController,
+                                          // initialValue: controller.selectedLocation?.lookupDetHierDescEn ?? "",
+                                          inputType: TextInputType.text,
+                                          onChange: (p0) {},
                                           onTap: () async {
                                             return null;
                                           },
                                           readOnly: true,
                                           label: RichText(
                                             text: const TextSpan(
-                                                text: 'District',
+                                                text: 'Taluka',
                                                 style: TextStyle(
                                                     color: kHintColor,
                                                     fontFamily: Montserrat),
@@ -391,7 +460,240 @@ class _CampCreationState extends State<CampCreation> {
                                               ),
                                             ),
                                           ),
-                                        )
+                                        ),
+                                        SizedBox(
+                                          height: responsiveHeight(10),
+                                        ),
+                                        AppRoundTextField(
+                                          initialValue: controller
+                                              .campCreationCardList[0]
+                                              .memberType,
+                                          inputStyle: TextStyle(
+                                              fontSize: responsiveFont(14),
+                                              color: kTextBlackColor),
+                                          inputType: TextInputType.text,
+                                          onTap: () {
+                                            commonBottomSheets(
+                                                context,
+                                                (p0) => {
+                                                      controller
+                                                          .campCreationCardList[
+                                                              0]
+                                                          .memberType = (p0
+                                                                  as MemberLookupDet)
+                                                              .lookupDetDescEn ??
+                                                          '',
+                                                      controller
+                                                              .campCreationCardList[
+                                                                  0]
+                                                              .lookupDetIdType =
+                                                          p0.lookupDetId,
+                                                      setState(() {})
+                                                    },
+                                                "Designation/Member Type",
+                                                campCreationController
+                                                    .memberTypeList);
+                                          },
+                                          readOnly: true,
+                                          label: RichText(
+                                            text: const TextSpan(
+                                                text: 'Designation/Member Type',
+                                                style: TextStyle(
+                                                    color: kHintColor,
+                                                    fontFamily: Montserrat),
+                                                children: [
+                                                  TextSpan(
+                                                      text: "*",
+                                                      style: TextStyle(
+                                                          color: Colors.red))
+                                                ]),
+                                          ),
+                                          hint: "",
+                                          suffix: SizedBox(
+                                            height: responsiveHeight(20),
+                                            width: responsiveHeight(20),
+                                            child: Center(
+                                              child: Image.asset(
+                                                icArrowDownOrange,
+                                                height: responsiveHeight(20),
+                                                width: responsiveHeight(20),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: responsiveHeight(10),
+                                        ),
+                                        SizedBox(
+                                          height: responsiveHeight(10),
+                                        ),
+                                        AppRoundTextField(
+                                          controller: campCreationController
+                                              .userNameController,
+                                          // initialValue: controller
+                                          //     .campCreationCardList[0].userName,
+                                          inputStyle: TextStyle(
+                                              fontSize: responsiveFont(14),
+                                              color: kTextBlackColor),
+                                          inputType: TextInputType.text,
+                                          onChange: (p0) {
+                                            campCreationController
+                                                .userNameController.text = p0;
+                                            print("AppRoundTextField: $p0");
+                                            // controller.userNameController.text = p0;
+                                          },
+                                          label: RichText(
+                                            text: const TextSpan(
+                                                text: 'Full Name',
+                                                style: TextStyle(
+                                                    color: kHintColor,
+                                                    fontFamily: Montserrat),
+                                                children: [
+                                                  TextSpan(
+                                                      text: "*",
+                                                      style: TextStyle(
+                                                          color: Colors.red))
+                                                ]),
+                                          ),
+                                          hint: "",
+                                        ),
+                                        SizedBox(
+                                          height: responsiveHeight(10),
+                                        ),
+                                        SizedBox(
+                                          height: responsiveHeight(10),
+                                        ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: AppRoundTextField(
+                                                controller: controller
+                                                    .countryCodeController,
+
+                                                inputStyle: TextStyle(
+                                                    fontSize:
+                                                        responsiveFont(14),
+                                                    color: kTextBlackColor),
+                                                inputType: TextInputType.number,
+                                                onChange: (p0) {},
+                                                onTap: () {
+                                                  List<Map<String, dynamic>>
+                                                      list = [
+                                                    {"title": "+91", "id": 1}
+                                                  ];
+                                                  commonBottonSheet(
+                                                      context,
+                                                      (p0) => {
+                                                            controller
+                                                                .countryCodeController
+                                                                .text = p0['title'],
+                                                            // controller.campCreationCardList[0].selectedCountry = p0['title'],
+                                                            campCreationController
+                                                                .update()
+                                                          },
+                                                      "Country Code",
+                                                      list);
+                                                },
+                                                // maxLength: 12,
+                                                readOnly: true,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text: 'Country Code',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "*",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                                suffix: SizedBox(
+                                                  height: responsiveHeight(20),
+                                                  width: responsiveHeight(20),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      icArrowDownOrange,
+                                                      height:
+                                                          responsiveHeight(20),
+                                                      width:
+                                                          responsiveHeight(20),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: responsiveWidth(10),
+                                            ),
+                                            Expanded(
+                                              child: AppRoundTextField(
+                                                // initialValue: controller
+                                                //     .campCreationCardList[0]
+                                                //     .userMobileNumber,
+                                                controller:
+                                                    controller.mobileController,
+                                                inputStyle: TextStyle(
+                                                    fontSize:
+                                                        responsiveFont(14),
+                                                    color: kTextBlackColor),
+                                                inputType: TextInputType.number,
+                                                onChange: (p0) {
+                                                  // controller
+                                                  //     .campCreationCardList[0]
+                                                  //     .userMobileNumber = p0;
+                                                  controller.mobileController
+                                                      .text = p0;
+                                                },
+                                                maxLength: 10,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text: 'Mobile No',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "*",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: responsiveHeight(10),
+                                        ),
+                                        AppRoundTextField(
+                                          readOnly: true,
+                                          initialValue: controller.username,
+                                          inputStyle: TextStyle(
+                                              fontSize: responsiveFont(14),
+                                              color: kTextBlackColor),
+                                          inputType: TextInputType.text,
+                                          onChange: (p0) {},
+                                          label: RichText(
+                                            text: const TextSpan(
+                                              text: 'Username',
+                                              style: TextStyle(
+                                                  color: kHintColor,
+                                                  fontFamily: Montserrat),
+                                              // children: [
+                                              //   TextSpan(text: "*", style: TextStyle(color: Colors.red))
+                                              // ]
+                                            ),
+                                          ),
+                                          hint: "",
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -399,27 +701,6 @@ class _CampCreationState extends State<CampCreation> {
                               ),
                               SizedBox(
                                 height: responsiveHeight(10),
-                              ),
-                              Column(
-                                children: controller.campCreationCardList
-                                    .asMap()
-                                    .entries
-                                    .map((entry) {
-                                  int index = entry.key;
-                                  TtCampCreateDetails cardData = entry.value;
-                                  return CamCreationCard(
-                                    index: index,
-                                    addCard: () {
-                                      addCard();
-                                    },
-                                    removeCard: () {
-                                      removeCard(index);
-                                    },
-                                  );
-                                }).toList(),
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(30),
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
@@ -473,11 +754,49 @@ class _CampCreationState extends State<CampCreation> {
                                               ?.status = 1;
 
                                           campCreationController
-                                                  .saveCampReqModel
-                                                  .ttCampCreateDetList =
-                                              campCreationController
-                                                  .campCreationCardList;
+                                              .saveCampReqModel
+                                              .ttCampCreate
+                                              ?.campNumber = null;
 
+                                          campCreationController
+                                              .saveCampReqModel
+                                              .ttCampCreate
+                                              ?.requestOrCreateFlag = "c";
+
+                                          campCreationController
+                                              .saveCampReqModel
+                                              .ttCampCreateDetList = [];
+
+                                          campCreationController
+                                              .saveCampReqModel
+                                              .ttCampCreateDetList
+                                              ?.add(TtCampCreateDetails(
+                                                  campCreateRequestDetId: null,
+                                                  campCreateRequestId: null,
+                                                  lookupDetIdType:
+                                                      campCreationController
+                                                          .memberTypeList[0]
+                                                          ?.lookupDetId,
+                                                  userId: controller
+                                                      .campCreationCardList[0]
+                                                      .userId,
+                                                  userName: controller.username,
+                                                  userLogin:
+                                                      controller.username,
+                                                  userMobileNumber: controller
+                                                      .mobileController.text,
+                                                  status: 1,
+                                                  isInactive: null));
+                                          campCreationController.userCreation(
+                                              "${controller.locationNameController.text}"
+                                              "${controller.campNumber}",
+                                              campCreationController
+                                                  .userNameController.text,
+                                              campCreationController
+                                                  .mobileController.text,
+                                              campCreationController
+                                                  .memberTypeList[0]
+                                                  ?.lookupDetId);
                                           campCreationController
                                               .saveCampCreation();
                                         },
@@ -495,7 +814,7 @@ class _CampCreationState extends State<CampCreation> {
                                       flex: 1,
                                       child: AppButton(
                                         title: "Clear",
-                                        onTap: (){
+                                        onTap: () {
                                           Get.back();
                                         },
                                         buttonColor: Colors.grey,
@@ -618,322 +937,5 @@ class _CampCreationState extends State<CampCreation> {
     final now = DateTime.now();
     final dt = DateTime(now.year, now.month, now.day, time.hour, time.minute);
     return DateFormat('h.mm a').format(dt);
-  }
-}
-
-class CamCreationCard extends StatefulWidget {
-  final Function addCard;
-  final Function removeCard;
-  final int index;
-
-  const CamCreationCard(
-      {super.key,
-      required this.addCard,
-      required this.removeCard,
-      required this.index});
-
-  @override
-  State<CamCreationCard> createState() => _CamCreationCardState();
-}
-
-class _CamCreationCardState extends State<CamCreationCard> {
-  @override
-  Widget build(BuildContext context) {
-    CampCreationController campCreationController = Get.find();
-    TtCampCreateDetails details =
-        campCreationController.campCreationCardList[widget.index];
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: SizeConfig.screenWidth * 0.95,
-        // height: SizeConfig.screenHeight /3,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(responsiveHeight(25)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5), // Shadow color
-              spreadRadius: 2, // Spread radius
-              blurRadius: 7, // Blur radius
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              SizedBox(
-                height: responsiveHeight(30),
-              ),
-              AppRoundTextField(
-                key: UniqueKey(),
-                initialValue: details.memberType,
-                inputStyle: TextStyle(
-                    fontSize: responsiveFont(14), color: kTextBlackColor),
-                inputType: TextInputType.text,
-                onTap: () {
-                  commonBottomSheets(
-                      context,
-                      (p0) => {
-                            details.memberType =
-                                (p0 as MemberLookupDet).lookupDetDescEn ?? '',
-                            details.lookupDetIdType = p0.lookupDetId,
-                            setState(() {})
-                          },
-                      "Designation/Member Type",
-                      campCreationController
-                              .memberTypeModel?.details?.first.lookupDet ??
-                          []);
-                },
-                readOnly: true,
-                label: RichText(
-                  text: const TextSpan(
-                      text: 'Designation/Member Type',
-                      style:
-                          TextStyle(color: kHintColor, fontFamily: Montserrat),
-                      children: [
-                        TextSpan(text: "*", style: TextStyle(color: Colors.red))
-                      ]),
-                ),
-                hint: "",
-                suffix: SizedBox(
-                  height: responsiveHeight(20),
-                  width: responsiveHeight(20),
-                  child: Center(
-                    child: Image.asset(
-                      icArrowDownOrange,
-                      height: responsiveHeight(20),
-                      width: responsiveHeight(20),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: responsiveHeight(30),
-              ),
-              AppRoundTextField(
-                key: ValueKey('TF3${widget.index}'),
-                // controller: campCreationController.userNameController,
-                initialValue: details.userName,
-                inputStyle: TextStyle(
-                    fontSize: responsiveFont(14), color: kTextBlackColor),
-                inputType: TextInputType.text,
-                onChange: (p0) {
-                  details.userName = p0;
-                  print("AppRoundTextField: $p0");
-                },
-                label: RichText(
-                  text: const TextSpan(
-                      text: 'Full Name',
-                      style:
-                          TextStyle(color: kHintColor, fontFamily: Montserrat),
-                      children: [
-                        TextSpan(text: "*", style: TextStyle(color: Colors.red))
-                      ]),
-                ),
-                hint: "",
-              ),
-              SizedBox(
-                height: responsiveHeight(30),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: AppRoundTextField(
-                      key: UniqueKey(),
-                      initialValue: details.selectedCountry,
-                      // controller: campCreationController.countryCodeController,
-                      inputStyle: TextStyle(
-                          fontSize: responsiveFont(14), color: kTextBlackColor),
-                      inputType: TextInputType.number,
-                      onChange: (p0) {},
-                      onTap: () {
-                        List<Map<String, dynamic>> list = [
-                          {"title": "+91", "id": 1}
-                        ];
-                        commonBottonSheet(
-                            context,
-                            (p0) => {
-                                  details.selectedCountry = p0['title'],
-                                  campCreationController.update()
-                                  // campCreationController.selectedCountryCode =
-                                  //     p0,
-                                  // campCreationController
-                                  //     .countryCodeController.text =
-                                  // campCreationController
-                                  //     .selectedCountryCode!['title']
-                                },
-                            "Country Code",
-                            list);
-                      },
-                      // maxLength: 12,
-                      readOnly: true,
-                      label: RichText(
-                        text: const TextSpan(
-                            text: 'Country Code',
-                            style: TextStyle(
-                                color: kHintColor, fontFamily: Montserrat),
-                            children: [
-                              TextSpan(
-                                  text: "*",
-                                  style: TextStyle(color: Colors.red))
-                            ]),
-                      ),
-                      hint: "",
-                      suffix: SizedBox(
-                        height: responsiveHeight(20),
-                        width: responsiveHeight(20),
-                        child: Center(
-                          child: Image.asset(
-                            icArrowDownOrange,
-                            height: responsiveHeight(20),
-                            width: responsiveHeight(20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: responsiveWidth(10),
-                  ),
-                  Expanded(
-                    child: AppRoundTextField(
-                      key: ValueKey('TF1${widget.index}'),
-                      initialValue: details.userMobileNumber,
-                      // controller: campCreationController.mobileController,
-                      inputStyle: TextStyle(
-                          fontSize: responsiveFont(14), color: kTextBlackColor),
-                      inputType: TextInputType.number,
-                      onChange: (p0) {
-                        details.userMobileNumber = p0;
-                      },
-                      maxLength: 10,
-                      label: RichText(
-                        text: const TextSpan(
-                            text: 'Mobile No',
-                            style: TextStyle(
-                                color: kHintColor, fontFamily: Montserrat),
-                            children: [
-                              TextSpan(
-                                  text: "*",
-                                  style: TextStyle(color: Colors.red))
-                            ]),
-                      ),
-                      hint: "",
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(
-                height: responsiveHeight(30),
-              ),
-              AppRoundTextField(
-                initialValue: details.userLogin,
-                key: UniqueKey(),
-                inputStyle: TextStyle(
-                    fontSize: responsiveFont(14), color: kTextBlackColor),
-                inputType: TextInputType.text,
-                onChange: (p0) {},
-                onTap: () {
-                  if (campCreationController.userList?.details != null) {
-                    userBottomSheet(
-                        context,
-                        (p0) => {
-                              details.userLogin = p0.fullName,
-                              details.userId = p0.userId,
-                              campCreationController.update()
-                              // campCreationController.userController.text =
-                              //     p0.fullName,
-                              // campCreationController.selectedUser = p0
-                            },
-                        "User Id",
-                        campCreationController.userList?.details ?? []);
-                  }
-                },
-                readOnly: true,
-                label: RichText(
-                  text: const TextSpan(
-                      text: 'User Id',
-                      style:
-                          TextStyle(color: kHintColor, fontFamily: Montserrat),
-                      children: [
-                        TextSpan(text: "*", style: TextStyle(color: Colors.red))
-                      ]),
-                ),
-                hint: "",
-                suffix: SizedBox(
-                  height: responsiveHeight(20),
-                  width: responsiveHeight(20),
-                  child: Center(
-                    child: Image.asset(
-                      icArrowDownOrange,
-                      height: responsiveHeight(20),
-                      width: responsiveHeight(20),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 12, right: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: AppButton(
-                        title: "Create User",
-                        onTap: () {
-                          createUserBottomSheet(
-                              context,
-                              (p0) => {},
-                              "User Creation",
-                              details.userName ?? '',
-                              details.userMobileNumber ?? "",
-                              details.lookupDetIdType ?? null,
-                              campCreationController.stakeHolderModel?.details
-                                      ?.first.lookupDetHierarchical ??
-                                  [],
-                              campCreationController.stakHolderUserCreation,
-                              campCreationController.loginNameUserCreation);
-                        },
-                        iconData: Icon(
-                          Icons.arrow_forward,
-                          color: kWhiteColor,
-                          size: responsiveHeight(20),
-                        ),
-                      ),
-                    ),
-                    const Spacer(),
-                    InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset("assets/icons/add.png"),
-                      ),
-                      onTap: () {
-                        widget.addCard();
-                      },
-                    ),
-                    SizedBox(
-                      width: responsiveWidth(10),
-                    ),
-                    InkWell(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Image.asset("assets/icons/remove.png"),
-                      ),
-                      onTap: () {
-                        widget.removeCard();
-                      },
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

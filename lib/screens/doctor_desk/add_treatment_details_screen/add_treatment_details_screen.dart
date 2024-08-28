@@ -1,10 +1,11 @@
 import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
+import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_deskRef.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
-import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
+import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -50,6 +51,13 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
 
   @override
   void initState() {
+
+    doctorDeskController.stakeHolderTypeController.text ='';
+    doctorDeskController.symptomController.text ='';
+    doctorDeskController.provisionalDiaController.text ='';
+    doctorDeskController.stakeHolderController.text ='';
+    doctorDeskController
+        .selectedStakeH.clear();
     checkInternetAndLoadData();
     super.initState();
   }
@@ -80,7 +88,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                               title: "Add Treatment Details",
                               context: context,
                               onBackButtonPress: () {
-                                Navigator.pop(context);
+                                Get.to(const DoctorDeskPatientsScreen());
                               },
                             ),
                             Container(
@@ -364,7 +372,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        height: responsiveHeight(400),
+                                        height: responsiveHeight(450),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -551,6 +559,82 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       20, 15, 20, 0),
                                               child: AppRoundTextField(
                                                 controller: controller
+                                                    .stakeHolderTypeController,
+                                                inputType: TextInputType.text,
+                                                onChange: (p0) {},
+                                                onTap: () async {
+                                                  await commonBottomSheet(
+                                                      context,
+                                                      (p0) async => {
+                                                            controller
+                                                                    .selectedStakeHTypeVal =
+                                                                p0.lookupDetHierDescEn,
+                                                            controller
+                                                                .stakeHolderTypeController
+                                                                .text = p0
+                                                                    .lookupDetHierDescEn ??
+                                                                "",
+                                                            await controller
+                                                                .getReferTo(p0
+                                                                    .lookupDetHierId),
+                                                            controller
+                                                                .selectedStakeHType = p0,
+                                                            controller.update()
+                                                          },
+                                                      "Stakeholder Subtype",
+                                                      controller
+                                                              .stakeHolderTypeModel
+                                                              ?.details
+                                                              ?.first
+                                                              .lookupDetHierarchical ??
+                                                          []);
+                                                },
+                                                // maxLength: 12,
+                                                readOnly: true,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text:
+                                                          'Stakeholder Subtype',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "*",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                                suffix: SizedBox(
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      icArrowDownOrange,
+                                                      height:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                      width:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: AppRoundTextField(
+                                                controller: controller
                                                     .stakeHolderController,
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
@@ -574,11 +658,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             controller.update()
                                                           },
                                                       "Refer To",
-                                                      controller
-                                                              .stakeHolderModel
-                                                              ?.details
-                                                              ?.first
-                                                              .lookupDetHierarchical ??
+                                                      controller.referToModel
+                                                              ?.details ??
                                                           []);
                                                 },
                                                 // maxLength: 12,
@@ -679,6 +760,15 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
                                                       ?.userId = 1;
+
+                                                  controller
+                                                          .addTreatmentDetailsModel
+                                                          .ttPatientDoctorDesk
+                                                          ?.lookupDetHierIdStakeholderSubType2 =
+                                                      controller
+                                                          .selectedStakeHType
+                                                          ?.lookupDetHierId;
+
                                                   controller
                                                           .addTreatmentDetailsModel
                                                           .ttPatientDoctorDesk
@@ -697,7 +787,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDeskRef = [];
-                                                  for (LookupDetHierarchical item
+                                                  for (ReferToDetails item
                                                       in controller
                                                           .selectedStakeH) {
                                                     controller
@@ -709,7 +799,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             patientDoctorDeskReferId:
                                                                 null,
                                                             stakeholderMasterId:
-                                                                item.lookupDetHierId,
+                                                                item.stakeholderMasterId,
                                                             orgId: 1,
                                                             status: 1,
                                                             isInactive: null));
@@ -766,8 +856,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
 }
 
 extension ListExtensions on List {
-  void addIfNotExist(LookupDetHierarchical element,
-      {bool Function(LookupDetHierarchical item)? condition}) {
+  void addIfNotExist(ReferToDetails element,
+      {bool Function(ReferToDetails item)? condition}) {
     bool exists;
 
     if (condition != null) {

@@ -2284,13 +2284,15 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
                             SizedBox(
                               width: responsiveWidth(6),
                             ),
-                            Text(
-                              widget.list[i].lookupDetHierDescEn ?? "",
-                              style: TextStyle(
-                                  fontSize: responsiveFont(14.0),
-                                  fontWeight: selectedIndex == i
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
+                            Expanded(
+                              child: Text(
+                                widget.list[i].lookupDetHierDescEn ?? "",
+                                style: TextStyle(
+                                    fontSize: responsiveFont(14.0),
+                                    fontWeight: selectedIndex == i
+                                        ? FontWeight.bold
+                                        : FontWeight.w500),
+                              ),
                             ),
                             const Spacer(),
                             if (selectedIndex == i)
