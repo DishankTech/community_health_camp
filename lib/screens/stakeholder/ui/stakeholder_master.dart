@@ -347,7 +347,12 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    mAppBarV1(title: "Stakeholder Master", context: context),
+                    mAppBarV1(
+                        title: "Stakeholder Master",
+                        context: context,
+                        onBackButtonPress: () {
+                          Navigator.pop(context);
+                        }),
                     Padding(
                       padding: EdgeInsets.only(bottom: responsiveHeight(30)),
                       child: Container(

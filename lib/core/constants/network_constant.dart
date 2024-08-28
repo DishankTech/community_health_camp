@@ -31,10 +31,11 @@ const String kBookBedApi = "bookBedApi";
 const String kGetMyAppointments = "getAutoSuggetionDetails";
 
 const String userLogin = "public/account/login";
-const String userResetPassword =
-    "api/profile/account/update/user-password-reset";
+const String userResetPassword = "profile/account/update/user-password-reset";
 const String kCreateUser = "profile/account/new/";
 const String kUpdateUser = "profile/account/update/user-account-details";
+const String kLoginNameValidation =
+    "profile/account/get/login-name-validation/";
 const String kGetAllUsers = "profile/account/all-user-details-pagination";
 const String kPatientRegistration = "administrator/masters/add/patient-master";
 const String kGetAllPatients =
@@ -54,3 +55,9 @@ const String kGetAllStakeholders =
     "administrator/masters/all-stake-holder-master-pagination";
 const String kGetStakeholderName =
     "administrator/masters/dropdown/stake-holder-list/";
+//Dashboard
+const String kGetCount = "administrator/masters/get/filter/count";
+const String kGetDateWiseDistrictCount =
+    "administrator/masters/get/district-wise-camp-by-date/count";
+
+const String kGetExcelData = "administrator/masters/download-excel/";

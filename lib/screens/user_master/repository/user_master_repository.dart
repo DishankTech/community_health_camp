@@ -43,4 +43,10 @@ class UserMasterRepository {
     return await http.post(Uri.parse('$kBaseUrl$kGetAllUsers'),
         body: jsonEncode(payload), headers: headers);
   }
+
+  Future<http.Response> getLoginNameValidation(String payload) async {
+    var headers = {'Content-Type': 'application/json'};
+    return await http.post(Uri.parse('$kBaseUrl$kLoginNameValidation$payload'),
+        body: jsonEncode(payload), headers: headers);
+  }
 }

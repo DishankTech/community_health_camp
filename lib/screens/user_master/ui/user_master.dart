@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
@@ -22,6 +23,7 @@ import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master
 import 'package:community_health_app/screens/stakeholder/models/stakeholder_name_response_model.dart';
 import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -36,7 +38,7 @@ class UserMasterScreen extends StatefulWidget {
 
 class _UserMasterScreenState extends State<UserMasterScreen> {
   XFile? capturedFile;
-
+  Timer? _debounce;
   GlobalKey<FormState> _formKey = GlobalKey();
   late TextEditingController _stakeholderTypeTextController;
   late TextEditingController _stakeholderNameTextController;
@@ -75,21 +77,6 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
     _mobileNoCountryCodeTextController = TextEditingController();
 
     _mobileNoCountryCodeTextController.text = "+91";
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      context.read<MasterDataBloc>().add(GetMasters(payload: const {
-            "lookup_det_code_list1": [
-              {"lookup_det_code": "STY"}
-            ]
-          }));
-
-      context
-          .read<MasterDataBloc>()
-          .add(GetMastersDesignationType(payload: const {
-            "lookup_code_list1": [
-              {"lookup_code": "MTY"}
-            ]
-          }));
-    });
   }
 
   @override
@@ -104,6 +91,7 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
     _confirmPsswordTextController.dispose();
     _mobileNoTextController.dispose();
     _mobileNoCountryCodeTextController.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
@@ -154,6 +142,13 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
               ));
             context.read<UserMasterBloc>().add(ResetUserMasterState());
           }
+          // if (state.loginNameCheckStatus.isSuccess) {
+          //   var res = jsonDecode(state.loginNameCheckResponse);
+          //   if (res['details'] == 1) {
+          //     _loginNameTextController.clear();
+          //   }
+          //   context.read<UserMasterBloc>().add(ResetUserMasterState());
+          // }
           if (state.createUserStatus.isSuccess) {
             var res = jsonDecode(state.createUserResponse);
             if (res['status_code'] == 200) {
@@ -164,15 +159,15 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                   backgroundColor: Colors.green,
                   duration: const Duration(seconds: 2),
                 ));
-              context.read<UserMasterBloc>().add(GetUserRequest(payload: const {
-                    "total_pages": 1,
-                    "page": 1,
-                    "total_count": 1,
-                    "per_page": 100,
-                    "data": ""
-                  }));
+              // context.read<UserMasterBloc>().add(GetUserRequest(payload: const {
+              //       "total_pages": 1,
+              //       "page": 1,
+              //       "total_count": 1,
+              //       "per_page": 10,
+              //       "data": ""
+              //     }));
 
-              Navigator.pop(context);
+              Navigator.pop(context, "refresh");
             } else {
               ScaffoldMessenger.of(context)
                 ..clearSnackBars()
@@ -181,9 +176,8 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                   backgroundColor: Colors.red,
                   duration: const Duration(seconds: 2),
                 ));
+              context.read<UserMasterBloc>().add(ResetUserMasterState());
             }
-
-            context.read<UserMasterBloc>().add(ResetUserMasterState());
           }
         },
         child: BlocListener<MasterDataBloc, MasterDataState>(
@@ -237,7 +231,12 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    mAppBarV1(title: "User Master", context: context),
+                    mAppBarV1(
+                        title: "User Master",
+                        context: context,
+                        onBackButtonPress: () {
+                          Navigator.pop(context);
+                        }),
                     SizedBox(
                       height: responsiveHeight(10),
                     ),
@@ -266,21 +265,6 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                                 },
                                 validators: Validators.validateStakeholderType,
                                 onTap: () {
-                                  // stakeholderBottomSheet(context, (p0) {
-                                  //   setState(() {
-                                  //     _selectedStakeholder = p0;
-                                  //     _stakeholderTypeTextController.text =
-                                  //         p0['title'];
-                                  //   });
-                                  // });
-                                  // context
-                                  //     .read<MasterDataBloc>()
-                                  //     .add(GetMasters(payload: const {
-                                  //       "lookup_det_code_list1": [
-                                  //         {"lookup_det_code": "STY"}
-                                  //       ]
-                                  //     }));
-
                                   stakeholderBottomSheet(context, (p0) {
                                     setState(() {
                                       _selectedStakeholderType = p0;
@@ -431,28 +415,66 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                               SizedBox(
                                 height: responsiveHeight(20),
                               ),
-                              AppRoundTextField(
-                                controller: _loginNameTextController,
-                                inputType: TextInputType.name,
-                                errorText: Validators.validateLoginName(
-                                    _loginNameTextController.text),
-                                onChange: (p0) {
-                                  setState(() {});
+                              BlocBuilder<UserMasterBloc, UserMasterState>(
+                                builder: (context, state) {
+                                  return AppRoundTextField(
+                                    controller: _loginNameTextController,
+                                    inputType: TextInputType.name,
+                                    inputFormatter:
+                                        FilteringTextInputFormatter.deny(
+                                            RegExp(r'\s')),
+                                    errorText: Validators.validateLoginName(
+                                        _loginNameTextController.text,
+                                        state.loginNameCheckStatus,
+                                        state.loginNameCheckResponse),
+                                    readOnly:
+                                        state.loginNameCheckStatus.isInProgress,
+                                    onChange: (p0) {
+                                      if (_debounce?.isActive ?? false)
+                                        _debounce?.cancel();
+                                      _debounce = Timer(
+                                          const Duration(milliseconds: 500),
+                                          () {
+                                        context.read<UserMasterBloc>().add(
+                                            CheckLoginNameRequest(
+                                                loginName:
+                                                    _loginNameTextController
+                                                        .text));
+                                      });
+                                    },
+                                    validators: (s) {
+                                      return Validators.validateLoginName(
+                                          _loginNameTextController.text,
+                                          state.loginNameCheckStatus,
+                                          state.loginNameCheckResponse);
+                                    },
+                                    label: RichText(
+                                      text: const TextSpan(
+                                          text: 'Login Name',
+                                          style: TextStyle(
+                                              color: kHintColor,
+                                              fontFamily: Montserrat),
+                                          children: [
+                                            TextSpan(
+                                                text: "*",
+                                                style: TextStyle(
+                                                    color: Colors.red))
+                                          ]),
+                                    ),
+                                    hint: "",
+                                    suffix:
+                                        state.loginNameCheckStatus.isInProgress
+                                            ? SizedBox(
+                                                height: responsiveHeight(20),
+                                                width: responsiveHeight(20),
+                                                child: const Center(
+                                                  child:
+                                                      CircularProgressIndicator(),
+                                                ),
+                                              )
+                                            : const SizedBox.shrink(),
+                                  );
                                 },
-                                validators: Validators.validateLoginName,
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: 'Login Name',
-                                      style: TextStyle(
-                                          color: kHintColor,
-                                          fontFamily: Montserrat),
-                                      children: [
-                                        TextSpan(
-                                            text: "*",
-                                            style: TextStyle(color: Colors.red))
-                                      ]),
-                                ),
-                                hint: "",
                               ),
                               SizedBox(
                                 height: responsiveHeight(20),
@@ -725,7 +747,10 @@ class _UserMasterScreenState extends State<UserMasterScreen> {
                                                     "org_id": 1,
                                                     "lookup_det_hier_id_stakeholder_type1":
                                                         _selectedStakeholderType
-                                                            ?.lookupDetHierId
+                                                            ?.lookupDetHierId,
+                                                    "lookup_det_id_membertype":
+                                                        _selectedDesignationType?[
+                                                            'id']
                                                   };
 
                                                   context

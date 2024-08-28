@@ -19,8 +19,14 @@ class GetUserRequest extends UserMasterEvent {
   Map payload;
   GetUserRequest({required this.payload});
   @override
-  // TODO: implement props
   List<Object> get props => [payload];
+}
+
+class CheckLoginNameRequest extends UserMasterEvent {
+  String loginName;
+  CheckLoginNameRequest({required this.loginName});
+  @override
+  List<Object> get props => [loginName];
 }
 
 class ResetUserMasterState extends UserMasterEvent {}

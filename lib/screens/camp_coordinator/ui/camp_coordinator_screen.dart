@@ -8,15 +8,19 @@ import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
+import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
-    as picker;
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as picker;
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../models/camp_coordinator_registered_patient_model.dart';
 
 class CampCoordinator extends StatefulWidget {
   const CampCoordinator({super.key});
@@ -59,6 +63,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
   TextEditingController patientsTreated = TextEditingController();
   TextEditingController patientsReferred = TextEditingController();
   TextEditingController campStartDateTime = TextEditingController();
+  TextEditingController campStartDateTimeId = TextEditingController();
   TextEditingController campCloseDateTime = TextEditingController();
   TextEditingController campCloseDateTimeUTC = TextEditingController();
 
@@ -84,6 +89,8 @@ class _CampCoordinatorState extends State<CampCoordinator> {
   bool isLoadingLocation = false;
   bool isSaveLoad = false;
 
+  // bool isLoading=false;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -101,23 +108,25 @@ class _CampCoordinatorState extends State<CampCoordinator> {
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent, // Change to your desired color
       statusBarBrightness: Brightness.light,
-      statusBarIconBrightness:
-          Brightness.light, // For light text/icons on the status bar
+      statusBarIconBrightness: Brightness.light, // For light text/icons on the status bar
     ));
     return Scaffold(
       body: Container(
         width: SizeConfig.designScreenWidth,
         height: SizeConfig.designScreenHeight,
-        decoration: const BoxDecoration(
-            image:
-                DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
+        decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
         child: SingleChildScrollView(
             child: Stack(
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                mAppBarV1(title: "Camp Details", context: context),
+                mAppBarV1(
+                    title: "Camp Details",
+                    context: context,
+                    onBackButtonPress: () {
+                      Navigator.pushNamedAndRemoveUntil(context, "/dashboard_view", (Route<dynamic> route) => false);
+                    }),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -135,25 +144,20 @@ class _CampCoordinatorState extends State<CampCoordinator> {
 
                                 decoration: BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.circular(
-                                      responsiveHeight(25)),
+                                  borderRadius: BorderRadius.circular(responsiveHeight(25)),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.grey
-                                          .withOpacity(0.5), // Shadow color
+                                      color: Colors.grey.withOpacity(0.5), // Shadow color
                                       spreadRadius: 2, // Spread radius
                                       blurRadius: 7, // Blur radius
-                                      offset: Offset(
-                                          0, 3), // changes position of shadow
+                                      offset: Offset(0, 3), // changes position of shadow
                                     ),
                                   ],
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       AppRoundTextField(
@@ -165,19 +169,10 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                               (p0) => {
                                                     setState(() {
                                                       selectedLocationName = p0;
-                                                      print(
-                                                          selectedLocationName);
-                                                      locationNameController
-                                                              .text =
-                                                          selectedLocationName![
-                                                              'title'];
-                                                      locationNameIDController
-                                                              .text =
-                                                          selectedLocationName![
-                                                                  'id']
-                                                              .toString();
-                                                      campStartDateTime.text =
-                                                          "Fetching Data,please wait";
+                                                      print(selectedLocationName);
+                                                      locationNameController.text = selectedLocationName!['title'];
+                                                      locationNameIDController.text = selectedLocationName!['id'].toString();
+                                                      campStartDateTime.text = "Fetching Data,please wait";
                                                       fetchCampDateList();
                                                     })
                                                   },
@@ -191,32 +186,17 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                         readOnly: true,
                                         label: RichText(
                                           text: const TextSpan(
-                                              text: 'Location Name',
-                                              style: TextStyle(
-                                                  color: kHintColor,
-                                                  fontFamily: Montserrat),
-                                              children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
-                                              ]),
+                                              text: 'Location Name', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                                         ),
                                         hint: "",
                                         suffix: SizedBox(
-                                          height:
-                                              getProportionateScreenHeight(20),
-                                          width:
-                                              getProportionateScreenHeight(20),
+                                          height: getProportionateScreenHeight(20),
+                                          width: getProportionateScreenHeight(20),
                                           child: Center(
                                             child: Image.asset(
                                               icArrowDownOrange,
-                                              height:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                              width:
-                                                  getProportionateScreenHeight(
-                                                      20),
+                                              height: getProportionateScreenHeight(20),
+                                              width: getProportionateScreenHeight(20),
                                             ),
                                           ),
                                         ),
@@ -243,11 +223,9 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                               (p0) => {
                                                     setState(() {
                                                       selectedLocationName = p0;
-                                                      print(
-                                                          selectedLocationName);
-                                                      campStartDateTime.text =
-                                                          selectedLocationName![
-                                                              'title'];
+                                                      print(selectedLocationName);
+                                                      campStartDateTime.text = selectedLocationName!['title'];
+                                                      campStartDateTimeId.text = selectedLocationName!['id'].toString();
                                                     })
                                                   },
                                               "Camp Timings Available :",
@@ -257,31 +235,18 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                         label: RichText(
                                           text: const TextSpan(
                                               text: 'Camp Start date & time',
-                                              style: TextStyle(
-                                                  color: kHintColor,
-                                                  fontFamily: Montserrat),
-                                              children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
-                                              ]),
+                                              style: TextStyle(color: kHintColor, fontFamily: Montserrat),
+                                              children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                                         ),
                                         hint: "",
                                         suffix: SizedBox(
-                                          height:
-                                              getProportionateScreenHeight(20),
-                                          width:
-                                              getProportionateScreenHeight(20),
+                                          height: getProportionateScreenHeight(20),
+                                          width: getProportionateScreenHeight(20),
                                           child: Center(
                                             child: Image.asset(
                                               icArrowDownOrange,
-                                              height:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                              width:
-                                                  getProportionateScreenHeight(
-                                                      20),
+                                              height: getProportionateScreenHeight(20),
+                                              width: getProportionateScreenHeight(20),
                                             ),
                                           ),
                                         ),
@@ -293,70 +258,45 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                         controller: campCloseDateTime,
                                         inputType: TextInputType.none,
                                         onTap: () {
-                                          picker.DatePicker.showDateTimePicker(
-                                              context,
-                                              showTitleActions: true,
-                                              onChanged: (date) {
-                                            print('change $date in time zone ' +
-                                                date.timeZoneOffset.inHours
-                                                    .toString());
+                                          picker.DatePicker.showDateTimePicker(context, showTitleActions: true, onChanged: (date) {
+                                            print('change $date in time zone ' + date.timeZoneOffset.inHours.toString());
                                           }, onConfirm: (date) {
                                             print('confirm $date');
                                             campCloseDateTime.text = '$date';
 
-                                            String localTimeString =
-                                                campCloseDateTime.text;
-                                            DateTime localTime =
-                                                DateTime.parse(localTimeString);
+                                            String localTimeString = campCloseDateTime.text;
+                                            DateTime localTime = DateTime.parse(localTimeString);
 
                                             // Assuming the local time is in GMT+5:30 (Indian Standard Time)
-                                            Duration offset =
-                                                Duration(hours: 5, minutes: 30);
+                                            Duration offset = Duration(hours: 5, minutes: 30);
 
                                             // Convert local time to UTC
-                                            DateTime utcTime = localTime
-                                                .toUtc()
-                                                .subtract(offset);
+                                            DateTime utcTime = localTime.toUtc().subtract(offset);
 
                                             // Format to get only the time
-                                            String timeOnly = DateFormat.Hms()
-                                                .format(utcTime);
+                                            String timeOnly = DateFormat.Hms().format(utcTime);
 
                                             // Print the time
                                             print(timeOnly); // Output: 15:00:00
-                                            campCloseDateTimeUTC.text =
-                                                timeOnly;
+                                            campCloseDateTimeUTC.text = timeOnly;
                                           }, currentTime: DateTime.now());
                                         },
                                         onChange: (p0) {},
                                         label: RichText(
                                           text: const TextSpan(
                                               text: 'Camp Close date & time',
-                                              style: TextStyle(
-                                                  color: kHintColor,
-                                                  fontFamily: Montserrat),
-                                              children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
-                                              ]),
+                                              style: TextStyle(color: kHintColor, fontFamily: Montserrat),
+                                              children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                                         ),
                                         hint: "",
                                         suffix: SizedBox(
-                                          height:
-                                              getProportionateScreenHeight(20),
-                                          width:
-                                              getProportionateScreenHeight(20),
+                                          height: getProportionateScreenHeight(20),
+                                          width: getProportionateScreenHeight(20),
                                           child: Center(
                                             child: Image.asset(
                                               icCalendar,
-                                              height:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                              width:
-                                                  getProportionateScreenHeight(
-                                                      20),
+                                              height: getProportionateScreenHeight(20),
+                                              width: getProportionateScreenHeight(20),
                                             ),
                                           ),
                                         ),
@@ -368,8 +308,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
                                           "How many patients registered today ?",
-                                          style:
-                                              TextStyle(fontFamily: Montserrat),
+                                          style: TextStyle(fontFamily: Montserrat),
                                         ),
                                       ),
                                       SizedBox(
@@ -377,23 +316,12 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                       ),
                                       AppRoundTextField(
                                         controller: patientsRegistered,
-                                        inputStyle: TextStyle(
-                                            fontSize: responsiveFont(14),
-                                            color: kTextBlackColor),
+                                        inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                         inputType: TextInputType.number,
                                         onChange: (p0) {},
                                         label: RichText(
                                           text: const TextSpan(
-                                              text: 'Enter Count',
-                                              style: TextStyle(
-                                                  color: kHintColor,
-                                                  fontFamily: Montserrat),
-                                              children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
-                                              ]),
+                                              text: 'Enter Count', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                                         ),
                                         hint: "",
                                       ),
@@ -401,29 +329,17 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
                                           "How many patients treated Today ?",
-                                          style:
-                                              TextStyle(fontFamily: Montserrat),
+                                          style: TextStyle(fontFamily: Montserrat),
                                         ),
                                       ),
                                       AppRoundTextField(
                                         controller: patientsTreated,
-                                        inputStyle: TextStyle(
-                                            fontSize: responsiveFont(14),
-                                            color: kTextBlackColor),
+                                        inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                         inputType: TextInputType.number,
                                         onChange: (p0) {},
                                         label: RichText(
                                           text: const TextSpan(
-                                              text: 'Enter Count',
-                                              style: TextStyle(
-                                                  color: kHintColor,
-                                                  fontFamily: Montserrat),
-                                              children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
-                                              ]),
+                                              text: 'Enter Count', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                                         ),
                                         hint: "",
                                       ),
@@ -431,29 +347,17 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
                                           "How many patients referred Today ?",
-                                          style:
-                                              TextStyle(fontFamily: Montserrat),
+                                          style: TextStyle(fontFamily: Montserrat),
                                         ),
                                       ),
                                       AppRoundTextField(
                                         controller: patientsReferred,
-                                        inputStyle: TextStyle(
-                                            fontSize: responsiveFont(14),
-                                            color: kTextBlackColor),
+                                        inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                         inputType: TextInputType.number,
                                         onChange: (p0) {},
                                         label: RichText(
                                           text: const TextSpan(
-                                              text: 'Enter Count',
-                                              style: TextStyle(
-                                                  color: kHintColor,
-                                                  fontFamily: Montserrat),
-                                              children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
-                                              ]),
+                                              text: 'Enter Count', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                                         ),
                                         hint: "",
                                       ),
@@ -473,8 +377,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                   alignment: Alignment.bottomRight,
                                   child: AppButton(
                                     onTap: () {
-                                      Navigator.pushNamed(context,
-                                          AppRoutes.addReferredPatient);
+                                      Navigator.pushNamed(context, AppRoutes.addReferredPatient);
                                     },
                                     mWidth: SizeConfig.screenWidth * 0.6,
                                     title: "Add Referred Patient",
@@ -539,8 +442,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                 child: Container(
                   width: SizeConfig.designScreenWidth,
                   height: SizeConfig.designScreenHeight,
-                  color:
-                      Colors.black.withOpacity(0.3), // Semi-transparent overlay
+                  color: Colors.black.withOpacity(0.3), // Semi-transparent overlay
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -592,18 +494,11 @@ class _CampCoordinatorState extends State<CampCoordinator> {
               ),
               AppRoundTextField(
                 controller: TextEditingController(),
-                inputStyle: TextStyle(
-                    fontSize: responsiveFont(14), color: kTextBlackColor),
+                inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                 inputType: TextInputType.number,
                 onChange: (p0) {},
                 label: RichText(
-                  text: const TextSpan(
-                      text: 'Enter Count',
-                      style:
-                          TextStyle(color: kHintColor, fontFamily: Montserrat),
-                      children: [
-                        TextSpan(text: "*", style: TextStyle(color: Colors.red))
-                      ]),
+                  text: const TextSpan(text: 'Enter Count', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                 ),
                 hint: "",
               ),
@@ -612,18 +507,11 @@ class _CampCoordinatorState extends State<CampCoordinator> {
               ),
               AppRoundTextField(
                 controller: TextEditingController(),
-                inputStyle: TextStyle(
-                    fontSize: responsiveFont(14), color: kTextBlackColor),
+                inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                 inputType: TextInputType.number,
                 onChange: (p0) {},
                 label: RichText(
-                  text: const TextSpan(
-                      text: 'Login Name',
-                      style:
-                          TextStyle(color: kHintColor, fontFamily: Montserrat),
-                      children: [
-                        TextSpan(text: "*", style: TextStyle(color: Colors.red))
-                      ]),
+                  text: const TextSpan(text: 'Login Name', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                 ),
                 hint: "",
               ),
@@ -632,8 +520,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
               ),
               AppRoundTextField(
                 controller: TextEditingController(),
-                inputStyle: TextStyle(
-                    fontSize: responsiveFont(14), color: kTextBlackColor),
+                inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                 inputType: TextInputType.number,
                 onChange: (p0) {},
                 onTap: () {
@@ -647,8 +534,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                       (p0) => {
                             setState(() {
                               selectedDesignationType = p0;
-                              designationType.text =
-                                  selectedDesignationType!['title'];
+                              designationType.text = selectedDesignationType!['title'];
                             })
                           },
                       "Designation/Member Type",
@@ -657,12 +543,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                 readOnly: true,
                 label: RichText(
                   text: const TextSpan(
-                      text: 'Designation/Member Type',
-                      style:
-                          TextStyle(color: kHintColor, fontFamily: Montserrat),
-                      children: [
-                        TextSpan(text: "*", style: TextStyle(color: Colors.red))
-                      ]),
+                      text: 'Designation/Member Type', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                 ),
                 hint: "",
                 suffix: SizedBox(
@@ -685,8 +566,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                   Expanded(
                     child: AppRoundTextField(
                       controller: TextEditingController(),
-                      inputStyle: TextStyle(
-                          fontSize: responsiveFont(14), color: kTextBlackColor),
+                      inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                       inputType: TextInputType.number,
                       onChange: (p0) {},
                       onTap: () {
@@ -700,8 +580,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                             (p0) => {
                                   setState(() {
                                     selectedCountryCode = p0;
-                                    countryCodeController.text =
-                                        selectedCountryCode!['title'];
+                                    countryCodeController.text = selectedCountryCode!['title'];
                                   })
                                 },
                             "Country Code",
@@ -710,15 +589,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                       maxLength: 12,
                       readOnly: true,
                       label: RichText(
-                        text: const TextSpan(
-                            text: 'Country Code',
-                            style: TextStyle(
-                                color: kHintColor, fontFamily: Montserrat),
-                            children: [
-                              TextSpan(
-                                  text: "*",
-                                  style: TextStyle(color: Colors.red))
-                            ]),
+                        text: const TextSpan(text: 'Country Code', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                       ),
                       hint: "",
                       suffix: SizedBox(
@@ -740,8 +611,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                   Expanded(
                     child: AppRoundTextField(
                       controller: mobileController,
-                      inputStyle: TextStyle(
-                          fontSize: responsiveFont(14), color: kTextBlackColor),
+                      inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                       inputType: TextInputType.number,
                       onChange: (p0) {},
                       onTap: () {
@@ -755,8 +625,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                             (p0) => {
                                   setState(() {
                                     selectedMobile = p0;
-                                    mobileController.text =
-                                        selectedMobile!['title'];
+                                    mobileController.text = selectedMobile!['title'];
                                   })
                                 },
                             "Mobile no",
@@ -764,15 +633,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                       },
                       maxLength: 10,
                       label: RichText(
-                        text: const TextSpan(
-                            text: 'Mobile No',
-                            style: TextStyle(
-                                color: kHintColor, fontFamily: Montserrat),
-                            children: [
-                              TextSpan(
-                                  text: "*",
-                                  style: TextStyle(color: Colors.red))
-                            ]),
+                        text: const TextSpan(text: 'Mobile No', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
                       ),
                       hint: "",
                       suffix: SizedBox(
@@ -838,8 +699,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       isLoadingLocation = true;
     });
 
-    final url = Uri.parse(
-        'http://210.89.42.117:8085/api/administrator/masters/dropdown/location-list');
+    final url = Uri.parse('http://210.89.42.117:8085/api/administrator/masters/dropdown/location-list');
 
     try {
       final response = await http.post(url);
@@ -896,13 +756,11 @@ class _CampCoordinatorState extends State<CampCoordinator> {
 
     // Make the HTTP POST request
     var response = await http.post(
-      Uri.parse(
-          'http://210.89.42.117:8085/api/administrator/camp/dropdown/camp-date-list/$locationId'),
+      Uri.parse('http://210.89.42.117:8085/api/administrator/camp/dropdown/camp-date-list/$locationId'),
       headers: headers,
     );
 
-    print(
-        'http://210.89.42.117:8085/api/administrator/camp/dropdown/camp-date-list/$locationId');
+    print('http://210.89.42.117:8085/api/administrator/camp/dropdown/camp-date-list/$locationId');
     // Check the response status code
     if (response.statusCode == 200) {
       print('Response data: ${response.body}');
@@ -910,14 +768,12 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       var jsonResponse = json.decode(response.body);
 
       if (jsonResponse['message'] == "Data Not Found") {
-        campStartDateTime.text =
-            "No Data Available Try again later or Select Another Location";
+        campStartDateTime.text = "No Data Available Try again later or Select Another Location";
       } else {
         campStartDateTime.text = "Select Camp Start Date & Time";
       }
 
-      List<Map<String, dynamic>> detailsList =
-          List<Map<String, dynamic>>.from(jsonResponse['details']);
+      List<Map<String, dynamic>> detailsList = List<Map<String, dynamic>>.from(jsonResponse['details']);
       campStartDateTimeList.addAll(detailsList);
     } else {
       print('Request failed with status: ${response.statusCode}.');
@@ -939,7 +795,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       // Define the request body
       var body = json.encode({
         "camp_dashboard_id": null,
-        "camp_create_request_id": null,
+        "camp_create_request_id": campStartDateTimeId.text.trim(),
         "camp_date": campStartDateTime.text.trim(),
         "camp_clousure_y_n": "Y",
         "camp_clousure_time": campCloseDateTimeUTC.text.trim(),
@@ -954,8 +810,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       print(body);
       // Make the HTTP POST request
       var response = await http.post(
-        Uri.parse(
-            'http://210.89.42.117:8085/api/administrator/masters/add/camp-dashboard-master'),
+        Uri.parse('http://210.89.42.117:8085/api/administrator/masters/add/camp-dashboard-master'),
         headers: headers,
         body: body,
       );
@@ -966,6 +821,15 @@ class _CampCoordinatorState extends State<CampCoordinator> {
 
         final data = json.decode(response.body);
         if (data['status_code'] == 200) {
+          DataProvider().storeCampDashboardId(data['uniquerId']);
+
+          Future<List<CampCoordRegisteredPatientModel>> campRefPatientList = DataProvider().getPatientList();
+
+          List<CampCoordRegisteredPatientModel> tempList = await campRefPatientList;
+          if (tempList.isNotEmpty) {
+            sendPostRequest(data['uniquerId'], tempList);
+          }
+
           setState(() {
             isSaveLoad = false;
             // clearAllFields();
@@ -1008,6 +872,72 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       patientsTreated.text = "";
       patientsReferred.text = "";
     });
+  }
+
+  Future<void> sendPostRequest(data, List campRefPatientList) async {
+    // List<CampCoordRegisteredPatientModel> campregisteredpatients = campRefPatientList;
+    setState(() {
+      isSaveLoad = true;
+    });
+
+    for (int i = 0; i < campRefPatientList.length; i++) {
+      var headers = {
+        'Content-Type': 'application/json',
+      };
+
+      var body = json.encode({
+        "tt_camp_dashboard_ref_patients_list": [
+          {
+            "dashboard_ref_patients_id": null,
+            "camp_dashboard_id": data,
+            "patient_id": null,
+            "patient_name": campRefPatientList[i].name,
+            "age": 0,
+            "lookup_det_id_gender": null,
+            "contact_number": campRefPatientList[i].mobile,
+            "org_id": 1,
+            "status": 1,
+            "tt_camp_dashboard_ref_patients_det_list": [
+              {
+                "dashboard_ref_patients_det_id": null,
+                "dashboard_ref_patients_id": null,
+                "lookup_det_hier_id_stakeholder_sub_type2": null,
+                "stakeholder_master_id": int.parse(campRefPatientList[i].referredToId.toString()),
+                "org_id": 1,
+                "status": 1
+              }
+            ]
+          }
+        ]
+      });
+      print(body);
+      var response = await http.post(
+        Uri.parse('http://210.89.42.117:8085/api/administrator/masters/add/dashboard-patient-ref-details'),
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        final data = json.decode(response.body);
+        if (data['status_code'] == 200) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Patients Saved Successfully',
+              ),
+              backgroundColor: Colors.green,
+            ),
+          );
+          // Navigator.pop(context);
+          SharedPreferences prefrences = await SharedPreferences.getInstance();
+          await prefrences.remove('patients');
+          Navigator.pushNamed(context, AppRoutes.referredPatientList);
+        }
+      } else {
+        print('Request failed with status: ${response.statusCode}. ${response.reasonPhrase}');
+      }
+    }
   }
 }
 

@@ -12,17 +12,17 @@ class DashboardFilterCountResponse {
     path = json['path'];
     dateTime = json['dateTime'];
     details = json['details'] != null
-        ? new DashboardFilterCountDetails.fromJson(json['details'])
+        ? DashboardFilterCountDetails.fromJson(json['details'])
         : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status_code'] = this.statusCode;
-    data['path'] = this.path;
-    data['dateTime'] = this.dateTime;
-    if (this.details != null) {
-      data['details'] = this.details!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['status_code'] = statusCode;
+    data['path'] = path;
+    data['dateTime'] = dateTime;
+    if (details != null) {
+      data['details'] = details!.toJson();
     }
     return data;
   }
@@ -48,11 +48,11 @@ class DashboardFilterCountDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['total_treated_patients'] = this.totalTreatedPatients;
-    data['total_patients'] = this.totalPatients;
-    data['total_referred_patients'] = this.totalReferredPatients;
-    data['total_camp_conduct'] = this.totalCampConduct;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['total_treated_patients'] = totalTreatedPatients;
+    data['total_patients'] = totalPatients;
+    data['total_referred_patients'] = totalReferredPatients;
+    data['total_camp_conduct'] = totalCampConduct;
     return data;
   }
 }

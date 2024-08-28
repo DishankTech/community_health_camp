@@ -290,7 +290,12 @@ class _PatientRegistrationEditScreenState
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                mAppBarV1(title: "Patient Registration", context: context),
+                mAppBarV1(
+                    title: "Patient Registration",
+                    context: context,
+                    onBackButtonPress: () {
+                      Navigator.pop(context);
+                    }),
                 Padding(
                   padding: EdgeInsets.only(bottom: responsiveHeight(10)),
                   child: Container(

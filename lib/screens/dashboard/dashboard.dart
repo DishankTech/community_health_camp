@@ -46,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icStakeholderMaster,
           routeName: AppRoutes.stakeholderMasterListScreen),
       DashboardMenuModel(
-          name: "Camp Creation",
+          name: "Camp Request",
           image: icCampCreation,
           routeName: AppRoutes.campCreation),
       DashboardMenuModel(
@@ -84,6 +84,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           for (var element in state.loginResponseModel!.details!.last.menu!) {
             if (element.parentList != null) {
+              if (element.parentList!.menuFeatureName == "Dashboard") {
+                if (element.childList != null) {
+                  for (var element in element.childList!) {
+                    for (var staticMenu in _staticMenuList) {
+                      if (element.menuControllerMobile != null &&
+                          (element.menuControllerMobile == staticMenu.name)) {
+                        _menuList.add(staticMenu);
+                      }
+                    }
+                  }
+                }
+              }
               if (element.parentList!.menuFeatureName == "Master") {
                 if (element.childList != null) {
                   for (var element in element.childList!) {
@@ -98,18 +110,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               }
 
               if (element.parentList!.menuFeatureName == "Registration") {
-                if (element.childList != null) {
-                  for (var element in element.childList!) {
-                    for (var staticMenu in _staticMenuList) {
-                      if (element.menuControllerMobile != null &&
-                          (element.menuControllerMobile == staticMenu.name)) {
-                        _menuList.add(staticMenu);
-                      }
-                    }
-                  }
-                }
-              }
-              if (element.parentList!.menuFeatureName == "Dashboard") {
                 if (element.childList != null) {
                   for (var element in element.childList!) {
                     for (var staticMenu in _staticMenuList) {
@@ -166,10 +166,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                               onTap: () {
                                                 DataProvider().clearUserData();
 
-                                                Navigator.pushNamedAndRemoveUntil(
+                                                Navigator
+                                                    .pushNamedAndRemoveUntil(
                                                   context,
                                                   AppRoutes.loginScreen,
-                                                      (Route<dynamic> route) => false, // This condition removes all previous routes
+                                                  (Route<dynamic> route) =>
+                                                      false, // This condition removes all previous routes
                                                 );
 
                                                 // Navigator.pushNamed(context,

@@ -58,6 +58,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             child: SingleChildScrollView(
               child: Center(
                 child: Column(
+                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -228,6 +229,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       "password": _confirmpasswordController.text.toString().trim()
     });
     request.headers.addAll(headers);
+
+    print(request.body);
+    print(request);
 
     http.StreamedResponse response = await request.send();
     http.Response finalResponse = await http.Response.fromStream(response);

@@ -65,6 +65,8 @@ class AppRoundTextField extends StatelessWidget {
               initialValue: initialValue,
               readOnly: readOnly ?? false,
               controller: controller,
+              inputFormatters:
+                  inputFormatter != null ? [inputFormatter!] : null,
               keyboardType: inputType,
               style: inputStyle ??
                   TextStyle(

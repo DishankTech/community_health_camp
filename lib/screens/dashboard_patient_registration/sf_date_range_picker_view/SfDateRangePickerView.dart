@@ -2,8 +2,8 @@
 
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+
 import '../../../core/utilities/size_config.dart';
 
 class SfDateRangePickerView extends StatefulWidget {
@@ -12,7 +12,8 @@ class SfDateRangePickerView extends StatefulWidget {
     required this.onDidSelectedDateRange,
   });
 
-  final void Function(String startDate, String endDate) onDidSelectedDateRange;
+  final void Function(DateTime startDate, DateTime endDate)
+      onDidSelectedDateRange;
 
   @override
   State<SfDateRangePickerView> createState() => _SfDateRangePickerViewState();
@@ -49,14 +50,12 @@ class _SfDateRangePickerViewState extends State<SfDateRangePickerView> {
               );
             } else {
               if (p0 is PickerDateRange) {
-                //'yyyy-MM-dd'
-                final DateFormat formatter = DateFormat('dd MMM yyyy');
-                final String startDate = formatter.format(p0.startDate!);
-                final String endDate =
-                    formatter.format(p0.endDate ?? p0.startDate!);
-                print('Start Date: $startDate');
-                print('End Date: $endDate');
-                widget.onDidSelectedDateRange(startDate, endDate);
+                if (p0.endDate == null) {
+                  widget.onDidSelectedDateRange(p0.startDate!, p0.startDate!);
+                } else {
+                  widget.onDidSelectedDateRange(p0.startDate!, p0.endDate!);
+                }
+
                 Navigator.pop(context);
               }
             }
