@@ -8,6 +8,8 @@ class DashboardState extends Equatable {
     required this.getDateWiseDistrictCountResponse,
     required this.getExcelDataResponse,
     required this.getExcelDataStatus,
+    required this.getDistrictWisePatientResponse,
+    required this.getDistrictWisePatientStatus,
   });
   final FormzSubmissionStatus getCountStatus;
   final String getCountResponse;
@@ -18,6 +20,9 @@ class DashboardState extends Equatable {
   final FormzSubmissionStatus getExcelDataStatus;
   final String getExcelDataResponse;
 
+  final FormzSubmissionStatus getDistrictWisePatientStatus;
+  final String getDistrictWisePatientResponse;
+
   DashboardState copyWith({
     FormzSubmissionStatus? getCountStatus,
     String? getCountResponse,
@@ -25,6 +30,8 @@ class DashboardState extends Equatable {
     String? getDateWiseDistrictCountResponse,
     FormzSubmissionStatus? getExcelDataStatus,
     String? getExcelDataResponse,
+    FormzSubmissionStatus? getDistrictWisePatientStatus,
+    String? getDistrictWisePatientResponse,
   }) {
     return DashboardState(
       getCountResponse: getCountResponse ?? this.getCountResponse,
@@ -35,6 +42,10 @@ class DashboardState extends Equatable {
           this.getDateWiseDistrictCountResponse,
       getExcelDataResponse: getExcelDataResponse ?? this.getExcelDataResponse,
       getExcelDataStatus: getExcelDataStatus ?? this.getExcelDataStatus,
+      getDistrictWisePatientResponse:
+          getDistrictWisePatientResponse ?? this.getDistrictWisePatientResponse,
+      getDistrictWisePatientStatus:
+          getDistrictWisePatientStatus ?? this.getDistrictWisePatientStatus,
     );
   }
 
@@ -46,5 +57,7 @@ class DashboardState extends Equatable {
         getDateWiseDistrictCountStatus,
         getExcelDataResponse,
         getExcelDataStatus,
+        getDistrictWisePatientResponse,
+        getDistrictWisePatientStatus
       ];
 }

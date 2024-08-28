@@ -61,3 +61,5 @@ const String kGetDateWiseDistrictCount =
     "administrator/masters/get/district-wise-camp-by-date/count";
 
 const String kGetExcelData = "administrator/masters/download-excel/";
+const String kDistrictWisePatientCount =
+    "administrator/masters/get/district-wise-patient/count";
