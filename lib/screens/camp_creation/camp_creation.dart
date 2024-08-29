@@ -199,7 +199,7 @@ class _CampCreationState extends State<CampCreation> {
                                                 "Location",
                                                 controller.locationNameModel
                                                         ?.details ??
-                                                    []);
+                                                    [],true);
                                           },
                                           // maxLength: 12,
                                           readOnly: true,
@@ -309,7 +309,7 @@ class _CampCreationState extends State<CampCreation> {
                                                 "Stakeholder Name",
                                                 controller.stakeHolderNameModel
                                                         ?.details ??
-                                                    []);
+                                                    [],true);
                                           },
                                           // maxLength: 12,
                                           readOnly: true,
