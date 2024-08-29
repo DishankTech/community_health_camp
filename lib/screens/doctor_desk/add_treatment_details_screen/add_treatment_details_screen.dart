@@ -33,6 +33,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
   final DoctorDeskController doctorDeskController =
       Get.put(DoctorDeskController());
 
+  TextEditingController txtContro = TextEditingController();
+
   checkInternetAndLoadData() async {
     List<ConnectivityResult> connectivityResult =
         await Connectivity().checkConnectivity();
@@ -51,13 +53,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
 
   @override
   void initState() {
-
-    doctorDeskController.stakeHolderTypeController.text ='';
-    doctorDeskController.symptomController.text ='';
-    doctorDeskController.provisionalDiaController.text ='';
-    doctorDeskController.stakeHolderController.text ='';
-    doctorDeskController
-        .selectedStakeH.clear();
+    doctorDeskController.stakeHolderTypeController.text = '';
+    doctorDeskController.symptomController.text = '';
+    doctorDeskController.provisionalDiaController.text = '';
+    doctorDeskController.stakeHolderController.text = '';
+    doctorDeskController.selectedStakeH.clear();
     checkInternetAndLoadData();
     super.initState();
   }
@@ -372,7 +372,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        height: responsiveHeight(450),
+                                        height: responsiveHeight(500),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -639,28 +639,34 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
                                                 onTap: () async {
-                                                  await commonBottomSheet(
-                                                      context,
-                                                      (p0) => {
-                                                            controller
-                                                                    .selectedStakeHVal =
-                                                                p0.lookupDetHierDescEn,
-                                                            controller
-                                                                .selectedStakeH
-                                                                .addIfNotExist(
-                                                                    p0),
-                                                            controller
-                                                                    .stakeHolderController
-                                                                    .text =
-                                                                controller
-                                                                    .selectedStakeH
-                                                                    .displayText(),
-                                                            controller.update()
-                                                          },
-                                                      "Refer To",
-                                                      controller.referToModel
-                                                              ?.details ??
-                                                          []);
+                                                  if (controller
+                                                      .stakeHolderTypeController
+                                                      .text
+                                                      .isNotEmpty) {
+                                                    await stakeHolderNameBottomSheet(
+                                                        context,
+                                                        (p0) => {
+                                                              controller
+                                                                      .selectedStakeHVal =
+                                                                  p0.lookupDetHierDescEn,
+                                                              controller
+                                                                  .selectedStakeH
+                                                                  .addIfNotExist(
+                                                                      p0),
+                                                              controller
+                                                                      .stakeHolderController
+                                                                      .text =
+                                                                  controller
+                                                                      .selectedStakeH
+                                                                      .displayText(),
+                                                              controller
+                                                                  .update()
+                                                            },
+                                                        "Refer To",
+                                                        controller.referToModel
+                                                                ?.details ??
+                                                            []);
+                                                  }
                                                 },
                                                 // maxLength: 12,
                                                 readOnly: true,
@@ -700,7 +706,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   ),
                                                 ),
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ),

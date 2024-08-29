@@ -12,17 +12,15 @@ import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
-import 'package:community_health_app/screens/camp_calendar/model/camp_list_response_model.dart';
 import 'package:community_health_app/screens/camp_coordinator/controller/camp_details_controller.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
 import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master_bloc.dart';
 import 'package:community_health_app/screens/stakeholder/models/stakeholder_name_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:formz/formz.dart';
 import 'package:get/get.dart';
-
-import '../../screens/camp_coordinator/models/multiple_referred_to_request_model.dart';
 
 Future<dynamic> genderBottomSheet(
     BuildContext context, Function(LookupDet) onItemSelected) {
@@ -2222,6 +2220,7 @@ class _CommonBottomSheetContent extends StatefulWidget {
 
 class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
   int? selectedIndex;
+  TextEditingController txtContro = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -2241,15 +2240,13 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
-                  child: Text(
-                    widget.bottomSheetTitle,
-                    softWrap: true,
-                    style: TextStyle(
-                      fontSize: responsiveFont(17),
-                      fontWeight: FontWeight.bold,
-                      color: kPrimaryColor,
-                    ),
+                Text(
+                  widget.bottomSheetTitle,
+                  softWrap: true,
+                  style: TextStyle(
+                    fontSize: responsiveFont(17),
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
                   ),
                 ),
                 IconButton(
@@ -2261,6 +2258,52 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
               ],
             ),
           ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //         border: Border.all(color: kTextFieldBorder, width: 1),
+          //         borderRadius: BorderRadius.circular(responsiveHeight(60))),
+          //     child: TypeAheadField<dynamic>(
+          //       controller: txtContro,
+          //       suggestionsCallback: (search) {
+          //         return widget.list.where((stakeHolder) {
+          //           final stakeHNameLower =
+          //               stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
+          //           final searchLower = search.toLowerCase();
+          //           return stakeHNameLower.contains(searchLower);
+          //         }).toList();
+          //         // CityService.find(search);
+          //       },
+          //       builder: (BuildContext context,
+          //           TextEditingController textController, FocusNode focusNode) {
+          //         return TextField(
+          //             controller: textController,
+          //             focusNode: focusNode,
+          //             autofocus: true,
+          //             decoration: InputDecoration(
+          //               contentPadding: const EdgeInsets.symmetric(horizontal: 6),
+          //               suffix: const Icon(Icons.search,color: kPrimaryColor,),
+          //               border: InputBorder.none,
+          //               hintText: "Search ${widget.bottomSheetTitle}",
+          //             ));
+          //       },
+          //       itemBuilder: (context, stakeholder) {
+          //         return ListTile(
+          //           title: Text(stakeholder.lookupDetHierDescEn ?? ""),
+          //           // subtitle: Text(city.country),
+          //         );
+          //       },
+          //       onSelected: (dynamic selectedStakeH) {
+          //         txtContro.text = selectedStakeH.lookupDetHierDescEn ?? '';
+          //         setState(() {
+          //           selectedIndex = widget.list.indexOf(selectedStakeH);
+          //         });
+          //         widget.onItemSelected(selectedStakeH);
+          //       },
+          //     ),
+          //   ),
+          // ),
           Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,
@@ -2329,6 +2372,76 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
               ),
             ),
           ),
+
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: widget.list.length,
+          //     shrinkWrap: true,
+          //     itemBuilder: (c, i) =>
+          //         Padding(
+          //           padding: const EdgeInsets.all(2.0),
+          //           child: Padding(
+          //             padding: const EdgeInsets.symmetric(
+          //               vertical: 6,
+          //               horizontal: 12,
+          //             ),
+          //             child: InkWell(
+          //               onTap: () {
+          //                 setState(() {
+          //                   selectedIndex = i;
+          //                 });
+          //
+          //                 widget.onItemSelected(widget.list[i]);
+          //                 Navigator.pop(context);
+          //               },
+          //               child: Container(
+          //                 decoration: BoxDecoration(
+          //                   color: kContainerBack,
+          //                   borderRadius: BorderRadius.circular(10),
+          //                 ),
+          //                 child: Padding(
+          //                   padding: const EdgeInsets.all(8.0),
+          //                   child: Row(
+          //                     children: [
+          //                       selectedIndex == i
+          //                           ? Icon(
+          //                         Icons.radio_button_checked,
+          //                         color: kPrimaryColor,
+          //                         size: responsiveFont(14.0),
+          //                       )
+          //                           : Icon(
+          //                         Icons.circle_outlined,
+          //                         size: responsiveFont(14.0),
+          //                       ),
+          //                       SizedBox(
+          //                         width: responsiveWidth(6),
+          //                       ),
+          //                       Expanded(
+          //                         child: Text(
+          //                           widget.list[i].lookupDetHierDescEn ?? "",
+          //                           style: TextStyle(
+          //                               fontSize: responsiveFont(14.0),
+          //                               fontWeight: selectedIndex == i
+          //                                   ? FontWeight.bold
+          //                                   : FontWeight.w500),
+          //                         ),
+          //                       ),
+          //                       const Spacer(),
+          //                       if (selectedIndex == i)
+          //                         Icon(
+          //                           Icons.check_circle,
+          //                           color: kPrimaryColor,
+          //                           size: responsiveFont(14.0),
+          //                         ),
+          //                     ],
+          //                   ),
+          //                 ),
+          //               ),
+          //             ),
+          //           ),
+          //         ),
+          //   ),
+          // ),
         ],
       ),
     );
@@ -3679,5 +3792,33 @@ class _MultiSelectBottomSheetContentState
         ),
       ],
     );
+  }
+}
+
+class City {
+  final String name;
+  final String country;
+
+  City({required this.name, required this.country});
+}
+
+class CityService {
+  static List<City> getCities() {
+    return [
+      City(name: 'New York', country: 'USA'),
+      City(name: 'Los Angeles', country: 'USA'),
+      City(name: 'Chicago', country: 'USA'),
+      City(name: 'London', country: 'UK'),
+      City(name: 'Berlin', country: 'Germany'),
+      City(name: 'Paris', country: 'France'),
+    ];
+  }
+
+  static List<City> find(String query) {
+    return getCities().where((city) {
+      final cityNameLower = city.name.toLowerCase();
+      final searchLower = query.toLowerCase();
+      return cityNameLower.contains(searchLower);
+    }).toList();
   }
 }
