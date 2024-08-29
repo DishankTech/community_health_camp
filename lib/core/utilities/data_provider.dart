@@ -228,7 +228,7 @@ class DataProvider {
   }
 
 
-  Future<void> storePatientList(List<CampCoordRegisteredPatientModel> patients) async {
+/*  Future<void> storePatientList(List<CampCoordRegisteredPatientModel> patients) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // Convert List<CampCoordRegisteredPatientModel> to List<Map<String, dynamic>>
@@ -252,7 +252,7 @@ class DataProvider {
 
     // Convert List<String> to List<CampCoordRegisteredPatientModel>
     return jsonList.map((jsonString) => CampCoordRegisteredPatientModel.fromJson(jsonDecode(jsonString))).toList();
-  }
+  }*/
 
 
   // int? getUserId() {
