@@ -1557,6 +1557,140 @@ Future<dynamic> talukaBottomSheetV1(
           ));
 }
 
+Future<dynamic> stakeholderSubTypeBottomSheetV1(
+    BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
+  int selectedIndex = -1;
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => StatefulBuilder(
+            builder: (c, setState) => Container(
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(responsiveHeight(50)),
+                      topRight: Radius.circular(responsiveHeight(50)))),
+              child: Padding(
+                padding: EdgeInsets.all(responsiveHeight(30)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Stakeholder Sub Type",
+                            style: TextStyle(
+                                fontSize: responsiveFont(17),
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                icSquareClose,
+                                height: responsiveHeight(24),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(25),
+                    ),
+                    BlocBuilder<MasterDataBloc, MasterDataState>(
+                      builder: (context, state) {
+                        MasterLookupDetHierResponseModel? responseModel;
+
+                        if (state.getStakeholderSubTypeResponse.isNotEmpty) {
+                          responseModel =
+                              MasterLookupDetHierResponseModel.fromJson(
+                                  jsonDecode(
+                                      state.getStakeholderSubTypeResponse));
+                        }
+
+                        return responseModel != null &&
+                                responseModel.details != null
+                            ? Expanded(
+                                child: ListView.builder(
+                                  itemCount: responseModel.details!.length,
+                                  itemBuilder: (c, i) => Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: () {
+                                          onItemSelected(
+                                              responseModel!.details![i]);
+                                          setState(
+                                            () {
+                                              selectedIndex = i;
+                                            },
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                        child: Ink(
+                                          decoration: BoxDecoration(
+                                            color: i == selectedIndex
+                                                ? Colors.transparent
+                                                : kListBGColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  i == selectedIndex
+                                                      ? icCircleDot
+                                                      : icCircle,
+                                                  height: responsiveHeight(20),
+                                                ),
+                                                SizedBox(
+                                                  width: responsiveWidth(20),
+                                                ),
+                                                Expanded(
+                                                  child: Text(responseModel!
+                                                      .details![i]
+                                                      .lookupDetHierDescEn!),
+                                                ),
+                                                const Spacer(),
+                                                i == selectedIndex
+                                                    ? Image.asset(
+                                                        icCircleCheck,
+                                                        height:
+                                                            responsiveHeight(
+                                                                20),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Center(child: Text("Data Not Available"));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
+
 Future<dynamic> townBottomSheet(
     BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;

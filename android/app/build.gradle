@@ -23,7 +23,7 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.community_health_app"
+    namespace "com.community.health.camp"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 

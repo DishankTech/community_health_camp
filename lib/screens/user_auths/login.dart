@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 // import 'package:community_health_app/SizeConfig.dart';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
@@ -246,33 +247,35 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void validateFields() async {
-    if (await PermissionService().hasAllPermission() == false) {
-      showDialog(
-          context: context,
-          builder: (c) => AlertDialog(
-                title: const Text('Permissions needed'),
-                content: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text("Please allow all the permissions, to continue")
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text("Cancel"),
+    if (Platform.isAndroid) {
+      if (await PermissionService().hasAllPermission() == false) {
+        showDialog(
+            context: context,
+            builder: (c) => AlertDialog(
+                  title: const Text('Permissions needed'),
+                  content: const Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text("Please allow all the permissions, to continue")
+                    ],
                   ),
-                  TextButton(
+                  actions: [
+                    TextButton(
                       onPressed: () {
-                        _openAppSettings();
                         Navigator.pop(context);
                       },
-                      child: const Text("Yes"))
-                ],
-              ));
-      return;
+                      child: const Text("Cancel"),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          _openAppSettings();
+                          Navigator.pop(context);
+                        },
+                        child: const Text("Yes"))
+                  ],
+                ));
+        return;
+      }
     }
     if (_usernameController.value.text.isEmpty) {
       Fluttertoast.showToast(
