@@ -32,6 +32,7 @@ class LocationMasterController extends GetxController {
   SubLocationDetails? selectedCity;
 
   bool hasInternet = true;
+  bool isSearch = false;
   bool isLoading = false;
 
   TextEditingController stateController = TextEditingController();
@@ -441,7 +442,7 @@ class LocationMasterController extends GetxController {
       isLoading = false;
       distModel = SubLocationModel.fromJson(data);
 
-      distController.text = distModel?.details?.first.lookupDetHierDescEn ?? "";
+      // distController.text = distModel?.details?.first.lookupDetHierDescEn ?? "";
       if (isView == true) {
         distController.text =
             distModel?.details?.first.lookupDetHierDescEn ?? "";

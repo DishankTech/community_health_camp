@@ -587,7 +587,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                               ?.details
                                                               ?.first
                                                               .lookupDetHierarchical ??
-                                                          []);
+                                                          [],true);
                                                 },
                                                 // maxLength: 12,
                                                 readOnly: true,
@@ -665,7 +665,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                         "Refer To",
                                                         controller.referToModel
                                                                 ?.details ??
-                                                            []);
+                                                            [],true);
                                                   }
                                                 },
                                                 // maxLength: 12,

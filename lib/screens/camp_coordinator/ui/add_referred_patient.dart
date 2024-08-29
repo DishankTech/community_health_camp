@@ -247,7 +247,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                           })
                                         },
                                     "Stakeholder Type",
-                                    stakeHolderModel?.details?.first.lookupDetHierarchical ?? []);
+                                    stakeHolderModel?.details?.first.lookupDetHierarchical ?? [],true);
                               },
                               // maxLength: 12,
                               readOnly: true,

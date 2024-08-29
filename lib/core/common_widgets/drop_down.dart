@@ -2190,6 +2190,7 @@ Future<dynamic> commonBottomSheet(
   Function(dynamic) onItemSelected,
   String bottomSheetTitle,
   List<dynamic> list,
+  bool isVisible,
 ) {
   return showModalBottomSheet(
     context: context,
@@ -2198,6 +2199,7 @@ Future<dynamic> commonBottomSheet(
       onItemSelected: onItemSelected,
       bottomSheetTitle: bottomSheetTitle,
       list: list,
+      isVisible: isVisible,
     ),
   );
 }
@@ -2206,11 +2208,13 @@ class _CommonBottomSheetContent extends StatefulWidget {
   final Function(dynamic) onItemSelected;
   final String bottomSheetTitle;
   final List<dynamic> list;
+  final bool isVisible;
 
   const _CommonBottomSheetContent({
     required this.onItemSelected,
     required this.bottomSheetTitle,
     required this.list,
+    required this.isVisible,
   });
 
   @override
@@ -2258,52 +2262,110 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
               ],
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-          //   child: Container(
-          //     decoration: BoxDecoration(
-          //         border: Border.all(color: kTextFieldBorder, width: 1),
-          //         borderRadius: BorderRadius.circular(responsiveHeight(60))),
-          //     child: TypeAheadField<dynamic>(
-          //       controller: txtContro,
-          //       suggestionsCallback: (search) {
-          //         return widget.list.where((stakeHolder) {
-          //           final stakeHNameLower =
-          //               stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
-          //           final searchLower = search.toLowerCase();
-          //           return stakeHNameLower.contains(searchLower);
-          //         }).toList();
-          //         // CityService.find(search);
-          //       },
-          //       builder: (BuildContext context,
-          //           TextEditingController textController, FocusNode focusNode) {
-          //         return TextField(
-          //             controller: textController,
-          //             focusNode: focusNode,
-          //             autofocus: true,
-          //             decoration: InputDecoration(
-          //               contentPadding: const EdgeInsets.symmetric(horizontal: 6),
-          //               suffix: const Icon(Icons.search,color: kPrimaryColor,),
-          //               border: InputBorder.none,
-          //               hintText: "Search ${widget.bottomSheetTitle}",
-          //             ));
-          //       },
-          //       itemBuilder: (context, stakeholder) {
-          //         return ListTile(
-          //           title: Text(stakeholder.lookupDetHierDescEn ?? ""),
-          //           // subtitle: Text(city.country),
-          //         );
-          //       },
-          //       onSelected: (dynamic selectedStakeH) {
-          //         txtContro.text = selectedStakeH.lookupDetHierDescEn ?? '';
-          //         setState(() {
-          //           selectedIndex = widget.list.indexOf(selectedStakeH);
-          //         });
-          //         widget.onItemSelected(selectedStakeH);
-          //       },
-          //     ),
-          //   ),
-          // ),
+          Visibility(
+            visible: widget.isVisible,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: kTextFieldBorder, width: 1),
+                    borderRadius: BorderRadius.circular(responsiveHeight(60))),
+                child: TypeAheadField<dynamic>(
+                  controller: txtContro,
+                  suggestionsCallback: (search) {
+                    return widget.list.where((stakeHolder) {
+                      final stakeHNameLower =
+                          stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
+                      final searchLower = search.toLowerCase();
+                      return stakeHNameLower.contains(searchLower);
+                    }).toList();
+                  },
+                  builder: (BuildContext context,
+                      TextEditingController textController,
+                      FocusNode focusNode) {
+                    return TextField(
+                        controller: textController,
+                        focusNode: focusNode,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          suffixIcon:
+                              const Icon(Icons.search, color: kPrimaryColor),
+                          border: InputBorder.none,
+                          hintText: "Search ${widget.bottomSheetTitle}",
+                        ));
+                  },
+                  itemBuilder: (context, stakeholder) {
+                    bool isSelected =
+                        widget.list.indexOf(stakeholder) == selectedIndex;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: [
+                            isSelected
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
+                                : Icon(
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Expanded(
+                              child: Text(
+                                stakeholder.lookupDetHierDescEn ?? "",
+                                style: TextStyle(
+                                  fontSize: responsiveFont(14.0),
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            if (isSelected)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ).paddingSymmetric(horizontal: 4, vertical: 2),
+                      ),
+                    );
+                    // return ListTile(
+                    //   title: Text(stakeholder.lookupDetHierDescEn ?? ""),
+                    //   // subtitle: Text(city.country),
+                    // );
+                  },
+                  onSelected: (dynamic selectedStakeH) {
+                    txtContro.text = selectedStakeH.lookupDetHierDescEn ?? '';
+                    setState(() {
+                      // Move the selected item to the top of the list
+                      int selectedIndex = widget.list.indexOf(selectedStakeH);
+                      if (selectedIndex != -1) {
+                        var selectedItem = widget.list.removeAt(selectedIndex);
+                        widget.list.insert(0, selectedItem);
+                        this.selectedIndex =
+                            0; // Update the selectedIndex for the ListView
+                      }
+                    });
+                    widget.onItemSelected(selectedStakeH);
+                    Get.back();
+                  },
+                ),
+              ),
+            ),
+          ),
           Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,
@@ -2372,76 +2434,6 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
               ),
             ),
           ),
-
-          // Expanded(
-          //   child: ListView.builder(
-          //     itemCount: widget.list.length,
-          //     shrinkWrap: true,
-          //     itemBuilder: (c, i) =>
-          //         Padding(
-          //           padding: const EdgeInsets.all(2.0),
-          //           child: Padding(
-          //             padding: const EdgeInsets.symmetric(
-          //               vertical: 6,
-          //               horizontal: 12,
-          //             ),
-          //             child: InkWell(
-          //               onTap: () {
-          //                 setState(() {
-          //                   selectedIndex = i;
-          //                 });
-          //
-          //                 widget.onItemSelected(widget.list[i]);
-          //                 Navigator.pop(context);
-          //               },
-          //               child: Container(
-          //                 decoration: BoxDecoration(
-          //                   color: kContainerBack,
-          //                   borderRadius: BorderRadius.circular(10),
-          //                 ),
-          //                 child: Padding(
-          //                   padding: const EdgeInsets.all(8.0),
-          //                   child: Row(
-          //                     children: [
-          //                       selectedIndex == i
-          //                           ? Icon(
-          //                         Icons.radio_button_checked,
-          //                         color: kPrimaryColor,
-          //                         size: responsiveFont(14.0),
-          //                       )
-          //                           : Icon(
-          //                         Icons.circle_outlined,
-          //                         size: responsiveFont(14.0),
-          //                       ),
-          //                       SizedBox(
-          //                         width: responsiveWidth(6),
-          //                       ),
-          //                       Expanded(
-          //                         child: Text(
-          //                           widget.list[i].lookupDetHierDescEn ?? "",
-          //                           style: TextStyle(
-          //                               fontSize: responsiveFont(14.0),
-          //                               fontWeight: selectedIndex == i
-          //                                   ? FontWeight.bold
-          //                                   : FontWeight.w500),
-          //                         ),
-          //                       ),
-          //                       const Spacer(),
-          //                       if (selectedIndex == i)
-          //                         Icon(
-          //                           Icons.check_circle,
-          //                           color: kPrimaryColor,
-          //                           size: responsiveFont(14.0),
-          //                         ),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-          //             ),
-          //           ),
-          //         ),
-          //   ),
-          // ),
         ],
       ),
     );
@@ -2453,6 +2445,7 @@ Future<dynamic> commonBottomSheet1(
   Future Function(dynamic) onItemSelected,
   String bottomSheetTitle,
   List<dynamic> list,
+  bool isVisible,
 ) {
   return showModalBottomSheet(
     context: context,
@@ -2461,6 +2454,7 @@ Future<dynamic> commonBottomSheet1(
       onItemSelected: onItemSelected,
       bottomSheetTitle: bottomSheetTitle,
       list: list,
+      isVisible: isVisible,
     ),
   );
 }
@@ -2469,11 +2463,13 @@ class _CommonBottomSheetContent1 extends StatefulWidget {
   final Function(dynamic) onItemSelected;
   final String bottomSheetTitle;
   final List<dynamic> list;
+  final bool isVisible;
 
   const _CommonBottomSheetContent1({
     required this.onItemSelected,
     required this.bottomSheetTitle,
     required this.list,
+    required this.isVisible,
   });
 
   @override
@@ -2484,6 +2480,7 @@ class _CommonBottomSheetContent1 extends StatefulWidget {
 class _CommonBottomSheetContent1State
     extends State<_CommonBottomSheetContent1> {
   int? selectedIndex;
+  TextEditingController txtContro = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -2518,6 +2515,110 @@ class _CommonBottomSheetContent1State
                   icon: const Icon(Icons.cancel_presentation),
                 ),
               ],
+            ),
+          ),
+          Visibility(
+            visible: widget.isVisible,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: kTextFieldBorder, width: 1),
+                    borderRadius: BorderRadius.circular(responsiveHeight(60))),
+                child: TypeAheadField<dynamic>(
+                  controller: txtContro,
+                  suggestionsCallback: (search) {
+                    return widget.list.where((stakeHolder) {
+                      final stakeHNameLower =
+                          stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
+                      final searchLower = search.toLowerCase();
+                      return stakeHNameLower.contains(searchLower);
+                    }).toList();
+                  },
+                  builder: (BuildContext context,
+                      TextEditingController textController,
+                      FocusNode focusNode) {
+                    return TextField(
+                        controller: textController,
+                        focusNode: focusNode,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          suffixIcon:
+                              const Icon(Icons.search, color: kPrimaryColor),
+                          border: InputBorder.none,
+                          hintText: "Search ${widget.bottomSheetTitle}",
+                        ));
+                  },
+                  itemBuilder: (context, stakeholder) {
+                    bool isSelected =
+                        widget.list.indexOf(stakeholder) == selectedIndex;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: [
+                            isSelected
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
+                                : Icon(
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Expanded(
+                              child: Text(
+                                stakeholder.lookupDetHierDescEn ?? "",
+                                style: TextStyle(
+                                  fontSize: responsiveFont(14.0),
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            if (isSelected)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ).paddingSymmetric(horizontal: 4, vertical: 2),
+                      ),
+                    );
+                    // return ListTile(
+                    //   title: Text(stakeholder.lookupDetHierDescEn ?? ""),
+                    //   // subtitle: Text(city.country),
+                    // );
+                  },
+                  onSelected: (dynamic selectedStakeH) {
+                    txtContro.text = selectedStakeH.lookupDetHierDescEn ?? '';
+                    setState(() {
+                      // Move the selected item to the top of the list
+                      int selectedIndex = widget.list.indexOf(selectedStakeH);
+                      if (selectedIndex != -1) {
+                        var selectedItem = widget.list.removeAt(selectedIndex);
+                        widget.list.insert(0, selectedItem);
+                        this.selectedIndex =
+                            0; // Update the selectedIndex for the ListView
+                      }
+                    });
+                    widget.onItemSelected(selectedStakeH);
+                    Get.back();
+                  },
+                ),
+              ),
             ),
           ),
           Expanded(
@@ -2988,7 +3089,8 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
                         setState(() {})
                       },
                   "Stakeholder Type",
-                  widget.list);
+                  widget.list,
+                  true);
             },
             // maxLength: 12,
             readOnly: true,
@@ -3088,6 +3190,7 @@ Future<dynamic> locationNameBottomSheet(
   Function(dynamic) onItemSelected,
   String bottomSheetTitle,
   List<dynamic> list,
+  bool isVisible,
 ) {
   return showModalBottomSheet(
     context: context,
@@ -3096,6 +3199,7 @@ Future<dynamic> locationNameBottomSheet(
       onItemSelected: onItemSelected,
       bottomSheetTitle: bottomSheetTitle,
       list: list,
+      isVisible: isVisible,
     ),
   );
 }
@@ -3104,12 +3208,14 @@ class LocationNameBottomSheetContent extends StatefulWidget {
   final Function(dynamic) onItemSelected;
   final String bottomSheetTitle;
   final List<dynamic> list;
+  final bool isVisible;
 
   const LocationNameBottomSheetContent({
     super.key,
     required this.onItemSelected,
     required this.bottomSheetTitle,
     required this.list,
+    required this.isVisible,
   });
 
   @override
@@ -3120,6 +3226,7 @@ class LocationNameBottomSheetContent extends StatefulWidget {
 class LocationNameBottomSheetContentState
     extends State<LocationNameBottomSheetContent> {
   int? selectedIndex;
+  TextEditingController txtContro = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -3154,6 +3261,110 @@ class LocationNameBottomSheetContentState
                   icon: const Icon(Icons.cancel_presentation),
                 ),
               ],
+            ),
+          ),
+          Visibility(
+            visible: widget.isVisible,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: kTextFieldBorder, width: 1),
+                    borderRadius: BorderRadius.circular(responsiveHeight(60))),
+                child: TypeAheadField<dynamic>(
+                  controller: txtContro,
+                  suggestionsCallback: (search) {
+                    return widget.list.where((stakeHolder) {
+                      final stakeHNameLower =
+                          stakeHolder.locationName?.toLowerCase() ?? "";
+                      final searchLower = search.toLowerCase();
+                      return stakeHNameLower.contains(searchLower);
+                    }).toList();
+                  },
+                  builder: (BuildContext context,
+                      TextEditingController textController,
+                      FocusNode focusNode) {
+                    return TextField(
+                        controller: textController,
+                        focusNode: focusNode,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          suffixIcon:
+                              const Icon(Icons.search, color: kPrimaryColor),
+                          border: InputBorder.none,
+                          hintText: "Search ${widget.bottomSheetTitle}",
+                        ));
+                  },
+                  itemBuilder: (context, stakeholder) {
+                    bool isSelected =
+                        widget.list.indexOf(stakeholder) == selectedIndex;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: [
+                            isSelected
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
+                                : Icon(
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Expanded(
+                              child: Text(
+                                stakeholder.locationName ?? "",
+                                style: TextStyle(
+                                  fontSize: responsiveFont(14.0),
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            if (isSelected)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ).paddingSymmetric(horizontal: 4, vertical: 2),
+                      ),
+                    );
+                    // return ListTile(
+                    //   title: Text(stakeholder.lookupDetHierDescEn ?? ""),
+                    //   // subtitle: Text(city.country),
+                    // );
+                  },
+                  onSelected: (dynamic selectedStakeH) {
+                    txtContro.text = selectedStakeH.locationName ?? '';
+                    setState(() {
+                      // Move the selected item to the top of the list
+                      int selectedIndex = widget.list.indexOf(selectedStakeH);
+                      if (selectedIndex != -1) {
+                        var selectedItem = widget.list.removeAt(selectedIndex);
+                        widget.list.insert(0, selectedItem);
+                        this.selectedIndex =
+                            0; // Update the selectedIndex for the ListView
+                      }
+                    });
+                    widget.onItemSelected(selectedStakeH);
+                    Get.back();
+                  },
+                ),
+              ),
             ),
           ),
           Expanded(
@@ -3538,6 +3749,7 @@ Future<dynamic> stakeHolderNameBottomSheet(
   Function(dynamic) onItemSelected,
   String bottomSheetTitle,
   List<dynamic> list,
+  bool isVisible,
 ) {
   return showModalBottomSheet(
     context: context,
@@ -3546,6 +3758,7 @@ Future<dynamic> stakeHolderNameBottomSheet(
       onItemSelected: onItemSelected,
       bottomSheetTitle: bottomSheetTitle,
       list: list,
+      isVisible: isVisible,
     ),
   );
 }
@@ -3554,12 +3767,14 @@ class StakeHolderNameBottomSheetContent extends StatefulWidget {
   final Function(dynamic) onItemSelected;
   final String bottomSheetTitle;
   final List<dynamic> list;
+  final bool isVisible;
 
   const StakeHolderNameBottomSheetContent({
     super.key,
     required this.onItemSelected,
     required this.bottomSheetTitle,
     required this.list,
+    required this.isVisible,
   });
 
   @override
@@ -3570,6 +3785,7 @@ class StakeHolderNameBottomSheetContent extends StatefulWidget {
 class StakeHolderNameBottomSheetContentState
     extends State<StakeHolderNameBottomSheetContent> {
   int? selectedIndex;
+  TextEditingController txtContro = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -3606,8 +3822,108 @@ class StakeHolderNameBottomSheetContentState
               ],
             ),
           ),
-          SizedBox(
-            height: SizeConfig.screenHeight * 0.3,
+          Visibility(
+            visible: widget.isVisible,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: kTextFieldBorder, width: 1),
+                    borderRadius: BorderRadius.circular(responsiveHeight(60))),
+                child: TypeAheadField<dynamic>(
+                  controller: txtContro,
+                  suggestionsCallback: (search) {
+                    return widget.list.where((stakeHolder) {
+                      final stakeHNameLower =
+                          stakeHolder.stakeholderNameEn?.toLowerCase() ?? "";
+                      final searchLower = search.toLowerCase();
+                      return stakeHNameLower.contains(searchLower);
+                    }).toList();
+                  },
+                  builder: (BuildContext context,
+                      TextEditingController textController,
+                      FocusNode focusNode) {
+                    return TextField(
+                        controller: textController,
+                        focusNode: focusNode,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          suffixIcon:
+                              const Icon(Icons.search, color: kPrimaryColor),
+                          border: InputBorder.none,
+                          hintText: "Search ${widget.bottomSheetTitle}",
+                        ));
+                  },
+                  itemBuilder: (context, stakeholder) {
+                    bool isSelected =
+                        widget.list.indexOf(stakeholder) == selectedIndex;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: [
+                            isSelected
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
+                                : Icon(
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Expanded(
+                              child: Text(
+                                stakeholder.stakeholderNameEn ?? "",
+                                style: TextStyle(
+                                  fontSize: responsiveFont(14.0),
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            if (isSelected)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ).paddingSymmetric(horizontal: 4, vertical: 2),
+                      ),
+                    );
+
+                  },
+                  onSelected: (dynamic selectedStakeH) {
+                    txtContro.text = selectedStakeH.stakeholderNameEn ?? '';
+                    setState(() {
+                      // Move the selected item to the top of the list
+                      int selectedIndex = widget.list.indexOf(selectedStakeH);
+                      if (selectedIndex != -1) {
+                        var selectedItem = widget.list.removeAt(selectedIndex);
+                        widget.list.insert(0, selectedItem);
+                        this.selectedIndex =
+                            0; // Update the selectedIndex for the ListView
+                      }
+                    });
+                    widget.onItemSelected(selectedStakeH);
+                    Get.back();
+                  },
+                ),
+              ),
+            ),
+          ),
+          Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,
               shrinkWrap: true,

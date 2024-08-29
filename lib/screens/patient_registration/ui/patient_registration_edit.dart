@@ -400,7 +400,7 @@ class _PatientRegistrationEditScreenState
                                             "Location name",
                                             controller.locationNameModel
                                                     ?.details ??
-                                                []);
+                                                [],true);
                                       },
                                       // maxLength: 12,
                                       readOnly: true,

@@ -72,395 +72,429 @@ class _LocationMasterListState extends State<LocationMasterList> {
       statusBarIconBrightness:
           Brightness.light, // For light text/icons on the status bar
     ));
-    return Scaffold(
-        body: Container(
-      decoration: const BoxDecoration(
-          image:
-              DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
-      child: Column(
-        children: [
-          mAppBarV1(
-            title: "Locations",
-            context: context,
-            onBackButtonPress: () {
-              Get.to(() => const DashboardScreen());
-            },
-            suffix: Material(
-              color: Colors.transparent,
-              child: InkWell(
-                borderRadius: BorderRadius.circular(5),
-                onTap: () {
-                  // Navigator.pushNamed(context, AppRoutes.addLocationMaster,
-                  //     arguments: LocDetails(false, null));
-                  Get.to(() => const AddLocationMaster(
-                        isView: false,
-                        isEdit: false,
-                        locationId: null,
-                      ));
-                },
-                child: Ink(
-                  child: Image.asset(
-                    icSquarePlus,
-                    height: responsiveHeight(24),
+    return PopScope(
+      canPop: false,
+      child: Scaffold(
+          body: Container(
+        decoration: const BoxDecoration(
+            image:
+                DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
+        child: Column(
+          children: [
+            mAppBarV1(
+              title: "Locations",
+              context: context,
+              onBackButtonPress: () {
+                Get.to(() => const DashboardScreen());
+              },
+              suffix: Row(
+                children: [
+                  // Material(
+                  //   color: Colors.transparent,
+                  //   child: InkWell(
+                  //     borderRadius: BorderRadius.circular(5),
+                  //     onTap: () {
+                  //       locationMasterController.isSearch = true;
+                  //       // Get.to(() => const AddLocationMaster(
+                  //       //       isView: false,
+                  //       //       isEdit: false,
+                  //       //       locationId: null,
+                  //       //     ));
+                  //     },
+                  //     child: Ink(
+                  //       child: const Icon(
+                  //         Icons.search,
+                  //         color: Colors.white,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(
+                    width: responsiveFont(10),
                   ),
-                ),
+                  Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(5),
+                      onTap: () {
+                        Get.to(() => const AddLocationMaster(
+                              isView: false,
+                              isEdit: false,
+                              locationId: null,
+                            ));
+                      },
+                      child: Ink(
+                        child: Image.asset(
+                          icSquarePlus,
+                          height: responsiveHeight(24),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+
             ),
-          ),
-          GetBuilder<LocationMasterController>(
-              init: LocationMasterController(),
-              builder: (controller) {
-                return locationMasterController.hasInternet
-                    ? controller.isLoading
-                        ? Container(
-                            width: SizeConfig.screenWidth * 0.95,
-                            height: SizeConfig.screenHeight * 0.7,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(
-                                    responsiveHeight(25))),
-                            child: const Center(
-                                child: CircularProgressIndicator()))
-                        : Expanded(
-                            child: PagedListView<int, LocationListData>(
-                              padding: EdgeInsets.zero,
-                              pagingController:
-                                  locationMasterController.pagingController,
-                              builderDelegate:
-                                  PagedChildBuilderDelegate<LocationListData>(
-                                itemBuilder: (context, item, index) =>
-                                    Stack(children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 8.0, left: 8.0, right: 0.8),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                                offset: const Offset(0, 0),
-                                                color: Colors.grey
-                                                    .withOpacity(0.5),
-                                                spreadRadius: 1,
-                                                blurRadius: 5)
-                                          ],
-                                          borderRadius: BorderRadius.circular(
-                                              responsiveHeight(20))),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(
-                                            responsiveHeight(20)),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Flexible(
-                                              flex: 3,
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      text: "Location Name: ",
-                                                      style: TextStyle(
-                                                          color: kTextColor,
-                                                          fontSize:
-                                                              responsiveFont(
-                                                                  12),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      children: [
-                                                        TextSpan(
-                                                            text: item
-                                                                .locationName,
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    responsiveFont(
-                                                                        12),
-                                                                color:
-                                                                    kTextColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal))
-                                                      ],
+            GetBuilder<LocationMasterController>(
+                init: LocationMasterController(),
+                builder: (controller) {
+                  return locationMasterController.hasInternet
+                      ? controller.isLoading
+                          ? Container(
+                              width: SizeConfig.screenWidth * 0.95,
+                              height: SizeConfig.screenHeight * 0.7,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(
+                                      responsiveHeight(25))),
+                              child: const Center(
+                                  child: CircularProgressIndicator()))
+                          : Expanded(
+                              child: PagedListView<int, LocationListData>(
+                                padding: EdgeInsets.zero,
+                                pagingController:
+                                    locationMasterController.pagingController,
+                                builderDelegate:
+                                    PagedChildBuilderDelegate<LocationListData>(
+                                  itemBuilder: (context, item, index) =>
+                                      Stack(children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 8.0, left: 8.0, right: 0.8),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  offset: const Offset(0, 0),
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 1,
+                                                  blurRadius: 5)
+                                            ],
+                                            borderRadius: BorderRadius.circular(
+                                                responsiveHeight(20))),
+                                        child: Padding(
+                                          padding: EdgeInsets.all(
+                                              responsiveHeight(20)),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Flexible(
+                                                flex: 3,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        text: "Location Name: ",
+                                                        style: TextStyle(
+                                                            color: kTextColor,
+                                                            fontSize:
+                                                                responsiveFont(
+                                                                    12),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        children: [
+                                                          TextSpan(
+                                                              text: item
+                                                                  .locationName,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      responsiveFont(
+                                                                          12),
+                                                                  color:
+                                                                      kTextColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal))
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        responsiveHeight(10),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      text: "Address: ",
-                                                      style: TextStyle(
-                                                          color: kTextColor,
-                                                          fontSize:
-                                                              responsiveFont(
-                                                                  12),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      children: [
-                                                        TextSpan(
-                                                            text: item.address1,
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    responsiveFont(
-                                                                        12),
-                                                                color:
-                                                                    kTextColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal))
-                                                      ],
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(10),
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        responsiveHeight(10),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      text: "Contact No : ",
-                                                      style: TextStyle(
-                                                          color: kTextColor,
-                                                          fontSize:
-                                                              responsiveFont(
-                                                                  12),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      children: [
-                                                        TextSpan(
-                                                            text: item
-                                                                .contactNumber,
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    responsiveFont(
-                                                                        12),
-                                                                color:
-                                                                    kTextColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal))
-                                                      ],
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        text: "Address: ",
+                                                        style: TextStyle(
+                                                            color: kTextColor,
+                                                            fontSize:
+                                                                responsiveFont(
+                                                                    12),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        children: [
+                                                          TextSpan(
+                                                              text:
+                                                                  item.address1,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      responsiveFont(
+                                                                          12),
+                                                                  color:
+                                                                      kTextColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal))
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        responsiveHeight(10),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      text: "Contact Person : ",
-                                                      style: TextStyle(
-                                                          color: kTextColor,
-                                                          fontSize:
-                                                              responsiveFont(
-                                                                  12),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      children: [
-                                                        TextSpan(
-                                                            text: item
-                                                                .contactPersonName,
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    responsiveFont(
-                                                                        12),
-                                                                color:
-                                                                    kTextColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal))
-                                                      ],
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(10),
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        responsiveHeight(10),
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Expanded(
-                                                        child: RichText(
-                                                          text: TextSpan(
-                                                            text: "District: ",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    kTextColor,
-                                                                fontSize:
-                                                                    responsiveFont(
-                                                                        12),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                            children: [
-                                                              TextSpan(
-                                                                  text: item
-                                                                      .districtDesEn
-                                                                      .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          responsiveFont(
-                                                                              12),
-                                                                      color:
-                                                                          kTextColor,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal))
-                                                            ],
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        text: "Contact No : ",
+                                                        style: TextStyle(
+                                                            color: kTextColor,
+                                                            fontSize:
+                                                                responsiveFont(
+                                                                    12),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        children: [
+                                                          TextSpan(
+                                                              text: item
+                                                                  .contactNumber,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      responsiveFont(
+                                                                          12),
+                                                                  color:
+                                                                      kTextColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal))
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(10),
+                                                    ),
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        text:
+                                                            "Contact Person : ",
+                                                        style: TextStyle(
+                                                            color: kTextColor,
+                                                            fontSize:
+                                                                responsiveFont(
+                                                                    12),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        children: [
+                                                          TextSpan(
+                                                              text: item
+                                                                  .contactPersonName,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      responsiveFont(
+                                                                          12),
+                                                                  color:
+                                                                      kTextColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal))
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(10),
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Expanded(
+                                                          child: RichText(
+                                                            text: TextSpan(
+                                                              text:
+                                                                  "District: ",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      kTextColor,
+                                                                  fontSize:
+                                                                      responsiveFont(
+                                                                          12),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                              children: [
+                                                                TextSpan(
+                                                                    text: item
+                                                                        .districtDesEn
+                                                                        .toString(),
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            responsiveFont(
+                                                                                12),
+                                                                        color:
+                                                                            kTextColor,
+                                                                        fontWeight:
+                                                                            FontWeight.normal))
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                      SizedBox(
-                                                        height:
-                                                            responsiveHeight(
-                                                                10),
-                                                      ),
-                                                      Expanded(
-                                                        child: RichText(
-                                                          text: TextSpan(
-                                                            text: "City: ",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    kTextColor,
-                                                                fontSize:
-                                                                    responsiveFont(
-                                                                        12),
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold),
-                                                            children: [
-                                                              TextSpan(
-                                                                  text: item
-                                                                      .cityDescEn
-                                                                      .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          responsiveFont(
-                                                                              12),
-                                                                      color:
-                                                                          kTextColor,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .normal))
-                                                            ],
+                                                        SizedBox(
+                                                          height:
+                                                              responsiveHeight(
+                                                                  10),
+                                                        ),
+                                                        Expanded(
+                                                          child: RichText(
+                                                            text: TextSpan(
+                                                              text: "City: ",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      kTextColor,
+                                                                  fontSize:
+                                                                      responsiveFont(
+                                                                          12),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                              children: [
+                                                                TextSpan(
+                                                                    text: item
+                                                                        .cityDescEn
+                                                                        .toString(),
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            responsiveFont(
+                                                                                12),
+                                                                        color:
+                                                                            kTextColor,
+                                                                        fontWeight:
+                                                                            FontWeight.normal))
+                                                              ],
+                                                            ),
                                                           ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        responsiveHeight(10),
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      text: "Email id : ",
-                                                      style: TextStyle(
-                                                          color: kTextColor,
-                                                          fontSize:
-                                                              responsiveFont(
-                                                                  12),
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                      children: [
-                                                        TextSpan(
-                                                            text: item.emailId,
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                    responsiveFont(
-                                                                        12),
-                                                                color:
-                                                                    kTextColor,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .normal))
                                                       ],
                                                     ),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        responsiveHeight(10),
-                                                  ),
-                                                ],
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(10),
+                                                    ),
+                                                    RichText(
+                                                      text: TextSpan(
+                                                        text: "Email id : ",
+                                                        style: TextStyle(
+                                                            color: kTextColor,
+                                                            fontSize:
+                                                                responsiveFont(
+                                                                    12),
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                        children: [
+                                                          TextSpan(
+                                                              text:
+                                                                  item.emailId,
+                                                              style: TextStyle(
+                                                                  fontSize:
+                                                                      responsiveFont(
+                                                                          12),
+                                                                  color:
+                                                                      kTextColor,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .normal))
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(10),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  Positioned(
-                                    top: 20,
-                                    right: 20,
-                                    child: Row(
-                                      children: [
-                                        Material(
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            onTap: () {
-                                              // Navigator.pushNamed(context,
-                                              //     AppRoutes.addLocationMaster,
-                                              //     arguments: LocDetails(true,
-                                              //         item.locationMasterId!));
-                                              Get.to(() => AddLocationMaster(
-                                                    isView: false,
-                                                    isEdit: true,
-                                                    locationId:
-                                                        item.locationMasterId,
-                                                  ));
-                                            },
-                                            child: Ink(
-                                              child: Image.asset(
-                                                icEdit,
-                                                height: responsiveHeight(24),
+                                    Positioned(
+                                      top: 20,
+                                      right: 20,
+                                      child: Row(
+                                        children: [
+                                          Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              onTap: () {
+                                                // Navigator.pushNamed(context,
+                                                //     AppRoutes.addLocationMaster,
+                                                //     arguments: LocDetails(true,
+                                                //         item.locationMasterId!));
+                                                Get.to(() => AddLocationMaster(
+                                                      isView: false,
+                                                      isEdit: true,
+                                                      locationId:
+                                                          item.locationMasterId,
+                                                    ));
+                                              },
+                                              child: Ink(
+                                                child: Image.asset(
+                                                  icEdit,
+                                                  height: responsiveHeight(24),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        SizedBox(
-                                          width: responsiveHeight(10),
-                                        ),
-                                        Material(
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            onTap: () {
-                                              Get.to(() => AddLocationMaster(
-                                                    isView: true,
-                                                    isEdit: false,
-                                                    locationId:
-                                                        item.locationMasterId,
-                                                  ));
-                                            },
-                                            child: Ink(
-                                              child: Image.asset(
-                                                icEye,
-                                                height: responsiveHeight(24),
+                                          SizedBox(
+                                            width: responsiveHeight(10),
+                                          ),
+                                          Material(
+                                            color: Colors.transparent,
+                                            child: InkWell(
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                              onTap: () {
+                                                Get.to(() => AddLocationMaster(
+                                                      isView: true,
+                                                      isEdit: false,
+                                                      locationId:
+                                                          item.locationMasterId,
+                                                    ));
+                                              },
+                                              child: Ink(
+                                                child: Image.asset(
+                                                  icEye,
+                                                  height: responsiveHeight(24),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ]),
+                                  ]),
+                                ),
                               ),
-                            ),
-                          )
-                    : InternetIssue(
-                        onRetryPressed: () {
-                          checkInternetAndLoadData();
-                        },
-                      );
-              })
-        ],
-      ),
-    ));
+                            )
+                      : InternetIssue(
+                          onRetryPressed: () {
+                            checkInternetAndLoadData();
+                          },
+                        );
+                })
+          ],
+        ),
+      )),
+    );
   }
 }
-
-
