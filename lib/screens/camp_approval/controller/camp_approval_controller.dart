@@ -7,6 +7,8 @@ import 'package:community_health_app/screens/camp_approval/model/camp_approval_d
 import 'package:community_health_app/screens/camp_approval/model/camp_approval_list/camp_approval_data.dart';
 import 'package:community_health_app/screens/camp_approval/model/camp_approval_list/camp_approval_list_model.dart';
 import 'package:community_health_app/screens/camp_approval/model/save_camp_approval_req/SaveCampApprovalDetails.dart';
+import 'package:community_health_app/screens/camp_approval/model/search/search_data_camp_approval.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +31,50 @@ class CampApprovalController extends GetxController {
   CampApprovalDetailsModel? campApprovalDetailsModel;
 
   SaveCampApprovalDetails saveCampApprovalReqModel = SaveCampApprovalDetails();
+
+  var isSearch = false;
+
+  TextEditingController searchController = TextEditingController();
+
+  SearchDataCampApproval? searchedDataModel;
+
+
+  getSearchedData(searchText) async {
+    isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getSearchedCampApprovalData}/$searchText');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      searchedDataModel = SearchDataCampApproval.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
 
   fetchPage(int pageKey) async {
     try {

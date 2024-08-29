@@ -9,6 +9,7 @@ import 'package:community_health_app/screens/location_master/model/country/looku
 import 'package:community_health_app/screens/location_master/model/location_details/location_details_model.dart';
 import 'package:community_health_app/screens/location_master/model/location_master_list/location_list_data.dart';
 import 'package:community_health_app/screens/location_master/model/location_master_list/location_master_list.dart';
+import 'package:community_health_app/screens/location_master/model/search/search_data_model.dart';
 import 'package:community_health_app/screens/location_master/model/sub_location_model/sub_location_details.dart';
 import 'package:community_health_app/screens/location_master/model/sub_location_model/sub_location_model.dart';
 import 'package:flutter/material.dart';
@@ -52,6 +53,7 @@ class LocationMasterController extends GetxController {
   TextEditingController emailId = TextEditingController();
 
   TextEditingController contactPerson = TextEditingController();
+  TextEditingController searchController = TextEditingController();
 
   TextEditingController contactNo = TextEditingController();
 
@@ -63,12 +65,12 @@ class LocationMasterController extends GetxController {
 
   SubLocationModel? stateModel;
   LocationDetailsModel? locationDetailsModel;
+  SearchDataModel? searchedDataModel;
   SubLocationModel? distModel;
   SubLocationModel? talukaModel;
   SubLocationModel? cityModel;
 
   AddLocationMasterResp? addlocationMasterResp;
-
 
   List<LocationListData> locations = [];
 
@@ -76,7 +78,6 @@ class LocationMasterController extends GetxController {
 
   static const pageSize = 10;
   late PagingController<int, LocationListData> pagingController;
-
 
   fetchPage(int pageKey) async {
     try {
@@ -190,6 +191,43 @@ class LocationMasterController extends GetxController {
     update();
   }
 
+  getSearchedData(searchText) async {
+    isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getSearchedData}/$searchText');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      searchedDataModel = SearchDataModel.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+
   updateLocationMaster(locationMasterid) async {
     isLoading = true;
     final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.updateLocation);
@@ -234,7 +272,6 @@ class LocationMasterController extends GetxController {
         // Get.back();
         // await fetchPage(1);
         Get.to(const LocationMasterList());
-
       } else {
         isLoading = false;
         CustomMessage.toast("Save Failed");
@@ -261,7 +298,7 @@ class LocationMasterController extends GetxController {
   saveLocationMaster() async {
     isLoading = true;
     final uri =
-    Uri.parse(ApiConstants.baseUrl + ApiConstants.saveLocationMaster);
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.saveLocationMaster);
 
     final Map<String, dynamic> body = {
       "location_name": locationName.text,
@@ -357,11 +394,11 @@ class LocationMasterController extends GetxController {
         countryController.text = countryModel?.details?.first
                 .lookupDetHierarchical?.first.lookupDetHierDescEn ??
             '';
-        selectedCountry =  countryModel?.details?.first
-            .lookupDetHierarchical?.first;
+        selectedCountry =
+            countryModel?.details?.first.lookupDetHierarchical?.first;
 
-        selectedCountryVal = countryModel?.details?.first
-            .lookupDetHierarchical?.first.lookupDetHierDescEn ??
+        selectedCountryVal = countryModel?.details?.first.lookupDetHierarchical
+                ?.first.lookupDetHierDescEn ??
             '';
       }
       update();
@@ -447,7 +484,7 @@ class LocationMasterController extends GetxController {
         distController.text =
             distModel?.details?.first.lookupDetHierDescEn ?? "";
         selectedDist = distModel?.details?.first;
-        selectedDistVal= distModel?.details?.first.lookupDetHierDescEn ?? "";
+        selectedDistVal = distModel?.details?.first.lookupDetHierDescEn ?? "";
       }
       update();
     } else if (response.statusCode == 401) {
@@ -489,7 +526,8 @@ class LocationMasterController extends GetxController {
         talukaController.text =
             talukaModel?.details?.first.lookupDetHierDescEn ?? "";
         selectedTaluka = talukaModel?.details?.first;
-        selectedTalukaVal = talukaModel?.details?.first.lookupDetHierDescEn ?? "";
+        selectedTalukaVal =
+            talukaModel?.details?.first.lookupDetHierDescEn ?? "";
       }
       update();
     } else if (response.statusCode == 401) {
@@ -547,6 +585,4 @@ class LocationMasterController extends GetxController {
     }
     update();
   }
-
-
 }

@@ -9,8 +9,10 @@ import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_detai
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_details/doc_desk_details_list_model.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_model.dart';
+import 'package:community_health_app/screens/doctor_desk/model/search/search__doc_desk_data_model.dart';
 import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
@@ -18,6 +20,7 @@ import 'package:intl/intl.dart';
 
 import '../camp_creation/model/user_list_model/user_list_model.dart';
 import '../location_master/model/country/country_model.dart';
+import '../location_master/model/search/search_data_model.dart';
 import 'model/doctor_desk_list_model.dart';
 
 class DoctorDeskController extends GetxController {
@@ -56,6 +59,12 @@ class DoctorDeskController extends GetxController {
   String? campLocation;
   String? campDate;
   String? totalPatientCount;
+
+  TextEditingController searchController = TextEditingController();
+
+  bool isSearch = false;
+
+  SearchDocDeskDataModel? searchedDataModel;
 
   fetchPage(int pageKey) async {
     try {
@@ -140,6 +149,43 @@ class DoctorDeskController extends GetxController {
       docPagingController.error = error;
     }
   }
+
+  getSearchedData(searchText) async {
+    isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getSearchedDataDocDesk}/$searchText');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      searchedDataModel = SearchDocDeskDataModel.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
 
   doctorDeskDetailsList(pageKey, pageSize) async {
     doctorDetailsDesk.clear();

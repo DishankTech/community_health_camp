@@ -79,6 +79,36 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
             onBackButtonPress: () {
               Get.to(() => const DashboardScreen());
             },
+            // isSearched: campApprovalController.isSearch,
+            // searchWidget: Container(
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(20),
+            //     color: Colors.white,
+            //   ),
+            //   child: TextField(
+            //     controller:
+            //     campApprovalController.searchController,
+            //     onChanged: (value) async {
+            //       await campApprovalController
+            //           .getSearchedData(value);
+            //     },
+            //     decoration: InputDecoration(
+            //         contentPadding: const EdgeInsets.only(
+            //             left: 8, top: 8),
+            //         border: InputBorder.none,
+            //         suffixIcon: IconButton(
+            //           onPressed: () {
+            //             campApprovalController.isSearch = false;
+            //             campApprovalController.searchedDataModel = null;
+            //             campApprovalController.pagingController.refresh();
+            //             setState(() {});
+            //           },
+            //           icon: const Icon(
+            //               Icons.cancel_presentation),
+            //         ),
+            //         hintText: "Search"),
+            //   ),
+            // ),
           ),
           GetBuilder<CampApprovalController>(
               init: CampApprovalController(),
@@ -98,6 +128,7 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
                             child: PagedListView<int, CampApprovalData>(
                               pagingController:
                                   campApprovalController.pagingController,
+                              padding: EdgeInsets.zero,
                               builderDelegate:
                                   PagedChildBuilderDelegate<CampApprovalData>(
                                 itemBuilder: (context, item, index) =>

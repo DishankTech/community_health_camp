@@ -6,6 +6,7 @@ import 'package:community_health_app/screens/doctor_desk/model/add_treatment_det
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_deskRef.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
+import 'package:community_health_app/screens/doctor_desk/model/search/search_doc_desk_details.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,8 +22,10 @@ import '../../../core/utilities/size_config.dart';
 
 class AddTreatmentDetailsScreen extends StatefulWidget {
   final DoctorDeskData? doctorDeskData;
+  final SearchDocDeskDetails? searchedDat;
 
-  const AddTreatmentDetailsScreen({super.key, this.doctorDeskData});
+  const AddTreatmentDetailsScreen(
+      {super.key, this.doctorDeskData, this.searchedDat});
 
   @override
   State<AddTreatmentDetailsScreen> createState() =>
@@ -195,18 +198,33 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                        widget.doctorDeskData
-                                                                ?.patientName ??
-                                                            "",
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                responsiveFont(
-                                                                    14),
-                                                            color: kBlackColor,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold)),
+                                                    widget.searchedDat == null
+                                                        ? Text(
+                                                            widget.doctorDeskData
+                                                                    ?.patientName ??
+                                                                "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        14),
+                                                                color:
+                                                                    kBlackColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold))
+                                                        : Text(
+                                                            widget.searchedDat
+                                                                    ?.patientName ??
+                                                                "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        14),
+                                                                color:
+                                                                    kBlackColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
                                                     SizedBox(
                                                       height:
                                                           responsiveHeight(10),
@@ -240,8 +258,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                             FontWeight.bold),
                                                                     children: [
                                                                       TextSpan(
-                                                                          text: widget.doctorDeskData?.age.toString() ??
-                                                                              "",
+                                                                          text: widget.searchedDat == null
+                                                                              ? widget.doctorDeskData?.age
+                                                                                  .toString()
+                                                                              : widget.searchedDat?.age.toString() ??
+                                                                                  "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
                                                                               color: kTextColor,
@@ -274,8 +295,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                             FontWeight.bold),
                                                                     children: [
                                                                       TextSpan(
-                                                                          text: widget.doctorDeskData?.gender ??
-                                                                              "",
+                                                                          text: widget.searchedDat == null
+                                                                              ? widget
+                                                                                  .doctorDeskData?.gender
+                                                                              : widget.searchedDat?.genderDescEn ??
+                                                                                  "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
                                                                               color: kTextColor,
@@ -306,10 +330,14 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                              text: widget
+                                                              text: widget.searchedDat ==
+                                                                      null
+                                                                  ? widget
                                                                       .doctorDeskData
-                                                                      ?.contactNumber ??
-                                                                  "",
+                                                                      ?.contactNumber
+                                                                  : widget.searchedDat
+                                                                          ?.contactNumber ??
+                                                                      "",
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       responsiveFont(
@@ -339,12 +367,18 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                            text:
-                                                                "${widget.doctorDeskData?.locationName ?? ""} "
-                                                                "${widget.doctorDeskData?.city ?? ""} "
-                                                                "${widget.doctorDeskData?.destrict ?? ""} "
-                                                                "${widget.doctorDeskData?.taluka ?? ""} "
-                                                                "${widget.doctorDeskData?.state ?? ""}",
+                                                            text: widget.searchedDat ==
+                                                                    null
+                                                                ? "${widget.doctorDeskData?.locationName ?? ""} "
+                                                                    "${widget.doctorDeskData?.city ?? ""} "
+                                                                    "${widget.doctorDeskData?.destrict ?? ""} "
+                                                                    "${widget.doctorDeskData?.taluka ?? ""} "
+                                                                    "${widget.doctorDeskData?.state ?? ""}"
+                                                                : "${widget.searchedDat?.locationName ?? ""} "
+                                                                    "${widget.searchedDat?.cityDescEn ?? ""} "
+                                                                    "${widget.searchedDat?.districtDescEn ?? ""} "
+                                                                    "${widget.searchedDat?.talukaDescEn ?? ""} "
+                                                                    "${widget.searchedDat?.stateDescEn ?? ""}",
                                                             style: TextStyle(
                                                               fontSize:
                                                                   responsiveFont(
@@ -587,7 +621,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                               ?.details
                                                               ?.first
                                                               .lookupDetHierarchical ??
-                                                          [],true);
+                                                          [],
+                                                      true);
                                                 },
                                                 // maxLength: 12,
                                                 readOnly: true,
@@ -665,7 +700,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                         "Refer To",
                                                         controller.referToModel
                                                                 ?.details ??
-                                                            [],true);
+                                                            [],
+                                                        true);
                                                   }
                                                 },
                                                 // maxLength: 12,
@@ -739,24 +775,36 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       .ttPatientDoctorDesk
                                                       ?.status = 1;
                                                   controller
-                                                          .addTreatmentDetailsModel
-                                                          .ttPatientDoctorDesk
-                                                          ?.campCreateRequestId =
-                                                      widget.doctorDeskData
+                                                      .addTreatmentDetailsModel
+                                                      .ttPatientDoctorDesk
+                                                      ?.campCreateRequestId = widget
+                                                              .searchedDat ==
+                                                          null
+                                                      ? widget.doctorDeskData
+                                                          ?.campCreateRequestId
+                                                      : widget.searchedDat
                                                           ?.campCreateRequestId;
                                                   controller
-                                                          .addTreatmentDetailsModel
-                                                          .ttPatientDoctorDesk
-                                                          ?.patientId =
-                                                      widget.doctorDeskData
+                                                      .addTreatmentDetailsModel
+                                                      .ttPatientDoctorDesk
+                                                      ?.patientId = widget
+                                                              .searchedDat ==
+                                                          null
+                                                      ? widget.doctorDeskData
+                                                          ?.patientId
+                                                      : widget.searchedDat
                                                           ?.patientId;
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
                                                       ?.campDate = widget
-                                                          .doctorDeskData
-                                                          ?.campDate ??
-                                                      "";
+                                                              .searchedDat ==
+                                                          null
+                                                      ? widget.doctorDeskData
+                                                          ?.campDate
+                                                      : widget.searchedDat
+                                                              ?.campDate ??
+                                                          "";
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
