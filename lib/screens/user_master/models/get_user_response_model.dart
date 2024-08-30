@@ -77,6 +77,13 @@ class UserMasterData {
   int? status;
   int? orgId;
   int? lookupDetHierIdStakeholderType1;
+  int? lookupDetIdMembertype;
+  String? stakeHolderType1En;
+  String? stakeHolderType1Rg;
+  String? memberTypeEn;
+  String? memberTypeRg;
+  String? stakeholderNameEn;
+  String? stakeholderNameRg;
 
   UserMasterData(
       {this.userId,
@@ -88,7 +95,14 @@ class UserMasterData {
       this.firstLoginPassReset,
       this.status,
       this.orgId,
-      this.lookupDetHierIdStakeholderType1});
+      this.lookupDetHierIdStakeholderType1,
+      this.lookupDetIdMembertype,
+      this.stakeHolderType1En,
+      this.stakeHolderType1Rg,
+      this.memberTypeEn,
+      this.memberTypeRg,
+      this.stakeholderNameEn,
+      this.stakeholderNameRg});
 
   UserMasterData.fromJson(Map<String, dynamic> json) {
     userId = json['user_id'];
@@ -102,21 +116,35 @@ class UserMasterData {
     orgId = json['org_id'];
     lookupDetHierIdStakeholderType1 =
         json['lookup_det_hier_id_stakeholder_type1'];
+    lookupDetIdMembertype = json['lookup_det_id_membertype'];
+    stakeHolderType1En = json['stake_holder_type1_en'];
+    stakeHolderType1Rg = json['stake_holder_type1_rg'];
+    memberTypeEn = json['member_type_en'];
+    memberTypeRg = json['member_type_rg'];
+    stakeholderNameEn = json['stakeholder_name_en'];
+    stakeholderNameRg = json['stakeholder_name_rg'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['user_id'] = userId;
-    data['stakeholder_master_id'] = stakeholderMasterId;
-    data['full_name'] = fullName;
-    data['login_name'] = loginName;
-    data['mobile_number'] = mobileNumber;
-    data['email_id'] = emailId;
-    data['first_login_pass_reset'] = firstLoginPassReset;
-    data['status'] = status;
-    data['org_id'] = orgId;
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['user_id'] = this.userId;
+    data['stakeholder_master_id'] = this.stakeholderMasterId;
+    data['full_name'] = this.fullName;
+    data['login_name'] = this.loginName;
+    data['mobile_number'] = this.mobileNumber;
+    data['email_id'] = this.emailId;
+    data['first_login_pass_reset'] = this.firstLoginPassReset;
+    data['status'] = this.status;
+    data['org_id'] = this.orgId;
     data['lookup_det_hier_id_stakeholder_type1'] =
-        lookupDetHierIdStakeholderType1;
+        this.lookupDetHierIdStakeholderType1;
+    data['lookup_det_id_membertype'] = this.lookupDetIdMembertype;
+    data['stake_holder_type1_en'] = this.stakeHolderType1En;
+    data['stake_holder_type1_rg'] = this.stakeHolderType1Rg;
+    data['member_type_en'] = this.memberTypeEn;
+    data['member_type_rg'] = this.memberTypeRg;
+    data['stakeholder_name_en'] = this.stakeholderNameEn;
+    data['stakeholder_name_rg'] = this.stakeholderNameRg;
     return data;
   }
 }

@@ -46,7 +46,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           image: icStakeholderMaster,
           routeName: AppRoutes.stakeholderMasterListScreen),
       DashboardMenuModel(
-          name: "Camp Request",
+          name: "Camp Creation",
           image: icCampCreation,
           routeName: AppRoutes.campCreation),
       DashboardMenuModel(

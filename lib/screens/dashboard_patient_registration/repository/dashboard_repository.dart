@@ -11,6 +11,7 @@ class DashboardRepository {
   }
 
   Future<http.Response> getDateWiseDistrictCount(Map payload) async {
+    print(payload);
     var header = {'Content-Type': 'application/json'};
     return await http.post(Uri.parse('$kBaseUrl$kGetDateWiseDistrictCount'),
         body: jsonEncode(payload), headers: header);
@@ -20,5 +21,12 @@ class DashboardRepository {
     var header = {'Content-Type': 'application/json'};
     return await http.post(Uri.parse('$kBaseUrl$kGetExcelData'),
         body: jsonEncode(payload), headers: header);
+  }
+
+  Future<http.Response> getDistrictWisePatientCount() async {
+    var header = {'Content-Type': 'application/json'};
+    return await http.post(
+      Uri.parse('$kBaseUrl$kDistrictWisePatientCount'),
+    );
   }
 }

@@ -31,4 +31,6 @@ class GetExcelData extends DashboardEvent {
   List<Object> get props => [payload];
 }
 
+class GetDistrictWisePatientsCount extends DashboardEvent {}
+
 class ResetDashboardState extends DashboardEvent {}

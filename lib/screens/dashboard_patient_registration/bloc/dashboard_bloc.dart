@@ -17,25 +17,27 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
   final DashboardRepository dashboardRepository;
   DashboardBloc({required this.dashboardRepository})
       : super(const DashboardState(
-          getCountResponse: '',
-          getCountStatus: FormzSubmissionStatus.initial,
-          getDateWiseDistrictCountResponse: '',
-          getDateWiseDistrictCountStatus: FormzSubmissionStatus.initial,
-          getExcelDataResponse: '',
-          getExcelDataStatus: FormzSubmissionStatus.initial,
-        )) {
+            getCountResponse: '',
+            getCountStatus: FormzSubmissionStatus.initial,
+            getDateWiseDistrictCountResponse: '',
+            getDateWiseDistrictCountStatus: FormzSubmissionStatus.initial,
+            getExcelDataResponse: '',
+            getExcelDataStatus: FormzSubmissionStatus.initial,
+            getDistrictWisePatientResponse: '',
+            getDistrictWisePatientStatus: FormzSubmissionStatus.initial)) {
     on<GetCount>(_onGetCount);
     on<GetDateWiseDistrictCount>(_onGetDateWiseDistrictCount);
     on<GetExcelData>(_onGetExcelData);
     on<ResetDashboardState>(_onResetDashboardState);
+    on<GetDistrictWisePatientsCount>(_onGetDistrictWisePatientsCount);
   }
 
   FutureOr<void> _onGetCount(
       GetCount event, Emitter<DashboardState> emit) async {
     try {
       emit(state.copyWith(
-          getExcelDataStatus: FormzSubmissionStatus.initial,
-          getExcelDataResponse: '',
+          // getExcelDataStatus: FormzSubmissionStatus.initial,
+          // getExcelDataResponse: '',
           getCountResponse: '',
           getCountStatus: FormzSubmissionStatus.inProgress));
       http.Response res = await dashboardRepository.getCount(event.payload);
@@ -62,11 +64,12 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
       GetDateWiseDistrictCount event, Emitter<DashboardState> emit) async {
     try {
       emit(state.copyWith(
-          getDateWiseDistrictCountResponse: '',
-          getExcelDataStatus: FormzSubmissionStatus.initial,
-          getExcelDataResponse: '',
-          getCountStatus: FormzSubmissionStatus.initial,
-          getDateWiseDistrictCountStatus: FormzSubmissionStatus.inProgress));
+        getDateWiseDistrictCountResponse: '',
+        // getExcelDataStatus: FormzSubmissionStatus.initial,
+        // getExcelDataResponse: '',
+        // getCountStatus: FormzSubmissionStatus.initial,
+        getDateWiseDistrictCountStatus: FormzSubmissionStatus.inProgress,
+      ));
       http.Response res =
           await dashboardRepository.getDateWiseDistrictCount(event.payload);
       if (res.statusCode == 200) {
@@ -153,6 +156,33 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           getDateWiseDistrictCountStatus: FormzSubmissionStatus.initial));
     } catch (e) {
       print(e);
+    }
+  }
+
+  FutureOr<void> _onGetDistrictWisePatientsCount(
+      GetDistrictWisePatientsCount event, Emitter<DashboardState> emit) async {
+    try {
+      emit(state.copyWith(
+          // getCountStatus: FormzSubmissionStatus.initial,
+          // getExcelDataStatus: FormzSubmissionStatus.initial,
+          // getDateWiseDistrictCountStatus: FormzSubmissionStatus.initial,
+          getDistrictWisePatientStatus: FormzSubmissionStatus.inProgress));
+      http.Response res =
+          await dashboardRepository.getDistrictWisePatientCount();
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            getDistrictWisePatientResponse: res.body,
+            getDistrictWisePatientStatus: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+            getDistrictWisePatientResponse: res.reasonPhrase,
+            getDistrictWisePatientStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      print(e);
+      emit(state.copyWith(
+          getDistrictWisePatientResponse: e.toString(),
+          getDistrictWisePatientStatus: FormzSubmissionStatus.failure));
     }
   }
 }

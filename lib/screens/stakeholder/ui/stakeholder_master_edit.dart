@@ -52,7 +52,7 @@ class _StakeHolderMasterEditScreenState
   late TextEditingController _cityTextController;
   late TextEditingController _divisionTextController;
   LookupDetHierarchical? _selectedStakeholderType;
-  LookupDetHierarchical? _selectedStakeholderSubType;
+  LookupDetHierDetails? _selectedStakeholderSubType;
   late TextEditingController _sectorTypeTextController;
   late TextEditingController _stakeholderNameRegTextController;
   late TextEditingController _noOfBedTextController;
@@ -126,6 +126,10 @@ class _StakeHolderMasterEditScreenState
       _address1TextController.text = stakeholderMasterData!.address1 ?? '';
       _address2TextController.text = stakeholderMasterData!.address2 ?? '';
       _pincodeTextController.text = stakeholderMasterData!.pinCode ?? '';
+      _noOfBedTextController.text =
+          stakeholderMasterData!.numberOfBed?.toString() ?? '';
+      _stateTextController.text = stakeholderMasterData!.stateDescEn ?? '';
+      _countryTextController.text = stakeholderMasterData!.countryDescEn ?? '';
       _districtTextController.text =
           stakeholderMasterData!.districtDescEn ?? '';
       _talukaTextController.text = stakeholderMasterData!.talukaDescEn ?? '';
@@ -252,6 +256,8 @@ class _StakeHolderMasterEditScreenState
             setState(() {
               _selectedStakeholderType = p0;
               _stakeholderTypeTextController.text = p0.lookupDetHierDescEn!;
+              _selectedStakeholderSubType = null;
+              _stakeholderSubTypeTextController.clear();
             });
 
             context.read<MasterDataBloc>().add(ResetMasterState());
@@ -307,7 +313,7 @@ class _StakeHolderMasterEditScreenState
         }
 
         if (state.getStakeholderSubTypeStatus.isSuccess) {
-          stakeholderSubTypeBottomSheet(context, (p0) {
+          stakeholderSubTypeBottomSheetV1(context, (p0) {
             setState(() {
               _selectedStakeholderSubType = p0;
               _stakeholderSubTypeTextController.text = p0.lookupDetHierDescEn!;
@@ -487,13 +493,21 @@ class _StakeHolderMasterEditScreenState
                                       //   });
                                       //   return;
                                       // }
+                                      if (_selectedStakeholderType == null) {
+                                        ScaffoldMessenger.of(context)
+                                          ..clearSnackBars()
+                                          ..showSnackBar(const SnackBar(
+                                            content: Text(
+                                                "Please select Stakeholder Type"),
+                                            backgroundColor: Colors.amber,
+                                            duration: Duration(seconds: 2),
+                                          ));
+                                        return;
+                                      }
                                       context.read<MasterDataBloc>().add(
-                                              GetStakeholderSubType(
-                                                  payload: const {
-                                                "lookup_det_code_list1": [
-                                                  {"lookup_det_code": "SUY"}
-                                                ]
-                                              }));
+                                          GetStakeholderSubType(
+                                              payload: _selectedStakeholderType!
+                                                  .lookupDetHierId!));
                                     },
                                     readOnly: true,
                                     label: RichText(
@@ -754,6 +768,38 @@ class _StakeHolderMasterEditScreenState
                               SizedBox(
                                 height: responsiveHeight(20),
                               ),
+                              AppRoundTextField(
+                                controller: _address1TextController,
+                                inputType: TextInputType.streetAddress,
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Address 1',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: []),
+                                ),
+                                hint: "",
+                              ),
+                              SizedBox(
+                                height: responsiveHeight(20),
+                              ),
+                              AppRoundTextField(
+                                controller: _address2TextController,
+                                inputType: TextInputType.streetAddress,
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Address 2',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: []),
+                                ),
+                                hint: "",
+                              ),
+                              SizedBox(
+                                height: responsiveHeight(20),
+                              ),
                               Row(
                                 children: [
                                   Flexible(
@@ -859,19 +905,6 @@ class _StakeHolderMasterEditScreenState
                                           ),
                                           hint: "",
                                           onTap: () {
-                                            // if (state.getDivisionListResponse
-                                            //     .isNotEmpty) {
-                                            //   divisionBottomSheet(context, (p0) {
-                                            //     setState(() {
-                                            //       _selectedDivision = p0;
-                                            //       _divisionTextController.text =
-                                            //           p0.lookupDetDescEn!;
-                                            //     });
-                                            //   });
-
-                                            //   return;
-                                            // }
-
                                             context.read<MasterDataBloc>().add(
                                                     GetDivisionList(
                                                         payload: const {
@@ -942,18 +975,6 @@ class _StakeHolderMasterEditScreenState
                                           ),
                                           hint: "",
                                           onTap: () {
-                                            // if (state.getDistrictListResponse
-                                            //     .isNotEmpty) {
-                                            //   districtBottomSheet(context, (p0) {
-                                            //     setState(() {
-                                            //       _selectedDistrict = p0;
-                                            //       _districtTextController.text =
-                                            //           p0.lookupDetHierDescEn!;
-                                            //     });
-                                            //   });
-                                            //   return;
-                                            // }
-
                                             var payload = {
                                               "lookup_det_code_list1": [
                                                 {"lookup_det_code": "DIS"}
@@ -1027,19 +1048,6 @@ class _StakeHolderMasterEditScreenState
                                           ),
                                           hint: "",
                                           onTap: () {
-                                            // if (state.getTalukaListResponse
-                                            //     .isNotEmpty) {
-                                            //   talukaBottomSheet(context, (p0) {
-                                            //     setState(() {
-                                            //       _selectedTaluka = p0;
-                                            //       _talukaTextController.text =
-                                            //           p0.lookupDetHierDescEn!;
-                                            //     });
-                                            //   });
-
-                                            //   return;
-                                            // }
-
                                             var payload = {
                                               "lookup_det_code_list1": [
                                                 {"lookup_det_code": "TLK"}
@@ -1199,71 +1207,6 @@ class _StakeHolderMasterEditScreenState
                                 ),
                                 hint: "",
                               ),
-                              SizedBox(
-                                height: responsiveHeight(20),
-                              ),
-                              AppRoundTextField(
-                                controller: _address1TextController,
-                                inputType: TextInputType.streetAddress,
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: 'Address 1',
-                                      style: TextStyle(
-                                          color: kHintColor,
-                                          fontFamily: Montserrat),
-                                      children: []),
-                                ),
-                                hint: "",
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(20),
-                              ),
-                              AppRoundTextField(
-                                controller: _address2TextController,
-                                inputType: TextInputType.streetAddress,
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: 'Address 2',
-                                      style: TextStyle(
-                                          color: kHintColor,
-                                          fontFamily: Montserrat),
-                                      children: []),
-                                ),
-                                hint: "",
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(30),
-                              ),
-                              // AppRoundTextField(
-                              //   controller: _statusTextController,
-                              //   label: RichText(
-                              //     text: const TextSpan(
-                              //         text: 'Status',
-                              //         style: TextStyle(
-                              //             color: kHintColor,
-                              //             fontFamily: Montserrat),
-                              //         children: []),
-                              //   ),
-                              //   hint: "",
-                              //   readOnly: true,
-                              //   onTap: () {
-                              //     stakeholderStatusBottomSheet(context, (p0) {
-                              //       _selectedStatus = p0;
-                              //       _statusTextController.text = p0['title'];
-                              //     });
-                              //   },
-                              //   suffix: SizedBox(
-                              //     height: responsiveHeight(20),
-                              //     width: responsiveHeight(20),
-                              //     child: Center(
-                              //       child: Image.asset(
-                              //         icArrowDownOrange,
-                              //         height: responsiveHeight(20),
-                              //         width: responsiveHeight(20),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
                               SizedBox(
                                 height: responsiveHeight(30),
                               ),

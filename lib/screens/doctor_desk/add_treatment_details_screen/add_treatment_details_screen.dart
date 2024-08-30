@@ -1,10 +1,12 @@
 import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
+import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_deskRef.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
-import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
+import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
+import 'package:community_health_app/screens/doctor_desk/model/search/search_doc_desk_details.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,8 +22,10 @@ import '../../../core/utilities/size_config.dart';
 
 class AddTreatmentDetailsScreen extends StatefulWidget {
   final DoctorDeskData? doctorDeskData;
+  final SearchDocDeskDetails? searchedDat;
 
-  const AddTreatmentDetailsScreen({super.key, this.doctorDeskData});
+  const AddTreatmentDetailsScreen(
+      {super.key, this.doctorDeskData, this.searchedDat});
 
   @override
   State<AddTreatmentDetailsScreen> createState() =>
@@ -31,6 +35,8 @@ class AddTreatmentDetailsScreen extends StatefulWidget {
 class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
   final DoctorDeskController doctorDeskController =
       Get.put(DoctorDeskController());
+
+  TextEditingController txtContro = TextEditingController();
 
   checkInternetAndLoadData() async {
     List<ConnectivityResult> connectivityResult =
@@ -50,6 +56,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
 
   @override
   void initState() {
+    doctorDeskController.stakeHolderTypeController.text = '';
+    doctorDeskController.symptomController.text = '';
+    doctorDeskController.provisionalDiaController.text = '';
+    doctorDeskController.stakeHolderController.text = '';
+    doctorDeskController.selectedStakeH.clear();
     checkInternetAndLoadData();
     super.initState();
   }
@@ -80,7 +91,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                               title: "Add Treatment Details",
                               context: context,
                               onBackButtonPress: () {
-                                Navigator.pop(context);
+                                Get.to(const DoctorDeskPatientsScreen());
                               },
                             ),
                             Container(
@@ -170,13 +181,10 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                     padding:
                                                         const EdgeInsets.all(
                                                             1.0),
-                                                    child: Image.asset(
-                                                      pat1,
-                                                      fit: BoxFit.contain,
-                                                      height:
-                                                      responsiveHeight(54),
-                                                      width:
-                                                      responsiveWidth(54),
+                                                    child: Icon(
+                                                      Icons.person,
+                                                      size:
+                                                          responsiveHeight(54),
                                                     ),
                                                   ),
                                                 ),
@@ -190,18 +198,33 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                        widget.doctorDeskData
-                                                                ?.patientName ??
-                                                            "",
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                responsiveFont(
-                                                                    14),
-                                                            color: kBlackColor,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500)),
+                                                    widget.searchedDat == null
+                                                        ? Text(
+                                                            widget.doctorDeskData
+                                                                    ?.patientName ??
+                                                                "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        14),
+                                                                color:
+                                                                    kBlackColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold))
+                                                        : Text(
+                                                            widget.searchedDat
+                                                                    ?.patientName ??
+                                                                "",
+                                                            style: TextStyle(
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        14),
+                                                                color:
+                                                                    kBlackColor,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
                                                     SizedBox(
                                                       height:
                                                           responsiveHeight(10),
@@ -235,8 +258,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                             FontWeight.bold),
                                                                     children: [
                                                                       TextSpan(
-                                                                          text: widget.doctorDeskData?.age.toString() ??
-                                                                              "",
+                                                                          text: widget.searchedDat == null
+                                                                              ? widget.doctorDeskData?.age
+                                                                                  .toString()
+                                                                              : widget.searchedDat?.age.toString() ??
+                                                                                  "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
                                                                               color: kTextColor,
@@ -269,9 +295,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                             FontWeight.bold),
                                                                     children: [
                                                                       TextSpan(
-                                                                          // text: widget.doctorDeskData?.lookupDetDescEn ?? "",
-                                                                          text:
-                                                                              "",
+                                                                          text: widget.searchedDat == null
+                                                                              ? widget
+                                                                                  .doctorDeskData?.gender
+                                                                              : widget.searchedDat?.genderDescEn ??
+                                                                                  "",
                                                                           style: TextStyle(
                                                                               fontSize: responsiveFont(12),
                                                                               color: kTextColor,
@@ -302,10 +330,14 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                              text: widget
+                                                              text: widget.searchedDat ==
+                                                                      null
+                                                                  ? widget
                                                                       .doctorDeskData
-                                                                      ?.contactNumber ??
-                                                                  "",
+                                                                      ?.contactNumber
+                                                                  : widget.searchedDat
+                                                                          ?.contactNumber ??
+                                                                      "",
                                                               style: TextStyle(
                                                                   fontSize:
                                                                       responsiveFont(
@@ -335,11 +367,18 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                     .bold),
                                                         children: [
                                                           TextSpan(
-                                                            // text:
-                                                            //     "${widget.doctorDeskData?.districtEn ?? ""} "
-                                                            //     "${widget.doctorDeskData?.stateEn ?? ""} "
-                                                            //     "${widget.doctorDeskData?.cityEn ?? ""}",
-                                                            text: "",
+                                                            text: widget.searchedDat ==
+                                                                    null
+                                                                ? "${widget.doctorDeskData?.locationName ?? ""} "
+                                                                    "${widget.doctorDeskData?.city ?? ""} "
+                                                                    "${widget.doctorDeskData?.destrict ?? ""} "
+                                                                    "${widget.doctorDeskData?.taluka ?? ""} "
+                                                                    "${widget.doctorDeskData?.state ?? ""}"
+                                                                : "${widget.searchedDat?.locationName ?? ""} "
+                                                                    "${widget.searchedDat?.cityDescEn ?? ""} "
+                                                                    "${widget.searchedDat?.districtDescEn ?? ""} "
+                                                                    "${widget.searchedDat?.talukaDescEn ?? ""} "
+                                                                    "${widget.searchedDat?.stateDescEn ?? ""}",
                                                             style: TextStyle(
                                                               fontSize:
                                                                   responsiveFont(
@@ -367,7 +406,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        height: responsiveHeight(400),
+                                        height: responsiveHeight(500),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -554,35 +593,116 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       20, 15, 20, 0),
                                               child: AppRoundTextField(
                                                 controller: controller
-                                                    .stakeHolderController,
+                                                    .stakeHolderTypeController,
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
                                                 onTap: () async {
                                                   await commonBottomSheet(
                                                       context,
-                                                      (p0) => {
+                                                      (p0) async => {
                                                             controller
-                                                                    .selectedStakeHVal =
+                                                                    .selectedStakeHTypeVal =
                                                                 p0.lookupDetHierDescEn,
                                                             controller
-                                                                .selectedStakeH
-                                                                .addIfNotExist(
-                                                                    p0),
+                                                                .stakeHolderTypeController
+                                                                .text = p0
+                                                                    .lookupDetHierDescEn ??
+                                                                "",
+                                                            await controller
+                                                                .getReferTo(p0
+                                                                    .lookupDetHierId),
                                                             controller
-                                                                    .stakeHolderController
-                                                                    .text =
-                                                                controller
-                                                                    .selectedStakeH
-                                                                    .displayText(),
+                                                                .selectedStakeHType = p0,
                                                             controller.update()
                                                           },
-                                                      "Refer To",
+                                                      "Stakeholder Subtype",
                                                       controller
-                                                              .stakeHolderModel
+                                                              .stakeHolderTypeModel
                                                               ?.details
                                                               ?.first
                                                               .lookupDetHierarchical ??
-                                                          []);
+                                                          [],
+                                                      true);
+                                                },
+                                                // maxLength: 12,
+                                                readOnly: true,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text:
+                                                          'Stakeholder Subtype',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "*",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                                suffix: SizedBox(
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      icArrowDownOrange,
+                                                      height:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                      width:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: AppRoundTextField(
+                                                controller: controller
+                                                    .stakeHolderController,
+                                                inputType: TextInputType.text,
+                                                onChange: (p0) {},
+                                                onTap: () async {
+                                                  if (controller
+                                                      .stakeHolderTypeController
+                                                      .text
+                                                      .isNotEmpty) {
+                                                    await stakeHolderNameBottomSheet(
+                                                        context,
+                                                        (p0) => {
+                                                              controller
+                                                                      .selectedStakeHVal =
+                                                                  p0.lookupDetHierDescEn,
+                                                              controller
+                                                                  .selectedStakeH
+                                                                  .addIfNotExist(
+                                                                      p0),
+                                                              controller
+                                                                      .stakeHolderController
+                                                                      .text =
+                                                                  controller
+                                                                      .selectedStakeH
+                                                                      .displayText(),
+                                                              controller
+                                                                  .update()
+                                                            },
+                                                        "Refer To",
+                                                        controller.referToModel
+                                                                ?.details ??
+                                                            [],
+                                                        true);
+                                                  }
                                                 },
                                                 // maxLength: 12,
                                                 readOnly: true,
@@ -622,7 +742,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   ),
                                                 ),
                                               ),
-                                            )
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -655,24 +775,36 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       .ttPatientDoctorDesk
                                                       ?.status = 1;
                                                   controller
-                                                          .addTreatmentDetailsModel
-                                                          .ttPatientDoctorDesk
-                                                          ?.campCreateRequestId =
-                                                      widget.doctorDeskData
+                                                      .addTreatmentDetailsModel
+                                                      .ttPatientDoctorDesk
+                                                      ?.campCreateRequestId = widget
+                                                              .searchedDat ==
+                                                          null
+                                                      ? widget.doctorDeskData
+                                                          ?.campCreateRequestId
+                                                      : widget.searchedDat
                                                           ?.campCreateRequestId;
                                                   controller
-                                                          .addTreatmentDetailsModel
-                                                          .ttPatientDoctorDesk
-                                                          ?.patientId =
-                                                      widget.doctorDeskData
+                                                      .addTreatmentDetailsModel
+                                                      .ttPatientDoctorDesk
+                                                      ?.patientId = widget
+                                                              .searchedDat ==
+                                                          null
+                                                      ? widget.doctorDeskData
+                                                          ?.patientId
+                                                      : widget.searchedDat
                                                           ?.patientId;
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
                                                       ?.campDate = widget
-                                                          .doctorDeskData
-                                                          ?.campDate ??
-                                                      "";
+                                                              .searchedDat ==
+                                                          null
+                                                      ? widget.doctorDeskData
+                                                          ?.campDate
+                                                      : widget.searchedDat
+                                                              ?.campDate ??
+                                                          "";
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
@@ -682,6 +814,15 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDesk
                                                       ?.userId = 1;
+
+                                                  controller
+                                                          .addTreatmentDetailsModel
+                                                          .ttPatientDoctorDesk
+                                                          ?.lookupDetHierIdStakeholderSubType2 =
+                                                      controller
+                                                          .selectedStakeHType
+                                                          ?.lookupDetHierId;
+
                                                   controller
                                                           .addTreatmentDetailsModel
                                                           .ttPatientDoctorDesk
@@ -696,30 +837,13 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       controller
                                                           .provisionalDiaController
                                                           .text;
-                                                  //
-                                                  // TtPatientDoctorDeskRef
-                                                  //     ttPatientDoctorDeskRef =
-                                                  //     TtPatientDoctorDeskRef();
-                                                  // ttPatientDoctorDeskRef
-                                                  //         .patientDoctorDeskId =
-                                                  //     null;
-                                                  // ttPatientDoctorDeskRef
-                                                  //         .patientDoctorDeskReferId =
-                                                  //     null;
-                                                  //
-                                                  // ttPatientDoctorDeskRef
-                                                  //     .stakeholderMasterId = 1;
-                                                  // ttPatientDoctorDeskRef.orgId =
-                                                  //     1;
-                                                  // ttPatientDoctorDeskRef
-                                                  //     .status = 1;
-                                                  //
+
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .ttPatientDoctorDeskRef = [];
-                                                  for (LookupDetHierarchical item
+                                                  for (ReferToDetails item
                                                       in controller
-                                                      .selectedStakeH) {
+                                                          .selectedStakeH) {
                                                     controller
                                                         .addTreatmentDetailsModel
                                                         .ttPatientDoctorDeskRef
@@ -729,17 +853,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             patientDoctorDeskReferId:
                                                                 null,
                                                             stakeholderMasterId:
-                                                                item.lookupDetHierId,
+                                                                item.stakeholderMasterId,
                                                             orgId: 1,
                                                             status: 1,
                                                             isInactive: null));
                                                   }
-
-                                                  // controller
-                                                  //     .addTreatmentDetailsModel
-                                                  //     .ttPatientDoctorDeskRef
-                                                  //     ?.add(
-                                                  //         ttPatientDoctorDeskRef);
 
                                                   controller
                                                       .addTreatmentDetails();
@@ -759,7 +877,11 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                               flex: 1,
                                               child: AppButton(
                                                 onTap: () {
-                                                  Navigator.pop(context);
+                                                  doctorDeskController.stakeHolderTypeController.text = '';
+                                                  doctorDeskController.symptomController.text = '';
+                                                  doctorDeskController.provisionalDiaController.text = '';
+                                                  doctorDeskController.stakeHolderController.text = '';
+                                                  doctorDeskController.selectedStakeH.clear();
                                                 },
                                                 title: "Clear",
                                                 buttonColor: Colors.grey,
@@ -792,8 +914,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
 }
 
 extension ListExtensions on List {
-  void addIfNotExist(LookupDetHierarchical element,
-      {bool Function(LookupDetHierarchical item)? condition}) {
+  void addIfNotExist(ReferToDetails element,
+      {bool Function(ReferToDetails item)? condition}) {
     bool exists;
 
     if (condition != null) {

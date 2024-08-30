@@ -1118,7 +1118,8 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getRefferedByStatus: FormzSubmissionStatus.initial,
       ));
 
-      http.Response res = await masterDataRepository.getMaster(event.payload);
+      http.Response res =
+          await masterDataRepository.getMasterLookupDetId(event.payload);
 
       if (res.statusCode == 200) {
         emit(state.copyWith(

@@ -4,7 +4,8 @@ class TtPatientDoctorDesk {
       this.patientId, 
       this.campCreateRequestId, 
       this.campDate, 
-      this.userId, 
+      this.lookupDetHierIdStakeholderSubType2,
+      this.userId,
       this.symptons, 
       this.provisionalDiagnosis, 
       this.orgId, 
@@ -15,6 +16,7 @@ class TtPatientDoctorDesk {
     patientId = json['patient_id'];
     campCreateRequestId = json['camp_create_request_id'];
     campDate = json['camp_date'];
+    lookupDetHierIdStakeholderSubType2 = json['lookup_det_hier_id_stakeholder_sub_type2'];
     userId = json['user_id'];
     symptons = json['symptons'];
     provisionalDiagnosis = json['provisional_diagnosis'];
@@ -25,6 +27,7 @@ class TtPatientDoctorDesk {
   int? patientId;
   int? campCreateRequestId;
   String? campDate;
+  int? lookupDetHierIdStakeholderSubType2;
   int? userId;
   String? symptons;
   String? provisionalDiagnosis;
@@ -37,6 +40,7 @@ class TtPatientDoctorDesk {
     map['patient_id'] = patientId;
     map['camp_create_request_id'] = campCreateRequestId;
     map['camp_date'] = campDate;
+    map['lookup_det_hier_id_stakeholder_sub_type2'] = lookupDetHierIdStakeholderSubType2;
     map['user_id'] = userId;
     map['symptons'] = symptons;
     map['provisional_diagnosis'] = provisionalDiagnosis;

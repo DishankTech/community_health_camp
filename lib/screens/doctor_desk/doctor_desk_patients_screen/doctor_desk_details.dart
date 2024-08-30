@@ -1,5 +1,6 @@
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
+import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_details/doc_desk_data.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +69,8 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                               title: "Doctor Desk Details",
                               context: context,
                               onBackButtonPress: () {
-                                Navigator.pop(context);
+                                Get.to(const DoctorDeskPatientsScreen());
+
                               },
                             ),
                             Container(
@@ -115,6 +117,7 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                               child: PagedListView<int, DocDeskData>(
                                   pagingController:
                                       controller.docPagingController,
+                                  padding: EdgeInsets.zero,
                                   builderDelegate:
                                       PagedChildBuilderDelegate<DocDeskData>(
                                           itemBuilder:
@@ -182,13 +185,9 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                             padding:
                                                                                 const EdgeInsets.all(1.0),
                                                                             child:
-                                                                            Image.asset(
-                                                                              pat1,
-                                                                              fit: BoxFit.contain,
-                                                                              height:
-                                                                              responsiveHeight(54),
-                                                                              width:
-                                                                              responsiveWidth(54),
+                                                                                Icon(
+                                                                              Icons.person,
+                                                                              size: responsiveHeight(54),
                                                                             ),
                                                                           ),
                                                                         ),
@@ -216,7 +215,7 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                                     text: "Age: ",
                                                                                     style: TextStyle(color: kTextColor, fontSize: responsiveFont(12), fontWeight: FontWeight.bold),
                                                                                     children: [
-                                                                                      TextSpan(text: item.age.toString(), style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal))
+                                                                                      TextSpan(text: item.age != null ? item.age.toString() : "", style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal))
                                                                                     ],
                                                                                   ),
                                                                                 ),
@@ -270,8 +269,12 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                               FontWeight.bold),
                                                                       children: [
                                                                         TextSpan(
-                                                                            text: item.locationName ??
-                                                                                "",
+                                                                            text:
+                                                                                "${item.locationName ?? ""} "
+                                                                                "${item.cityEn ?? ""} "
+                                                                                "${item.districtEn ?? ""} "
+                                                                                "${item.talukaEn ?? ""} "
+                                                                                "${item.stateEn ?? ""}",
                                                                             style: TextStyle(
                                                                                 fontSize: responsiveFont(12),
                                                                                 color: kTextColor,
@@ -298,7 +301,7 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                               FontWeight.bold),
                                                                       children: [
                                                                         TextSpan(
-                                                                            text:
+                                                                            text: item.symptons ??
                                                                                 "",
                                                                             style: TextStyle(
                                                                                 fontSize: responsiveFont(12),
@@ -326,7 +329,7 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                               FontWeight.bold),
                                                                       children: [
                                                                         TextSpan(
-                                                                            text:
+                                                                            text: item.provisionalDiagnosis ??
                                                                                 "",
                                                                             style: TextStyle(
                                                                                 fontSize: responsiveFont(12),

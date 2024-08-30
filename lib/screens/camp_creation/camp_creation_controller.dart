@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/screens/camp_creation/model/location/location_name_details.dart';
+import 'package:community_health_app/screens/camp_creation/model/member_type/member_lookup_det.dart';
 import 'package:community_health_app/screens/camp_creation/model/member_type/member_type_model.dart';
 import 'package:community_health_app/screens/camp_creation/model/save_camp_req/save_camp_req_model.dart';
 import 'package:community_health_app/screens/camp_creation/model/stakeholder_name/stake_holder_name_model.dart';
@@ -26,17 +27,18 @@ class CampCreationController extends GetxController {
   TextEditingController locationNameController = TextEditingController();
   TextEditingController dateTimeController = TextEditingController();
 
-  // TextEditingController userNameController = TextEditingController();
-  // TextEditingController userController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController mobileController = TextEditingController();
   UserDetails? selectedUser;
   TextEditingController distNameController = TextEditingController();
+  TextEditingController talukaController = TextEditingController();
 
   TextEditingController designationType = TextEditingController();
 
   TextEditingController stakeHolderController = TextEditingController();
 
-  // TextEditingController countryCodeController = TextEditingController();
-
+  TextEditingController countryCodeController = TextEditingController();
+  TextEditingController stakeholderSubTypeId = TextEditingController();
   // Map<String, dynamic>? selectedCountryCode;
 
   // TextEditingController mobileController = TextEditingController();
@@ -76,6 +78,11 @@ class CampCreationController extends GetxController {
   UserListModel? userList;
   SaveCampReqModel saveCampReqModel = SaveCampReqModel();
 
+  List<MemberLookupDet?> memberTypeList = [];
+
+  String? campNumber;
+  String? username;
+
   saveCampCreation() async {
     isLoading = true;
     final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.saveCampCreation);
@@ -94,18 +101,12 @@ class CampCreationController extends GetxController {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      // addlocationMasterResp = AddLocationMasterResp.fromJson(data);
 
-      // if (addlocationMasterResp!.statusCode == 200) {
       isLoading = false;
       CustomMessage.toast("Save Successfully");
       Get.back();
 
-      // } else {
-      //   isLoading = false;
-      //   CustomMessage.toast("Save Failed");
-      //   Get.back();
-      // }
+
 
       update();
     } else if (response.statusCode == 401) {
@@ -124,17 +125,18 @@ class CampCreationController extends GetxController {
     update();
   }
 
-  userCreation(loginName,fullName,mobileNo,memberTypeId) async {
+  userCreation(loginName, fullName, mobileNo, memberTypeId) async {
     isLoading = true;
     final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.userCreation);
 
     var body = {
       "user_id": null,
-      "stakeholder_master_id": 1,
+      "stakeholder_master_id": selectedStakeHName
+          ?.stakeholderMasterId,
       // "stakeholder_master_id": selectedStakeHolder?.lookupDetHierId,
       "full_name": fullName,
       "login_name": loginName,
-      "passwords": "",
+      "passwords": "Pass@123",
       "mobile_number": mobileNo,
       "email_id": "",
       "first_login_pass_reset": "Y",
@@ -225,6 +227,43 @@ class CampCreationController extends GetxController {
     update();
   }
 
+
+  getUserCode() async {
+    isLoading = true;
+    final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.generateCampNumber);
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      campNumber = data['details'];
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+
   getMemberType() async {
     isLoading = true;
     final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.getDivision);
@@ -241,7 +280,7 @@ class CampCreationController extends GetxController {
 
     debugPrint(uri.path);
     debugPrint(body.toString());
-
+    memberTypeList.clear();
     final response = await http.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
@@ -253,6 +292,9 @@ class CampCreationController extends GetxController {
       // if (data['status'] == 'Success') {
       isLoading = false;
       memberTypeModel = MemberTypeModel.fromJson(data);
+
+      memberTypeList.add(memberTypeModel?.details!.first.lookupDet
+          ?.firstWhere((e) => e.lookupDetDescEn == "Co-ordinators"));
 
       update();
     } else if (response.statusCode == 401) {
@@ -341,10 +383,10 @@ class CampCreationController extends GetxController {
     update();
   }
 
-
   getStakHoldeName(id) async {
     isLoading = true;
-    final uri = Uri.parse("${ApiConstants.baseUrl}${ApiConstants.getStakeholderName}/$id");
+    final uri = Uri.parse(
+        "${ApiConstants.baseUrl}${ApiConstants.getStakeholderName}/$id");
     final Map<String, dynamic> body = {
       "lookup_det_code_list1": [
         {"lookup_det_code": "STY"}

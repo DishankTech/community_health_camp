@@ -91,7 +91,7 @@ class _CampCreationState extends State<CampCreation> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             mAppBarV1(
-                              title: "Camp Request",
+                              title: "Camp Creation",
                               context: context,
                               onBackButtonPress: () {
                                 Navigator.pop(context);
@@ -126,7 +126,7 @@ class _CampCreationState extends State<CampCreation> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               mAppBarV1(
-                                title: "Camp Request",
+                                title: "Camp Creation",
                                 context: context,
                                 onBackButtonPress: () {
                                   Navigator.pop(context);
@@ -160,6 +160,8 @@ class _CampCreationState extends State<CampCreation> {
                                         vertical: 12, horizontal: 12),
                                     child: Column(
                                       children: [
+
+
                                         AppRoundTextField(
                                           controller:
                                               controller.locationNameController,
@@ -197,7 +199,7 @@ class _CampCreationState extends State<CampCreation> {
                                                 "Location",
                                                 controller.locationNameModel
                                                         ?.details ??
-                                                    []);
+                                                    [],true);
                                           },
                                           // maxLength: 12,
                                           readOnly: true,
@@ -307,7 +309,7 @@ class _CampCreationState extends State<CampCreation> {
                                                 "Stakeholder Name",
                                                 controller.stakeHolderNameModel
                                                         ?.details ??
-                                                    []);
+                                                    [],true);
                                           },
                                           // maxLength: 12,
                                           readOnly: true,
@@ -493,6 +495,9 @@ class _CampCreationState extends State<CampCreation> {
                                       flex: 1,
                                       child: AppButton(
                                         title: "Clear",
+                                        onTap: (){
+                                          Get.back();
+                                        },
                                         buttonColor: Colors.grey,
                                         iconData: Icon(
                                           Icons.arrow_forward,

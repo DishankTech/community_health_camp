@@ -358,12 +358,10 @@ class _CampApprovalDetailsScreenState extends State<CampApprovalDetailsScreen> {
                                                                               FontWeight.bold),
                                                                       children: [
                                                                         TextSpan(
-                                                                            text: controller.campApprovalDetailsModel?.details?.ttCampCreateDetList?[index].userId.toString() ??
-                                                                                "",
-                                                                            style: TextStyle(
-                                                                                fontSize: responsiveFont(12),
-                                                                                color: kTextColor,
-                                                                                fontWeight: FontWeight.normal))
+                                                                            text: (controller.campApprovalDetailsModel?.details?.ttCampCreateDetList?[index].userId) != null
+                                                                                ? (controller.campApprovalDetailsModel?.details?.ttCampCreateDetList?[index].userId.toString())
+                                                                                : "",
+                                                                            style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal))
                                                                       ],
                                                                     ),
                                                                   ),

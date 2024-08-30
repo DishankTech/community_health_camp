@@ -5,7 +5,6 @@ import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_sc
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
@@ -53,7 +52,6 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -99,452 +97,462 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                           ],
                         )
                       : Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          // crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             mAppBarV1(
-                              title: "Patients List",
-                              context: context,
-                              leading: GestureDetector(
-                                onTap: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Image.asset(
-                                  icArrowBack,
-                                  height: responsiveHeight(30),
+                                title: "Patients List",
+                                suffix: Row(
+                                  children: [
+                                    Visibility(
+                                      visible: doctorDeskController.isSearch == false,
+                                      child: Material(
+                                        color: Colors.transparent,
+                                        child: InkWell(
+                                          borderRadius: BorderRadius.circular(5),
+                                          onTap: () {
+                                            doctorDeskController.isSearch = true;
+                                            setState(() {});
+                                          },
+                                          child: Ink(
+                                            child: const Icon(
+                                              Icons.search,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10,),
+                                    GestureDetector(
+                                      onTap: () {
+                                        Get.to(const DoctorDeskDetailsScreen());
+                                      },
+                                      child: Image.asset(
+                                        "assets/stethoscope.png",
+                                        height: responsiveHeight(30),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              ),
-                              suffix: GestureDetector(
-                                onTap: () {
-                                  Get.to(const DoctorDeskDetailsScreen());
-                                },
-                                child: Image.asset(
-                                  "assets/stethoscope.png",
-                                  height: responsiveHeight(30),
+                              isSearched: doctorDeskController.isSearch,
+                                searchWidget: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Colors.white,
+                                  ),
+                                  child: TextField(
+                                    controller:
+                                    doctorDeskController.searchController,
+                                    onChanged: (value) async {
+                                      await doctorDeskController
+                                          .getSearchedData(value);
+                                    },
+                                    decoration: InputDecoration(
+                                        contentPadding: const EdgeInsets.only(
+                                            left: 8, top: 8),
+                                        border: InputBorder.none,
+                                        suffixIcon: IconButton(
+                                          onPressed: () {
+                                            doctorDeskController.isSearch = false;
+                                            doctorDeskController.searchedDataModel = null;
+                                            doctorDeskController.pagingController.refresh();
+                                            setState(() {});
+                                          },
+                                          icon: const Icon(
+                                              Icons.cancel_presentation),
+                                        ),
+                                        hintText: "Search"),
+                                  ),
                                 ),
-                              )
-                            ),
-                            // Padding(
-                            //   padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                            //   child: IntrinsicHeight(
-                            //     child: Container(
-                            //       width: MediaQuery.of(context).size.width,
-                            //       decoration: BoxDecoration(
-                            //         color: Colors.white,
-                            //         boxShadow: [
-                            //           BoxShadow(
-                            //               offset: const Offset(0, 0),
-                            //               color: Colors.grey.withOpacity(0.5),
-                            //               spreadRadius: 1,
-                            //               blurRadius: 5)
-                            //         ],
-                            //         borderRadius: BorderRadius.circular(
-                            //           responsiveHeight(25),
-                            //         ),
-                            //       ),
-                            //       child: Padding(
-                            //         padding: const EdgeInsets.only(
-                            //             top: 8.0,
-                            //             right: 8.0,
-                            //             left: 8.0,
-                            //             bottom: 8.0),
-                            //         child: Column(
-                            //           crossAxisAlignment:
-                            //               CrossAxisAlignment.start,
-                            //           children: [
-                            //             Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.start,
-                            //               crossAxisAlignment:
-                            //                   CrossAxisAlignment.center,
-                            //               children: [
-                            //                 const Spacer(),
-                            //                 const Text(
-                            //                   "Total Registered Patients",
-                            //                   style: TextStyle(
-                            //                     fontWeight: FontWeight.w500,
-                            //                     fontSize: 12,
-                            //                     color: Colors.black,
-                            //                   ),
-                            //                 ),
-                            //                 SizedBox(
-                            //                   width: responsiveWidth(8),
-                            //                 ),
-                            //                 Container(
-                            //                   // width: 40,
-                            //                   // height: 40,
-                            //                   clipBehavior: Clip.hardEdge,
-                            //                   padding: const EdgeInsets.only(
-                            //                       left: 12,
-                            //                       right: 12,
-                            //                       top: 8,
-                            //                       bottom: 8),
-                            //                   decoration: const BoxDecoration(
-                            //                       borderRadius:
-                            //                           BorderRadius.all(
-                            //                         Radius.circular(5),
-                            //                       ),
-                            //                       color: kPrimaryColor),
-                            //                   child: Column(
-                            //                     mainAxisAlignment:
-                            //                         MainAxisAlignment.center,
-                            //                     children: [
-                            //                       Text(
-                            //                         controller.totalPatientCount ?? '',
-                            //                         style: const TextStyle(
-                            //                           fontWeight:
-                            //                               FontWeight.w400,
-                            //                           fontSize: 14,
-                            //                           color: Colors.white,
-                            //                         ),
-                            //                       ),
-                            //                     ],
-                            //                   ),
-                            //                 ),
-                            //               ],
-                            //             ),
-                            //             SizedBox(
-                            //               height: responsiveHeight(10),
-                            //             ),
-                            //             Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.start,
-                            //               crossAxisAlignment:
-                            //                   CrossAxisAlignment.start,
-                            //               children: [
-                            //                 Expanded(
-                            //                   child: Container(
-                            //                     width: double.infinity,
-                            //                     color: Colors.transparent,
-                            //                     child: Row(
-                            //                       mainAxisAlignment:
-                            //                           MainAxisAlignment.start,
-                            //                       crossAxisAlignment:
-                            //                           CrossAxisAlignment.start,
-                            //                       children: [
-                            //                         Text(
-                            //                           "Camp ID : ",
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 responsiveFont(12),
-                            //                             color: kBlackColor,
-                            //                             fontWeight:
-                            //                                 FontWeight.w500,
-                            //                           ),
-                            //                         ),
-                            //                         Text(
-                            //                           controller.campId
-                            //                               .toString(),
-                            //                           // "1",
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 responsiveFont(12),
-                            //                             // color: dashboardSubTitle,
-                            //                             fontWeight:
-                            //                                 FontWeight.w500,
-                            //                           ),
-                            //                         )
-                            //                       ],
-                            //                     ),
-                            //                   ),
-                            //                 ),
-                            //                 Expanded(
-                            //                   child: Container(
-                            //                     color: Colors.transparent,
-                            //                     child: Row(
-                            //                       mainAxisAlignment:
-                            //                           MainAxisAlignment.start,
-                            //                       crossAxisAlignment:
-                            //                           CrossAxisAlignment.start,
-                            //                       children: [
-                            //                         Text(
-                            //                           "Camp Date : ",
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 responsiveFont(12),
-                            //                             color: kBlackColor,
-                            //                             fontWeight:
-                            //                                 FontWeight.w500,
-                            //                           ),
-                            //                         ),
-                            //                         Text(
-                            //                           controller.campDate ?? '',
-                            //                           style: TextStyle(
-                            //                             fontSize:
-                            //                                 responsiveFont(12),
-                            //                             // color: dashboardSubTitle,
-                            //                             fontWeight:
-                            //                                 FontWeight.w500,
-                            //                           ),
-                            //                         ),
-                            //                       ],
-                            //                     ),
-                            //                   ),
-                            //                 ),
-                            //               ],
-                            //             ),
-                            //             SizedBox(
-                            //               height: responsiveHeight(10),
-                            //             ),
-                            //             Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.start,
-                            //               crossAxisAlignment:
-                            //                   CrossAxisAlignment.start,
-                            //               children: [
-                            //                 Text(
-                            //                   "Camp Name : ",
-                            //                   style: TextStyle(
-                            //                     fontSize: responsiveFont(12),
-                            //                     color: kBlackColor,
-                            //                     fontWeight: FontWeight.w500,
-                            //                   ),
-                            //                 ),
-                            //                 Text(
-                            //                   controller.campName ?? "",
-                            //                   style: TextStyle(
-                            //                     fontSize: responsiveFont(12),
-                            //                     // color: dashboardSubTitle,
-                            //                     fontWeight: FontWeight.w500,
-                            //                   ),
-                            //                 )
-                            //               ],
-                            //             ),
-                            //             SizedBox(
-                            //               height: responsiveHeight(10),
-                            //             ),
-                            //             Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.start,
-                            //               crossAxisAlignment:
-                            //                   CrossAxisAlignment.start,
-                            //               children: [
-                            //                 Text(
-                            //                   "Camp Location : ",
-                            //                   style: TextStyle(
-                            //                     fontSize: responsiveFont(12),
-                            //                     color: kBlackColor,
-                            //                     fontWeight: FontWeight.w500,
-                            //                   ),
-                            //                 ),
-                            //                 Expanded(
-                            //                   child: Text(
-                            //                     controller
-                            //                             .campLocation ??
-                            //                     "",
-                            //                     style: TextStyle(
-                            //                       fontSize: responsiveFont(12),
-                            //                       // color: dashboardSubTitle,
-                            //                       fontWeight: FontWeight.w500,
-                            //                     ),
-                            //                   ),
-                            //                 ),
-                            //               ],
-                            //             ),
-                            //           ],
-                            //         ),
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
+                                context: context,
+                                leading: GestureDetector(
+                                  onTap: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Image.asset(
+                                    icArrowBack,
+                                    height: responsiveHeight(30),
+                                  ),
+                                ),
+                                ),
                             Expanded(
-                              child: PagedListView<int, DoctorDeskData>(
-                                  pagingController: controller.pagingController,
-                                  builderDelegate: PagedChildBuilderDelegate<
-                                          DoctorDeskData>(
-                                      itemBuilder: (context, item, index) =>
-                                          Stack(children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 8.0,
-                                                  right: 8.0,
-                                                  bottom: 8.0),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      offset:
-                                                          const Offset(0, 0),
-                                                      color: Colors.grey
-                                                          .withOpacity(0.5),
-                                                      spreadRadius: 1,
-                                                      blurRadius: 5,
-                                                    )
-                                                  ],
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                    responsiveHeight(20),
-                                                  ),
-                                                ),
-                                                child: Padding(
-                                                  padding: EdgeInsets.all(
-                                                    responsiveHeight(20),
-                                                  ),
-                                                  child: Row(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Flexible(
-                                                        flex: 1,
-                                                        child: Container(
-                                                          decoration: BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Colors
-                                                                      .blue),
-                                                              borderRadius:
-                                                                  BorderRadius.circular(
-                                                                      responsiveHeight(
-                                                                          10))),
-                                                          child: Padding(
+                              child:
+                                  (doctorDeskController.searchedDataModel ==
+                                          null)
+                                      ? PagedListView<int, DoctorDeskData>(
+                                          padding: EdgeInsets.zero,
+                                          pagingController:
+                                              controller.pagingController,
+                                          shrinkWrap: true,
+                                          builderDelegate:
+                                              PagedChildBuilderDelegate<
+                                                      DoctorDeskData>(
+                                                  itemBuilder:
+                                                      (context, item, index) =>
+                                                          Padding(
                                                             padding:
                                                                 const EdgeInsets
-                                                                    .all(1.0),
-                                                            child: Image.asset(
-                                                              pat1,
-                                                              fit: BoxFit.contain,
-                                                              height:
-                                                              responsiveHeight(54),
-                                                              width:
-                                                              responsiveWidth(54),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      SizedBox(
-                                                        width:
-                                                            responsiveWidth(16),
-                                                      ),
-                                                      Flexible(
-                                                        flex: 3,
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                                item.patientName ??
-                                                                    "",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        responsiveFont(
-                                                                            14),
-                                                                    color:
-                                                                        kBlackColor,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500)),
-                                                            SizedBox(
-                                                              height:
-                                                                  responsiveHeight(
-                                                                      10),
-                                                            ),
-                                                            RichText(
-                                                              text: TextSpan(
-                                                                text:
-                                                                    "Mobile No: ",
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        kTextColor,
-                                                                    fontSize:
-                                                                        responsiveFont(
-                                                                            12),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                                children: [
-                                                                  TextSpan(
-                                                                      text: item
-                                                                              .contactNumber ??
-                                                                          "",
-                                                                      style: TextStyle(
-                                                                          fontSize: responsiveFont(
-                                                                              12),
-                                                                          color:
-                                                                              kTextColor,
-                                                                          fontWeight:
-                                                                              FontWeight.normal))
+                                                                    .only(
+                                                                    left: 8.0,
+                                                                    right: 8.0,
+                                                                    bottom:
+                                                                        8.0),
+                                                            child: Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Colors
+                                                                    .white,
+                                                                boxShadow: [
+                                                                  BoxShadow(
+                                                                    offset:
+                                                                        const Offset(
+                                                                            0,
+                                                                            0),
+                                                                    color: Colors
+                                                                        .grey
+                                                                        .withOpacity(
+                                                                            0.5),
+                                                                    spreadRadius:
+                                                                        1,
+                                                                    blurRadius:
+                                                                        5,
+                                                                  )
                                                                 ],
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                  responsiveHeight(
+                                                                      20),
+                                                                ),
+                                                              ),
+                                                              child: Padding(
+                                                                padding:
+                                                                    EdgeInsets
+                                                                        .all(
+                                                                  responsiveHeight(
+                                                                      20),
+                                                                ),
+                                                                child: Row(
+                                                                  // crossAxisAlignment:
+                                                                  //     CrossAxisAlignment
+                                                                  //         .start,
+                                                                  children: [
+                                                                    Expanded(
+                                                                      child:
+                                                                          Row(
+                                                                        children: [
+                                                                          Flexible(
+                                                                            flex:
+                                                                                1,
+                                                                            child:
+                                                                                Container(
+                                                                              decoration: BoxDecoration(border: Border.all(color: Colors.blue), borderRadius: BorderRadius.circular(responsiveHeight(10))),
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.all(1.0),
+                                                                                child: Icon(
+                                                                                  Icons.person,
+                                                                                  size: responsiveHeight(54),
+                                                                                ),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          SizedBox(
+                                                                            width:
+                                                                                responsiveWidth(16),
+                                                                          ),
+                                                                          Expanded(
+                                                                            // flex: 3,
+                                                                            child:
+                                                                                Column(
+                                                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                                                              children: [
+                                                                                Text(item.patientName ?? "", style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold)),
+                                                                                SizedBox(
+                                                                                  height: responsiveHeight(10),
+                                                                                ),
+                                                                                RichText(
+                                                                                  text: TextSpan(
+                                                                                    text: "Mobile No: ",
+                                                                                    style: TextStyle(color: kTextColor, fontSize: responsiveFont(12), fontWeight: FontWeight.bold),
+                                                                                    children: [
+                                                                                      TextSpan(text: item.contactNumber ?? "", style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal))
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  height: responsiveHeight(10),
+                                                                                ),
+                                                                                RichText(
+                                                                                  text: TextSpan(
+                                                                                    text: "Address: ",
+                                                                                    style: TextStyle(color: kTextColor, fontSize: responsiveFont(12), fontWeight: FontWeight.bold),
+                                                                                    children: [
+                                                                                      TextSpan(
+                                                                                        text: "${item.locationName ?? ""} "
+                                                                                            "${item.city ?? ""} "
+                                                                                            "${item.destrict ?? ""} "
+                                                                                            "${item.taluka ?? ""}"
+                                                                                            "${item.state ?? ""}",
+                                                                                        // text: "",
+                                                                                        style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal),
+                                                                                      )
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                    Material(
+                                                                      color: Colors
+                                                                          .transparent,
+                                                                      child:
+                                                                          InkWell(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5),
+                                                                        onTap:
+                                                                            () {
+                                                                          // Navigator.pushNamed(context,
+                                                                          //     AppRoutes.addTreatmentDetailsScreen);
+                                                                          Get.to(
+                                                                              AddTreatmentDetailsScreen(
+                                                                            doctorDeskData:
+                                                                                item,
+                                                                          ));
+                                                                        },
+                                                                        child:
+                                                                            Ink(
+                                                                          child:
+                                                                              Image.asset(
+                                                                            icEdit,
+                                                                            height:
+                                                                                responsiveHeight(36),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    )
+                                                                  ],
+                                                                ),
                                                               ),
                                                             ),
-                                                            SizedBox(
-                                                              height:
-                                                                  responsiveHeight(
-                                                                      10),
+                                                          )))
+                                      : ListView.builder(
+                                      itemCount: controller
+                                          .searchedDataModel
+                                          ?.details
+                                          ?.length,
+                                          itemBuilder: (context, index) {
+                                          return Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 8.0,
+                                                right: 8.0,
+                                                bottom: 8.0),
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    offset: const Offset(0, 0),
+                                                    color: Colors.grey
+                                                        .withOpacity(0.5),
+                                                    spreadRadius: 1,
+                                                    blurRadius: 5,
+                                                  )
+                                                ],
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  responsiveHeight(20),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsets.all(
+                                                  responsiveHeight(20),
+                                                ),
+                                                child: Row(
+                                                  // crossAxisAlignment:
+                                                  //     CrossAxisAlignment
+                                                  //         .start,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Row(
+                                                        children: [
+                                                          Flexible(
+                                                            flex: 1,
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                  border: Border.all(
+                                                                      color: Colors
+                                                                          .blue),
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              responsiveHeight(10))),
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        1.0),
+                                                                child: Icon(
+                                                                  Icons.person,
+                                                                  size:
+                                                                      responsiveHeight(
+                                                                          54),
+                                                                ),
+                                                              ),
                                                             ),
-                                                            RichText(
-                                                              text: TextSpan(
-                                                                text:
-                                                                    "Address: ",
-                                                                style: TextStyle(
-                                                                    color:
-                                                                        kTextColor,
-                                                                    fontSize:
-                                                                        responsiveFont(
-                                                                            12),
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold),
-                                                                children: [
-                                                                  TextSpan(
-                                                                    // text:
-                                                                    //     "${item.cityEn ?? ""} "
-                                                                    //     "${item.districtEn ?? ""} "
-                                                                    //     "${item.countryEn ?? ""}",
-                                                                    text: "",
+                                                          ),
+                                                          SizedBox(
+                                                            width:
+                                                                responsiveWidth(
+                                                                    16),
+                                                          ),
+                                                          Expanded(
+                                                            // flex: 3,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                    controller
+                                                                        .searchedDataModel
+                                                                        ?.details?[
+                                                                    index].patientName ??
+                                                                        "",
                                                                     style: TextStyle(
                                                                         fontSize:
                                                                             responsiveFont(
-                                                                                12),
+                                                                                14),
+                                                                        color:
+                                                                            kBlackColor,
+                                                                        fontWeight:
+                                                                            FontWeight.bold)),
+                                                                SizedBox(
+                                                                  height:
+                                                                      responsiveHeight(
+                                                                          10),
+                                                                ),
+                                                                RichText(
+                                                                  text:
+                                                                      TextSpan(
+                                                                    text:
+                                                                        "Mobile No: ",
+                                                                    style: TextStyle(
                                                                         color:
                                                                             kTextColor,
+                                                                        fontSize:
+                                                                            responsiveFont(
+                                                                                12),
                                                                         fontWeight:
-                                                                            FontWeight.normal),
-                                                                  )
-                                                                ],
-                                                              ),
+                                                                            FontWeight.bold),
+                                                                    children: [
+                                                                      TextSpan(
+                                                                          text: controller
+                                                                              .searchedDataModel
+                                                                              ?.details?[
+                                                                          index].contactNumber ??
+                                                                              "",
+                                                                          style: TextStyle(
+                                                                              fontSize: responsiveFont(12),
+                                                                              color: kTextColor,
+                                                                              fontWeight: FontWeight.normal))
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height:
+                                                                      responsiveHeight(
+                                                                          10),
+                                                                ),
+                                                                RichText(
+                                                                  text:
+                                                                      TextSpan(
+                                                                    text:
+                                                                        "Address: ",
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                            kTextColor,
+                                                                        fontSize:
+                                                                            responsiveFont(
+                                                                                12),
+                                                                        fontWeight:
+                                                                            FontWeight.bold),
+                                                                    children: [
+                                                                      TextSpan(
+                                                                        text:
+                                                                            "${controller
+                                                                                .searchedDataModel
+                                                                                ?.details?[
+                                                                            index].locationName ?? ""} "
+                                                                            "${controller
+                                                                                .searchedDataModel
+                                                                                ?.details?[
+                                                                            index].cityDescEn ?? ""} "
+                                                                            "${controller
+                                                                                .searchedDataModel
+                                                                                ?.details?[
+                                                                            index].districtDescEn ?? ""} "
+                                                                            "${controller
+                                                                                .searchedDataModel
+                                                                                ?.details?[
+                                                                            index].talukaDescEn ?? ""}"
+                                                                            "${controller
+                                                                                .searchedDataModel
+                                                                                ?.details?[
+                                                                            index].stateDescEn ?? ""}",
+                                                                        // text: "",
+                                                                        style: TextStyle(
+                                                                            fontSize: responsiveFont(
+                                                                                12),
+                                                                            color:
+                                                                                kTextColor,
+                                                                            fontWeight:
+                                                                                FontWeight.normal),
+                                                                      )
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Material(
+                                                      color: Colors.transparent,
+                                                      child: InkWell(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(5),
+                                                        onTap: () {
+
+                                                          Get.to(
+                                                              AddTreatmentDetailsScreen(
+                                                            searchedDat:
+                                                            controller
+                                                                .searchedDataModel
+                                                                ?.details?[
+                                                            index],
+                                                          ));
+                                                        },
+                                                        child: Ink(
+                                                          child: Image.asset(
+                                                            icEdit,
+                                                            height:
+                                                                responsiveHeight(
+                                                                    36),
+                                                          ),
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
+                                                    )
+                                                  ],
                                                 ),
                                               ),
                                             ),
-                                            Positioned(
-                                              top: 20,
-                                              right: 20,
-                                              child: Row(
-                                                children: [
-                                                  Material(
-                                                    color: Colors.transparent,
-                                                    child: InkWell(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                      onTap: () {
-                                                        // Navigator.pushNamed(context,
-                                                        //     AppRoutes.addTreatmentDetailsScreen);
-                                                        Get.to(
-                                                            AddTreatmentDetailsScreen(
-                                                          doctorDeskData: item,
-                                                        ));
-                                                      },
-                                                      child: Ink(
-                                                        child: Image.asset(
-                                                          icEdit,
-                                                          height:
-                                                              responsiveHeight(
-                                                                  36),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ]))),
+                                          );
+                                        }),
                             ),
                           ],
                         )

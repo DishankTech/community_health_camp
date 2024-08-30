@@ -392,7 +392,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                             "Location name",
                                             controller.locationNameModel
                                                     ?.details ??
-                                                []);
+                                                [],true);
                                       },
                                       // maxLength: 12,
                                       readOnly: true,

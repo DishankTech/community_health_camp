@@ -251,8 +251,7 @@ class _RegisteredUserMasterScreenState
                                                   children: [
                                                     TextSpan(
                                                         text: data[i]
-                                                            .stakeholderMasterId
-                                                            .toString(),
+                                                            .stakeHolderType1En,
                                                         style: TextStyle(
                                                             fontSize:
                                                                 responsiveFont(
@@ -279,8 +278,7 @@ class _RegisteredUserMasterScreenState
                                                   children: [
                                                     TextSpan(
                                                         text: data[i]
-                                                            .lookupDetHierIdStakeholderType1
-                                                            .toString(),
+                                                            .stakeholderNameEn,
                                                         style: TextStyle(
                                                             fontSize:
                                                                 responsiveFont(
@@ -334,8 +332,7 @@ class _RegisteredUserMasterScreenState
                                                   children: [
                                                     TextSpan(
                                                         text: data[i]
-                                                            .lookupDetHierIdStakeholderType1
-                                                            .toString(),
+                                                            .memberTypeEn,
                                                         style: TextStyle(
                                                             fontSize:
                                                                 responsiveFont(

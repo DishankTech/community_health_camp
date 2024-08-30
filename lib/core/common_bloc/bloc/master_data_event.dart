@@ -126,7 +126,7 @@ class GetGenderRequest extends MasterDataEvent {
 }
 
 class GetStakeholderSubType extends MasterDataEvent {
-  Map payload;
+  int payload;
   GetStakeholderSubType({required this.payload});
 
   @override

@@ -2,16 +2,22 @@
 import 'dart:io';
 
 import 'package:community_health_app/core/utilities/permission_service.dart';
+import 'dart:io';
+
+import 'package:community_health_app/core/utilities/permission_service.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/bloc/dashboard_bloc.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_card_view/dashboard_card_view.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/models/dashboard_filter_count_response.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/models/district_date_wise_camp_response_model.dart';
+import 'package:community_health_app/screens/dashboard_patient_registration/models/district_wise_patient_response_model.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/sf_date_range_picker_view/SfDateRangePickerView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -107,10 +113,11 @@ class _DashboardPatientRegistrationScreenState
               context
                   .read<DashboardBloc>()
                   .add(GetDateWiseDistrictCount(payload: {
-                    "days": 0,
+                    "district_id": null,
                     "start_date": selectedStartDateWithRange,
                     "end_date": selectedEndDateWithRange
                   }));
+              context.read<DashboardBloc>().add(GetDistrictWisePatientsCount());
               // filterCountDashboard();
               setState(() {});
             },
@@ -165,11 +172,34 @@ class _DashboardPatientRegistrationScreenState
                   ..showSnackBar(const SnackBar(
                     content: Text('Unable to get report'),
                     duration: Duration(seconds: 3),
+                  ..showSnackBar(const SnackBar(
+                    content: Text('Unable to get report'),
+                    duration: Duration(seconds: 3),
                     backgroundColor: Colors.red,
                   ));
                 Navigator.pop(context);
+                Navigator.pop(context);
               }
               if (state.getExcelDataStatus.isSuccess) {
+                if (state.getExcelDataResponse ==
+                    'File Downloaded Successfully') {
+                  ScaffoldMessenger.of(context)
+                    ..clearSnackBars()
+                    ..showSnackBar(SnackBar(
+                      content: Text(state.getExcelDataResponse),
+                      duration: const Duration(seconds: 3),
+                      backgroundColor: Colors.green,
+                    ));
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context)
+                    ..clearSnackBars()
+                    ..showSnackBar(SnackBar(
+                      content: Text(state.getExcelDataResponse),
+                      duration: const Duration(seconds: 3),
+                      backgroundColor: Colors.red,
+                    ));
+                  Navigator.pop(context);
                 if (state.getExcelDataResponse ==
                     'File Downloaded Successfully') {
                   ScaffoldMessenger.of(context)
@@ -524,10 +554,11 @@ class _DashboardPatientRegistrationScreenState
             "end_date": selectedEndDateWithRange
           }));
       context.read<DashboardBloc>().add(GetDateWiseDistrictCount(payload: {
-            "days": 0,
+            "district_id": null,
             "start_date": selectedStartDateWithRange,
             "end_date": selectedEndDateWithRange
           }));
+      context.read<DashboardBloc>().add(GetDistrictWisePatientsCount());
     });
     // filterCountDashboard();
   }
@@ -558,7 +589,8 @@ class _DashboardPatientRegistrationScreenState
           xValueMapper: (ChartData data, _) => data.category,
           yValueMapper: (ChartData data, _) => data.value,
           color: campConductedDistrictWiseBarChartcolor,
-          width: 0.8,
+          width: 0.8, // Width of the bars
+          // spacing: 0.1, // Spacing between the bars
         );
       },
     );
@@ -894,15 +926,17 @@ class _DashboardPatientRegistrationScreenState
         child: SfCartesianChart(
           isTransposed: true,
           primaryXAxis: CategoryAxis(
-            labelRotation: -45,
+            axisLine: const AxisLine(color: Colors.grey),
+            labelStyle: TextStyle(fontSize: responsiveFont(10)),
+            labelRotation: -30,
+            autoScrollingDelta: 5,
             autoScrollingMode: AutoScrollingMode.start,
-            initialVisibleMinimum: (campConductedDistrictWiseList.length - 20),
-            initialVisibleMaximum: (campConductedDistrictWiseList.length - 0),
           ),
           primaryYAxis: const NumericAxis(
             minimum: 0,
             // maximum: 40,
             interval: 10,
+            axisLine: AxisLine(color: Colors.grey),
           ),
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,
@@ -916,15 +950,17 @@ class _DashboardPatientRegistrationScreenState
         child: SfCartesianChart(
           isTransposed: true,
           primaryXAxis: CategoryAxis(
-            labelRotation: -45,
+            axisLine: const AxisLine(color: Colors.grey),
+            labelStyle: TextStyle(fontSize: responsiveFont(10)),
+            labelRotation: -30,
+            autoScrollingDelta: 5,
             autoScrollingMode: AutoScrollingMode.start,
-            initialVisibleMinimum: (campConductedDistrictWiseList.length - 20),
-            initialVisibleMaximum: (campConductedDistrictWiseList.length - 0),
           ),
           primaryYAxis: const NumericAxis(
             minimum: 0,
             // maximum: 40,
             interval: 10,
+            axisLine: AxisLine(color: Colors.grey),
           ),
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,
@@ -938,15 +974,17 @@ class _DashboardPatientRegistrationScreenState
         child: SfCartesianChart(
           isTransposed: true,
           primaryXAxis: CategoryAxis(
-            labelRotation: -45,
+            axisLine: const AxisLine(color: Colors.grey),
+            labelStyle: TextStyle(fontSize: responsiveFont(10)),
+            labelRotation: -30,
+            autoScrollingDelta: 5,
             autoScrollingMode: AutoScrollingMode.start,
-            initialVisibleMinimum: (campConductedDistrictWiseList.length - 20),
-            initialVisibleMaximum: (campConductedDistrictWiseList.length - 0),
           ),
           primaryYAxis: const NumericAxis(
             minimum: 0,
             // maximum: 40,
-            interval: 10,
+            interval: 1,
+            axisLine: AxisLine(color: Colors.grey),
           ),
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,
@@ -960,15 +998,17 @@ class _DashboardPatientRegistrationScreenState
         child: SfCartesianChart(
           isTransposed: true,
           primaryXAxis: CategoryAxis(
-            labelRotation: -45,
+            axisLine: const AxisLine(color: Colors.grey),
+            labelStyle: TextStyle(fontSize: responsiveFont(7)),
+            labelRotation: -30,
+            autoScrollingDelta: 5,
             autoScrollingMode: AutoScrollingMode.start,
-            initialVisibleMinimum: (campConductedDistrictWiseList.length - 20),
-            initialVisibleMaximum: (campConductedDistrictWiseList.length - 0),
           ),
           primaryYAxis: const NumericAxis(
             minimum: 0,
             // maximum: 40,
             interval: 10,
+            axisLine: AxisLine(color: Colors.grey),
           ),
           zoomPanBehavior: ZoomPanBehavior(
             enablePanning: true,
@@ -1063,8 +1103,11 @@ class _DashboardPatientRegistrationScreenState
                                     .format(DateTime.now()),
                                 "end_date": DateFormat('yyyy-MM-dd')
                                     .format(DateTime.now()),
-                                "district_id": 0
+                                "district_id": null
                               }));
+                          context
+                              .read<DashboardBloc>()
+                              .add(GetDistrictWisePatientsCount());
                           setState(() {});
                         },
                         child: Container(
@@ -1118,6 +1161,7 @@ class _DashboardPatientRegistrationScreenState
                     const VerticalDivider(
                       color: Colors.grey,
                       width: 0,
+                      thickness: 0.5,
                     ),
                     Expanded(
                       child: GestureDetector(
@@ -1142,6 +1186,9 @@ class _DashboardPatientRegistrationScreenState
                                 "end_date": null,
                                 "district_id": null
                               }));
+                          context
+                              .read<DashboardBloc>()
+                              .add(GetDistrictWisePatientsCount());
                           setState(() {});
                         },
                         child: Container(
@@ -1187,6 +1234,7 @@ class _DashboardPatientRegistrationScreenState
                     const VerticalDivider(
                       color: Colors.grey,
                       width: 0,
+                      thickness: 0.5,
                     ),
                     Expanded(
                       child: GestureDetector(
@@ -1419,111 +1467,213 @@ class _DashboardPatientRegistrationScreenState
                             ),
                           ),
                           //Pie Chart View
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                            child: Container(
-                              width: double.infinity,
-                              height: responsiveHeight(480),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                      offset: const Offset(0, 0),
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 1,
-                                      blurRadius: 5)
-                                ],
-                                borderRadius: BorderRadius.circular(
-                                  responsiveHeight(20),
-                                ),
-                              ),
-                              child: Stack(
-                                children: [
-                                  isShowPatientsSummary
-                                      ? Container()
-                                      : Align(
-                                          alignment: Alignment.topRight,
-                                          child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0, 8, 10, 0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                // if (barSteps == 0) {
-                                                //   _selectedIndex = -1;
-                                                //   isShowPatientsSummary = true;
-                                                //   isShowPatientsTreatments = false;
-                                                //   isShowPatientsReferred = false;
-                                                // } else
-                                                if (barSteps == 1) {
-                                                  _selectedIndex = -1;
-                                                  isShowPatientsSummary = true;
-                                                  isShowPatientsTreatments =
-                                                      false;
-                                                  isShowPatientsReferred =
-                                                      false;
-                                                } else if (barSteps == 2) {
-                                                  isShowPatientsSummary = false;
-                                                  isShowPatientsTreatments =
-                                                      false;
-                                                  isShowPatientsReferred = true;
-                                                  isShowPatientsSubReferred =
-                                                      false;
-                                                }
-                                                barSteps -= 1;
-                                                setState(() {});
-                                              },
-                                              child: Container(
-                                                width: responsiveWidth(35),
-                                                height: responsiveHeight(35),
-                                                decoration: BoxDecoration(
-                                                  color: Colors.green,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                    responsiveHeight(8),
+                          BlocBuilder<DashboardBloc, DashboardState>(
+                            builder: (context, state) {
+                              DistrictWisePatientResponseModel?
+                                  districtWisePatientResponseModel;
+                              bool noData = false;
+                              if (state
+                                  .getDistrictWisePatientResponse.isNotEmpty) {
+                                districtWisePatientResponseModel =
+                                    DistrictWisePatientResponseModel.fromJson(
+                                        jsonDecode(state
+                                            .getDistrictWisePatientResponse));
+                                List<ChartData> chartDataList = [];
+                                if (districtWisePatientResponseModel != null &&
+                                    districtWisePatientResponseModel.details !=
+                                        null &&
+                                    districtWisePatientResponseModel
+                                        .details!.isNotEmpty) {
+                                  noData = false;
+
+                                  for (var element
+                                      in districtWisePatientResponseModel
+                                          .details!) {
+                                    chartDataList.add(ChartData(
+                                        element.lookupDetHierDescEn!,
+                                        double.parse(element.totalPatients ==
+                                                null
+                                            ? "0"
+                                            : element.totalPatients.toString()),
+                                        kPrimaryColor));
+                                  }
+
+                                  final List<List<ChartData>>
+                                      chartDataFinalList = [];
+
+                                  for (ChartData obj in chartDataList) {
+                                    chartDataFinalList.add([obj]);
+                                  }
+                                  totalPatientsRegisteredTillDateList =
+                                      chartDataFinalList;
+
+//Treated
+                                  List<ChartData> chartDataTreatedList = [];
+
+                                  for (var element
+                                      in districtWisePatientResponseModel
+                                          .details!) {
+                                    chartDataTreatedList.add(ChartData(
+                                        element.lookupDetHierDescEn!,
+                                        double.parse(
+                                            element.totalPatients == null
+                                                ? "0"
+                                                : element.treatedPatients
+                                                    .toString()),
+                                        kPrimaryColor));
+                                  }
+
+                                  final List<List<ChartData>>
+                                      chartDataTreatedFinalList = [];
+
+                                  for (ChartData obj in chartDataTreatedList) {
+                                    chartDataTreatedFinalList.add([obj]);
+                                  }
+                                  totalPatientsTreatmentsTillDateList =
+                                      chartDataTreatedFinalList;
+
+                                  //Total Referred
+                                  List<ChartData> chartDataReffredList = [];
+
+                                  for (var element
+                                      in districtWisePatientResponseModel
+                                          .details!) {
+                                    chartDataReffredList.add(ChartData(
+                                        element.lookupDetHierDescEn!,
+                                        double.parse(
+                                            element.totalPatients == null
+                                                ? "0"
+                                                : element.referredPatients
+                                                    .toString()),
+                                        kPrimaryColor));
+                                  }
+
+                                  final List<List<ChartData>>
+                                      chartDataReferredFinalList = [];
+
+                                  for (ChartData obj in chartDataReffredList) {
+                                    chartDataReferredFinalList.add([obj]);
+                                  }
+                                  totalPatientsReferredTillDateList =
+                                      chartDataReferredFinalList;
+                                } else {
+                                  noData = true;
+                                }
+                              }
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: responsiveHeight(480),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          offset: const Offset(0, 0),
+                                          color: Colors.grey.withOpacity(0.5),
+                                          spreadRadius: 1,
+                                          blurRadius: 5)
+                                    ],
+                                    borderRadius: BorderRadius.circular(
+                                      responsiveHeight(20),
+                                    ),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      isShowPatientsSummary
+                                          ? Container()
+                                          : Align(
+                                              alignment: Alignment.topRight,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        0, 8, 10, 0),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    // if (barSteps == 0) {
+                                                    //   _selectedIndex = -1;
+                                                    //   isShowPatientsSummary = true;
+                                                    //   isShowPatientsTreatments = false;
+                                                    //   isShowPatientsReferred = false;
+                                                    // } else
+                                                    if (barSteps == 1) {
+                                                      _selectedIndex = -1;
+                                                      isShowPatientsSummary =
+                                                          true;
+                                                      isShowPatientsTreatments =
+                                                          false;
+                                                      isShowPatientsReferred =
+                                                          false;
+                                                    } else if (barSteps == 2) {
+                                                      isShowPatientsSummary =
+                                                          false;
+                                                      isShowPatientsTreatments =
+                                                          false;
+                                                      isShowPatientsReferred =
+                                                          true;
+                                                      isShowPatientsSubReferred =
+                                                          false;
+                                                    }
+                                                    barSteps -= 1;
+                                                    setState(() {});
+                                                  },
+                                                  child: Container(
+                                                    width: responsiveWidth(35),
+                                                    height:
+                                                        responsiveHeight(35),
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.green,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                        responsiveHeight(8),
+                                                      ),
+                                                    ),
+                                                    child: Center(
+                                                      child: Image.asset(
+                                                          icArrowBack),
+                                                    ),
                                                   ),
-                                                ),
-                                                child: Center(
-                                                  child:
-                                                      Image.asset(icArrowBack),
                                                 ),
                                               ),
                                             ),
+                                      Padding(
+                                        padding: const EdgeInsets.fromLTRB(
+                                            20, 10, 0, 0),
+                                        child: Text(
+                                          getBarTitleName(),
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: responsiveFont(11),
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(20, 10, 0, 0),
-                                    child: Text(
-                                      getBarTitleName(),
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: responsiveFont(11),
-                                        fontWeight: FontWeight.w600,
                                       ),
-                                    ),
-                                  ),
-                                  state.getCountStatus.isInProgress
-                                      ? const Center(
-                                          child: CircularProgressIndicator(),
-                                        )
-                                      : noData
-                                          ? const Align(
-                                              alignment:
-                                                  FractionalOffset.center,
-                                              child: Text(
-                                                  "Data not available for selected date"),
+                                      state.getCountStatus.isInProgress
+                                          ? const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
                                             )
-                                          : getPieOrBarChartLayout(),
-                                ],
-                              ),
-                            ),
+                                          : noData
+                                              ? const Align(
+                                                  alignment:
+                                                      FractionalOffset.center,
+                                                  child: Text(
+                                                      "Data not available for selected date"),
+                                                )
+                                              : getPieOrBarChartLayout(),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                           //Bar chart
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                             child: Container(
-                              width: double.infinity,
-                              height: responsiveHeight(480),
+                              // width: SizeConfig.screenWidth,
+                              // height: responsiveHeight(600),
                               decoration: BoxDecoration(
                                 color: Colors.white,
                                 boxShadow: [
@@ -1551,6 +1701,20 @@ class _DashboardPatientRegistrationScreenState
                                       ),
                                     ),
                                   ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 30, 8, 8),
+                                    child: BlocBuilder<DashboardBloc,
+                                        DashboardState>(
+                                      builder: (context, state) {
+                                        bool noData = true;
+                                        DistrictDateWiseCampResponseModel?
+                                            districtDateWiseCampResponseModel;
+                                        if (state.getDateWiseDistrictCountStatus
+                                            .isSuccess) {
+                                          if (state
+                                              .getDateWiseDistrictCountResponse
+                                              .isNotEmpty) {
                                   Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(8, 30, 8, 8),
@@ -1603,6 +1767,9 @@ class _DashboardPatientRegistrationScreenState
                                             }
                                           }
                                         }
+                                            }
+                                          }
+                                        }
 
                                         return state
                                                 .getDateWiseDistrictCountStatus
@@ -1620,21 +1787,32 @@ class _DashboardPatientRegistrationScreenState
                                                 : SfCartesianChart(
                                                     isTransposed: true,
                                                     primaryXAxis: CategoryAxis(
-                                                      labelRotation: -70,
+                                                      // labelPlacement: LabelPlacement.onTicks,
+                                                      labelStyle: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  10)),
+                                                      // ignore: prefer_const_constructors
+                                                      axisLine: AxisLine(
+                                                          color: Colors.grey),
+                                                      labelRotation: -45,
+                                                      autoScrollingDelta: 5,
                                                       autoScrollingMode:
                                                           AutoScrollingMode
                                                               .start,
-                                                      initialVisibleMinimum:
-                                                          (campConductedDistrictWiseList
-                                                                  .length -
-                                                              20),
-                                                      initialVisibleMaximum:
-                                                          (campConductedDistrictWiseList
-                                                                  .length -
-                                                              0),
+                                                      // initialVisibleMinimum:
+                                                      //     (campConductedDistrictWiseList
+                                                      //             .length -
+                                                      //         20),
+                                                      // initialVisibleMaximum:
+                                                      //     (campConductedDistrictWiseList
+                                                      //             .length -
+                                                      //         0),
                                                     ),
                                                     primaryYAxis:
                                                         const NumericAxis(
+                                                      axisLine: AxisLine(
+                                                          color: Colors.grey),
                                                       minimum: 0,
                                                       // maximum: 40,
                                                       interval: 3,
