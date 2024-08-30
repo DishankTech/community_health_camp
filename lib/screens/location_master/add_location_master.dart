@@ -728,7 +728,18 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                               child: AppButton(
                                                 title: "Clear",
                                                 onTap: (){
-                                                  Get.back();
+                                                  locationMasterController.locationName.text = "";
+                                                  locationMasterController.contactNo.text = "";
+                                                  locationMasterController.contactPerson.text = "";
+                                                  locationMasterController.emailId.text = "";
+                                                  locationMasterController.address1.text = "";
+                                                  locationMasterController.address2.text = "";
+                                                  locationMasterController.distController.text = "";
+                                                  locationMasterController.talukaController.text = "";
+                                                  locationMasterController.cityController.text = "";
+                                                  locationMasterController.countryController.text = "";
+                                                  locationMasterController.stateController.text = "";
+                                                  // Get.back();
                                                 },
                                                 buttonColor: Colors.grey,
                                                 iconData: Icon(
