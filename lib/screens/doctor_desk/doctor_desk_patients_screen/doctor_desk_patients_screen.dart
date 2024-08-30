@@ -125,6 +125,9 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                     const SizedBox(width: 10,),
                                     GestureDetector(
                                       onTap: () {
+                                        doctorDeskController.isSearch = false;
+                                        doctorDeskController.pagingController.refresh();
+                                        doctorDeskController.searchedDataModel = null;
                                         Get.to(const DoctorDeskDetailsScreen());
                                       },
                                       child: Image.asset(
@@ -156,6 +159,7 @@ class _DoctorDeskPatientsScreenState extends State<DoctorDeskPatientsScreen> {
                                             doctorDeskController.isSearch = false;
                                             doctorDeskController.searchedDataModel = null;
                                             doctorDeskController.pagingController.refresh();
+                                            doctorDeskController.searchController.text = '';
                                             setState(() {});
                                           },
                                           icon: const Icon(

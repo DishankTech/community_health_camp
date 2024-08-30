@@ -1963,131 +1963,6 @@ Future<dynamic> campListDropdownBottomSheet(
           ));
 }
 
-Future<dynamic> stakeholderStatusBottomSheet(
-    BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
-  int selectedIndex = -1;
-  return showModalBottomSheet(
-      context: context,
-      isScrollControlled: false,
-      builder: (c) => StatefulBuilder(
-            builder: (c, setState) => Container(
-              width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
-              child: Padding(
-                padding: EdgeInsets.all(responsiveHeight(30)),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Status",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
-                          ),
-                          const Spacer(),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Image.asset(
-                              icSquareClose,
-                              height: responsiveHeight(24),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: responsiveHeight(25),
-                    ),
-                    BlocBuilder<MasterDataBloc, MasterDataState>(
-                      builder: (context, state) {
-                        List<Map<String, dynamic>> list = [
-                          {"title": "Active", "id": 0},
-                          {"title": "In Active", "id": 1},
-                        ];
-                        return list != null
-                            ? ListView.builder(
-                                itemCount: list.length,
-                                shrinkWrap: true,
-                                itemBuilder: (c, i) => Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      borderRadius: BorderRadius.circular(10),
-                                      onTap: () {
-                                        var selectedItem = {
-                                          'id': list[i]['id'],
-                                          'title': list[i]['title']
-                                        };
-                                        onItemSelected(selectedItem);
-                                        setState(
-                                          () {
-                                            selectedIndex = i;
-                                          },
-                                        );
-
-                                        Navigator.pop(context);
-                                      },
-                                      child: Ink(
-                                        decoration: BoxDecoration(
-                                          color: i == selectedIndex
-                                              ? Colors.transparent
-                                              : kListBGColor,
-                                          // border: Border.all(
-                                          //     color: kTextFieldBorder,
-                                          //     width: 0.5),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                        ),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Row(
-                                            children: [
-                                              Image.asset(
-                                                i == selectedIndex
-                                                    ? icCircleDot
-                                                    : icCircle,
-                                                height: responsiveHeight(20),
-                                              ),
-                                              SizedBox(
-                                                width: responsiveWidth(20),
-                                              ),
-                                              Text(list[i]['title']),
-                                              const Spacer(),
-                                              i == selectedIndex
-                                                  ? Image.asset(
-                                                      icCircleCheck,
-                                                      height:
-                                                          responsiveHeight(20),
-                                                    )
-                                                  : const SizedBox.shrink(),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : const Center(child: Text("Data Not Available"));
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ));
-}
 
 Future<dynamic> commonBottonSheet(
     BuildContext context,
@@ -2186,11 +2061,11 @@ Future<dynamic> commonBottonSheet(
 }
 
 Future<dynamic> commonBottomSheet(
-  BuildContext context,
-  Function(dynamic) onItemSelected,
-  String bottomSheetTitle,
-  List<dynamic> list,
-  bool isVisible,
+  final BuildContext context,
+  final Function(dynamic) onItemSelected,
+  final String bottomSheetTitle,
+  final List<dynamic> list,
+  final bool isVisible,
 ) {
   return showModalBottomSheet(
     context: context,
@@ -4111,30 +3986,4 @@ class _MultiSelectBottomSheetContentState
   }
 }
 
-class City {
-  final String name;
-  final String country;
 
-  City({required this.name, required this.country});
-}
-
-class CityService {
-  static List<City> getCities() {
-    return [
-      City(name: 'New York', country: 'USA'),
-      City(name: 'Los Angeles', country: 'USA'),
-      City(name: 'Chicago', country: 'USA'),
-      City(name: 'London', country: 'UK'),
-      City(name: 'Berlin', country: 'Germany'),
-      City(name: 'Paris', country: 'France'),
-    ];
-  }
-
-  static List<City> find(String query) {
-    return getCities().where((city) {
-      final cityNameLower = city.name.toLowerCase();
-      final searchLower = query.toLowerCase();
-      return cityNameLower.contains(searchLower);
-    }).toList();
-  }
-}

@@ -143,10 +143,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                   color: kHintColor,
                                                   fontFamily: Montserrat),
                                               children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
+                                                // TextSpan(
+                                                //     text: "*",
+                                                //     style: TextStyle(
+                                                //         color: Colors.red))
                                               ]),
                                         ),
                                         hint: "",
@@ -171,10 +171,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                   color: kHintColor,
                                                   fontFamily: Montserrat),
                                               children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
+                                                // TextSpan(
+                                                //     text: "*",
+                                                //     style: TextStyle(
+                                                //         color: Colors.red))
                                               ]),
                                         ),
                                         hint: "",
@@ -199,10 +199,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                   color: kHintColor,
                                                   fontFamily: Montserrat),
                                               children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
+                                                // TextSpan(
+                                                //     text: "*",
+                                                //     style: TextStyle(
+                                                //         color: Colors.red))
                                               ]),
                                         ),
                                         hint: "",
@@ -227,10 +227,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                   color: kHintColor,
                                                   fontFamily: Montserrat),
                                               children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
+                                                // TextSpan(
+                                                //     text: "*",
+                                                //     style: TextStyle(
+                                                //         color: Colors.red))
                                               ]),
                                         ),
                                         hint: "",
@@ -255,10 +255,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                   color: kHintColor,
                                                   fontFamily: Montserrat),
                                               children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
+                                                // TextSpan(
+                                                //     text: "*",
+                                                //     style: TextStyle(
+                                                //         color: Colors.red))
                                               ]),
                                         ),
                                         hint: "",
@@ -283,10 +283,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                   color: kHintColor,
                                                   fontFamily: Montserrat),
                                               children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
+                                                // TextSpan(
+                                                //     text: "*",
+                                                //     style: TextStyle(
+                                                //         color: Colors.red))
                                               ]),
                                         ),
                                         hint: "",
@@ -348,10 +348,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                         color: kHintColor,
                                                         fontFamily: Montserrat),
                                                     children: [
-                                                      TextSpan(
-                                                          text: "*",
-                                                          style: TextStyle(
-                                                              color: Colors.red))
+                                                      // TextSpan(
+                                                      //     text: "*",
+                                                      //     style: TextStyle(
+                                                      //         color: Colors.red))
                                                     ]),
                                               ),
                                               hint: "",
@@ -429,10 +429,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                         color: kHintColor,
                                                         fontFamily: Montserrat),
                                                     children: [
-                                                      TextSpan(
-                                                          text: "*",
-                                                          style: TextStyle(
-                                                              color: Colors.red))
+                                                      // TextSpan(
+                                                      //     text: "*",
+                                                      //     style: TextStyle(
+                                                      //         color: Colors.red))
                                                     ]),
                                               ),
                                               hint: "",
@@ -515,10 +515,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                         color: kHintColor,
                                                         fontFamily: Montserrat),
                                                     children: [
-                                                      TextSpan(
-                                                          text: "*",
-                                                          style: TextStyle(
-                                                              color: Colors.red))
+                                                      // TextSpan(
+                                                      //     text: "*",
+                                                      //     style: TextStyle(
+                                                      //         color: Colors.red))
                                                     ]),
                                               ),
                                               hint: "",
@@ -596,10 +596,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                         color: kHintColor,
                                                         fontFamily: Montserrat),
                                                     children: [
-                                                      TextSpan(
-                                                          text: "*",
-                                                          style: TextStyle(
-                                                              color: Colors.red))
+                                                      // TextSpan(
+                                                      //     text: "*",
+                                                      //     style: TextStyle(
+                                                      //         color: Colors.red))
                                                     ]),
                                               ),
                                               hint: "",
@@ -672,10 +672,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                   color: kHintColor,
                                                   fontFamily: Montserrat),
                                               children: [
-                                                TextSpan(
-                                                    text: "*",
-                                                    style: TextStyle(
-                                                        color: Colors.red))
+                                                // TextSpan(
+                                                //     text: "*",
+                                                //     style: TextStyle(
+                                                //         color: Colors.red))
                                               ]),
                                         ),
                                         hint: "",

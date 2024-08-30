@@ -683,7 +683,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                         (p0) => {
                                                               controller
                                                                       .selectedStakeHVal =
-                                                                  p0.lookupDetHierDescEn,
+                                                                  p0.stakeholderNameEn,
                                                               controller
                                                                   .selectedStakeH
                                                                   .addIfNotExist(
@@ -932,7 +932,7 @@ extension ListExtensions on List {
   String displayText() {
     return where((item) =>
             item.lookupDetHierDescEn != null) // Filter out null values
-        .map((item) => item.lookupDetHierDescEn!)
+        .map((item) => item.stakeholderNameEn!)
         .join(', '); // Joins with a comma and space separator
   }
 }
