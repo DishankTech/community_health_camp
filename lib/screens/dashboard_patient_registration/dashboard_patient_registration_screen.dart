@@ -2,6 +2,9 @@
 import 'dart:io';
 
 import 'package:community_health_app/core/utilities/permission_service.dart';
+import 'dart:io';
+
+import 'package:community_health_app/core/utilities/permission_service.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/bloc/dashboard_bloc.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_card_view/dashboard_card_view.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/models/dashboard_filter_count_response.dart';
@@ -13,6 +16,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -167,11 +172,34 @@ class _DashboardPatientRegistrationScreenState
                   ..showSnackBar(const SnackBar(
                     content: Text('Unable to get report'),
                     duration: Duration(seconds: 3),
+                  ..showSnackBar(const SnackBar(
+                    content: Text('Unable to get report'),
+                    duration: Duration(seconds: 3),
                     backgroundColor: Colors.red,
                   ));
                 Navigator.pop(context);
+                Navigator.pop(context);
               }
               if (state.getExcelDataStatus.isSuccess) {
+                if (state.getExcelDataResponse ==
+                    'File Downloaded Successfully') {
+                  ScaffoldMessenger.of(context)
+                    ..clearSnackBars()
+                    ..showSnackBar(SnackBar(
+                      content: Text(state.getExcelDataResponse),
+                      duration: const Duration(seconds: 3),
+                      backgroundColor: Colors.green,
+                    ));
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context)
+                    ..clearSnackBars()
+                    ..showSnackBar(SnackBar(
+                      content: Text(state.getExcelDataResponse),
+                      duration: const Duration(seconds: 3),
+                      backgroundColor: Colors.red,
+                    ));
+                  Navigator.pop(context);
                 if (state.getExcelDataResponse ==
                     'File Downloaded Successfully') {
                   ScaffoldMessenger.of(context)
@@ -468,6 +496,45 @@ class _DashboardPatientRegistrationScreenState
         );
       },
     );
+  }
+
+  Future<void> downloadFile() async {
+    // Request storage permissions
+    if (await Permission.storage.request().isGranted) {
+      try {
+        // The URL from which to download the file
+        final url =
+            'http://210.89.42.117:8085/api/administrator/masters/download-excel/';
+
+        // Make the request
+        final response = await http.get(Uri.parse(url));
+
+        if (response.statusCode == 200) {
+          // Get the filename from the headers if needed
+          final contentDisposition = response.headers['content-disposition'];
+          final filename = contentDisposition?.split('filename=')?.last ??
+              'downloaded_file.xlsx';
+
+          // Get the application's documents directory
+          final directory = await getApplicationDocumentsDirectory();
+
+          // Create the file
+          final file = File('${directory.path}/$filename');
+
+          // Write the file
+          await file.writeAsBytes(response.bodyBytes);
+
+          print('File saved to ${file.path}');
+        } else {
+          print('Failed to download file: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Error: $e');
+        PermissionService().requestPermissions();
+      }
+    } else {
+      print('Storage permission denied.');
+    }
   }
 
   @override
@@ -1648,6 +1715,20 @@ class _DashboardPatientRegistrationScreenState
                                           if (state
                                               .getDateWiseDistrictCountResponse
                                               .isNotEmpty) {
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 30, 8, 8),
+                                    child: BlocBuilder<DashboardBloc,
+                                        DashboardState>(
+                                      builder: (context, state) {
+                                        bool noData = true;
+                                        DistrictDateWiseCampResponseModel?
+                                            districtDateWiseCampResponseModel;
+                                        if (state.getDateWiseDistrictCountStatus
+                                            .isSuccess) {
+                                          if (state
+                                              .getDateWiseDistrictCountResponse
+                                              .isNotEmpty) {
                                             districtDateWiseCampResponseModel =
                                                 DistrictDateWiseCampResponseModel
                                                     .fromJson(jsonDecode(state
@@ -1683,6 +1764,9 @@ class _DashboardPatientRegistrationScreenState
                                                   chartDataFinalList;
                                             } else {
                                               noData = true;
+                                            }
+                                          }
+                                        }
                                             }
                                           }
                                         }

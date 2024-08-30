@@ -172,7 +172,7 @@ class AppRoutes {
         );
       case dateWiseCamps:
         return MaterialPageRoute(
-          builder: (_) => DateWiseCampsScreen(DateTime.now()),
+          builder: (_) => DateWiseCampsScreen(DateTime.now(),[]),
         );
       /*case districtWiseCamps:
         return MaterialPageRoute(
