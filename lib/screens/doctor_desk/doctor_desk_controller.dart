@@ -35,15 +35,24 @@ class DoctorDeskController extends GetxController {
   CountryModel? stakeHolderTypeModel;
 
   TextEditingController userController = TextEditingController();
+  TextEditingController patientId = TextEditingController();
   TextEditingController stakeHolderController = TextEditingController();
   TextEditingController stakeHolderTypeController = TextEditingController();
+  TextEditingController diseasesTypeController = TextEditingController();
+  TextEditingController referralService = TextEditingController();
   int? selectedUserId;
   List<ReferToDetails> selectedStakeH = [];
   LookupDetHierarchical? selectedStakeHType;
+  LookupDetHierarchical? selectedDiseases;
+  LookupDetHierarchical? selectedReferralSer;
   String? selectedStakeHVal;
   String? selectedStakeHTypeVal;
+  String? selectedDiseasesVal;
+  String? selectedReferralSerVal;
   TextEditingController symptomController = TextEditingController();
   TextEditingController provisionalDiaController = TextEditingController();
+  TextEditingController investigationController = TextEditingController();
+  TextEditingController treatmentGivenController = TextEditingController();
   AddTreatmentDetailsModel addTreatmentDetailsModel =
   AddTreatmentDetailsModel();
   UserListModel? userList;

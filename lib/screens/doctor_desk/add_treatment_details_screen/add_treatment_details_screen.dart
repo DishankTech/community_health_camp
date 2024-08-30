@@ -317,81 +317,86 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       height:
                                                           responsiveHeight(10),
                                                     ),
-                                                    RichText(
-                                                      text: TextSpan(
-                                                        text: "Mobile No: ",
-                                                        style: TextStyle(
-                                                            color: kTextColor,
-                                                            fontSize:
-                                                                responsiveFont(
-                                                                    12),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                        children: [
-                                                          TextSpan(
-                                                              text: widget.searchedDat ==
+                                                    Row(
+                                                      children: [
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            text: "Camp ID: ",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    kTextColor,
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        12),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: widget.searchedDat ==
                                                                       null
-                                                                  ? widget
-                                                                      .doctorDeskData
-                                                                      ?.contactNumber
-                                                                  : widget.searchedDat
-                                                                          ?.contactNumber ??
+                                                                      ? widget
+                                                                          .doctorDeskData
+                                                                          ?.campCreateRequestId
+                                                                          .toString() : widget.searchedDat?.campCreateRequestId.toString() ??
                                                                       "",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      responsiveFont(
-                                                                          12),
-                                                                  color:
-                                                                      kTextColor,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal))
-                                                        ],
-                                                      ),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          responsiveFont(
+                                                                              12),
+                                                                      color:
+                                                                          kTextColor,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width:
+                                                              responsiveHeight(
+                                                                  10),
+                                                        ),
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            text: "Camp Date: ",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    kTextColor,
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        12),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: widget.searchedDat ==
+                                                                      null
+                                                                      ? widget
+                                                                          .doctorDeskData
+                                                                          ?.campDate: widget.searchedDat?.campDate ??
+                                                                      "",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          responsiveFont(
+                                                                              12),
+                                                                      color:
+                                                                          kTextColor,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
+
                                                     SizedBox(
                                                       height:
                                                           responsiveHeight(10),
                                                     ),
-                                                    RichText(
-                                                      text: TextSpan(
-                                                        text: "Address: ",
-                                                        style: TextStyle(
-                                                            color: kTextColor,
-                                                            fontSize:
-                                                                responsiveFont(
-                                                                    12),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                        children: [
-                                                          TextSpan(
-                                                            text: widget.searchedDat ==
-                                                                    null
-                                                                ? "${widget.doctorDeskData?.locationName ?? ""} "
-                                                                    "${widget.doctorDeskData?.city ?? ""} "
-                                                                    "${widget.doctorDeskData?.destrict ?? ""} "
-                                                                    "${widget.doctorDeskData?.taluka ?? ""} "
-                                                                    "${widget.doctorDeskData?.state ?? ""}"
-                                                                : "${widget.searchedDat?.locationName ?? ""} "
-                                                                    "${widget.searchedDat?.cityDescEn ?? ""} "
-                                                                    "${widget.searchedDat?.districtDescEn ?? ""} "
-                                                                    "${widget.searchedDat?.talukaDescEn ?? ""} "
-                                                                    "${widget.searchedDat?.stateDescEn ?? ""}",
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  responsiveFont(
-                                                                      12),
-                                                              color: kTextColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
+
                                                   ],
                                                 ),
                                               ),
@@ -406,7 +411,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        height: responsiveHeight(500),
+                                        // height: responsiveHeight(550),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -423,6 +428,42 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                         ),
                                         child: Column(
                                           children: [
+                                            SizedBox(
+                                              height: responsiveHeight(8),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 20, 20, 0),
+                                              child: AppRoundTextField(
+                                                readOnly: false,
+                                                controller: doctorDeskController
+                                                    .patientId,
+                                                inputStyle: TextStyle(
+                                                    fontSize:
+                                                        responsiveFont(14),
+                                                    color: kTextBlackColor),
+                                                inputType:
+                                                    TextInputType.streetAddress,
+                                                onChange: (p0) {},
+                                                // maxLength: 12,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text: 'Patient ID',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        // TextSpan(
+                                                        //     text: "*",
+                                                        //     style: TextStyle(
+                                                        //         color: Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                              ),
+                                            ),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
@@ -593,6 +634,353 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       20, 15, 20, 0),
                                               child: AppRoundTextField(
                                                 controller: controller
+                                                    .diseasesTypeController,
+                                                inputType: TextInputType.text,
+                                                onChange: (p0) {},
+                                                onTap: () async {
+                                                  await commonBottomSheet(
+                                                      context,
+                                                      (p0) async => {
+                                                            controller
+                                                                    .selectedDiseasesVal =
+                                                                p0.lookupDetHierDescEn,
+                                                            controller
+                                                                .diseasesTypeController
+                                                                .text = p0
+                                                                    .lookupDetHierDescEn ??
+                                                                "",
+                                                            await controller
+                                                                .getReferTo(p0
+                                                                    .lookupDetHierId),
+                                                            controller
+                                                                .selectedDiseases = p0,
+                                                            controller.update()
+                                                          },
+                                                      "Diseases Type",
+                                                      controller
+                                                              .stakeHolderTypeModel
+                                                              ?.details
+                                                              ?.first
+                                                              .lookupDetHierarchical ??
+                                                          [],
+                                                      true);
+                                                },
+                                                // maxLength: 12,
+                                                readOnly: true,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text: 'Diseases Type"',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "*",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                                suffix: SizedBox(
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      icArrowDownOrange,
+                                                      height:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                      width:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 12, 0),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: kTextFieldBorder,
+                                                    width: 1,
+                                                  ),
+                                                ),
+                                                height: 110,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(4),
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 2, 0, 2),
+                                                      color: Colors.transparent,
+                                                      child: Text(
+                                                        "Investigation Advised",
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          // color: dashboardSubTitle,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    TextField(
+                                                      controller: controller
+                                                          .investigationController,
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            responsiveFont(12),
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                      maxLength: 500,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                        hintText: "",
+                                                        counterText: "",
+                                                        hintStyle: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  14),
+                                                          // color: dashboardSubTitle,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                      keyboardType:
+                                                          TextInputType
+                                                              .multiline,
+                                                      maxLines: null,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 12, 0),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: kTextFieldBorder,
+                                                    width: 1,
+                                                  ),
+                                                ),
+                                                height: 110,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(4),
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 2, 0, 2),
+                                                      color: Colors.transparent,
+                                                      child: Text(
+                                                        "Treatment Given",
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          // color: dashboardSubTitle,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    TextField(
+                                                      controller: controller
+                                                          .treatmentGivenController,
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            responsiveFont(12),
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                      maxLength: 500,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                        hintText: "",
+                                                        counterText: "",
+                                                        hintStyle: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  14),
+                                                          // color: dashboardSubTitle,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                      keyboardType:
+                                                          TextInputType
+                                                              .multiline,
+                                                      maxLines: null,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: AppRoundTextField(
+                                                controller:
+                                                    controller.referralService,
+                                                inputType: TextInputType.text,
+                                                onChange: (p0) {},
+                                                onTap: () async {
+                                                  await commonBottomSheet(
+                                                      context,
+                                                      (p0) async => {
+                                                            controller
+                                                                    .selectedReferralSerVal =
+                                                                p0.lookupDetHierDescEn,
+                                                            controller
+                                                                .referralService
+                                                                .text = p0
+                                                                    .lookupDetHierDescEn ??
+                                                                "",
+                                                            await controller
+                                                                .getReferTo(p0
+                                                                    .lookupDetHierId),
+                                                            controller
+                                                                .selectedReferralSer = p0,
+                                                            controller.update()
+                                                          },
+                                                      "Referral Services",
+                                                      controller
+                                                              .stakeHolderTypeModel
+                                                              ?.details
+                                                              ?.first
+                                                              .lookupDetHierarchical ??
+                                                          [],
+                                                      true);
+                                                },
+                                                // maxLength: 12,
+                                                readOnly: true,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text: 'Referral Services',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "*",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                                suffix: SizedBox(
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      icArrowDownOrange,
+                                                      height:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                      width:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(20),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 30, 20, 4),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        // height: responsiveHeight(100),
+
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                offset: const Offset(0, 0),
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 1,
+                                                blurRadius: 5)
+                                          ],
+                                          borderRadius: BorderRadius.circular(
+                                            responsiveHeight(25),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: AppRoundTextField(
+                                                controller: controller
                                                     .stakeHolderTypeController,
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
@@ -743,6 +1131,9 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                 ),
                                               ),
                                             ),
+                                            SizedBox(
+                                              height: responsiveHeight(20),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -877,11 +1268,21 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                               flex: 1,
                                               child: AppButton(
                                                 onTap: () {
-                                                  doctorDeskController.stakeHolderTypeController.text = '';
-                                                  doctorDeskController.symptomController.text = '';
-                                                  doctorDeskController.provisionalDiaController.text = '';
-                                                  doctorDeskController.stakeHolderController.text = '';
-                                                  doctorDeskController.selectedStakeH.clear();
+                                                  doctorDeskController
+                                                      .stakeHolderTypeController
+                                                      .text = '';
+                                                  doctorDeskController
+                                                      .symptomController
+                                                      .text = '';
+                                                  doctorDeskController
+                                                      .provisionalDiaController
+                                                      .text = '';
+                                                  doctorDeskController
+                                                      .stakeHolderController
+                                                      .text = '';
+                                                  doctorDeskController
+                                                      .selectedStakeH
+                                                      .clear();
                                                 },
                                                 title: "Clear",
                                                 buttonColor: Colors.grey,
