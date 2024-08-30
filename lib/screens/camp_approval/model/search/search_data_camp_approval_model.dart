@@ -1,25 +1,30 @@
-import 'search_cam_details.dart';
+import 'search_camp_details.dart';
 
-class SearchDataCampApproval {
-  SearchDataCampApproval({
+class SearchDataCampApprovalModel {
+  SearchDataCampApprovalModel({
       this.statusCode, 
       this.message, 
       this.path, 
       this.dateTime, 
       this.details,});
 
-  SearchDataCampApproval.fromJson(dynamic json) {
+  SearchDataCampApprovalModel.fromJson(dynamic json) {
     statusCode = json['status_code'];
     message = json['message'];
     path = json['path'];
     dateTime = json['dateTime'];
-    details = json['details'] != null ? SearchCampDetails.fromJson(json['details']) : null;
+    if (json['details'] != null) {
+      details = [];
+      json['details'].forEach((v) {
+        details?.add(SearchCampDetails.fromJson(v));
+      });
+    }
   }
   int? statusCode;
   String? message;
   String? path;
   String? dateTime;
-  SearchCampDetails? details;
+  List<SearchCampDetails>? details;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -28,7 +33,7 @@ class SearchDataCampApproval {
     map['path'] = path;
     map['dateTime'] = dateTime;
     if (details != null) {
-      map['details'] = details?.toJson();
+      map['details'] = details?.map((v) => v.toJson()).toList();
     }
     return map;
   }

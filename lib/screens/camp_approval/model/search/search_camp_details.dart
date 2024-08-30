@@ -1,5 +1,5 @@
-class SearchCampData {
-  SearchCampData({
+class SearchCampDetails {
+  SearchCampDetails({
       this.campCreateRequestId, 
       this.propCampDate, 
       this.stakeholderMasterId, 
@@ -12,7 +12,7 @@ class SearchCampData {
       this.districtRg, 
       this.campNumber,});
 
-  SearchCampData.fromJson(dynamic json) {
+  SearchCampDetails.fromJson(dynamic json) {
     campCreateRequestId = json['camp_create_request_id'];
     propCampDate = json['prop_camp_date'];
     stakeholderMasterId = json['stakeholder_master_id'];
