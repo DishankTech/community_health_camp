@@ -45,7 +45,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
     if (locationMasterController.hasInternet) {
       await locationMasterController.getCountry(false);
       if (widget.isView == true || widget.isEdit == true) {
-        await  locationMasterController.getLocationDetails(widget.locationId);
+        await locationMasterController.getLocationDetails(widget.locationId);
       }
     }
     if (mounted) {
@@ -76,7 +76,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return PopScope(
-      canPop:  false,
+      canPop: false,
       child: Scaffold(
           body: Container(
         decoration: const BoxDecoration(
@@ -91,10 +91,9 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                       ? "Edit Location Master"
                       : "Location Master",
                   context: context,
-              onBackButtonPress: (){
+                  onBackButtonPress: () {
                     Get.to(() => const LocationMasterList());
-              }
-              ),
+                  }),
               SizedBox(
                 height: responsiveHeight(10),
               ),
@@ -128,8 +127,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                       ),
                                       AppRoundTextField(
                                         readOnly: widget.isView,
-                                        controller:
-                                            locationMasterController.locationName,
+                                        controller: locationMasterController
+                                            .locationName,
                                         inputStyle: TextStyle(
                                             fontSize: responsiveFont(14),
                                             color: kTextBlackColor),
@@ -298,8 +297,9 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                         children: [
                                           Expanded(
                                             child: AppRoundTextField(
-                                              controller: locationMasterController
-                                                  .countryController,
+                                              controller:
+                                                  locationMasterController
+                                                      .countryController,
                                               inputStyle: TextStyle(
                                                   fontSize: responsiveFont(14),
                                                   color: kTextBlackColor),
@@ -336,7 +336,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                               ?.details
                                                               ?.first
                                                               .lookupDetHierarchical ??
-                                                          [],false);
+                                                          [],
+                                                      isVisible: false);
                                                 }
                                               },
                                               // maxLength: 12,
@@ -351,7 +352,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                       TextSpan(
                                                           text: "*",
                                                           style: TextStyle(
-                                                              color: Colors.red))
+                                                              color:
+                                                                  Colors.red))
                                                     ]),
                                               ),
                                               hint: "",
@@ -361,7 +363,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                 child: Center(
                                                   child: Image.asset(
                                                     icArrowDownOrange,
-                                                    height: responsiveHeight(20),
+                                                    height:
+                                                        responsiveHeight(20),
                                                     width: responsiveHeight(20),
                                                   ),
                                                 ),
@@ -373,8 +376,9 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           ),
                                           Expanded(
                                             child: AppRoundTextField(
-                                              controller: locationMasterController
-                                                  .stateController,
+                                              controller:
+                                                  locationMasterController
+                                                      .stateController,
                                               inputStyle: TextStyle(
                                                   fontSize: responsiveFont(14),
                                                   color: kTextBlackColor),
@@ -416,7 +420,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                         locationMasterController
                                                                 .stateModel
                                                                 ?.details ??
-                                                            [],true);
+                                                            [],
+                                                        true);
                                                   }
                                                 }
                                               },
@@ -432,7 +437,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                       TextSpan(
                                                           text: "*",
                                                           style: TextStyle(
-                                                              color: Colors.red))
+                                                              color:
+                                                                  Colors.red))
                                                     ]),
                                               ),
                                               hint: "",
@@ -442,7 +448,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                 child: Center(
                                                   child: Image.asset(
                                                     icArrowDownOrange,
-                                                    height: responsiveHeight(20),
+                                                    height:
+                                                        responsiveHeight(20),
                                                     width: responsiveHeight(20),
                                                   ),
                                                 ),
@@ -458,8 +465,9 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                         children: [
                                           Expanded(
                                             child: AppRoundTextField(
-                                              controller: locationMasterController
-                                                  .distController,
+                                              controller:
+                                                  locationMasterController
+                                                      .distController,
                                               inputStyle: TextStyle(
                                                   fontSize: responsiveFont(14),
                                                   color: kTextBlackColor),
@@ -484,11 +492,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                               locationMasterController
                                                                   .selectedDist = p0,
                                                               locationMasterController
-                                                                      .distController
-                                                                      .text =
-                                                                  locationMasterController
-                                                                          .selectedDistVal ??
-                                                                      "",
+                                                                  .distController
+                                                                  .text = locationMasterController
+                                                                      .selectedDistVal ??
+                                                                  "",
                                                               await locationMasterController.getTaluka(
                                                                   locationMasterController
                                                                       .selectedDist
@@ -502,7 +509,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                         locationMasterController
                                                                 .distModel
                                                                 ?.details ??
-                                                            [],true);
+                                                            [],
+                                                        true);
                                                   }
                                                 }
                                               },
@@ -518,7 +526,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                       TextSpan(
                                                           text: "*",
                                                           style: TextStyle(
-                                                              color: Colors.red))
+                                                              color:
+                                                                  Colors.red))
                                                     ]),
                                               ),
                                               hint: "",
@@ -528,7 +537,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                 child: Center(
                                                   child: Image.asset(
                                                     icArrowDownOrange,
-                                                    height: responsiveHeight(20),
+                                                    height:
+                                                        responsiveHeight(20),
                                                     width: responsiveHeight(20),
                                                   ),
                                                 ),
@@ -540,8 +550,9 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                           ),
                                           Expanded(
                                             child: AppRoundTextField(
-                                              controller: locationMasterController
-                                                  .talukaController,
+                                              controller:
+                                                  locationMasterController
+                                                      .talukaController,
                                               inputStyle: TextStyle(
                                                   fontSize: responsiveFont(14),
                                                   color: kTextBlackColor),
@@ -566,11 +577,10 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                             locationMasterController
                                                                 .selectedTaluka = p0,
                                                             locationMasterController
-                                                                    .talukaController
-                                                                    .text =
-                                                                locationMasterController
-                                                                        .selectedTalukaVal ??
-                                                                    "",
+                                                                .talukaController
+                                                                .text = locationMasterController
+                                                                    .selectedTalukaVal ??
+                                                                "",
                                                             await locationMasterController.getCity(
                                                                 locationMasterController
                                                                     .selectedTaluka
@@ -584,7 +594,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                       locationMasterController
                                                               .talukaModel
                                                               ?.details ??
-                                                          [],true);
+                                                          [],
+                                                      isVisible: true);
                                                 }
                                               },
                                               // maxLength: 12,
@@ -599,7 +610,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                       TextSpan(
                                                           text: "*",
                                                           style: TextStyle(
-                                                              color: Colors.red))
+                                                              color:
+                                                                  Colors.red))
                                                     ]),
                                               ),
                                               hint: "",
@@ -609,7 +621,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                 child: Center(
                                                   child: Image.asset(
                                                     icArrowDownOrange,
-                                                    height: responsiveHeight(20),
+                                                    height:
+                                                        responsiveHeight(20),
                                                     width: responsiveHeight(20),
                                                   ),
                                                 ),
@@ -659,7 +672,8 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                   "City",
                                                   locationMasterController
                                                           .cityModel?.details ??
-                                                      [],false);
+                                                      [],
+                                                  isVisible: false);
                                             }
                                           }
                                         },
@@ -704,12 +718,12 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                               child: AppButton(
                                                 onTap: () {
                                                   if (widget.isEdit == false) {
-
                                                     locationMasterController
                                                         .saveLocationMaster();
                                                   } else {
                                                     locationMasterController
-                                                        .updateLocationMaster(widget.locationId);
+                                                        .updateLocationMaster(
+                                                            widget.locationId);
                                                   }
                                                 },
                                                 title: "Save",
@@ -727,18 +741,32 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                               flex: 1,
                                               child: AppButton(
                                                 title: "Clear",
-                                                onTap: (){
-                                                  locationMasterController.locationName.text = "";
-                                                  locationMasterController.contactNo.text = "";
-                                                  locationMasterController.contactPerson.text = "";
-                                                  locationMasterController.emailId.text = "";
-                                                  locationMasterController.address1.text = "";
-                                                  locationMasterController.address2.text = "";
-                                                  locationMasterController.distController.text = "";
-                                                  locationMasterController.talukaController.text = "";
-                                                  locationMasterController.cityController.text = "";
-                                                  locationMasterController.countryController.text = "";
-                                                  locationMasterController.stateController.text = "";
+                                                onTap: () {
+                                                  locationMasterController
+                                                      .locationName.text = "";
+                                                  locationMasterController
+                                                      .contactNo.text = "";
+                                                  locationMasterController
+                                                      .contactPerson.text = "";
+                                                  locationMasterController
+                                                      .emailId.text = "";
+                                                  locationMasterController
+                                                      .address1.text = "";
+                                                  locationMasterController
+                                                      .address2.text = "";
+                                                  locationMasterController
+                                                      .distController.text = "";
+                                                  locationMasterController
+                                                      .talukaController
+                                                      .text = "";
+                                                  locationMasterController
+                                                      .cityController.text = "";
+                                                  locationMasterController
+                                                      .countryController
+                                                      .text = "";
+                                                  locationMasterController
+                                                      .stateController
+                                                      .text = "";
                                                   // Get.back();
                                                 },
                                                 buttonColor: Colors.grey,

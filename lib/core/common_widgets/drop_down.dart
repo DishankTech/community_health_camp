@@ -2320,12 +2320,11 @@ Future<dynamic> commonBottonSheet(
 }
 
 Future<dynamic> commonBottomSheet(
-  BuildContext context,
-  Function(dynamic) onItemSelected,
-  String bottomSheetTitle,
-  List<dynamic> list,
-  bool isVisible,
-) {
+    BuildContext context,
+    Function(dynamic) onItemSelected,
+    String bottomSheetTitle,
+    List<dynamic> list,
+    {bool? isVisible}) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: false,
@@ -2333,7 +2332,7 @@ Future<dynamic> commonBottomSheet(
       onItemSelected: onItemSelected,
       bottomSheetTitle: bottomSheetTitle,
       list: list,
-      isVisible: isVisible,
+      isVisible: isVisible ?? true,
     ),
   );
 }
@@ -2422,7 +2421,8 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          contentPadding:
+                              const EdgeInsets.only(left: 8, top: 12),
                           suffixIcon:
                               const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
@@ -2677,7 +2677,8 @@ class _CommonBottomSheetContent1State
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          contentPadding:
+                              const EdgeInsets.only(left: 8, top: 12),
                           suffixIcon:
                               const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
@@ -3224,7 +3225,7 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
                       },
                   "Stakeholder Type",
                   widget.list,
-                  true);
+                  isVisible: true);
             },
             // maxLength: 12,
             readOnly: true,
@@ -3423,7 +3424,8 @@ class LocationNameBottomSheetContentState
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          contentPadding:
+                              const EdgeInsets.only(left: 8, top: 12),
                           suffixIcon:
                               const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
@@ -3982,7 +3984,8 @@ class StakeHolderNameBottomSheetContentState
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          contentPadding:
+                              const EdgeInsets.only(left: 8, top: 12),
                           suffixIcon:
                               const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
@@ -4036,7 +4039,6 @@ class StakeHolderNameBottomSheetContentState
                         ).paddingSymmetric(horizontal: 4, vertical: 2),
                       ),
                     );
-
                   },
                   onSelected: (dynamic selectedStakeH) {
                     txtContro.text = selectedStakeH.stakeholderNameEn ?? '';

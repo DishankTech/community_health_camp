@@ -172,10 +172,6 @@ class _DashboardPatientRegistrationScreenState
                   ..showSnackBar(const SnackBar(
                     content: Text('Unable to get report'),
                     duration: Duration(seconds: 3),
-                  ..showSnackBar(const SnackBar(
-                    content: Text('Unable to get report'),
-                    duration: Duration(seconds: 3),
-                    backgroundColor: Colors.red,
                   ));
                 Navigator.pop(context);
                 Navigator.pop(context);
@@ -200,25 +196,26 @@ class _DashboardPatientRegistrationScreenState
                       backgroundColor: Colors.red,
                     ));
                   Navigator.pop(context);
-                if (state.getExcelDataResponse ==
-                    'File Downloaded Successfully') {
-                  ScaffoldMessenger.of(context)
-                    ..clearSnackBars()
-                    ..showSnackBar(SnackBar(
-                      content: Text(state.getExcelDataResponse),
-                      duration: const Duration(seconds: 3),
-                      backgroundColor: Colors.green,
-                    ));
-                  Navigator.pop(context);
-                } else {
-                  ScaffoldMessenger.of(context)
-                    ..clearSnackBars()
-                    ..showSnackBar(SnackBar(
-                      content: Text(state.getExcelDataResponse),
-                      duration: const Duration(seconds: 3),
-                      backgroundColor: Colors.red,
-                    ));
-                  Navigator.pop(context);
+                  if (state.getExcelDataResponse ==
+                      'File Downloaded Successfully') {
+                    ScaffoldMessenger.of(context)
+                      ..clearSnackBars()
+                      ..showSnackBar(SnackBar(
+                        content: Text(state.getExcelDataResponse),
+                        duration: const Duration(seconds: 3),
+                        backgroundColor: Colors.green,
+                      ));
+                    Navigator.pop(context);
+                  } else {
+                    ScaffoldMessenger.of(context)
+                      ..clearSnackBars()
+                      ..showSnackBar(SnackBar(
+                        content: Text(state.getExcelDataResponse),
+                        duration: const Duration(seconds: 3),
+                        backgroundColor: Colors.red,
+                      ));
+                    Navigator.pop(context);
+                  }
                 }
               }
             },
@@ -1174,21 +1171,20 @@ class _DashboardPatientRegistrationScreenState
                           isShowPatientsTreatments = false;
                           isShowPatientsReferred = false;
                           // filterCountDashboard();
-                          context.read<DashboardBloc>().add(GetCount(
-                                  payload: const {
-                                    "days": null,
-                                    "start_date": null,
-                                    "end_date": null
-                                  }));
-                          context.read<DashboardBloc>().add(
-                                  GetDateWiseDistrictCount(payload: const {
-                                "start_date": null,
-                                "end_date": null,
-                                "district_id": null
+                          context.read<DashboardBloc>().add(GetCount(payload: {
+                                "days": 0,
+                                "start_date": "2024-01-01",
+                                "end_date": DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.now())
                               }));
                           context
                               .read<DashboardBloc>()
-                              .add(GetDistrictWisePatientsCount());
+                              .add(GetDateWiseDistrictCount(payload: {
+                                "start_date": "2024-01-01",
+                                "end_date": DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.now()),
+                                "district_id": 0
+                              }));
                           setState(() {});
                         },
                         child: Container(
@@ -1715,20 +1711,6 @@ class _DashboardPatientRegistrationScreenState
                                           if (state
                                               .getDateWiseDistrictCountResponse
                                               .isNotEmpty) {
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8, 30, 8, 8),
-                                    child: BlocBuilder<DashboardBloc,
-                                        DashboardState>(
-                                      builder: (context, state) {
-                                        bool noData = true;
-                                        DistrictDateWiseCampResponseModel?
-                                            districtDateWiseCampResponseModel;
-                                        if (state.getDateWiseDistrictCountStatus
-                                            .isSuccess) {
-                                          if (state
-                                              .getDateWiseDistrictCountResponse
-                                              .isNotEmpty) {
                                             districtDateWiseCampResponseModel =
                                                 DistrictDateWiseCampResponseModel
                                                     .fromJson(jsonDecode(state
@@ -1767,9 +1749,6 @@ class _DashboardPatientRegistrationScreenState
                                             }
                                           }
                                         }
-                                            }
-                                          }
-                                        }
 
                                         return state
                                                 .getDateWiseDistrictCountStatus
@@ -1787,35 +1766,24 @@ class _DashboardPatientRegistrationScreenState
                                                 : SfCartesianChart(
                                                     isTransposed: true,
                                                     primaryXAxis: CategoryAxis(
-                                                      // labelPlacement: LabelPlacement.onTicks,
-                                                      labelStyle: TextStyle(
-                                                          fontSize:
-                                                              responsiveFont(
-                                                                  10)),
-                                                      // ignore: prefer_const_constructors
-                                                      axisLine: AxisLine(
-                                                          color: Colors.grey),
                                                       labelRotation: -45,
-                                                      autoScrollingDelta: 5,
                                                       autoScrollingMode:
                                                           AutoScrollingMode
                                                               .start,
-                                                      // initialVisibleMinimum:
-                                                      //     (campConductedDistrictWiseList
-                                                      //             .length -
-                                                      //         20),
-                                                      // initialVisibleMaximum:
-                                                      //     (campConductedDistrictWiseList
-                                                      //             .length -
-                                                      //         0),
+                                                      initialVisibleMinimum:
+                                                          (campConductedDistrictWiseList
+                                                                  .length -
+                                                              20),
+                                                      initialVisibleMaximum:
+                                                          (campConductedDistrictWiseList
+                                                                  .length -
+                                                              0),
                                                     ),
                                                     primaryYAxis:
                                                         const NumericAxis(
-                                                      axisLine: AxisLine(
-                                                          color: Colors.grey),
                                                       minimum: 0,
                                                       // maximum: 40,
-                                                      interval: 3,
+                                                      interval: 10,
                                                     ),
                                                     zoomPanBehavior:
                                                         ZoomPanBehavior(
