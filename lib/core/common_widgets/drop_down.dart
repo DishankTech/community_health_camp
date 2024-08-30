@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
-import 'package:community_health_app/core/common_bloc/models/camp_dropdown_list_response_model.dart'
-    as CommonCamp;
+import 'package:community_health_app/core/common_bloc/models/camp_dropdown_list_response_model.dart' as CommonCamp;
 import 'package:community_health_app/core/common_bloc/models/get_master_response_model_with_hier.dart';
 import 'package:community_health_app/core/common_bloc/models/master_lookup_det_hier_response_model.dart';
 import 'package:community_health_app/core/common_bloc/models/master_response_model.dart';
@@ -22,8 +21,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:formz/formz.dart';
 import 'package:get/get.dart';
 
-Future<dynamic> genderBottomSheet(
-    BuildContext context, Function(LookupDet) onItemSelected) {
+Future<dynamic> genderBottomSheet(BuildContext context, Function(LookupDet) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -31,11 +29,7 @@ Future<dynamic> genderBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -46,10 +40,7 @@ Future<dynamic> genderBottomSheet(
                         children: [
                           Text(
                             "Gender",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -74,16 +65,12 @@ Future<dynamic> genderBottomSheet(
                       builder: (context, state) {
                         MasterResponseModel? responseModel;
                         if (state.getGenderResponse.isNotEmpty) {
-                          responseModel = MasterResponseModel.fromJson(
-                              jsonDecode(state.getGenderResponse));
+                          responseModel = MasterResponseModel.fromJson(jsonDecode(state.getGenderResponse));
                         }
-                        return responseModel != null &&
-                                responseModel.details != null &&
-                                responseModel.details![0].lookupDet != null
+                        return responseModel != null && responseModel.details != null && responseModel.details![0].lookupDet != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel
-                                      .details![0].lookupDet!.length,
+                                  itemCount: responseModel.details![0].lookupDet!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -91,14 +78,8 @@ Future<dynamic> genderBottomSheet(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          var selectedItem = {
-                                            'id': responseModel!.details![0]
-                                                .lookupDet![i].lookupDetId!,
-                                            'title': responseModel.details![0]
-                                                .lookupDet![i].lookupDetDescEn!
-                                          };
-                                          onItemSelected(responseModel!
-                                              .details![0].lookupDet![i]);
+                                          var selectedItem = {'id': responseModel!.details![0].lookupDet![i].lookupDetId!, 'title': responseModel.details![0].lookupDet![i].lookupDetDescEn!};
+                                          onItemSelected(responseModel!.details![0].lookupDet![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -109,38 +90,28 @@ Future<dynamic> genderBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
                                                 Expanded(
-                                                  child: Text(responseModel!
-                                                      .details![0]
-                                                      .lookupDet![i]
-                                                      .lookupDetDescEn!),
+                                                  child: Text(responseModel!.details![0].lookupDet![i].lookupDetDescEn!),
                                                 ),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -162,8 +133,7 @@ Future<dynamic> genderBottomSheet(
           ));
 }
 
-Future<dynamic> stakeholderBottomSheet(
-    BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
+Future<dynamic> stakeholderBottomSheet(BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -171,11 +141,7 @@ Future<dynamic> stakeholderBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -186,10 +152,7 @@ Future<dynamic> stakeholderBottomSheet(
                         children: [
                           Text(
                             "Stakeholder Type",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -214,30 +177,23 @@ Future<dynamic> stakeholderBottomSheet(
                       builder: (context, state) {
                         GetUserMasterWithHierResponse? responseModel;
                         if (state.getMasterResponse.isNotEmpty) {
-                          responseModel =
-                              GetUserMasterWithHierResponse.fromJson(
-                                  jsonDecode(state.getMasterResponse));
+                          responseModel = GetUserMasterWithHierResponse.fromJson(jsonDecode(state.getMasterResponse));
                         }
 
                         return state.getMasterStatus.isInProgress
                             ? const Center(child: CircularProgressIndicator())
-                            : responseModel != null &&
-                                    responseModel.details != null
+                            : responseModel != null && responseModel.details != null
                                 ? Expanded(
                                     child: ListView.builder(
-                                      itemCount: responseModel.details![0]
-                                          .lookupDetHierarchical!.length,
+                                      itemCount: responseModel.details![0].lookupDetHierarchical!.length,
                                       itemBuilder: (c, i) => Padding(
                                         padding: const EdgeInsets.all(2.0),
                                         child: Material(
                                           color: Colors.transparent,
                                           child: InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            borderRadius: BorderRadius.circular(10),
                                             onTap: () {
-                                              onItemSelected(responseModel!
-                                                  .details![0]
-                                                  .lookupDetHierarchical![i]);
+                                              onItemSelected(responseModel!.details![0].lookupDetHierarchical![i]);
                                               setState(
                                                 () {
                                                   selectedIndex = i;
@@ -247,43 +203,28 @@ Future<dynamic> stakeholderBottomSheet(
                                             },
                                             child: Ink(
                                               decoration: BoxDecoration(
-                                                color: i == selectedIndex
-                                                    ? Colors.transparent
-                                                    : kListBGColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                                color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                                borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
                                                     Image.asset(
-                                                      i == selectedIndex
-                                                          ? icCircleDot
-                                                          : icCircle,
-                                                      height:
-                                                          responsiveHeight(20),
+                                                      i == selectedIndex ? icCircleDot : icCircle,
+                                                      height: responsiveHeight(20),
                                                     ),
                                                     SizedBox(
-                                                      width:
-                                                          responsiveWidth(20),
+                                                      width: responsiveWidth(20),
                                                     ),
-                                                    Text(responseModel!
-                                                        .details![0]
-                                                        .lookupDetHierarchical![
-                                                            i]
-                                                        .lookupDetHierDescEn!),
+                                                    Text(responseModel!.details![0].lookupDetHierarchical![i].lookupDetHierDescEn!),
                                                     const Spacer(),
                                                     i == selectedIndex
                                                         ? Image.asset(
                                                             icCircleCheck,
-                                                            height:
-                                                                responsiveHeight(
-                                                                    20),
+                                                            height: responsiveHeight(20),
                                                           )
-                                                        : const SizedBox
-                                                            .shrink(),
+                                                        : const SizedBox.shrink(),
                                                   ],
                                                 ),
                                               ),
@@ -293,8 +234,7 @@ Future<dynamic> stakeholderBottomSheet(
                                       ),
                                     ),
                                   )
-                                : const Center(
-                                    child: Text("Data Not Available"));
+                                : const Center(child: Text("Data Not Available"));
                       },
                     ),
                   ],
@@ -304,8 +244,7 @@ Future<dynamic> stakeholderBottomSheet(
           ));
 }
 
-Future<dynamic> sectorTypeBottomSheet(
-    BuildContext context, Function(LookupDet) onItemSelected) {
+Future<dynamic> sectorTypeBottomSheet(BuildContext context, Function(LookupDet) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -313,11 +252,7 @@ Future<dynamic> sectorTypeBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -328,10 +263,7 @@ Future<dynamic> sectorTypeBottomSheet(
                         children: [
                           Text(
                             "Sector Type",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -356,28 +288,23 @@ Future<dynamic> sectorTypeBottomSheet(
                       builder: (context, state) {
                         MasterResponseModel? responseModel;
                         if (state.getSectorTypeResponse.isNotEmpty) {
-                          responseModel = MasterResponseModel.fromJson(
-                              jsonDecode(state.getSectorTypeResponse));
+                          responseModel = MasterResponseModel.fromJson(jsonDecode(state.getSectorTypeResponse));
                         }
 
                         return state.getSectorTypeStatus.isInProgress
                             ? const Center(child: CircularProgressIndicator())
-                            : responseModel != null &&
-                                    responseModel.details != null
+                            : responseModel != null && responseModel.details != null
                                 ? Expanded(
                                     child: ListView.builder(
-                                      itemCount: responseModel
-                                          .details![0].lookupDet!.length,
+                                      itemCount: responseModel.details![0].lookupDet!.length,
                                       itemBuilder: (c, i) => Padding(
                                         padding: const EdgeInsets.all(2.0),
                                         child: Material(
                                           color: Colors.transparent,
                                           child: InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            borderRadius: BorderRadius.circular(10),
                                             onTap: () {
-                                              onItemSelected(responseModel!
-                                                  .details![0].lookupDet![i]);
+                                              onItemSelected(responseModel!.details![0].lookupDet![i]);
                                               setState(
                                                 () {
                                                   selectedIndex = i;
@@ -387,42 +314,28 @@ Future<dynamic> sectorTypeBottomSheet(
                                             },
                                             child: Ink(
                                               decoration: BoxDecoration(
-                                                color: i == selectedIndex
-                                                    ? Colors.transparent
-                                                    : kListBGColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
+                                                color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                                borderRadius: BorderRadius.circular(10),
                                               ),
                                               child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
+                                                padding: const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   children: [
                                                     Image.asset(
-                                                      i == selectedIndex
-                                                          ? icCircleDot
-                                                          : icCircle,
-                                                      height:
-                                                          responsiveHeight(20),
+                                                      i == selectedIndex ? icCircleDot : icCircle,
+                                                      height: responsiveHeight(20),
                                                     ),
                                                     SizedBox(
-                                                      width:
-                                                          responsiveWidth(20),
+                                                      width: responsiveWidth(20),
                                                     ),
-                                                    Text(responseModel!
-                                                        .details![0]
-                                                        .lookupDet![i]
-                                                        .lookupDetDescEn!),
+                                                    Text(responseModel!.details![0].lookupDet![i].lookupDetDescEn!),
                                                     const Spacer(),
                                                     i == selectedIndex
                                                         ? Image.asset(
                                                             icCircleCheck,
-                                                            height:
-                                                                responsiveHeight(
-                                                                    20),
+                                                            height: responsiveHeight(20),
                                                           )
-                                                        : const SizedBox
-                                                            .shrink(),
+                                                        : const SizedBox.shrink(),
                                                   ],
                                                 ),
                                               ),
@@ -432,8 +345,7 @@ Future<dynamic> sectorTypeBottomSheet(
                                       ),
                                     ),
                                   )
-                                : const Center(
-                                    child: Text("Data Not Available"));
+                                : const Center(child: Text("Data Not Available"));
                       },
                     ),
                   ],
@@ -443,8 +355,7 @@ Future<dynamic> sectorTypeBottomSheet(
           ));
 }
 
-Future<dynamic> stakeholderSubTypeBottomSheet(
-    BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
+Future<dynamic> stakeholderSubTypeBottomSheet(BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -452,11 +363,7 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -467,10 +374,7 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
                         children: [
                           Text(
                             "Stakeholder Sub Type",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -493,18 +397,12 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
                     ),
                     BlocBuilder<MasterDataBloc, MasterDataState>(
                       builder: (context, state) {
-                        GetUserMasterWithHierResponse responseModel =
-                            GetUserMasterWithHierResponse.fromJson(jsonDecode(
-                                state.getStakeholderSubTypeResponse));
+                        GetUserMasterWithHierResponse responseModel = GetUserMasterWithHierResponse.fromJson(jsonDecode(state.getStakeholderSubTypeResponse));
 
-                        return responseModel.details != null &&
-                                responseModel
-                                        .details![0].lookupDetHierarchical !=
-                                    null
+                        return responseModel.details != null && responseModel.details![0].lookupDetHierarchical != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel.details![0]
-                                      .lookupDetHierarchical!.length,
+                                  itemCount: responseModel.details![0].lookupDetHierarchical!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -513,18 +411,10 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
                                           var selectedItem = {
-                                            'id': responseModel
-                                                .details![0]
-                                                .lookupDetHierarchical![i]
-                                                .lookupDetHierId,
-                                            'title': responseModel
-                                                .details![0]
-                                                .lookupDetHierarchical![i]
-                                                .lookupDetHierDescEn!
+                                            'id': responseModel.details![0].lookupDetHierarchical![i].lookupDetHierId,
+                                            'title': responseModel.details![0].lookupDetHierarchical![i].lookupDetHierDescEn!
                                           };
-                                          onItemSelected(responseModel
-                                              .details![0]
-                                              .lookupDetHierarchical![i]);
+                                          onItemSelected(responseModel.details![0].lookupDetHierarchical![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -534,38 +424,28 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
                                                 Expanded(
-                                                  child: Text(responseModel
-                                                      .details![0]
-                                                      .lookupDetHierarchical![i]
-                                                      .lookupDetHierDescEn!),
+                                                  child: Text(responseModel.details![0].lookupDetHierarchical![i].lookupDetHierDescEn!),
                                                 ),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -587,8 +467,7 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
           ));
 }
 
-Future<dynamic> stakeholderNameBottomSheet(
-    BuildContext context, Function(StakeholderNameDetails) onItemSelected) {
+Future<dynamic> stakeholderNameBottomSheet(BuildContext context, Function(StakeholderNameDetails) onItemSelected) {
   int selectedIndex = -1;
   List<StakeholderNameDetails> filteredData = [];
   TextEditingController _searchTextController = TextEditingController();
@@ -598,11 +477,7 @@ Future<dynamic> stakeholderNameBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -613,10 +488,7 @@ Future<dynamic> stakeholderNameBottomSheet(
                         children: [
                           Text(
                             "Stakeholder Name",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -639,12 +511,9 @@ Future<dynamic> stakeholderNameBottomSheet(
                     ),
                     BlocBuilder<StakeholderMasterBloc, StakeholderMasterState>(
                       builder: (context, state) {
-                        StakeholderNameResponseModel responseModel =
-                            StakeholderNameResponseModel.fromJson(
-                                jsonDecode(state.getStakeholderNameResponse));
+                        StakeholderNameResponseModel responseModel = StakeholderNameResponseModel.fromJson(jsonDecode(state.getStakeholderNameResponse));
 
-                        return responseModel.details != null &&
-                                responseModel.details!.isNotEmpty
+                        return responseModel.details != null && responseModel.details!.isNotEmpty
                             ? Expanded(
                                 child: ListView.builder(
                                   itemCount: responseModel.details!.length,
@@ -655,8 +524,7 @@ Future<dynamic> stakeholderNameBottomSheet(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          onItemSelected(
-                                              responseModel.details![i]);
+                                          onItemSelected(responseModel.details![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -666,37 +534,28 @@ Future<dynamic> stakeholderNameBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
                                                 Expanded(
-                                                  child: Text(responseModel
-                                                      .details![i]
-                                                      .stakeholderNameEn!),
+                                                  child: Text(responseModel.details![i].stakeholderNameEn!),
                                                 ),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -729,8 +588,7 @@ Future<dynamic> stakeholderNameBottomSheet(
           ));
 }
 
-Future<dynamic> designationTypeBottomSheet(
-    BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
+Future<dynamic> designationTypeBottomSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -738,11 +596,7 @@ Future<dynamic> designationTypeBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -753,10 +607,7 @@ Future<dynamic> designationTypeBottomSheet(
                         children: [
                           Text(
                             "Designation Type",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -781,17 +632,12 @@ Future<dynamic> designationTypeBottomSheet(
                       builder: (context, state) {
                         MasterResponseModel? responseModel;
                         if (state.getMasterDesignationTypeResponse.isNotEmpty) {
-                          responseModel = MasterResponseModel.fromJson(
-                              jsonDecode(
-                                  state.getMasterDesignationTypeResponse));
+                          responseModel = MasterResponseModel.fromJson(jsonDecode(state.getMasterDesignationTypeResponse));
                         }
-                        return responseModel != null &&
-                                responseModel.details != null &&
-                                responseModel.details![0].lookupDet != null
+                        return responseModel != null && responseModel.details != null && responseModel.details![0].lookupDet != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel
-                                      .details![0].lookupDet!.length,
+                                  itemCount: responseModel.details![0].lookupDet!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -799,12 +645,7 @@ Future<dynamic> designationTypeBottomSheet(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          var selectedItem = {
-                                            'id': responseModel!.details![0]
-                                                .lookupDet![i].lookupDetId!,
-                                            'title': responseModel.details![0]
-                                                .lookupDet![i].lookupDetDescEn!
-                                          };
+                                          var selectedItem = {'id': responseModel!.details![0].lookupDet![i].lookupDetId!, 'title': responseModel.details![0].lookupDet![i].lookupDetDescEn!};
                                           onItemSelected(selectedItem);
                                           setState(
                                             () {
@@ -816,36 +657,26 @@ Future<dynamic> designationTypeBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel!
-                                                    .details![0]
-                                                    .lookupDet![i]
-                                                    .lookupDetDescEn!),
+                                                Text(responseModel!.details![0].lookupDet![i].lookupDetDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -867,8 +698,7 @@ Future<dynamic> designationTypeBottomSheet(
           ));
 }
 
-Future<dynamic> divisionBottomSheet(
-    BuildContext context, Function(LookupDet) onItemSelected) {
+Future<dynamic> divisionBottomSheet(BuildContext context, Function(LookupDet) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -876,11 +706,7 @@ Future<dynamic> divisionBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -891,10 +717,7 @@ Future<dynamic> divisionBottomSheet(
                         children: [
                           Text(
                             "Divison",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -919,16 +742,12 @@ Future<dynamic> divisionBottomSheet(
                       builder: (context, state) {
                         MasterResponseModel? responseModel;
                         if (state.getDivisionListResponse.isNotEmpty) {
-                          responseModel = MasterResponseModel.fromJson(
-                              jsonDecode(state.getDivisionListResponse));
+                          responseModel = MasterResponseModel.fromJson(jsonDecode(state.getDivisionListResponse));
                         }
-                        return responseModel != null &&
-                                responseModel.details != null &&
-                                responseModel.details![0].lookupDet != null
+                        return responseModel != null && responseModel.details != null && responseModel.details![0].lookupDet != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel
-                                      .details![0].lookupDet!.length,
+                                  itemCount: responseModel.details![0].lookupDet!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -936,14 +755,8 @@ Future<dynamic> divisionBottomSheet(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          var selectedItem = {
-                                            'id': responseModel!.details![0]
-                                                .lookupDet![i].lookupDetId!,
-                                            'title': responseModel.details![0]
-                                                .lookupDet![i].lookupDetDescEn!
-                                          };
-                                          onItemSelected(responseModel!
-                                              .details![0].lookupDet![i]);
+                                          var selectedItem = {'id': responseModel!.details![0].lookupDet![i].lookupDetId!, 'title': responseModel.details![0].lookupDet![i].lookupDetDescEn!};
+                                          onItemSelected(responseModel!.details![0].lookupDet![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -954,38 +767,28 @@ Future<dynamic> divisionBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
                                                 Expanded(
-                                                  child: Text(responseModel!
-                                                      .details![0]
-                                                      .lookupDet![i]
-                                                      .lookupDetDescEn!),
+                                                  child: Text(responseModel!.details![0].lookupDet![i].lookupDetDescEn!),
                                                 ),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -1007,8 +810,7 @@ Future<dynamic> divisionBottomSheet(
           ));
 }
 
-Future<dynamic> districtBottomSheet(
-    BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
+Future<dynamic> districtBottomSheet(BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -1016,11 +818,7 @@ Future<dynamic> districtBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -1031,10 +829,7 @@ Future<dynamic> districtBottomSheet(
                         children: [
                           Text(
                             "District",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -1060,17 +855,13 @@ Future<dynamic> districtBottomSheet(
                         GetUserMasterWithHierResponse? responseModel;
 
                         if (state.getDistrictListResponse.isNotEmpty) {
-                          responseModel =
-                              GetUserMasterWithHierResponse.fromJson(
-                                  jsonDecode(state.getDistrictListResponse));
+                          responseModel = GetUserMasterWithHierResponse.fromJson(jsonDecode(state.getDistrictListResponse));
                         }
 
-                        return responseModel != null &&
-                                responseModel.details != null
+                        return responseModel != null && responseModel.details != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel.details![0]
-                                      .lookupDetHierarchical!.length,
+                                  itemCount: responseModel.details![0].lookupDetHierarchical!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -1079,18 +870,10 @@ Future<dynamic> districtBottomSheet(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
                                           var selectedItem = {
-                                            'id': responseModel!
-                                                .details![0]
-                                                .lookupDetHierarchical![i]
-                                                .lookupDetHierId,
-                                            'title': responseModel
-                                                .details![0]
-                                                .lookupDetHierarchical![i]
-                                                .lookupDetHierDescEn!
+                                            'id': responseModel!.details![0].lookupDetHierarchical![i].lookupDetHierId,
+                                            'title': responseModel.details![0].lookupDetHierarchical![i].lookupDetHierDescEn!
                                           };
-                                          onItemSelected(responseModel
-                                              .details![0]
-                                              .lookupDetHierarchical![i]);
+                                          onItemSelected(responseModel.details![0].lookupDetHierarchical![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -1100,36 +883,26 @@ Future<dynamic> districtBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel!
-                                                    .details![0]
-                                                    .lookupDetHierarchical![i]
-                                                    .lookupDetHierDescEn!),
+                                                Text(responseModel!.details![0].lookupDetHierarchical![i].lookupDetHierDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -1151,8 +924,7 @@ Future<dynamic> districtBottomSheet(
           ));
 }
 
-Future<dynamic> districtBottomSheetV1(
-    BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
+Future<dynamic> districtBottomSheetV1(BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -1160,11 +932,7 @@ Future<dynamic> districtBottomSheetV1(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -1175,10 +943,7 @@ Future<dynamic> districtBottomSheetV1(
                         children: [
                           Text(
                             "District",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -1204,13 +969,10 @@ Future<dynamic> districtBottomSheetV1(
                         MasterLookupDetHierResponseModel? responseModel;
 
                         if (state.getTalukaListResponse.isNotEmpty) {
-                          responseModel =
-                              MasterLookupDetHierResponseModel.fromJson(
-                                  jsonDecode(state.getTalukaListResponse));
+                          responseModel = MasterLookupDetHierResponseModel.fromJson(jsonDecode(state.getTalukaListResponse));
                         }
 
-                        return responseModel != null &&
-                                responseModel.details != null
+                        return responseModel != null && responseModel.details != null
                             ? Expanded(
                                 child: ListView.builder(
                                   itemCount: responseModel.details!.length,
@@ -1221,8 +983,7 @@ Future<dynamic> districtBottomSheetV1(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          onItemSelected(
-                                              responseModel!.details![i]);
+                                          onItemSelected(responseModel!.details![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -1232,34 +993,26 @@ Future<dynamic> districtBottomSheetV1(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel!.details![i]
-                                                    .lookupDetHierDescEn!),
+                                                Text(responseModel!.details![i].lookupDetHierDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -1281,8 +1034,7 @@ Future<dynamic> districtBottomSheetV1(
           ));
 }
 
-Future<dynamic> talukaBottomSheet(
-    BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
+Future<dynamic> talukaBottomSheet(BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -1290,11 +1042,7 @@ Future<dynamic> talukaBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -1305,10 +1053,7 @@ Future<dynamic> talukaBottomSheet(
                         children: [
                           Text(
                             "Taluka",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -1334,17 +1079,13 @@ Future<dynamic> talukaBottomSheet(
                         GetUserMasterWithHierResponse? responseModel;
 
                         if (state.getTalukaListResponse.isNotEmpty) {
-                          responseModel =
-                              GetUserMasterWithHierResponse.fromJson(
-                                  jsonDecode(state.getTalukaListResponse));
+                          responseModel = GetUserMasterWithHierResponse.fromJson(jsonDecode(state.getTalukaListResponse));
                         }
 
-                        return responseModel != null &&
-                                responseModel.details != null
+                        return responseModel != null && responseModel.details != null
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel.details![0]
-                                      .lookupDetHierarchical!.length,
+                                  itemCount: responseModel.details![0].lookupDetHierarchical!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -1353,18 +1094,10 @@ Future<dynamic> talukaBottomSheet(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
                                           var selectedItem = {
-                                            'id': responseModel!
-                                                .details![0]
-                                                .lookupDetHierarchical![i]
-                                                .lookupDetHierId,
-                                            'title': responseModel
-                                                .details![0]
-                                                .lookupDetHierarchical![i]
-                                                .lookupDetHierDescEn!
+                                            'id': responseModel!.details![0].lookupDetHierarchical![i].lookupDetHierId,
+                                            'title': responseModel.details![0].lookupDetHierarchical![i].lookupDetHierDescEn!
                                           };
-                                          onItemSelected(responseModel
-                                              .details![0]
-                                              .lookupDetHierarchical![i]);
+                                          onItemSelected(responseModel.details![0].lookupDetHierarchical![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -1374,36 +1107,26 @@ Future<dynamic> talukaBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel!
-                                                    .details![0]
-                                                    .lookupDetHierarchical![i]
-                                                    .lookupDetHierDescEn!),
+                                                Text(responseModel!.details![0].lookupDetHierarchical![i].lookupDetHierDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -1425,8 +1148,7 @@ Future<dynamic> talukaBottomSheet(
           ));
 }
 
-Future<dynamic> talukaBottomSheetV1(
-    BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
+Future<dynamic> talukaBottomSheetV1(BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -1434,11 +1156,7 @@ Future<dynamic> talukaBottomSheetV1(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -1449,10 +1167,7 @@ Future<dynamic> talukaBottomSheetV1(
                         children: [
                           Text(
                             "Taluka",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -1478,13 +1193,10 @@ Future<dynamic> talukaBottomSheetV1(
                         MasterLookupDetHierResponseModel? responseModel;
 
                         if (state.getTalukaListResponse.isNotEmpty) {
-                          responseModel =
-                              MasterLookupDetHierResponseModel.fromJson(
-                                  jsonDecode(state.getTalukaListResponse));
+                          responseModel = MasterLookupDetHierResponseModel.fromJson(jsonDecode(state.getTalukaListResponse));
                         }
 
-                        return responseModel != null &&
-                                responseModel.details != null
+                        return responseModel != null && responseModel.details != null
                             ? Expanded(
                                 child: ListView.builder(
                                   itemCount: responseModel.details!.length,
@@ -1495,8 +1207,7 @@ Future<dynamic> talukaBottomSheetV1(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          onItemSelected(
-                                              responseModel!.details![i]);
+                                          onItemSelected(responseModel!.details![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -1506,34 +1217,26 @@ Future<dynamic> talukaBottomSheetV1(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel!.details![i]
-                                                    .lookupDetHierDescEn!),
+                                                Text(responseModel!.details![i].lookupDetHierDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -1555,8 +1258,7 @@ Future<dynamic> talukaBottomSheetV1(
           ));
 }
 
-Future<dynamic> stakeholderSubTypeBottomSheetV1(
-    BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
+Future<dynamic> stakeholderSubTypeBottomSheetV1(BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -1564,11 +1266,7 @@ Future<dynamic> stakeholderSubTypeBottomSheetV1(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -1579,10 +1277,7 @@ Future<dynamic> stakeholderSubTypeBottomSheetV1(
                         children: [
                           Text(
                             "Stakeholder Sub Type",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -1608,14 +1303,10 @@ Future<dynamic> stakeholderSubTypeBottomSheetV1(
                         MasterLookupDetHierResponseModel? responseModel;
 
                         if (state.getStakeholderSubTypeResponse.isNotEmpty) {
-                          responseModel =
-                              MasterLookupDetHierResponseModel.fromJson(
-                                  jsonDecode(
-                                      state.getStakeholderSubTypeResponse));
+                          responseModel = MasterLookupDetHierResponseModel.fromJson(jsonDecode(state.getStakeholderSubTypeResponse));
                         }
 
-                        return responseModel != null &&
-                                responseModel.details != null
+                        return responseModel != null && responseModel.details != null
                             ? Expanded(
                                 child: ListView.builder(
                                   itemCount: responseModel.details!.length,
@@ -1626,8 +1317,7 @@ Future<dynamic> stakeholderSubTypeBottomSheetV1(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          onItemSelected(
-                                              responseModel!.details![i]);
+                                          onItemSelected(responseModel!.details![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -1637,37 +1327,28 @@ Future<dynamic> stakeholderSubTypeBottomSheetV1(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
                                                 Expanded(
-                                                  child: Text(responseModel!
-                                                      .details![i]
-                                                      .lookupDetHierDescEn!),
+                                                  child: Text(responseModel!.details![i].lookupDetHierDescEn!),
                                                 ),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -1689,8 +1370,7 @@ Future<dynamic> stakeholderSubTypeBottomSheetV1(
           ));
 }
 
-Future<dynamic> townBottomSheet(
-    BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
+Future<dynamic> townBottomSheet(BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -1698,11 +1378,7 @@ Future<dynamic> townBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -1713,10 +1389,7 @@ Future<dynamic> townBottomSheet(
                         children: [
                           Text(
                             "City",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -1742,18 +1415,13 @@ Future<dynamic> townBottomSheet(
                         GetUserMasterWithHierResponse? responseModel;
 
                         if (state.getTownListResponse.isNotEmpty) {
-                          responseModel =
-                              GetUserMasterWithHierResponse.fromJson(
-                                  jsonDecode(state.getTownListResponse));
+                          responseModel = GetUserMasterWithHierResponse.fromJson(jsonDecode(state.getTownListResponse));
                         }
 
-                        return responseModel != null &&
-                                responseModel.details != null &&
-                                responseModel.details!.isNotEmpty
+                        return responseModel != null && responseModel.details != null && responseModel.details!.isNotEmpty
                             ? Expanded(
                                 child: ListView.builder(
-                                  itemCount: responseModel.details![0]
-                                      .lookupDetHierarchical!.length,
+                                  itemCount: responseModel.details![0].lookupDetHierarchical!.length,
                                   itemBuilder: (c, i) => Padding(
                                     padding: const EdgeInsets.all(2.0),
                                     child: Material(
@@ -1762,18 +1430,10 @@ Future<dynamic> townBottomSheet(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
                                           var selectedItem = {
-                                            'id': responseModel!
-                                                .details![0]
-                                                .lookupDetHierarchical![i]
-                                                .lookupDetHierId,
-                                            'title': responseModel
-                                                .details![0]
-                                                .lookupDetHierarchical![i]
-                                                .lookupDetHierDescEn!
+                                            'id': responseModel!.details![0].lookupDetHierarchical![i].lookupDetHierId,
+                                            'title': responseModel.details![0].lookupDetHierarchical![i].lookupDetHierDescEn!
                                           };
-                                          onItemSelected(responseModel
-                                              .details![0]
-                                              .lookupDetHierarchical![i]);
+                                          onItemSelected(responseModel.details![0].lookupDetHierarchical![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -1783,36 +1443,26 @@ Future<dynamic> townBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel!
-                                                    .details![0]
-                                                    .lookupDetHierarchical![i]
-                                                    .lookupDetHierDescEn!),
+                                                Text(responseModel!.details![0].lookupDetHierarchical![i].lookupDetHierDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -1834,8 +1484,7 @@ Future<dynamic> townBottomSheet(
           ));
 }
 
-Future<dynamic> townBottomSheetV1(
-    BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
+Future<dynamic> townBottomSheetV1(BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -1843,11 +1492,7 @@ Future<dynamic> townBottomSheetV1(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -1858,10 +1503,7 @@ Future<dynamic> townBottomSheetV1(
                         children: [
                           Text(
                             "City",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -1887,14 +1529,10 @@ Future<dynamic> townBottomSheetV1(
                         MasterLookupDetHierResponseModel? responseModel;
 
                         if (state.getTownListResponse.isNotEmpty) {
-                          responseModel =
-                              MasterLookupDetHierResponseModel.fromJson(
-                                  jsonDecode(state.getTownListResponse));
+                          responseModel = MasterLookupDetHierResponseModel.fromJson(jsonDecode(state.getTownListResponse));
                         }
 
-                        return responseModel != null &&
-                                responseModel.details != null &&
-                                responseModel.details!.isNotEmpty
+                        return responseModel != null && responseModel.details != null && responseModel.details!.isNotEmpty
                             ? Expanded(
                                 child: ListView.builder(
                                   itemCount: responseModel.details!.length,
@@ -1905,8 +1543,7 @@ Future<dynamic> townBottomSheetV1(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          onItemSelected(
-                                              responseModel!.details![i]);
+                                          onItemSelected(responseModel!.details![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -1916,34 +1553,26 @@ Future<dynamic> townBottomSheetV1(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(responseModel!.details![i]
-                                                    .lookupDetHierDescEn!),
+                                                Text(responseModel!.details![i].lookupDetHierDescEn!),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -1965,8 +1594,7 @@ Future<dynamic> townBottomSheetV1(
           ));
 }
 
-Future<dynamic> campListDropdownBottomSheet(
-    BuildContext context, Function(CommonCamp.CampDetails) onItemSelected) {
+Future<dynamic> campListDropdownBottomSheet(BuildContext context, Function(CommonCamp.CampDetails) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -1974,11 +1602,7 @@ Future<dynamic> campListDropdownBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -1989,10 +1613,7 @@ Future<dynamic> campListDropdownBottomSheet(
                         children: [
                           Text(
                             "Camp",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -2018,15 +1639,10 @@ Future<dynamic> campListDropdownBottomSheet(
                         CommonCamp.CampDropdownReponseModel? responseModel;
 
                         if (state.getCampDropdownListResponse.isNotEmpty) {
-                          responseModel =
-                              CommonCamp.CampDropdownReponseModel.fromJson(
-                                  jsonDecode(
-                                      state.getCampDropdownListResponse));
+                          responseModel = CommonCamp.CampDropdownReponseModel.fromJson(jsonDecode(state.getCampDropdownListResponse));
                         }
 
-                        return responseModel != null &&
-                                responseModel.details != null &&
-                                responseModel.details!.isNotEmpty
+                        return responseModel != null && responseModel.details != null && responseModel.details!.isNotEmpty
                             ? Expanded(
                                 child: ListView.builder(
                                   itemCount: responseModel.details!.length,
@@ -2037,8 +1653,7 @@ Future<dynamic> campListDropdownBottomSheet(
                                       child: InkWell(
                                         borderRadius: BorderRadius.circular(10),
                                         onTap: () {
-                                          onItemSelected(
-                                              responseModel!.details![i]);
+                                          onItemSelected(responseModel!.details![i]);
                                           setState(
                                             () {
                                               selectedIndex = i;
@@ -2048,34 +1663,26 @@ Future<dynamic> campListDropdownBottomSheet(
                                         },
                                         child: Ink(
                                           decoration: BoxDecoration(
-                                            color: i == selectedIndex
-                                                ? Colors.transparent
-                                                : kListBGColor,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
+                                            color: i == selectedIndex ? Colors.transparent : kListBGColor,
+                                            borderRadius: BorderRadius.circular(10),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Row(
                                               children: [
                                                 Image.asset(
-                                                  i == selectedIndex
-                                                      ? icCircleDot
-                                                      : icCircle,
+                                                  i == selectedIndex ? icCircleDot : icCircle,
                                                   height: responsiveHeight(20),
                                                 ),
                                                 SizedBox(
                                                   width: responsiveWidth(20),
                                                 ),
-                                                Text(
-                                                    'Camp :-${responseModel!.details![i].campCreateRequestId}'),
+                                                Text('Camp :-${responseModel!.details![i].campCreateRequestId}'),
                                                 const Spacer(),
                                                 i == selectedIndex
                                                     ? Image.asset(
                                                         icCircleCheck,
-                                                        height:
-                                                            responsiveHeight(
-                                                                20),
+                                                        height: responsiveHeight(20),
                                                       )
                                                     : const SizedBox.shrink(),
                                               ],
@@ -2097,8 +1704,7 @@ Future<dynamic> campListDropdownBottomSheet(
           ));
 }
 
-Future<dynamic> stakeholderStatusBottomSheet(
-    BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
+Future<dynamic> stakeholderStatusBottomSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected) {
   int selectedIndex = -1;
   return showModalBottomSheet(
       context: context,
@@ -2106,11 +1712,7 @@ Future<dynamic> stakeholderStatusBottomSheet(
       builder: (c) => StatefulBuilder(
             builder: (c, setState) => Container(
               width: SizeConfig.screenWidth,
-              decoration: BoxDecoration(
-                  color: kWhiteColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(responsiveHeight(50)),
-                      topRight: Radius.circular(responsiveHeight(50)))),
+              decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
               child: Padding(
                 padding: EdgeInsets.all(responsiveHeight(30)),
                 child: Column(
@@ -2121,10 +1723,7 @@ Future<dynamic> stakeholderStatusBottomSheet(
                         children: [
                           Text(
                             "Status",
-                            style: TextStyle(
-                                fontSize: responsiveFont(17),
-                                fontWeight: FontWeight.bold,
-                                color: kPrimaryColor),
+                            style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                           ),
                           const Spacer(),
                           GestureDetector(
@@ -2159,10 +1758,7 @@ Future<dynamic> stakeholderStatusBottomSheet(
                                     child: InkWell(
                                       borderRadius: BorderRadius.circular(10),
                                       onTap: () {
-                                        var selectedItem = {
-                                          'id': list[i]['id'],
-                                          'title': list[i]['title']
-                                        };
+                                        var selectedItem = {'id': list[i]['id'], 'title': list[i]['title']};
                                         onItemSelected(selectedItem);
                                         setState(
                                           () {
@@ -2174,23 +1770,18 @@ Future<dynamic> stakeholderStatusBottomSheet(
                                       },
                                       child: Ink(
                                         decoration: BoxDecoration(
-                                          color: i == selectedIndex
-                                              ? Colors.transparent
-                                              : kListBGColor,
+                                          color: i == selectedIndex ? Colors.transparent : kListBGColor,
                                           // border: Border.all(
                                           //     color: kTextFieldBorder,
                                           //     width: 0.5),
-                                          borderRadius:
-                                              BorderRadius.circular(10),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Row(
                                             children: [
                                               Image.asset(
-                                                i == selectedIndex
-                                                    ? icCircleDot
-                                                    : icCircle,
+                                                i == selectedIndex ? icCircleDot : icCircle,
                                                 height: responsiveHeight(20),
                                               ),
                                               SizedBox(
@@ -2201,8 +1792,7 @@ Future<dynamic> stakeholderStatusBottomSheet(
                                               i == selectedIndex
                                                   ? Image.asset(
                                                       icCircleCheck,
-                                                      height:
-                                                          responsiveHeight(20),
+                                                      height: responsiveHeight(20),
                                                     )
                                                   : const SizedBox.shrink(),
                                             ],
@@ -2223,35 +1813,23 @@ Future<dynamic> stakeholderStatusBottomSheet(
           ));
 }
 
-Future<dynamic> commonBottonSheet(
-    BuildContext context,
-    Function(Map<String, dynamic>) onItemSelected,
-    String bottomSheetTitle,
-    List<Map<String, dynamic>> list) {
+Future<dynamic> commonBottonSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected, String bottomSheetTitle, List<Map<String, dynamic>> list) {
   return showModalBottomSheet(
       context: context,
       isScrollControlled: false,
       builder: (c) => Container(
             width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(responsiveHeight(50)),
-                    topRight: Radius.circular(responsiveHeight(50)))),
+            decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         bottomSheetTitle,
-                        style: TextStyle(
-                            fontSize: responsiveFont(17),
-                            fontWeight: FontWeight.bold,
-                            color: kPrimaryColor),
+                        style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                       ),
                       IconButton(
                           onPressed: () {
@@ -2272,14 +1850,10 @@ Future<dynamic> commonBottonSheet(
                               itemBuilder: (c, i) => Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 6, horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                                   child: InkWell(
                                     onTap: () {
-                                      var selectedItem = {
-                                        'id': list[i]['id'],
-                                        'title': list[i]['title']
-                                      };
+                                      var selectedItem = {'id': list[i]['id'], 'title': list[i]['title']};
                                       onItemSelected(selectedItem);
                                       Navigator.pop(context);
                                     },
@@ -2319,12 +1893,7 @@ Future<dynamic> commonBottonSheet(
           ));
 }
 
-Future<dynamic> commonBottomSheet(
-    BuildContext context,
-    Function(dynamic) onItemSelected,
-    String bottomSheetTitle,
-    List<dynamic> list,
-    {bool? isVisible}) {
+Future<dynamic> commonBottomSheet(BuildContext context, Function(dynamic) onItemSelected, String bottomSheetTitle, List<dynamic> list, {bool? isVisible}) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: false,
@@ -2351,8 +1920,7 @@ class _CommonBottomSheetContent extends StatefulWidget {
   });
 
   @override
-  State<_CommonBottomSheetContent> createState() =>
-      _CommonBottomSheetContentState();
+  State<_CommonBottomSheetContent> createState() => _CommonBottomSheetContentState();
 }
 
 class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
@@ -2400,38 +1968,30 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: kTextFieldBorder, width: 1),
-                    borderRadius: BorderRadius.circular(responsiveHeight(60))),
+                decoration: BoxDecoration(border: Border.all(color: kTextFieldBorder, width: 1), borderRadius: BorderRadius.circular(responsiveHeight(60))),
                 child: TypeAheadField<dynamic>(
                   controller: txtContro,
                   suggestionsCallback: (search) {
                     return widget.list.where((stakeHolder) {
-                      final stakeHNameLower =
-                          stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
+                      final stakeHNameLower = stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
                       final searchLower = search.toLowerCase();
                       return stakeHNameLower.contains(searchLower);
                     }).toList();
                   },
-                  builder: (BuildContext context,
-                      TextEditingController textController,
-                      FocusNode focusNode) {
+                  builder: (BuildContext context, TextEditingController textController, FocusNode focusNode) {
                     return TextField(
                         controller: textController,
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.only(left: 8, top: 12),
-                          suffixIcon:
-                              const Icon(Icons.search, color: kPrimaryColor),
+                          contentPadding: const EdgeInsets.only(left: 8, top: 12),
+                          suffixIcon: const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
                           hintText: "Search ${widget.bottomSheetTitle}",
                         ));
                   },
                   itemBuilder: (context, stakeholder) {
-                    bool isSelected =
-                        widget.list.indexOf(stakeholder) == selectedIndex;
+                    bool isSelected = widget.list.indexOf(stakeholder) == selectedIndex;
                     return Container(
                       decoration: BoxDecoration(
                         color: kContainerBack,
@@ -2459,9 +2019,7 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
                                 stakeholder.lookupDetHierDescEn ?? "",
                                 style: TextStyle(
                                   fontSize: responsiveFont(14.0),
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
+                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -2489,8 +2047,7 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
                       if (selectedIndex != -1) {
                         var selectedItem = widget.list.removeAt(selectedIndex);
                         widget.list.insert(0, selectedItem);
-                        this.selectedIndex =
-                            0; // Update the selectedIndex for the ListView
+                        this.selectedIndex = 0; // Update the selectedIndex for the ListView
                       }
                     });
                     widget.onItemSelected(selectedStakeH);
@@ -2545,11 +2102,7 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
                             Expanded(
                               child: Text(
                                 widget.list[i].lookupDetHierDescEn ?? "",
-                                style: TextStyle(
-                                    fontSize: responsiveFont(14.0),
-                                    fontWeight: selectedIndex == i
-                                        ? FontWeight.bold
-                                        : FontWeight.w500),
+                                style: TextStyle(fontSize: responsiveFont(14.0), fontWeight: selectedIndex == i ? FontWeight.bold : FontWeight.w500),
                               ),
                             ),
                             const Spacer(),
@@ -2607,12 +2160,10 @@ class _CommonBottomSheetContent1 extends StatefulWidget {
   });
 
   @override
-  State<_CommonBottomSheetContent1> createState() =>
-      _CommonBottomSheetContent1State();
+  State<_CommonBottomSheetContent1> createState() => _CommonBottomSheetContent1State();
 }
 
-class _CommonBottomSheetContent1State
-    extends State<_CommonBottomSheetContent1> {
+class _CommonBottomSheetContent1State extends State<_CommonBottomSheetContent1> {
   int? selectedIndex;
   TextEditingController txtContro = TextEditingController();
 
@@ -2656,38 +2207,30 @@ class _CommonBottomSheetContent1State
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: kTextFieldBorder, width: 1),
-                    borderRadius: BorderRadius.circular(responsiveHeight(60))),
+                decoration: BoxDecoration(border: Border.all(color: kTextFieldBorder, width: 1), borderRadius: BorderRadius.circular(responsiveHeight(60))),
                 child: TypeAheadField<dynamic>(
                   controller: txtContro,
                   suggestionsCallback: (search) {
                     return widget.list.where((stakeHolder) {
-                      final stakeHNameLower =
-                          stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
+                      final stakeHNameLower = stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
                       final searchLower = search.toLowerCase();
                       return stakeHNameLower.contains(searchLower);
                     }).toList();
                   },
-                  builder: (BuildContext context,
-                      TextEditingController textController,
-                      FocusNode focusNode) {
+                  builder: (BuildContext context, TextEditingController textController, FocusNode focusNode) {
                     return TextField(
                         controller: textController,
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.only(left: 8, top: 12),
-                          suffixIcon:
-                              const Icon(Icons.search, color: kPrimaryColor),
+                          contentPadding: const EdgeInsets.only(left: 8, top: 12),
+                          suffixIcon: const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
                           hintText: "Search ${widget.bottomSheetTitle}",
                         ));
                   },
                   itemBuilder: (context, stakeholder) {
-                    bool isSelected =
-                        widget.list.indexOf(stakeholder) == selectedIndex;
+                    bool isSelected = widget.list.indexOf(stakeholder) == selectedIndex;
                     return Container(
                       decoration: BoxDecoration(
                         color: kContainerBack,
@@ -2715,9 +2258,7 @@ class _CommonBottomSheetContent1State
                                 stakeholder.lookupDetHierDescEn ?? "",
                                 style: TextStyle(
                                   fontSize: responsiveFont(14.0),
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
+                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -2745,8 +2286,7 @@ class _CommonBottomSheetContent1State
                       if (selectedIndex != -1) {
                         var selectedItem = widget.list.removeAt(selectedIndex);
                         widget.list.insert(0, selectedItem);
-                        this.selectedIndex =
-                            0; // Update the selectedIndex for the ListView
+                        this.selectedIndex = 0; // Update the selectedIndex for the ListView
                       }
                     });
                     widget.onItemSelected(selectedStakeH);
@@ -2800,11 +2340,7 @@ class _CommonBottomSheetContent1State
                             ),
                             Text(
                               widget.list[i].lookupDetHierDescEn ?? "",
-                              style: TextStyle(
-                                  fontSize: responsiveFont(14.0),
-                                  fontWeight: selectedIndex == i
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
+                              style: TextStyle(fontSize: responsiveFont(14.0), fontWeight: selectedIndex == i ? FontWeight.bold : FontWeight.w500),
                             ),
                             const Spacer(),
                             if (selectedIndex == i)
@@ -2857,12 +2393,10 @@ class _CommonBottomSheetContents extends StatefulWidget {
   });
 
   @override
-  State<_CommonBottomSheetContents> createState() =>
-      _CommonBottomSheetContentsState();
+  State<_CommonBottomSheetContents> createState() => _CommonBottomSheetContentsState();
 }
 
-class _CommonBottomSheetContentsState
-    extends State<_CommonBottomSheetContents> {
+class _CommonBottomSheetContentsState extends State<_CommonBottomSheetContents> {
   int? selectedIndex;
 
   @override
@@ -2944,11 +2478,7 @@ class _CommonBottomSheetContentsState
                             ),
                             Text(
                               widget.list[i].lookupDetDescEn ?? "",
-                              style: TextStyle(
-                                  fontSize: responsiveFont(14.0),
-                                  fontWeight: selectedIndex == i
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
+                              style: TextStyle(fontSize: responsiveFont(14.0), fontWeight: selectedIndex == i ? FontWeight.bold : FontWeight.w500),
                             ),
                             const Spacer(),
                             if (selectedIndex == i)
@@ -3087,11 +2617,7 @@ class SheetContentsState extends State<SheetContents> {
                             ),
                             Text(
                               widget.list[i].fullName ?? "",
-                              style: TextStyle(
-                                  fontSize: responsiveFont(14.0),
-                                  fontWeight: selectedIndex == i
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
+                              style: TextStyle(fontSize: responsiveFont(14.0), fontWeight: selectedIndex == i ? FontWeight.bold : FontWeight.w500),
                             ),
                             const Spacer(),
                             if (selectedIndex == i)
@@ -3216,26 +2742,13 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
             inputType: TextInputType.text,
             onChange: (p0) {},
             onTap: () async {
-              await commonBottomSheet(
-                  context,
-                  (p0) => {
-                        widget.stakeH.text = p0.lookupDetHierDescEn,
-                        campCreationController.selectedStakeHolder = p0,
-                        setState(() {})
-                      },
-                  "Stakeholder Type",
-                  widget.list,
+              await commonBottomSheet(context, (p0) => {widget.stakeH.text = p0.lookupDetHierDescEn, campCreationController.selectedStakeHolder = p0, setState(() {})}, "Stakeholder Type", widget.list,
                   isVisible: true);
             },
             // maxLength: 12,
             readOnly: true,
             label: RichText(
-              text: const TextSpan(
-                  text: 'Stakeholder Type',
-                  style: TextStyle(color: kHintColor, fontFamily: Montserrat),
-                  children: [
-                    TextSpan(text: "*", style: TextStyle(color: Colors.red))
-                  ]),
+              text: const TextSpan(text: 'Stakeholder Type', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
             ),
             hint: "",
             suffix: SizedBox(
@@ -3255,17 +2768,11 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
           ),
           AppRoundTextField(
             controller: widget.loginName,
-            inputStyle:
-                TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+            inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
             inputType: TextInputType.text,
             onChange: (p0) {},
             label: RichText(
-              text: const TextSpan(
-                  text: 'Login Name',
-                  style: TextStyle(color: kHintColor, fontFamily: Montserrat),
-                  children: [
-                    TextSpan(text: "*", style: TextStyle(color: Colors.red))
-                  ]),
+              text: const TextSpan(text: 'Login Name', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
             ),
             hint: "",
           ),
@@ -3281,11 +2788,7 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
                   child: AppButton(
                     title: "Save",
                     onTap: () {
-                      campCreationController.userCreation(
-                          widget.loginName.text,
-                          widget.fullName,
-                          widget.mobileNo,
-                          widget.memberTypeId);
+                      campCreationController.userCreation(widget.loginName.text, widget.fullName, widget.mobileNo, widget.memberTypeId);
                     },
                     iconData: Icon(
                       Icons.arrow_forward,
@@ -3354,12 +2857,10 @@ class LocationNameBottomSheetContent extends StatefulWidget {
   });
 
   @override
-  State<LocationNameBottomSheetContent> createState() =>
-      LocationNameBottomSheetContentState();
+  State<LocationNameBottomSheetContent> createState() => LocationNameBottomSheetContentState();
 }
 
-class LocationNameBottomSheetContentState
-    extends State<LocationNameBottomSheetContent> {
+class LocationNameBottomSheetContentState extends State<LocationNameBottomSheetContent> {
   int? selectedIndex;
   TextEditingController txtContro = TextEditingController();
 
@@ -3403,38 +2904,30 @@ class LocationNameBottomSheetContentState
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: kTextFieldBorder, width: 1),
-                    borderRadius: BorderRadius.circular(responsiveHeight(60))),
+                decoration: BoxDecoration(border: Border.all(color: kTextFieldBorder, width: 1), borderRadius: BorderRadius.circular(responsiveHeight(60))),
                 child: TypeAheadField<dynamic>(
                   controller: txtContro,
                   suggestionsCallback: (search) {
                     return widget.list.where((stakeHolder) {
-                      final stakeHNameLower =
-                          stakeHolder.locationName?.toLowerCase() ?? "";
+                      final stakeHNameLower = stakeHolder.locationName?.toLowerCase() ?? "";
                       final searchLower = search.toLowerCase();
                       return stakeHNameLower.contains(searchLower);
                     }).toList();
                   },
-                  builder: (BuildContext context,
-                      TextEditingController textController,
-                      FocusNode focusNode) {
+                  builder: (BuildContext context, TextEditingController textController, FocusNode focusNode) {
                     return TextField(
                         controller: textController,
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.only(left: 8, top: 12),
-                          suffixIcon:
-                              const Icon(Icons.search, color: kPrimaryColor),
+                          contentPadding: const EdgeInsets.only(left: 8, top: 12),
+                          suffixIcon: const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
                           hintText: "Search ${widget.bottomSheetTitle}",
                         ));
                   },
                   itemBuilder: (context, stakeholder) {
-                    bool isSelected =
-                        widget.list.indexOf(stakeholder) == selectedIndex;
+                    bool isSelected = widget.list.indexOf(stakeholder) == selectedIndex;
                     return Container(
                       decoration: BoxDecoration(
                         color: kContainerBack,
@@ -3462,9 +2955,7 @@ class LocationNameBottomSheetContentState
                                 stakeholder.locationName ?? "",
                                 style: TextStyle(
                                   fontSize: responsiveFont(14.0),
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
+                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -3492,8 +2983,7 @@ class LocationNameBottomSheetContentState
                       if (selectedIndex != -1) {
                         var selectedItem = widget.list.removeAt(selectedIndex);
                         widget.list.insert(0, selectedItem);
-                        this.selectedIndex =
-                            0; // Update the selectedIndex for the ListView
+                        this.selectedIndex = 0; // Update the selectedIndex for the ListView
                       }
                     });
                     widget.onItemSelected(selectedStakeH);
@@ -3547,11 +3037,7 @@ class LocationNameBottomSheetContentState
                             ),
                             Text(
                               widget.list[i].locationName ?? "",
-                              style: TextStyle(
-                                  fontSize: responsiveFont(14.0),
-                                  fontWeight: selectedIndex == i
-                                      ? FontWeight.bold
-                                      : FontWeight.w500),
+                              style: TextStyle(fontSize: responsiveFont(14.0), fontWeight: selectedIndex == i ? FontWeight.bold : FontWeight.w500),
                             ),
                             const Spacer(),
                             if (selectedIndex == i)
@@ -3575,35 +3061,23 @@ class LocationNameBottomSheetContentState
   }
 }
 
-Future<dynamic> commonLocationSheet(
-    BuildContext context,
-    Function(Map<String, dynamic>) onItemSelected,
-    String bottomSheetTitle,
-    List<Map<String, dynamic>> list) {
+Future<dynamic> commonLocationSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected, String bottomSheetTitle, List<Map<String, dynamic>> list) {
   return showModalBottomSheet(
       context: context,
       isScrollControlled: false,
       builder: (c) => Container(
             width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(responsiveHeight(50)),
-                    topRight: Radius.circular(responsiveHeight(50)))),
+            decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         bottomSheetTitle,
-                        style: TextStyle(
-                            fontSize: responsiveFont(17),
-                            fontWeight: FontWeight.bold,
-                            color: kPrimaryColor),
+                        style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                       ),
                       IconButton(
                           onPressed: () {
@@ -3624,15 +3098,11 @@ Future<dynamic> commonLocationSheet(
                               itemBuilder: (c, i) => Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 6, horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                                   child: InkWell(
                                     onTap: () {
                                       // var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['lookup_det_hier_desc_en']};
-                                      var selectedItem = {
-                                        'id': list[i]['location_master_id'],
-                                        'title': list[i]['location_name']
-                                      };
+                                      var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['location_name']};
                                       onItemSelected(selectedItem);
                                       Navigator.pop(context);
                                     },
@@ -3673,35 +3143,23 @@ Future<dynamic> commonLocationSheet(
           ));
 }
 
-Future<dynamic> commonStackholderSheet(
-    BuildContext context,
-    Function(Map<String, dynamic>) onItemSelected,
-    String bottomSheetTitle,
-    List<Map<String, dynamic>> list) {
+Future<dynamic> commonStackholderSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected, String bottomSheetTitle, List<Map<String, dynamic>> list) {
   return showModalBottomSheet(
       context: context,
       isScrollControlled: false,
       builder: (c) => Container(
             width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(responsiveHeight(50)),
-                    topRight: Radius.circular(responsiveHeight(50)))),
+            decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         bottomSheetTitle,
-                        style: TextStyle(
-                            fontSize: responsiveFont(17),
-                            fontWeight: FontWeight.bold,
-                            color: kPrimaryColor),
+                        style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                       ),
                       IconButton(
                           onPressed: () {
@@ -3722,16 +3180,11 @@ Future<dynamic> commonStackholderSheet(
                               itemBuilder: (c, i) => Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 6, horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                                   child: InkWell(
                                     onTap: () {
                                       // var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['lookup_det_hier_desc_en']};
-                                      var selectedItem = {
-                                        'id': list[i]['lookup_det_hier_id'],
-                                        'title': list[i]
-                                            ['lookup_det_hier_desc_en']
-                                      };
+                                      var selectedItem = {'id': list[i]['lookup_det_hier_id'], 'title': list[i]['lookup_det_hier_desc_en']};
                                       onItemSelected(selectedItem);
                                       Navigator.pop(context);
                                     },
@@ -3750,13 +3203,9 @@ Future<dynamic> commonStackholderSheet(
                                             ),
                                             // Text(list[i]['lookup_det_hier_desc_en']),
                                             Container(
-                                                width:
-                                                    MediaQuery.sizeOf(context)
-                                                            .width *
-                                                        0.7,
+                                                width: MediaQuery.sizeOf(context).width * 0.7,
                                                 child: Text(
-                                                  list[i][
-                                                      'lookup_det_hier_desc_en'],
+                                                  list[i]['lookup_det_hier_desc_en'],
                                                   textAlign: TextAlign.start,
                                                   softWrap: true,
                                                 )),
@@ -3782,35 +3231,23 @@ Future<dynamic> commonStackholderSheet(
           ));
 }
 
-Future<dynamic> commonDateTimeSheet(
-    BuildContext context,
-    Function(Map<String, dynamic>) onItemSelected,
-    String bottomSheetTitle,
-    List<Map<String, dynamic>> list) {
+Future<dynamic> commonDateTimeSheet(BuildContext context, Function(Map<String, dynamic>) onItemSelected, String bottomSheetTitle, List<Map<String, dynamic>> list) {
   return showModalBottomSheet(
       context: context,
       isScrollControlled: false,
       builder: (c) => Container(
             width: SizeConfig.screenWidth,
-            decoration: BoxDecoration(
-                color: kWhiteColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(responsiveHeight(50)),
-                    topRight: Radius.circular(responsiveHeight(50)))),
+            decoration: BoxDecoration(color: kWhiteColor, borderRadius: BorderRadius.only(topLeft: Radius.circular(responsiveHeight(50)), topRight: Radius.circular(responsiveHeight(50)))),
             child: Column(
               children: [
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         bottomSheetTitle,
-                        style: TextStyle(
-                            fontSize: responsiveFont(17),
-                            fontWeight: FontWeight.bold,
-                            color: kPrimaryColor),
+                        style: TextStyle(fontSize: responsiveFont(17), fontWeight: FontWeight.bold, color: kPrimaryColor),
                       ),
                       IconButton(
                           onPressed: () {
@@ -3831,15 +3268,11 @@ Future<dynamic> commonDateTimeSheet(
                               itemBuilder: (c, i) => Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 6, horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                                   child: InkWell(
                                     onTap: () {
                                       // var selectedItem = {'id': list[i]['location_master_id'], 'title': list[i]['lookup_det_hier_desc_en']};
-                                      var selectedItem = {
-                                        'id': list[i]['camp_create_request_id'],
-                                        'title': list[i]['prop_camp_date']
-                                      };
+                                      var selectedItem = {'id': list[i]['camp_create_request_id'], 'title': list[i]['prop_camp_date']};
                                       onItemSelected(selectedItem);
                                       Navigator.pop(context);
                                     },
@@ -3914,12 +3347,10 @@ class StakeHolderNameBottomSheetContent extends StatefulWidget {
   });
 
   @override
-  State<StakeHolderNameBottomSheetContent> createState() =>
-      StakeHolderNameBottomSheetContentState();
+  State<StakeHolderNameBottomSheetContent> createState() => StakeHolderNameBottomSheetContentState();
 }
 
-class StakeHolderNameBottomSheetContentState
-    extends State<StakeHolderNameBottomSheetContent> {
+class StakeHolderNameBottomSheetContentState extends State<StakeHolderNameBottomSheetContent> {
   int? selectedIndex;
   TextEditingController txtContro = TextEditingController();
 
@@ -3963,38 +3394,30 @@ class StakeHolderNameBottomSheetContentState
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
               child: Container(
-                decoration: BoxDecoration(
-                    border: Border.all(color: kTextFieldBorder, width: 1),
-                    borderRadius: BorderRadius.circular(responsiveHeight(60))),
+                decoration: BoxDecoration(border: Border.all(color: kTextFieldBorder, width: 1), borderRadius: BorderRadius.circular(responsiveHeight(60))),
                 child: TypeAheadField<dynamic>(
                   controller: txtContro,
                   suggestionsCallback: (search) {
                     return widget.list.where((stakeHolder) {
-                      final stakeHNameLower =
-                          stakeHolder.stakeholderNameEn?.toLowerCase() ?? "";
+                      final stakeHNameLower = stakeHolder.stakeholderNameEn?.toLowerCase() ?? "";
                       final searchLower = search.toLowerCase();
                       return stakeHNameLower.contains(searchLower);
                     }).toList();
                   },
-                  builder: (BuildContext context,
-                      TextEditingController textController,
-                      FocusNode focusNode) {
+                  builder: (BuildContext context, TextEditingController textController, FocusNode focusNode) {
                     return TextField(
                         controller: textController,
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding:
-                              const EdgeInsets.only(left: 8, top: 12),
-                          suffixIcon:
-                              const Icon(Icons.search, color: kPrimaryColor),
+                          contentPadding: const EdgeInsets.only(left: 8, top: 12),
+                          suffixIcon: const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
                           hintText: "Search ${widget.bottomSheetTitle}",
                         ));
                   },
                   itemBuilder: (context, stakeholder) {
-                    bool isSelected =
-                        widget.list.indexOf(stakeholder) == selectedIndex;
+                    bool isSelected = widget.list.indexOf(stakeholder) == selectedIndex;
                     return Container(
                       decoration: BoxDecoration(
                         color: kContainerBack,
@@ -4022,9 +3445,7 @@ class StakeHolderNameBottomSheetContentState
                                 stakeholder.stakeholderNameEn ?? "",
                                 style: TextStyle(
                                   fontSize: responsiveFont(14.0),
-                                  fontWeight: isSelected
-                                      ? FontWeight.bold
-                                      : FontWeight.w500,
+                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -4048,8 +3469,7 @@ class StakeHolderNameBottomSheetContentState
                       if (selectedIndex != -1) {
                         var selectedItem = widget.list.removeAt(selectedIndex);
                         widget.list.insert(0, selectedItem);
-                        this.selectedIndex =
-                            0; // Update the selectedIndex for the ListView
+                        this.selectedIndex = 0; // Update the selectedIndex for the ListView
                       }
                     });
                     widget.onItemSelected(selectedStakeH);
@@ -4106,11 +3526,7 @@ class StakeHolderNameBottomSheetContentState
                               child: Text(
                                 widget.list[i].stakeholderNameEn ?? "",
                                 softWrap: true,
-                                style: TextStyle(
-                                    fontSize: responsiveFont(14.0),
-                                    fontWeight: selectedIndex == i
-                                        ? FontWeight.bold
-                                        : FontWeight.w500),
+                                style: TextStyle(fontSize: responsiveFont(14.0), fontWeight: selectedIndex == i ? FontWeight.bold : FontWeight.w500),
                               ),
                             ),
                             const Spacer(),
@@ -4157,8 +3573,7 @@ class _MultiSelectBottomSheetContent extends StatefulWidget {
   final String bottomSheetTitle;
   final List<dynamic> list;
 
-  final CampDetailsController campDetailsController =
-      Get.put(CampDetailsController());
+  final CampDetailsController campDetailsController = Get.put(CampDetailsController());
 
   _MultiSelectBottomSheetContent({
     required this.onItemsSelected,
@@ -4167,12 +3582,10 @@ class _MultiSelectBottomSheetContent extends StatefulWidget {
   });
 
   @override
-  _MultiSelectBottomSheetContentState createState() =>
-      _MultiSelectBottomSheetContentState();
+  _MultiSelectBottomSheetContentState createState() => _MultiSelectBottomSheetContentState();
 }
 
-class _MultiSelectBottomSheetContentState
-    extends State<_MultiSelectBottomSheetContent> {
+class _MultiSelectBottomSheetContentState extends State<_MultiSelectBottomSheetContent> {
   List<dynamic> selectedItems = [];
   List<dynamic> selectedItemsName = [];
   List<dynamic> selectedItemsId = [];
@@ -4208,8 +3621,7 @@ class _MultiSelectBottomSheetContentState
             ? Container(
                 width: SizeConfig.screenWidth * 0.8,
                 height: SizeConfig.screenHeight * 0.2,
-                child: Center(
-                    child: Text("Stakeholder Not Available,Try again later")),
+                child: Center(child: Text("Stakeholder Not Available,Try again later")),
               )
             : Expanded(
                 child: ListView.builder(
@@ -4221,8 +3633,14 @@ class _MultiSelectBottomSheetContentState
                     return ListTile(
                       title: Text(item['stakeholder_name_en'].toString()),
                       trailing: isSelected
-                          ? Icon(Icons.check_box)
-                          : Icon(Icons.check_box_outline_blank),
+                          ? Icon(
+                              Icons.check_box,
+                              color: kPrimaryColor,
+                            )
+                          : Icon(
+                              Icons.check_box_outline_blank,
+                              color: kPrimaryColor,
+                            ),
                       onTap: () => _onItemTapped(item),
                     );
                   },
@@ -4272,5 +3690,141 @@ class CityService {
       final searchLower = query.toLowerCase();
       return cityNameLower.contains(searchLower);
     }).toList();
+  }
+}
+
+Future<dynamic> commonReferredCampBottomSheet(BuildContext context, Function(dynamic) onItemSelected, String bottomSheetTitle, List<dynamic> list, {bool? isVisible}) {
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: false,
+    builder: (c) => _CommonReferredCampsBottomSheetContent(
+      onItemSelected: onItemSelected,
+      bottomSheetTitle: bottomSheetTitle,
+      list: list,
+      isVisible: isVisible ?? true,
+    ),
+  );
+}
+
+class _CommonReferredCampsBottomSheetContent extends StatefulWidget {
+  final Function(dynamic) onItemSelected;
+  final String bottomSheetTitle;
+  final List<dynamic> list;
+  final bool isVisible;
+
+  const _CommonReferredCampsBottomSheetContent({
+    required this.onItemSelected,
+    required this.bottomSheetTitle,
+    required this.list,
+    required this.isVisible,
+  });
+
+  @override
+  State<_CommonReferredCampsBottomSheetContent> createState() => _CommonReferredCampsBottomSheetContentState();
+}
+
+class _CommonReferredCampsBottomSheetContentState extends State<_CommonReferredCampsBottomSheetContent> {
+  int? selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth,
+      decoration: BoxDecoration(
+        color: kWhiteColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(responsiveHeight(50)),
+          topRight: Radius.circular(responsiveHeight(50)),
+        ),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.bottomSheetTitle,
+                  style: TextStyle(
+                    fontSize: responsiveFont(17),
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.cancel_presentation),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.list.length,
+              shrinkWrap: true,
+              itemBuilder: (c, i) => Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 12,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex = i;
+                      });
+
+                      widget.onItemSelected(widget.list[i]);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            selectedIndex == i
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
+                                : Icon(
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Text(
+                              widget.list[i].campNumber ?? "",
+                              style: TextStyle(fontSize: responsiveFont(14.0), fontWeight: selectedIndex == i ? FontWeight.bold : FontWeight.w500),
+                            ),
+                            const Spacer(),
+                            if (selectedIndex == i)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
