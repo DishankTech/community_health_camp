@@ -8,6 +8,7 @@ import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_pa
 import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/referred_patients_view.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/referredto_view.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_patient_registration_screen.dart';
@@ -93,6 +94,7 @@ class AppRoutes {
   static const String registrationDashboard = "/registrationDashboard";
   static const String doctorDesk = "/doctorDesk";
   static const String addTreatmentDetailsScreen = "/addTreatmentDetailsScreen";
+  static const String referredTo = "/referredTo";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -218,6 +220,10 @@ class AppRoutes {
       case addTreatmentDetailsScreen:
         return MaterialPageRoute(
           builder: (_) => const AddTreatmentDetailsScreen(),
+        );
+        case referredTo:
+        return MaterialPageRoute(
+          builder: (_) => const ReferredToScreen(),
         );
 
       default:

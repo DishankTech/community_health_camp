@@ -22,14 +22,14 @@ import 'package:http/http.dart' as http;
 
 import '../models/multiple_referred_to_request_model.dart';
 
-class AddReferredPatient extends StatefulWidget {
-  const AddReferredPatient({super.key});
+class ReferredToScreen extends StatefulWidget {
+  const ReferredToScreen({super.key});
 
   @override
-  State<AddReferredPatient> createState() => _AddReferredPatientState();
+  State<ReferredToScreen> createState() => _ReferredToScreenState();
 }
 
-class _AddReferredPatientState extends State<AddReferredPatient> {
+class _ReferredToScreenState extends State<ReferredToScreen> {
   XFile? capturedFile;
   List<CardData> carbonCommentsList = [];
 
@@ -99,7 +99,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               mAppBarV1(
-                  title: "Add Referred Patient",
+                  title: "Referred To",
                   context: context,
                   onBackButtonPress: () {
                     Navigator.pop(context);
@@ -432,7 +432,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                           alignment: Alignment.bottomRight,
                           child: AppButton(
                             onTap: () {
-                              Navigator.pushNamed(context, AppRoutes.referredTo);
+                              Navigator.pushNamed(context, AppRoutes.addReferredPatient);
                             },
                             mWidth: SizeConfig.screenWidth * 0.6,
                             title: "Referred to",
