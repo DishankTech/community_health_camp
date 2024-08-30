@@ -622,7 +622,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                               ?.first
                                                               .lookupDetHierarchical ??
                                                           [],
-                                                      true);
+                                                      isVisible: true);
                                                 },
                                                 // maxLength: 12,
                                                 readOnly: true,
@@ -877,11 +877,21 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                               flex: 1,
                                               child: AppButton(
                                                 onTap: () {
-                                                  doctorDeskController.stakeHolderTypeController.text = '';
-                                                  doctorDeskController.symptomController.text = '';
-                                                  doctorDeskController.provisionalDiaController.text = '';
-                                                  doctorDeskController.stakeHolderController.text = '';
-                                                  doctorDeskController.selectedStakeH.clear();
+                                                  doctorDeskController
+                                                      .stakeHolderTypeController
+                                                      .text = '';
+                                                  doctorDeskController
+                                                      .symptomController
+                                                      .text = '';
+                                                  doctorDeskController
+                                                      .provisionalDiaController
+                                                      .text = '';
+                                                  doctorDeskController
+                                                      .stakeHolderController
+                                                      .text = '';
+                                                  doctorDeskController
+                                                      .selectedStakeH
+                                                      .clear();
                                                 },
                                                 title: "Clear",
                                                 buttonColor: Colors.grey,
