@@ -360,7 +360,6 @@ class _LoginPageState extends State<LoginPage> {
           }
 
           /*  Navigator.of(context)
-          /*  Navigator.of(context)
               .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);*/
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
