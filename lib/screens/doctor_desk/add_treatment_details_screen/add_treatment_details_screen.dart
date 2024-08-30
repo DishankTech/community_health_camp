@@ -2,8 +2,10 @@ import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
+import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/doctor_desk_disease_list.dart';
+import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/doctor_desk_ref_service_list.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk.dart';
-import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_deskRef.dart';
+import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk_ref.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
 import 'package:community_health_app/screens/doctor_desk/model/search/search_doc_desk_details.dart';
@@ -49,6 +51,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
     if (doctorDeskController.hasInternet) {
       doctorDeskController.getStakHolder();
       doctorDeskController.getUserList();
+      doctorDeskController.getDisease();
+      doctorDeskController.getReferral();
     }
 
     doctorDeskController.update();
@@ -334,12 +338,15 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             children: [
                                                               TextSpan(
                                                                   text: widget.searchedDat ==
-                                                                      null
+                                                                          null
                                                                       ? widget
                                                                           .doctorDeskData
                                                                           ?.campCreateRequestId
-                                                                          .toString() : widget.searchedDat?.campCreateRequestId.toString() ??
-                                                                      "",
+                                                                          .toString()
+                                                                      : widget.searchedDat
+                                                                              ?.campCreateRequestId
+                                                                              .toString() ??
+                                                                          "",
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           responsiveFont(
@@ -372,11 +379,13 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             children: [
                                                               TextSpan(
                                                                   text: widget.searchedDat ==
-                                                                      null
+                                                                          null
                                                                       ? widget
                                                                           .doctorDeskData
-                                                                          ?.campDate: widget.searchedDat?.campDate ??
-                                                                      "",
+                                                                          ?.campDate
+                                                                      : widget.searchedDat
+                                                                              ?.campDate ??
+                                                                          "",
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           responsiveFont(
@@ -391,12 +400,10 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                         ),
                                                       ],
                                                     ),
-
                                                     SizedBox(
                                                       height:
                                                           responsiveHeight(10),
                                                     ),
-
                                                   ],
                                                 ),
                                               ),
@@ -658,7 +665,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                           },
                                                       "Diseases Type",
                                                       controller
-                                                              .stakeHolderTypeModel
+                                                              .diseaseLookupDetHierarchical
                                                               ?.details
                                                               ?.first
                                                               .lookupDetHierarchical ??
@@ -878,30 +885,30 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
                                                 onTap: () async {
-                                                  await commonBottomSheet(
+                                                  await commonBottomSheets(
                                                       context,
                                                       (p0) async => {
                                                             controller
                                                                     .selectedReferralSerVal =
-                                                                p0.lookupDetHierDescEn,
+                                                                p0.lookupDetDescEn,
                                                             controller
                                                                 .referralService
                                                                 .text = p0
-                                                                    .lookupDetHierDescEn ??
+                                                                    .lookupDetDescEn ??
                                                                 "",
-                                                            await controller
-                                                                .getReferTo(p0
-                                                                    .lookupDetHierId),
+                                                            // await controller
+                                                            //     .getReferTo(p0
+                                                            //         .lookupDetDescEn),
                                                             controller
                                                                 .selectedReferralSer = p0,
                                                             controller.update()
                                                           },
                                                       "Referral Services",
                                                       controller
-                                                              .stakeHolderTypeModel
+                                                              .referralModel
                                                               ?.details
                                                               ?.first
-                                                              .lookupDetHierarchical ??
+                                                              .lookupDet ??
                                                           [],
                                                       true);
                                                 },
@@ -1209,10 +1216,18 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   controller
                                                           .addTreatmentDetailsModel
                                                           .ttPatientDoctorDesk
-                                                          ?.lookupDetHierIdStakeholderSubType2 =
+                                                          ?.treatmentGiven =
                                                       controller
-                                                          .selectedStakeHType
-                                                          ?.lookupDetHierId;
+                                                          .treatmentGivenController
+                                                          .text;
+
+                                                  controller
+                                                          .addTreatmentDetailsModel
+                                                          .ttPatientDoctorDesk
+                                                          ?.investigationAdvised =
+                                                      controller
+                                                          .investigationController
+                                                          .text;
 
                                                   controller
                                                           .addTreatmentDetailsModel
@@ -1235,10 +1250,13 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   for (ReferToDetails item
                                                       in controller
                                                           .selectedStakeH) {
-                                                    controller
-                                                        .addTreatmentDetailsModel
-                                                        .ttPatientDoctorDeskRef
-                                                        ?.add(TtPatientDoctorDeskRef(
+                                                    controller.addTreatmentDetailsModel.ttPatientDoctorDeskRef?.add(
+                                                        TtPatientDoctorDeskRef(
+                                                            // lookupDetHierIdStakeholderSubType2: controller
+                                                            //     .selectedStakeHType
+                                                            //     ?.lookupDetHierId,
+                                                            lookupDetHierIdStakeholderSubType2:
+                                                                null,
                                                             patientDoctorDeskId:
                                                                 null,
                                                             patientDoctorDeskReferId:
@@ -1249,6 +1267,44 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                             status: 1,
                                                             isInactive: null));
                                                   }
+
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .doctorDeskDiseaseList = [];
+
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .doctorDeskDiseaseList
+                                                      ?.add(DoctorDeskDiseaseList(
+                                                          patientDoctorDeskDiseaseTypesId:
+                                                              controller
+                                                                  .selectedDiseases
+                                                                  ?.lookupDetHierParentId,
+                                                          patientDoctorDeskId:
+                                                              null,
+                                                          lookupDetIdDiseaseTypes:
+                                                              controller
+                                                                  .selectedDiseases
+                                                                  ?.lookupDetHierId,
+                                                          orgId: 1,
+                                                          status: 1,
+                                                          isInactive: null));
+
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .doctorDeskRefServiceList = [];
+
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .doctorDeskRefServiceList
+                                                      ?.add(DoctorDeskRefServiceList(
+                                                    patientDoctorDeskReferralServicesId: controller.selectedReferralSer?.lookupDetOthers,
+                                                          patientDoctorDeskId:
+                                                              null,
+                                                          lookupDetIdReferralServices:controller.selectedReferralSer?.lookupDetId ,
+                                                          orgId: 1,
+                                                          status: 1,
+                                                          isInactive: null));
 
                                                   controller
                                                       .addTreatmentDetails();

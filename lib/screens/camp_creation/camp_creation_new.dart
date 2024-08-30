@@ -593,7 +593,7 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                                       },
                                                   "Designation/Member Type",
                                                   campCreationController
-                                                      .memberTypeList);
+                                                      .memberTypeList,false);
                                             },
                                             errorText: campCreationController
                                                 .errorDesignation,

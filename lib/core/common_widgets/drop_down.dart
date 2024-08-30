@@ -16,6 +16,7 @@ import 'package:community_health_app/screens/camp_coordinator/controller/camp_de
 import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
 import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master_bloc.dart';
 import 'package:community_health_app/screens/stakeholder/models/stakeholder_name_response_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -2573,6 +2574,7 @@ Future<dynamic> commonBottomSheets(
   Function(dynamic) onItemSelected,
   String bottomSheetTitle,
   List<dynamic> list,
+  bool isVisible,
 ) {
   return showModalBottomSheet(
     context: context,
@@ -2581,6 +2583,7 @@ Future<dynamic> commonBottomSheets(
       onItemSelected: onItemSelected,
       bottomSheetTitle: bottomSheetTitle,
       list: list,
+      isVisible: isVisible,
     ),
   );
 }
@@ -2589,11 +2592,12 @@ class _CommonBottomSheetContents extends StatefulWidget {
   final Function(dynamic) onItemSelected;
   final String bottomSheetTitle;
   final List<dynamic> list;
+  final bool isVisible;
 
   const _CommonBottomSheetContents({
     required this.onItemSelected,
     required this.bottomSheetTitle,
-    required this.list,
+    required this.list, required this.isVisible,
   });
 
   @override
@@ -2604,6 +2608,7 @@ class _CommonBottomSheetContents extends StatefulWidget {
 class _CommonBottomSheetContentsState
     extends State<_CommonBottomSheetContents> {
   int? selectedIndex;
+  TextEditingController txtContro = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -2640,6 +2645,111 @@ class _CommonBottomSheetContentsState
               ],
             ),
           ),
+          Visibility(
+            visible: widget.isVisible,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              child: Container(
+                decoration: BoxDecoration(
+                    border: Border.all(color: kTextFieldBorder, width: 1),
+                    borderRadius: BorderRadius.circular(responsiveHeight(60))),
+                child: TypeAheadField<dynamic>(
+                  controller: txtContro,
+                  suggestionsCallback: (search) {
+                    return widget.list.where((stakeHolder) {
+                      final stakeHNameLower =
+                          stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
+                      final searchLower = search.toLowerCase();
+                      return stakeHNameLower.contains(searchLower);
+                    }).toList();
+                  },
+                  builder: (BuildContext context,
+                      TextEditingController textController,
+                      FocusNode focusNode) {
+                    return TextField(
+                        controller: textController,
+                        focusNode: focusNode,
+                        autofocus: true,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          suffixIcon:
+                          const Icon(Icons.search, color: kPrimaryColor),
+                          border: InputBorder.none,
+                          hintText: "Search ${widget.bottomSheetTitle}",
+                        ));
+                  },
+                  itemBuilder: (context, stakeholder) {
+                    bool isSelected =
+                        widget.list.indexOf(stakeholder) == selectedIndex;
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(6.0),
+                        child: Row(
+                          children: [
+                            isSelected
+                                ? Icon(
+                              Icons.radio_button_checked,
+                              color: kPrimaryColor,
+                              size: responsiveFont(14.0),
+                            )
+                                : Icon(
+                              Icons.circle_outlined,
+                              size: responsiveFont(14.0),
+                            ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Expanded(
+                              child: Text(
+                                stakeholder.lookupDetHierDescEn ?? "",
+                                style: TextStyle(
+                                  fontSize: responsiveFont(14.0),
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            if (isSelected)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ).paddingSymmetric(horizontal: 4, vertical: 2),
+                      ),
+                    );
+                    // return ListTile(
+                    //   title: Text(stakeholder.lookupDetHierDescEn ?? ""),
+                    //   // subtitle: Text(city.country),
+                    // );
+                  },
+                  onSelected: (dynamic selectedStakeH) {
+                    txtContro.text = selectedStakeH.lookupDetHierDescEn ?? '';
+                    setState(() {
+                      // Move the selected item to the top of the list
+                      int selectedIndex = widget.list.indexOf(selectedStakeH);
+                      if (selectedIndex != -1) {
+                        var selectedItem = widget.list.removeAt(selectedIndex);
+                        widget.list.insert(0, selectedItem);
+                        this.selectedIndex =
+                        0; // Update the selectedIndex for the ListView
+                      }
+                    });
+                    widget.onItemSelected(selectedStakeH);
+                    Get.back();
+                  },
+                ),
+              ),
+            ),
+          ),
+
           Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,

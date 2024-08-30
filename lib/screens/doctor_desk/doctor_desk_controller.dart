@@ -4,9 +4,12 @@ import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/add_treatment_details_model.dart';
+import 'package:community_health_app/screens/doctor_desk/model/disease/disease_model.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_details/doc_desk_data.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_details/doc_desk_details_list_model.dart';
+import 'package:community_health_app/screens/doctor_desk/model/referral/referral_lookup_det.dart';
+import 'package:community_health_app/screens/doctor_desk/model/referral/referral_model.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_model.dart';
 import 'package:community_health_app/screens/doctor_desk/model/search/search__doc_desk_data_model.dart';
@@ -20,7 +23,6 @@ import 'package:intl/intl.dart';
 
 import '../camp_creation/model/user_list_model/user_list_model.dart';
 import '../location_master/model/country/country_model.dart';
-import '../location_master/model/search/search_data_model.dart';
 import 'model/doctor_desk_list_model.dart';
 
 class DoctorDeskController extends GetxController {
@@ -44,7 +46,7 @@ class DoctorDeskController extends GetxController {
   List<ReferToDetails> selectedStakeH = [];
   LookupDetHierarchical? selectedStakeHType;
   LookupDetHierarchical? selectedDiseases;
-  LookupDetHierarchical? selectedReferralSer;
+  ReferralLookupDet? selectedReferralSer;
   String? selectedStakeHVal;
   String? selectedStakeHTypeVal;
   String? selectedDiseasesVal;
@@ -54,8 +56,10 @@ class DoctorDeskController extends GetxController {
   TextEditingController investigationController = TextEditingController();
   TextEditingController treatmentGivenController = TextEditingController();
   AddTreatmentDetailsModel addTreatmentDetailsModel =
-  AddTreatmentDetailsModel();
+      AddTreatmentDetailsModel();
   UserListModel? userList;
+  DiseaseModel? diseaseLookupDetHierarchical;
+  ReferralModel? referralModel;
   static const pageSize = 10;
   late PagingController<int, DoctorDeskData> pagingController;
   late PagingController<int, DocDeskData> docPagingController;
@@ -145,7 +149,7 @@ class DoctorDeskController extends GetxController {
   fetchPagedoctorDeskDetailsList(int pageKey) async {
     try {
       List<DocDeskData> newItems =
-      await doctorDeskDetailsList(pageKey, pageSize);
+          await doctorDeskDetailsList(pageKey, pageSize);
       final isLastPage = newItems.length < pageSize;
       if (isLastPage) {
         docPagingController.appendLastPage(newItems);
@@ -185,8 +189,6 @@ class DoctorDeskController extends GetxController {
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
-
-
     } else {
       isLoading = false;
 
@@ -194,7 +196,6 @@ class DoctorDeskController extends GetxController {
     }
     update();
   }
-
 
   doctorDeskDetailsList(pageKey, pageSize) async {
     doctorDetailsDesk.clear();
@@ -257,7 +258,7 @@ class DoctorDeskController extends GetxController {
   addTreatmentDetails() async {
     isLoading = true;
     final uri =
-    Uri.parse(ApiConstants.baseUrl + ApiConstants.addTreatmentDetails);
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.addTreatmentDetails);
 
     String jsonbody = json.encode(addTreatmentDetailsModel);
     Map<String, String> headers = {
@@ -369,7 +370,6 @@ class DoctorDeskController extends GetxController {
     update();
   }
 
-
   getUserList() async {
     isLoading = true;
     final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.useList}');
@@ -391,6 +391,83 @@ class DoctorDeskController extends GetxController {
       // if (data['status'] == 'Success') {
       isLoading = false;
       userList = UserListModel.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+  getDisease() async {
+    isLoading = true;
+    final uri =
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getAllAddress}');
+    final Map<String, dynamic> body = {
+      "lookup_det_code_list1": [
+        {"lookup_det_code": "DIS"}
+      ]
+    };
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response =
+        await http.post(uri, headers: headers, body: json.encode(body));
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      diseaseLookupDetHierarchical = DiseaseModel.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+  getReferral() async {
+    isLoading = true;
+    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getDivision}');
+    final Map<String, dynamic> body = {
+      "lookup_code_list1": [
+        {"lookup_code": "REF"}
+      ]
+    };
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response =
+        await http.post(uri, headers: headers, body: json.encode(body));
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      referralModel = ReferralModel.fromJson(data);
 
       update();
     } else if (response.statusCode == 401) {

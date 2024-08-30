@@ -685,7 +685,7 @@ class _CamCreationCardState extends State<CamCreationCard> {
                       "Designation/Member Type",
                       campCreationController
                               .memberTypeModel?.details?.first.lookupDet ??
-                          []);
+                          [],false);
                 },
                 readOnly: true,
                 label: RichText(
