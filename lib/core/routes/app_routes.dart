@@ -1,46 +1,36 @@
-import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view.dart';
-import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view.dart';
-import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view_new.dart';
-import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.dart';
-import 'package:community_health_app/screens/camp_calendar/ui/district_wise_camps.dart';
+import 'package:community_health_app/core/exceptions/route_exception.dart';
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
-import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
+import 'package:community_health_app/screens/camp_calendar/ui/camp_calendar_view.dart';
+import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/referred_patients_view.dart';
-import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation_new.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_patient_registration_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
+import 'package:community_health_app/screens/location_master/add_location_master.dart';
 import 'package:community_health_app/screens/location_master/location_master_list.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration.dart';
 import 'package:community_health_app/screens/patient_registration/ui/patient_registration_edit.dart';
 import 'package:community_health_app/screens/patient_registration/ui/registered_patients.dart';
-import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
-import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
-import 'package:community_health_app/screens/location_master/add_location_master.dart';
+import 'package:community_health_app/screens/splash_screen.dart';
+import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master.dart';
 import 'package:community_health_app/screens/patient_registration/ui/registered_patients_search.dart';
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_edit.dart';
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_list.dart';
-
-import 'package:community_health_app/screens/user_master/ui/registered_user_master.dart';
-import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master.dart';
-import 'package:community_health_app/screens/user_master/ui/user_master.dart';
-import 'package:community_health_app/screens/user_master/ui/user_master_edit.dart';
 import 'package:community_health_app/screens/user_auths/createnewpassword_view.dart';
 import 'package:community_health_app/screens/user_auths/enterpin_view.dart';
 import 'package:community_health_app/screens/user_auths/forgotpassword_view.dart';
 import 'package:community_health_app/screens/user_auths/login.dart';
 import 'package:community_health_app/screens/user_auths/resetpassword_view.dart';
+import 'package:community_health_app/screens/user_master/ui/registered_user_master.dart';
+import 'package:community_health_app/screens/user_master/ui/user_master.dart';
+import 'package:community_health_app/screens/user_master/ui/user_master_edit.dart';
 import 'package:flutter/material.dart';
 
-import 'package:community_health_app/screens/splash_screen.dart';
-import 'package:community_health_app/core/exceptions/route_exception.dart';
-
 import '../../screens/camp_calendar/ui/camp_wise_registered_patients.dart';
-import '../../screens/camp_coordinator/ui/add_referred_patient.dart';
 
 class AppRoutes {
   const AppRoutes._();
@@ -156,12 +146,10 @@ class AppRoutes {
         );
       case locationMasterList:
         return MaterialPageRoute(
-          // builder: (_) => const CampCreationNew(),
           builder: (_) => const LocationMasterList(),
         );
       case campCreation:
         return MaterialPageRoute(
-          // builder: (_) => const CampCreation(),
           builder: (_) => const CampCreationNew(),
         );
       case dashboard:

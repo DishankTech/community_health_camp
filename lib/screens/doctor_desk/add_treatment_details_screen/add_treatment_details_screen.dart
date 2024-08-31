@@ -2,9 +2,12 @@ import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
+import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/doctor_desk_disease_list.dart';
+import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/doctor_desk_ref_service_list.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk.dart';
-import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_deskRef.dart';
+import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk_ref.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
+import 'package:community_health_app/screens/doctor_desk/model/referral/referral_lookup_det.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
 import 'package:community_health_app/screens/doctor_desk/model/search/search_doc_desk_details.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -49,6 +52,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
     if (doctorDeskController.hasInternet) {
       doctorDeskController.getStakHolder();
       doctorDeskController.getUserList();
+      doctorDeskController.getDisease();
+      doctorDeskController.getReferral();
     }
 
     doctorDeskController.update();
@@ -317,80 +322,88 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       height:
                                                           responsiveHeight(10),
                                                     ),
-                                                    RichText(
-                                                      text: TextSpan(
-                                                        text: "Mobile No: ",
-                                                        style: TextStyle(
-                                                            color: kTextColor,
-                                                            fontSize:
-                                                                responsiveFont(
-                                                                    12),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                        children: [
-                                                          TextSpan(
-                                                              text: widget.searchedDat ==
-                                                                      null
-                                                                  ? widget
-                                                                      .doctorDeskData
-                                                                      ?.contactNumber
-                                                                  : widget.searchedDat
-                                                                          ?.contactNumber ??
-                                                                      "",
-                                                              style: TextStyle(
-                                                                  fontSize:
-                                                                      responsiveFont(
-                                                                          12),
-                                                                  color:
-                                                                      kTextColor,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .normal))
-                                                        ],
-                                                      ),
+                                                    Row(
+                                                      children: [
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            text: "Camp ID: ",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    kTextColor,
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        12),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: widget.searchedDat ==
+                                                                          null
+                                                                      ? widget
+                                                                          .doctorDeskData
+                                                                          ?.campCreateRequestId
+                                                                          .toString()
+                                                                      : widget.searchedDat
+                                                                              ?.campCreateRequestId
+                                                                              .toString() ??
+                                                                          "",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          responsiveFont(
+                                                                              12),
+                                                                      color:
+                                                                          kTextColor,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        SizedBox(
+                                                          width:
+                                                              responsiveHeight(
+                                                                  10),
+                                                        ),
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            text: "Camp Date: ",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    kTextColor,
+                                                                fontSize:
+                                                                    responsiveFont(
+                                                                        12),
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: widget.searchedDat ==
+                                                                          null
+                                                                      ? widget
+                                                                          .doctorDeskData
+                                                                          ?.campDate
+                                                                      : widget.searchedDat
+                                                                              ?.campDate ??
+                                                                          "",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          responsiveFont(
+                                                                              12),
+                                                                      color:
+                                                                          kTextColor,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .normal))
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
                                                     ),
                                                     SizedBox(
                                                       height:
                                                           responsiveHeight(10),
-                                                    ),
-                                                    RichText(
-                                                      text: TextSpan(
-                                                        text: "Address: ",
-                                                        style: TextStyle(
-                                                            color: kTextColor,
-                                                            fontSize:
-                                                                responsiveFont(
-                                                                    12),
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                        children: [
-                                                          TextSpan(
-                                                            text: widget.searchedDat ==
-                                                                    null
-                                                                ? "${widget.doctorDeskData?.locationName ?? ""} "
-                                                                    "${widget.doctorDeskData?.city ?? ""} "
-                                                                    "${widget.doctorDeskData?.destrict ?? ""} "
-                                                                    "${widget.doctorDeskData?.taluka ?? ""} "
-                                                                    "${widget.doctorDeskData?.state ?? ""}"
-                                                                : "${widget.searchedDat?.locationName ?? ""} "
-                                                                    "${widget.searchedDat?.cityDescEn ?? ""} "
-                                                                    "${widget.searchedDat?.districtDescEn ?? ""} "
-                                                                    "${widget.searchedDat?.talukaDescEn ?? ""} "
-                                                                    "${widget.searchedDat?.stateDescEn ?? ""}",
-                                                            style: TextStyle(
-                                                              fontSize:
-                                                                  responsiveFont(
-                                                                      12),
-                                                              color: kTextColor,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .normal,
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
                                                     ),
                                                   ],
                                                 ),
@@ -406,7 +419,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                       child: Container(
                                         width:
                                             MediaQuery.of(context).size.width,
-                                        height: responsiveHeight(500),
+                                        // height: responsiveHeight(550),
                                         decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -423,6 +436,42 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                         ),
                                         child: Column(
                                           children: [
+                                            SizedBox(
+                                              height: responsiveHeight(8),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 20, 20, 0),
+                                              child: AppRoundTextField(
+                                                readOnly: false,
+                                                controller: doctorDeskController
+                                                    .patientId,
+                                                inputStyle: TextStyle(
+                                                    fontSize:
+                                                        responsiveFont(14),
+                                                    color: kTextBlackColor),
+                                                inputType:
+                                                    TextInputType.streetAddress,
+                                                onChange: (p0) {},
+                                                // maxLength: 12,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text: 'Patient ID',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        // TextSpan(
+                                                        //     text: "*",
+                                                        //     style: TextStyle(
+                                                        //         color: Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                              ),
+                                            ),
                                             Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
@@ -593,6 +642,350 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                       20, 15, 20, 0),
                                               child: AppRoundTextField(
                                                 controller: controller
+                                                    .diseasesTypeController,
+                                                inputType: TextInputType.text,
+                                                onChange: (p0) {},
+                                                onTap: () async {
+                                                  await commonBottomSheets(
+                                                      context,
+                                                      (p0) async => {
+                                                            controller
+                                                                    .selectedDiseasesVal =
+                                                                p0.lookupDetDescEn,
+                                                            controller
+                                                                .diseasesTypeController
+                                                                .text = p0
+                                                                    .lookupDetDescEn ??
+                                                                "",
+                                                            controller
+                                                                .selectedDiseases = p0,
+                                                            controller.update()
+                                                          },
+                                                      "Diseases Type",
+                                                      controller
+                                                              .diseaseLookupDetHierarchical
+                                                              ?.details
+                                                              ?.first
+                                                              .lookupDet ??
+                                                          [],
+                                                      true);
+                                                },
+                                                // maxLength: 12,
+                                                readOnly: true,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text: 'Diseases Type"',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "*",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                                suffix: SizedBox(
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      icArrowDownOrange,
+                                                      height:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                      width:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 12, 0),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: kTextFieldBorder,
+                                                    width: 1,
+                                                  ),
+                                                ),
+                                                height: 110,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(4),
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 2, 0, 2),
+                                                      color: Colors.transparent,
+                                                      child: Text(
+                                                        "Investigation Advised",
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          // color: dashboardSubTitle,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    TextField(
+                                                      controller: controller
+                                                          .investigationController,
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            responsiveFont(12),
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                      maxLength: 500,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                        hintText: "",
+                                                        counterText: "",
+                                                        hintStyle: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  14),
+                                                          // color: dashboardSubTitle,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                      keyboardType:
+                                                          TextInputType
+                                                              .multiline,
+                                                      maxLines: null,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        12, 0, 12, 0),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  border: Border.all(
+                                                    color: kTextFieldBorder,
+                                                    width: 1,
+                                                  ),
+                                                ),
+                                                height: 110,
+                                                child: Column(
+                                                  children: [
+                                                    SizedBox(
+                                                      height:
+                                                          responsiveHeight(4),
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                              .size
+                                                              .width,
+                                                      padding: const EdgeInsets
+                                                          .fromLTRB(0, 2, 0, 2),
+                                                      color: Colors.transparent,
+                                                      child: Text(
+                                                        "Treatment Given",
+                                                        style: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  12),
+                                                          // color: dashboardSubTitle,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    TextField(
+                                                      controller: controller
+                                                          .treatmentGivenController,
+                                                      style: TextStyle(
+                                                        fontSize:
+                                                            responsiveFont(12),
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                      ),
+                                                      maxLength: 500,
+                                                      decoration:
+                                                          InputDecoration(
+                                                        border:
+                                                            InputBorder.none,
+                                                        hintText: "",
+                                                        counterText: "",
+                                                        hintStyle: TextStyle(
+                                                          fontSize:
+                                                              responsiveFont(
+                                                                  14),
+                                                          // color: dashboardSubTitle,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                        ),
+                                                      ),
+                                                      keyboardType:
+                                                          TextInputType
+                                                              .multiline,
+                                                      maxLines: null,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: AppRoundTextField(
+                                                controller:
+                                                    controller.referralService,
+                                                inputType: TextInputType.text,
+                                                onChange: (p0) {},
+                                                onTap: () async {
+                                                  await commonBottomSheets(
+                                                      context,
+                                                      (p0) async => {
+                                                            controller
+                                                                    .selectedReferralSerVal =
+                                                                p0.lookupDetDescEn,
+                                                            controller
+                                                                .selectedReferralSer
+                                                                .addIfReferralNotExist(
+                                                                    p0),
+                                                            controller
+                                                                    .referralService
+                                                                    .text =
+                                                                controller
+                                                                    .selectedReferralSer
+                                                                    .displayReferralText(),
+                                                            controller.update()
+                                                          },
+                                                      "Referral Services",
+                                                      controller
+                                                              .referralModel
+                                                              ?.details
+                                                              ?.first
+                                                              .lookupDet ??
+                                                          [],
+                                                      true);
+                                                },
+                                                // maxLength: 12,
+                                                readOnly: true,
+                                                label: RichText(
+                                                  text: const TextSpan(
+                                                      text: 'Referral Services',
+                                                      style: TextStyle(
+                                                          color: kHintColor,
+                                                          fontFamily:
+                                                              Montserrat),
+                                                      children: [
+                                                        TextSpan(
+                                                            text: "*",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.red))
+                                                      ]),
+                                                ),
+                                                hint: "",
+                                                suffix: SizedBox(
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  child: Center(
+                                                    child: Image.asset(
+                                                      icArrowDownOrange,
+                                                      height:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                      width:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(20),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          20, 30, 20, 4),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        // height: responsiveHeight(100),
+
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                                offset: const Offset(0, 0),
+                                                color: Colors.grey
+                                                    .withOpacity(0.5),
+                                                spreadRadius: 1,
+                                                blurRadius: 5)
+                                          ],
+                                          borderRadius: BorderRadius.circular(
+                                            responsiveHeight(25),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      20, 15, 20, 0),
+                                              child: AppRoundTextField(
+                                                controller: controller
                                                     .stakeHolderTypeController,
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
@@ -683,7 +1076,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                         (p0) => {
                                                               controller
                                                                       .selectedStakeHVal =
-                                                                  p0.lookupDetHierDescEn,
+                                                                  p0.stakeholderNameEn,
                                                               controller
                                                                   .selectedStakeH
                                                                   .addIfNotExist(
@@ -742,6 +1135,9 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   ),
                                                 ),
                                               ),
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(20),
                                             ),
                                           ],
                                         ),
@@ -818,10 +1214,18 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   controller
                                                           .addTreatmentDetailsModel
                                                           .ttPatientDoctorDesk
-                                                          ?.lookupDetHierIdStakeholderSubType2 =
+                                                          ?.treatmentGiven =
                                                       controller
-                                                          .selectedStakeHType
-                                                          ?.lookupDetHierId;
+                                                          .treatmentGivenController
+                                                          .text;
+
+                                                  controller
+                                                          .addTreatmentDetailsModel
+                                                          .ttPatientDoctorDesk
+                                                          ?.investigationAdvised =
+                                                      controller
+                                                          .investigationController
+                                                          .text;
 
                                                   controller
                                                           .addTreatmentDetailsModel
@@ -844,16 +1248,69 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   for (ReferToDetails item
                                                       in controller
                                                           .selectedStakeH) {
-                                                    controller
-                                                        .addTreatmentDetailsModel
-                                                        .ttPatientDoctorDeskRef
-                                                        ?.add(TtPatientDoctorDeskRef(
+                                                    controller.addTreatmentDetailsModel.ttPatientDoctorDeskRef?.add(
+                                                        TtPatientDoctorDeskRef(
+                                                            // lookupDetHierIdStakeholderSubType2: controller
+                                                            //     .selectedStakeHType
+                                                            //     ?.lookupDetHierId,
+                                                            lookupDetHierIdStakeholderSubType2:
+                                                                null,
                                                             patientDoctorDeskId:
                                                                 null,
                                                             patientDoctorDeskReferId:
                                                                 null,
                                                             stakeholderMasterId:
                                                                 item.stakeholderMasterId,
+                                                            orgId: 1,
+                                                            status: 1,
+                                                            isInactive: null));
+                                                  }
+
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .doctorDeskDiseaseList = [];
+
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .doctorDeskDiseaseList
+                                                      ?.add(DoctorDeskDiseaseList(
+                                                          patientDoctorDeskDiseaseTypesId:
+                                                              controller
+                                                                  .selectedDiseases
+                                                                  ?.lookupDetHierParentId,
+                                                          patientDoctorDeskId:
+                                                              null,
+                                                          lookupDetIdDiseaseTypes:
+                                                              controller
+                                                                  .selectedDiseases
+                                                                  ?.lookupDetHierId,
+                                                          orgId: 1,
+                                                          status: 1,
+                                                          isInactive: null));
+
+                                                  controller
+                                                      .addTreatmentDetailsModel
+                                                      .doctorDeskRefServiceList = [];
+                                                  for (ReferralLookupDet item
+                                                      in controller
+                                                          .selectedReferralSer) {
+                                                    controller.addTreatmentDetailsModel.doctorDeskRefServiceList?.add(
+                                                        DoctorDeskRefServiceList(
+                                                            patientDoctorDeskReferralServicesId:
+                                                                item
+                                                                    .lookupDetOthers
+                                                            // controller
+                                                            //     .selectedReferralSer
+                                                            //     ?.lookupDetOthers
+                                                            ,
+                                                            patientDoctorDeskId:
+                                                                null,
+                                                            lookupDetIdReferralServices:
+                                                                item.lookupDetId
+                                                            // controller
+                                                            //     .selectedReferralSer
+                                                            //     ?.lookupDetId
+                                                            ,
                                                             orgId: 1,
                                                             status: 1,
                                                             isInactive: null));
@@ -940,9 +1397,33 @@ extension ListExtensions on List {
   }
 
   String displayText() {
-    return where(
-            (item) => item.stakeholderNameEn != null) // Filter out null values
+    return where((item) =>
+            item.lookupDetHierDescEn != null) // Filter out null values
         .map((item) => item.stakeholderNameEn!)
+        .join(', '); // Joins with a comma and space separator
+  }
+}
+
+extension ListExtensionsReferral on List {
+  void addIfReferralNotExist(ReferralLookupDet element,
+      {bool Function(ReferralLookupDet item)? condition}) {
+    bool exists;
+
+    if (condition != null) {
+      exists = any((item) => condition(item));
+    } else {
+      exists = contains(element);
+    }
+
+    if (!exists) {
+      add(element);
+    }
+  }
+
+  String displayReferralText() {
+    return where(
+            (item) => item.lookupDetDescEn != null) // Filter out null values
+        .map((item) => item.lookupDetDescEn!)
         .join(', '); // Joins with a comma and space separator
   }
 }

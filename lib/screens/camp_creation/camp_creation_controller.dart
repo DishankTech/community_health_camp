@@ -45,7 +45,16 @@ class CampCreationController extends GetxController {
   // TextEditingController memberTypeController = TextEditingController();
   TextEditingController stakHolderUserCreation = TextEditingController();
   TextEditingController loginNameUserCreation = TextEditingController();
-
+String? errorMobile;
+String? errorLocation;
+String? errorDistrict;
+String? errorTaluka;
+String? errorStakeHolder;
+String? errorDate;
+String? errorDesignation;
+String? errorFullName;
+String? errorCountryCode;
+String? errorUserName;
   bool isLoading = false;
 
   String? status;

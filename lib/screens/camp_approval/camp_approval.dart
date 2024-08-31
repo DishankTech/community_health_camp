@@ -98,6 +98,8 @@ class _CampApprovalScreenState extends State<CampApprovalScreen> {
                             onPressed: () {
                               campApprovalController.isSearch = false;
                               campApprovalController.searchedDataModel = null;
+                              campApprovalController.searchController.text = '';
+
                               campApprovalController.pagingController.refresh();
                               setState(() {});
                             },

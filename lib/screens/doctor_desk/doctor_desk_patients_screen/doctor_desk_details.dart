@@ -6,6 +6,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/common_widgets/app_bar_v1.dart';
 import '../../../core/constants/constants.dart';
@@ -234,16 +235,76 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                               ],
                                                                             ),
                                                                             SizedBox(
-                                                                              height: responsiveHeight(10),
+                                                                              height:
+                                                                              responsiveHeight(10),
                                                                             ),
-                                                                            RichText(
-                                                                              text: TextSpan(
-                                                                                text: "Mobile No: ",
-                                                                                style: TextStyle(color: kTextColor, fontSize: responsiveFont(12), fontWeight: FontWeight.bold),
-                                                                                children: [
-                                                                                  TextSpan(text: item.contactNumber ?? "", style: TextStyle(fontSize: responsiveFont(12), color: kTextColor, fontWeight: FontWeight.normal))
-                                                                                ],
-                                                                              ),
+                                                                            Row(
+                                                                              children: [
+                                                                                RichText(
+                                                                                  text: TextSpan(
+                                                                                    text: "Camp ID: ",
+                                                                                    style: TextStyle(
+                                                                                        color:
+                                                                                        kTextColor,
+                                                                                        fontSize:
+                                                                                        responsiveFont(
+                                                                                            12),
+                                                                                        fontWeight:
+                                                                                        FontWeight
+                                                                                            .bold),
+                                                                                    children: [
+                                                                                      TextSpan(
+                                                                                          text: item.campCreateRequestId.toString() ??
+                                                                                              "",
+                                                                                          style: TextStyle(
+                                                                                              fontSize:
+                                                                                              responsiveFont(
+                                                                                                  12),
+                                                                                              color:
+                                                                                              kTextColor,
+                                                                                              fontWeight:
+                                                                                              FontWeight
+                                                                                                  .normal))
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                                SizedBox(
+                                                                                  width:
+                                                                                  responsiveHeight(
+                                                                                      10),
+                                                                                ),
+                                                                                RichText(
+                                                                                  text: TextSpan(
+                                                                                    text: "Camp Date: ",
+                                                                                    style: TextStyle(
+                                                                                        color:
+                                                                                        kTextColor,
+                                                                                        fontSize:
+                                                                                        responsiveFont(
+                                                                                            12),
+                                                                                        fontWeight:
+                                                                                        FontWeight
+                                                                                            .bold),
+                                                                                    children: [
+                                                                                      TextSpan(
+                                                                                          text: dateConversion(item.propCampDate),
+                                                                                          style: TextStyle(
+                                                                                              fontSize:
+                                                                                              responsiveFont(
+                                                                                                  12),
+                                                                                              color:
+                                                                                              kTextColor,
+                                                                                              fontWeight:
+                                                                                              FontWeight
+                                                                                                  .normal))
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                            SizedBox(
+                                                                              height:
+                                                                              responsiveHeight(10),
                                                                             ),
                                                                           ],
                                                                         ),
@@ -255,38 +316,7 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
                                                                         responsiveHeight(
                                                                             10),
                                                                   ),
-                                                                  RichText(
-                                                                    text:
-                                                                        TextSpan(
-                                                                      text:
-                                                                          "Address: ",
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              kTextColor,
-                                                                          fontSize: responsiveFont(
-                                                                              12),
-                                                                          fontWeight:
-                                                                              FontWeight.bold),
-                                                                      children: [
-                                                                        TextSpan(
-                                                                            text:
-                                                                                "${item.locationName ?? ""} "
-                                                                                "${item.cityEn ?? ""} "
-                                                                                "${item.districtEn ?? ""} "
-                                                                                "${item.talukaEn ?? ""} "
-                                                                                "${item.stateEn ?? ""}",
-                                                                            style: TextStyle(
-                                                                                fontSize: responsiveFont(12),
-                                                                                color: kTextColor,
-                                                                                fontWeight: FontWeight.normal))
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  SizedBox(
-                                                                    height:
-                                                                        responsiveHeight(
-                                                                            10),
-                                                                  ),
+
                                                                   RichText(
                                                                     text:
                                                                         TextSpan(
@@ -383,5 +413,13 @@ class _DoctorDeskDetailsScreenState extends State<DoctorDeskDetailsScreen> {
             }),
       ),
     );
+  }
+
+  dateConversion(dateTimeString){
+    DateTime parsedDate = DateTime.parse(dateTimeString);
+
+    // Format the date as "yyyy-MM-dd"
+    String formattedDate = DateFormat('yyyy-MM-dd').format(parsedDate);
+    return formattedDate;
   }
 }

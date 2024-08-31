@@ -32,6 +32,7 @@ class _CampCreationNewState extends State<CampCreationNew> {
   DateTime? selectedDate;
   TimeOfDay? startTime;
   TimeOfDay? endTime;
+  final GlobalKey<FormState> _formKey = GlobalKey();
 
   checkInternetAndLoadData() async {
     List<ConnectivityResult> connectivityResult =
@@ -63,7 +64,9 @@ class _CampCreationNewState extends State<CampCreationNew> {
     campCreationController.talukaController.text = "";
 
     campCreationController.stakeHolderController.text = '';
-
+    campCreationController.userNameController.text = '';
+    campCreationController.mobileController.text = '';
+    campCreationController.username = '';
     campCreationController.campCreationCardList.clear();
     campCreationController.campCreationCardList.add(TtCampCreateDetails());
     checkInternetAndLoadData();
@@ -124,711 +127,952 @@ class _CampCreationNewState extends State<CampCreationNew> {
                           ],
                         )
                       : SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              mAppBarV1(
-                                title: "Camp Creation",
-                                context: context,
-                                onBackButtonPress: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  width: SizeConfig.screenWidth * 3,
-                                  // height: SizeConfig.screenHeight / 3,
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                mAppBarV1(
+                                  title: "Camp Creation",
+                                  context: context,
+                                  onBackButtonPress: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    width: SizeConfig.screenWidth * 3,
+                                    // height: SizeConfig.screenHeight / 3,
 
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(
-                                        responsiveHeight(25)),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.grey.withOpacity(0.5),
-                                        // Shadow color
-                                        spreadRadius: 2,
-                                        // Spread radius
-                                        blurRadius: 7,
-                                        // Blur radius
-                                        offset: const Offset(
-                                            0, 3), // changes position of shadow
-                                      ),
-                                    ],
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 12, horizontal: 12),
-                                    child: Column(
-                                      children: [
-                                        AppRoundTextField(
-                                          controller:
-                                              controller.locationNameController,
-                                          inputType: TextInputType.text,
-                                          onChange: (p0) {},
-                                          onTap: () async {
-                                            await locationNameBottomSheet(
-                                                context,
-                                                (p0) async => {
-                                                      controller
-                                                              .selectedLocationVal =
-                                                          p0.locationName,
-                                                      controller
-                                                          .selectedLocation = p0,
-                                                      controller
-                                                          .locationNameController
-                                                          .text = controller
-                                                              .selectedLocationVal ??
-                                                          "",
-                                                      controller.update(),
-                                                      await controller
-                                                          .getStakHoldeName(
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(
+                                          responsiveHeight(25)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5),
+                                          // Shadow color
+                                          spreadRadius: 2,
+                                          // Spread radius
+                                          blurRadius: 7,
+                                          // Blur radius
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 12, horizontal: 12),
+                                      child: Column(
+                                        children: [
+                                          AppRoundTextField(
+                                            controller: controller
+                                                .locationNameController,
+                                            inputType: TextInputType.text,
+                                            onChange: (p0) {},
+                                            onTap: () async {
+                                              await locationNameBottomSheet(
+                                                  context,
+                                                  (p0) async => {
                                                         controller
-                                                            .selectedLocation
-                                                            ?.lookupDetHierIdDistrict
-                                                            .toString(),
-                                                      ),
-                                                      controller
-                                                          .distNameController
-                                                          .text = controller
+                                                                .selectedLocationVal =
+                                                            p0.locationName,
+                                                        controller
+                                                            .selectedLocation = p0,
+                                                        controller
+                                                            .locationNameController
+                                                            .text = controller
+                                                                .selectedLocationVal ??
+                                                            "",
+                                                        controller.update(),
+                                                        await controller
+                                                            .getStakHoldeName(
+                                                          controller
                                                               .selectedLocation
-                                                              ?.lookupDetHierDescEn ??
-                                                          "",
-                                                      controller
-                                                          .talukaController
-                                                          .text = controller
-                                                              .selectedLocation
-                                                              ?.talukaEn ??
-                                                          "",
-                                                      controller
-                                                              .campCreationCardList[
-                                                                  0]
-                                                              .memberType =
-                                                          campCreationController
-                                                              .memberTypeModel
-                                                              ?.details
-                                                              ?.first
-                                                              .lookupDet
-                                                              ?.firstWhere((e) =>
-                                                                  e.lookupDetDescEn ==
-                                                                  "Co-ordinators")
-                                                              .lookupDetDescEn,
-                                                      controller.username =
-                                                          "${controller.locationNameController.text.trim()}"
-                                                              "${controller.campNumber}",
-                                                      controller.update(),
-                                                    },
-                                                "Location",
-                                                controller.locationNameModel
-                                                        ?.details ??
-                                                    [],true);
-                                          },
-                                          // maxLength: 12,
-                                          readOnly: true,
-                                          label: RichText(
-                                            text: const TextSpan(
-                                                text: 'Location ',
-                                                style: TextStyle(
-                                                    color: kHintColor,
-                                                    fontFamily: Montserrat),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "*",
-                                                      style: TextStyle(
-                                                          color: Colors.red))
-                                                ]),
-                                          ),
-                                          hint: "",
-                                          suffix: SizedBox(
-                                            height:
-                                                getProportionateScreenHeight(
-                                                    20),
-                                            width: getProportionateScreenHeight(
-                                                20),
-                                            child: Center(
-                                              child: Image.asset(
-                                                icArrowDownOrange,
-                                                height:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                                width:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        AppRoundTextField(
-                                          controller:
-                                              controller.distNameController,
-                                          // initialValue: controller.selectedLocation?.lookupDetHierDescEn ?? "",
-                                          inputType: TextInputType.text,
-                                          onChange: (p0) {},
-                                          // onTap: () async {
-                                          //   return null;
-                                          // },
-                                          readOnly: true,
-                                          label: RichText(
-                                            text: const TextSpan(
-                                                text: 'District',
-                                                style: TextStyle(
-                                                    color: kHintColor,
-                                                    fontFamily: Montserrat),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "*",
-                                                      style: TextStyle(
-                                                          color: Colors.red))
-                                                ]),
-                                          ),
-                                          hint: "",
-                                          suffix: SizedBox(
-                                            height:
-                                                getProportionateScreenHeight(
-                                                    20),
-                                            width: getProportionateScreenHeight(
-                                                20),
-                                            child: Center(
-                                              child: Image.asset(
-                                                icArrowDownOrange,
-                                                height:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                                width:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        AppRoundTextField(
-                                          controller:
-                                              controller.talukaController,
-                                          // initialValue: controller.selectedLocation?.lookupDetHierDescEn ?? "",
-                                          inputType: TextInputType.text,
-                                          onChange: (p0) {},
-                                          onTap: () async {
-                                            return null;
-                                          },
-                                          readOnly: true,
-                                          label: RichText(
-                                            text: const TextSpan(
-                                                text: 'Taluka',
-                                                style: TextStyle(
-                                                    color: kHintColor,
-                                                    fontFamily: Montserrat),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "*",
-                                                      style: TextStyle(
-                                                          color: Colors.red))
-                                                ]),
-                                          ),
-                                          hint: "",
-                                          suffix: SizedBox(
-                                            height:
-                                                getProportionateScreenHeight(
-                                                    20),
-                                            width: getProportionateScreenHeight(
-                                                20),
-                                            child: Center(
-                                              child: Image.asset(
-                                                icArrowDownOrange,
-                                                height:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                                width:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        AppRoundTextField(
-                                          controller:
-                                              controller.stakeHolderController,
-                                          inputType: TextInputType.text,
-                                          onChange: (p0) {},
-                                          onTap: () async {
-                                            await stakeHolderNameBottomSheet(
-                                                context,
-                                                (p0) => {
-                                                      controller
-                                                              .selectedStakeHVal =
-                                                          p0.stakeholderNameEn,
-                                                      controller
-                                                          .selectedStakeHName = p0,
-                                                      controller
-                                                          .stakeHolderController
-                                                          .text = controller
-                                                              .selectedStakeHVal ??
-                                                          "",
-                                                      controller.update()
-                                                    },
-                                                "Stakeholder Name",
-                                                controller.stakeHolderNameModel
-                                                        ?.details ??
-                                                    [],true);
-                                          },
-                                          // maxLength: 12,
-                                          readOnly: true,
-                                          label: RichText(
-                                            text: const TextSpan(
-                                                text: 'Stakeholder Name',
-                                                style: TextStyle(
-                                                    color: kHintColor,
-                                                    fontFamily: Montserrat),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "*",
-                                                      style: TextStyle(
-                                                          color: Colors.red))
-                                                ]),
-                                          ),
-                                          hint: "",
-                                          suffix: SizedBox(
-                                            height:
-                                                getProportionateScreenHeight(
-                                                    20),
-                                            width: getProportionateScreenHeight(
-                                                20),
-                                            child: Center(
-                                              child: Image.asset(
-                                                icArrowDownOrange,
-                                                height:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                                width:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        AppRoundTextField(
-                                          controller:
-                                              controller.dateTimeController,
-                                          inputType: TextInputType.text,
-                                          onChange: (p0) {},
-                                          onTap: () {
-                                            selectDateTime(context);
-                                          },
-                                          readOnly: true,
-                                          label: RichText(
-                                            text: const TextSpan(
-                                                text:
-                                                    'Proposed camp date & time',
-                                                style: TextStyle(
-                                                    color: kHintColor,
-                                                    fontFamily: Montserrat),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "*",
-                                                      style: TextStyle(
-                                                          color: Colors.red))
-                                                ]),
-                                          ),
-                                          hint: "",
-                                          suffix: SizedBox(
-                                            height:
-                                                getProportionateScreenHeight(
-                                                    20),
-                                            width: getProportionateScreenHeight(
-                                                20),
-                                            child: Center(
-                                              child: Image.asset(
-                                                icCalendar,
-                                                height:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                                width:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        AppRoundTextField(
-                                          initialValue: controller
-                                              .campCreationCardList[0]
-                                              .memberType,
-                                          inputStyle: TextStyle(
-                                              fontSize: responsiveFont(14),
-                                              color: kTextBlackColor),
-                                          inputType: TextInputType.text,
-                                          onTap: () {
-                                            commonBottomSheets(
-                                                context,
-                                                (p0) => {
-                                                      controller
-                                                          .campCreationCardList[
-                                                              0]
-                                                          .memberType = (p0
-                                                                  as MemberLookupDet)
-                                                              .lookupDetDescEn ??
-                                                          '',
-                                                      controller
-                                                              .campCreationCardList[
-                                                                  0]
-                                                              .lookupDetIdType =
-                                                          p0.lookupDetId,
-                                                      setState(() {})
-                                                    },
-                                                "Designation/Member Type",
-                                                campCreationController
-                                                    .memberTypeList);
-                                          },
-                                          readOnly: true,
-                                          label: RichText(
-                                            text: const TextSpan(
-                                                text: 'Designation/Member Type',
-                                                style: TextStyle(
-                                                    color: kHintColor,
-                                                    fontFamily: Montserrat),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "*",
-                                                      style: TextStyle(
-                                                          color: Colors.red))
-                                                ]),
-                                          ),
-                                          hint: "",
-                                          suffix: SizedBox(
-                                            height: responsiveHeight(20),
-                                            width: responsiveHeight(20),
-                                            child: Center(
-                                              child: Image.asset(
-                                                icArrowDownOrange,
-                                                height: responsiveHeight(20),
-                                                width: responsiveHeight(20),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        AppRoundTextField(
-                                          controller: campCreationController
-                                              .userNameController,
-                                          // initialValue: controller
-                                          //     .campCreationCardList[0].userName,
-                                          inputStyle: TextStyle(
-                                              fontSize: responsiveFont(14),
-                                              color: kTextBlackColor),
-                                          inputType: TextInputType.text,
-                                          onChange: (p0) {
-                                            campCreationController
-                                                .userNameController.text = p0;
-                                            print("AppRoundTextField: $p0");
-                                            // controller.userNameController.text = p0;
-                                          },
-                                          label: RichText(
-                                            text: const TextSpan(
-                                                text: 'Full Name',
-                                                style: TextStyle(
-                                                    color: kHintColor,
-                                                    fontFamily: Montserrat),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "*",
-                                                      style: TextStyle(
-                                                          color: Colors.red))
-                                                ]),
-                                          ),
-                                          hint: "",
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: AppRoundTextField(
-                                                controller: controller
-                                                    .countryCodeController,
-
-                                                inputStyle: TextStyle(
-                                                    fontSize:
-                                                        responsiveFont(14),
-                                                    color: kTextBlackColor),
-                                                inputType: TextInputType.number,
-                                                onChange: (p0) {},
-                                                onTap: () {
-                                                  List<Map<String, dynamic>>
-                                                      list = [
-                                                    {"title": "+91", "id": 1}
-                                                  ];
-                                                  commonBottonSheet(
-                                                      context,
-                                                      (p0) => {
-                                                            controller
-                                                                .countryCodeController
-                                                                .text = p0['title'],
-                                                            // controller.campCreationCardList[0].selectedCountry = p0['title'],
+                                                              ?.lookupDetHierIdDistrict
+                                                              .toString(),
+                                                        ),
+                                                        controller
+                                                            .distNameController
+                                                            .text = controller
+                                                                .selectedLocation
+                                                                ?.lookupDetHierDescEn ??
+                                                            "",
+                                                        controller
+                                                            .talukaController
+                                                            .text = controller
+                                                                .selectedLocation
+                                                                ?.talukaEn ??
+                                                            "",
+                                                        controller
+                                                                .campCreationCardList[
+                                                                    0]
+                                                                .memberType =
                                                             campCreationController
-                                                                .update()
-                                                          },
-                                                      "Country Code",
-                                                      list);
-                                                },
-                                                // maxLength: 12,
-                                                readOnly: true,
-                                                label: RichText(
-                                                  text: const TextSpan(
-                                                      text: 'Country Code',
-                                                      style: TextStyle(
-                                                          color: kHintColor,
-                                                          fontFamily:
-                                                              Montserrat),
-                                                      children: [
-                                                        TextSpan(
-                                                            text: "*",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    Colors.red))
-                                                      ]),
+                                                                .memberTypeModel
+                                                                ?.details
+                                                                ?.first
+                                                                .lookupDet
+                                                                ?.firstWhere((e) =>
+                                                                    e.lookupDetDescEn ==
+                                                                    "Co-ordinators")
+                                                                .lookupDetDescEn,
+                                                        controller.username =
+                                                            "${controller.locationNameController.text.trim()}"
+                                                                "${controller.campNumber}",
+                                                        controller.update(),
+                                                      },
+                                                  "Location",
+                                                  controller.locationNameModel
+                                                          ?.details ??
+                                                      [],
+                                                  true);
+                                            },
+                                            // maxLength: 12,
+                                            readOnly: true,
+                                            validators: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                campCreationController
+                                                        .errorLocation =
+                                                    'Please select location';
+                                                campCreationController.update();
+                                                return '';
+                                              } else {
+                                                campCreationController
+                                                    .errorLocation = null;
+                                                campCreationController.update();
+                                              }
+
+                                              return null;
+                                            },
+                                            errorText: campCreationController
+                                                .errorLocation,
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Location ',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                            suffix: SizedBox(
+                                              height:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              width:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  icArrowDownOrange,
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
                                                 ),
-                                                hint: "",
-                                                suffix: SizedBox(
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          AppRoundTextField(
+                                            controller:
+                                                controller.distNameController,
+                                            // initialValue: controller.selectedLocation?.lookupDetHierDescEn ?? "",
+                                            inputType: TextInputType.text,
+                                            onChange: (p0) {},
+                                            // onTap: () async {
+                                            //   return null;
+                                            // },
+                                            errorText: campCreationController
+                                                .errorDistrict,
+                                            validators: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                campCreationController
+                                                        .errorDistrict =
+                                                    'Please select district';
+                                                campCreationController.update();
+                                                return '';
+                                              } else {
+                                                campCreationController
+                                                    .errorDistrict = null;
+                                                campCreationController.update();
+                                              }
+
+                                              return null;
+                                            },
+                                            readOnly: true,
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'District',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                            suffix: SizedBox(
+                                              height:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              width:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  icArrowDownOrange,
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          AppRoundTextField(
+                                            controller:
+                                                controller.talukaController,
+                                            // initialValue: controller.selectedLocation?.lookupDetHierDescEn ?? "",
+                                            inputType: TextInputType.text,
+                                            onChange: (p0) {},
+                                            onTap: () async {
+                                              return null;
+                                            },
+                                            errorText: campCreationController
+                                                .errorTaluka,
+                                            validators: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                campCreationController
+                                                        .errorTaluka =
+                                                    'Please select taluka';
+                                                campCreationController.update();
+                                                return '';
+                                              } else {
+                                                campCreationController
+                                                    .errorTaluka = null;
+                                                campCreationController.update();
+                                              }
+
+                                              return null;
+                                            },
+                                            readOnly: true,
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Taluka',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                            suffix: SizedBox(
+                                              height:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              width:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  icArrowDownOrange,
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          AppRoundTextField(
+                                            controller: controller
+                                                .stakeHolderController,
+                                            inputType: TextInputType.text,
+                                            onChange: (p0) {},
+                                            onTap: () async {
+                                              await stakeHolderNameBottomSheet(
+                                                  context,
+                                                  (p0) => {
+                                                        controller
+                                                                .selectedStakeHVal =
+                                                            p0.stakeholderNameEn,
+                                                        controller
+                                                            .selectedStakeHName = p0,
+                                                        controller
+                                                            .stakeHolderController
+                                                            .text = controller
+                                                                .selectedStakeHVal ??
+                                                            "",
+                                                        controller.update()
+                                                      },
+                                                  "Stakeholder Name",
+                                                  controller
+                                                          .stakeHolderNameModel
+                                                          ?.details ??
+                                                      [],
+                                                  true);
+                                            },
+                                            // maxLength: 12,
+                                            readOnly: true,
+                                            errorText: campCreationController
+                                                .errorStakeHolder,
+                                            validators: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                campCreationController
+                                                        .errorStakeHolder =
+                                                    'Please select stakeholder';
+                                                campCreationController.update();
+                                                return '';
+                                              } else {
+                                                campCreationController
+                                                    .errorStakeHolder = null;
+                                                campCreationController.update();
+                                              }
+
+                                              return null;
+                                            },
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Stakeholder Name',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                            suffix: SizedBox(
+                                              height:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              width:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  icArrowDownOrange,
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          AppRoundTextField(
+                                            controller:
+                                                controller.dateTimeController,
+                                            inputType: TextInputType.text,
+                                            onChange: (p0) {},
+                                            onTap: () {
+                                              selectDateTime(context);
+                                            },
+                                            readOnly: true,
+                                            errorText: campCreationController
+                                                .errorDate,
+                                            validators: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                campCreationController
+                                                        .errorDate =
+                                                    'Please select date';
+                                                campCreationController.update();
+                                                return '';
+                                              } else {
+                                                campCreationController
+                                                    .errorDate = null;
+                                                campCreationController.update();
+                                              }
+
+                                              return null;
+                                            },
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text:
+                                                      'Proposed camp date & time',
+                                                  style: TextStyle(color: kHintColor, fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                            suffix: SizedBox(
+                                              height:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              width:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  icCalendar,
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          AppRoundTextField(
+                                            initialValue: controller
+                                                .campCreationCardList[0]
+                                                .memberType,
+                                            inputStyle: TextStyle(
+                                                fontSize: responsiveFont(14),
+                                                color: kTextBlackColor),
+                                            inputType: TextInputType.text,
+                                            onTap: () {
+                                              commonBottomSheets(
+                                                  context,
+                                                  (p0) => {
+                                                        controller
+                                                            .campCreationCardList[
+                                                                0]
+                                                            .memberType = (p0
+                                                                    as MemberLookupDet)
+                                                                .lookupDetDescEn ??
+                                                            '',
+                                                        controller
+                                                                .campCreationCardList[
+                                                                    0]
+                                                                .lookupDetIdType =
+                                                            p0.lookupDetId,
+                                                        setState(() {})
+                                                      },
+                                                  "Designation/Member Type",
+                                                  campCreationController
+                                                      .memberTypeList,false);
+                                            },
+                                            errorText: campCreationController
+                                                .errorDesignation,
+                                            validators: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                campCreationController
+                                                        .errorDesignation =
+                                                    'Please select designation';
+                                                campCreationController.update();
+                                                return '';
+                                              } else {
+                                                campCreationController
+                                                    .errorDesignation = null;
+                                                campCreationController.update();
+                                              }
+
+                                              return null;
+                                            },
+                                            readOnly: true,
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text:
+                                                      'Designation/Member Type',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                            suffix: SizedBox(
+                                              height: responsiveHeight(20),
+                                              width: responsiveHeight(20),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  icArrowDownOrange,
                                                   height: responsiveHeight(20),
                                                   width: responsiveHeight(20),
-                                                  child: Center(
-                                                    child: Image.asset(
-                                                      icArrowDownOrange,
-                                                      height:
-                                                          responsiveHeight(20),
-                                                      width:
-                                                          responsiveHeight(20),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          AppRoundTextField(
+                                            controller: campCreationController
+                                                .userNameController,
+                                            // initialValue: controller
+                                            //     .campCreationCardList[0].userName,
+                                            inputStyle: TextStyle(
+                                                fontSize: responsiveFont(14),
+                                                color: kTextBlackColor),
+                                            inputType: TextInputType.text,
+                                            onChange: (p0) {
+                                              campCreationController
+                                                  .userNameController.text = p0;
+                                              print("AppRoundTextField: $p0");
+                                              // controller.userNameController.text = p0;
+                                            },
+                                            errorText: campCreationController
+                                                .errorFullName,
+                                            validators: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                campCreationController
+                                                        .errorFullName =
+                                                    'Please enter full name';
+                                                campCreationController.update();
+                                                return '';
+                                              } else {
+                                                campCreationController
+                                                    .errorFullName = null;
+                                                campCreationController.update();
+                                              }
+
+                                              return null;
+                                            },
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Full Name',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: AppRoundTextField(
+                                                  controller: controller
+                                                      .countryCodeController,
+
+                                                  inputStyle: TextStyle(
+                                                      fontSize:
+                                                          responsiveFont(14),
+                                                      color: kTextBlackColor),
+                                                  inputType:
+                                                      TextInputType.number,
+                                                  onChange: (p0) {},
+                                                  errorText:
+                                                      campCreationController
+                                                          .errorCountryCode,
+                                                  validators: (value) {
+                                                    if (value == null ||
+                                                        value.isEmpty) {
+                                                      campCreationController
+                                                              .errorCountryCode =
+                                                          'Please select contry code';
+                                                      campCreationController
+                                                          .update();
+                                                      return '';
+                                                    } else {
+                                                      campCreationController
+                                                              .errorCountryCode =
+                                                          null;
+                                                      campCreationController
+                                                          .update();
+                                                    }
+
+                                                    return null;
+                                                  },
+                                                  onTap: () {
+                                                    List<Map<String, dynamic>>
+                                                        list = [
+                                                      {"title": "+91", "id": 1}
+                                                    ];
+                                                    commonBottonSheet(
+                                                        context,
+                                                        (p0) => {
+                                                              controller
+                                                                      .countryCodeController
+                                                                      .text =
+                                                                  p0['title'],
+                                                              // controller.campCreationCardList[0].selectedCountry = p0['title'],
+                                                              campCreationController
+                                                                  .update()
+                                                            },
+                                                        "Country Code",
+                                                        list);
+                                                  },
+                                                  // maxLength: 12,
+                                                  readOnly: true,
+                                                  label: RichText(
+                                                    text: const TextSpan(
+                                                        text: 'Country Code',
+                                                        style: TextStyle(
+                                                            color: kHintColor,
+                                                            fontFamily:
+                                                                Montserrat),
+                                                        children: [
+                                                          TextSpan(
+                                                              text: "*",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .red))
+                                                        ]),
+                                                  ),
+                                                  hint: "",
+                                                  suffix: SizedBox(
+                                                    height:
+                                                        responsiveHeight(20),
+                                                    width: responsiveHeight(20),
+                                                    child: Center(
+                                                      child: Image.asset(
+                                                        icArrowDownOrange,
+                                                        height:
+                                                            responsiveHeight(
+                                                                20),
+                                                        width: responsiveHeight(
+                                                            20),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            SizedBox(
-                                              width: responsiveWidth(10),
-                                            ),
-                                            Expanded(
-                                              child: AppRoundTextField(
-                                                // initialValue: controller
-                                                //     .campCreationCardList[0]
-                                                //     .userMobileNumber,
-                                                controller:
-                                                    controller.mobileController,
-                                                inputStyle: TextStyle(
-                                                    fontSize:
-                                                        responsiveFont(14),
-                                                    color: kTextBlackColor),
-                                                inputType: TextInputType.number,
-                                                onChange: (p0) {
-                                                  // controller
-                                                  //     .campCreationCardList[0]
-                                                  //     .userMobileNumber = p0;
-                                                  controller.mobileController
-                                                      .text = p0;
-                                                },
-                                                maxLength: 10,
-                                                label: RichText(
-                                                  text: const TextSpan(
-                                                      text: 'Mobile No',
-                                                      style: TextStyle(
-                                                          color: kHintColor,
-                                                          fontFamily:
-                                                              Montserrat),
-                                                      children: [
-                                                        TextSpan(
-                                                            text: "*",
-                                                            style: TextStyle(
-                                                                color:
-                                                                    Colors.red))
-                                                      ]),
-                                                ),
-                                                hint: "",
+                                              SizedBox(
+                                                width: responsiveWidth(10),
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                        SizedBox(
-                                          height: responsiveHeight(10),
-                                        ),
-                                        AppRoundTextField(
-                                          readOnly: true,
-                                          initialValue: controller.username,
-                                          inputStyle: TextStyle(
-                                              fontSize: responsiveFont(14),
-                                              color: kTextBlackColor),
-                                          inputType: TextInputType.text,
-                                          onChange: (p0) {},
-                                          label: RichText(
-                                            text: const TextSpan(
-                                              text: 'Username',
-                                              style: TextStyle(
-                                                  color: kHintColor,
-                                                  fontFamily: Montserrat),
-                                              // children: [
-                                              //   TextSpan(text: "*", style: TextStyle(color: Colors.red))
-                                              // ]
-                                            ),
+                                              Expanded(
+                                                child: AppRoundTextField(
+                                                  // initialValue: controller
+                                                  //     .campCreationCardList[0]
+                                                  //     .userMobileNumber,
+
+                                                  controller: controller
+                                                      .mobileController,
+                                                  inputStyle: TextStyle(
+                                                      fontSize:
+                                                          responsiveFont(14),
+                                                      color: kTextBlackColor),
+                                                  inputType:
+                                                      TextInputType.number,
+                                                  onChange: (p0) {
+                                                    // controller
+                                                    //     .campCreationCardList[0]
+                                                    //     .userMobileNumber = p0;
+                                                    controller.mobileController
+                                                        .text = p0;
+                                                  },
+
+                                                  validators: (value) {
+                                                    if (value == null ||
+                                                        value.isEmpty) {
+                                                      campCreationController
+                                                              .errorMobile =
+                                                          'Please enter your mobile number';
+
+                                                      campCreationController
+                                                          .update();
+                                                      return '';
+                                                    } else if (RegExp(
+                                                            r"^(0/91)?[6-9][0-9]{9}")
+                                                        .hasMatch(value)) {
+                                                      campCreationController
+                                                              .errorMobile =
+                                                          'Please enter a valid 10-digit Indian mobile number';
+                                                      campCreationController
+                                                          .update();
+                                                      return '';
+                                                    } else {
+                                                      campCreationController
+                                                          .errorMobile = null;
+                                                      campCreationController
+                                                          .update();
+                                                    }
+                                                    return null; // Validation passed
+                                                  },
+                                                  errorText:
+                                                      campCreationController
+                                                          .errorMobile,
+                                                  maxLength: 10,
+                                                  label: RichText(
+                                                    text: const TextSpan(
+                                                        text: 'Mobile No',
+                                                        style: TextStyle(
+                                                            color: kHintColor,
+                                                            fontFamily:
+                                                                Montserrat),
+                                                        children: [
+                                                          TextSpan(
+                                                              text: "*",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .red))
+                                                        ]),
+                                                  ),
+                                                  hint: "",
+                                                ),
+                                              )
+                                            ],
                                           ),
-                                          hint: "",
-                                        ),
-                                      ],
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          AppRoundTextField(
+                                            readOnly: true,
+                                            initialValue: controller.username,
+                                            inputStyle: TextStyle(
+                                                fontSize: responsiveFont(14),
+                                                color: kTextBlackColor),
+                                            inputType: TextInputType.text,
+                                            onChange: (p0) {},
+                                            errorText: campCreationController
+                                                .errorUserName,
+                                            validators: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                campCreationController
+                                                        .errorUserName =
+                                                    'Please enter username';
+                                                campCreationController.update();
+                                                return '';
+                                              } else {
+                                                campCreationController
+                                                    .errorUserName = null;
+                                                campCreationController.update();
+                                              }
+
+                                              return null;
+                                            },
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Username',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(10),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    Flexible(
-                                      flex: 1,
-                                      child: AppButton(
-                                        title: "Save",
-                                        onTap: () {
-                                          campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreate = TtCampCreate();
-                                          campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreate
-                                              ?.campCreateRequestId = null;
-
-                                          campCreationController
-                                                  .saveCampReqModel
-                                                  .ttCampCreate
-                                                  ?.stakeholderMasterId =
-                                              controller.selectedStakeHName
-                                                  ?.stakeholderMasterId;
-
-                                          campCreationController
-                                                  .saveCampReqModel
-                                                  .ttCampCreate
-                                                  ?.locationMasterId =
+                                SizedBox(
+                                  height: responsiveHeight(10),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    children: [
+                                      Flexible(
+                                        flex: 1,
+                                        child: AppButton(
+                                          title: "Save",
+                                          onTap: () {
+                                            if (_formKey.currentState
+                                                    ?.validate() ==
+                                                true) {
                                               campCreationController
-                                                  .selectedLocation
-                                                  ?.locationMasterId;
+                                                      .saveCampReqModel
+                                                      .ttCampCreate =
+                                                  TtCampCreate();
+                                              campCreationController
+                                                  .saveCampReqModel
+                                                  .ttCampCreate
+                                                  ?.campCreateRequestId = null;
 
-                                          String isoFormatDate =
-                                              convertToIsoFormat(
+                                              campCreationController
+                                                      .saveCampReqModel
+                                                      .ttCampCreate
+                                                      ?.stakeholderMasterId =
+                                                  controller.selectedStakeHName
+                                                      ?.stakeholderMasterId;
+
+                                              campCreationController
+                                                      .saveCampReqModel
+                                                      .ttCampCreate
+                                                      ?.locationMasterId =
                                                   campCreationController
-                                                      .dateTimeController.text);
-                                          campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreate
-                                              ?.propCampDate = isoFormatDate;
+                                                      .selectedLocation
+                                                      ?.locationMasterId;
 
-                                          campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreate
-                                              ?.orgId = 1;
+                                              String isoFormatDate =
+                                                  convertToIsoFormat(
+                                                      campCreationController
+                                                          .dateTimeController
+                                                          .text);
+                                              campCreationController
+                                                      .saveCampReqModel
+                                                      .ttCampCreate
+                                                      ?.propCampDate =
+                                                  isoFormatDate;
 
-                                          campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreate
-                                              ?.status = 1;
+                                              campCreationController
+                                                  .saveCampReqModel
+                                                  .ttCampCreate
+                                                  ?.orgId = 1;
 
-                                          campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreate
-                                              ?.campNumber = null;
+                                              campCreationController
+                                                  .saveCampReqModel
+                                                  .ttCampCreate
+                                                  ?.status = 1;
 
-                                          campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreate
-                                              ?.requestOrCreateFlag = "c";
+                                              campCreationController
+                                                  .saveCampReqModel
+                                                  .ttCampCreate
+                                                  ?.campNumber = null;
 
-                                          campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreateDetList = [];
+                                              campCreationController
+                                                  .saveCampReqModel
+                                                  .ttCampCreate
+                                                  ?.requestOrCreateFlag = "c";
 
-                                          campCreationController
-                                              .saveCampReqModel
-                                              .ttCampCreateDetList
-                                              ?.add(TtCampCreateDetails(
-                                                  campCreateRequestDetId: null,
-                                                  campCreateRequestId: null,
-                                                  lookupDetIdType:
+                                              campCreationController
+                                                  .saveCampReqModel
+                                                  .ttCampCreateDetList = [];
+
+                                              campCreationController
+                                                  .saveCampReqModel
+                                                  .ttCampCreateDetList
+                                                  ?.add(TtCampCreateDetails(
+                                                      campCreateRequestDetId:
+                                                          null,
+                                                      campCreateRequestId: null,
+                                                      lookupDetIdType:
+                                                          campCreationController
+                                                              .memberTypeList[0]
+                                                              ?.lookupDetId,
+                                                      userId: controller
+                                                          .campCreationCardList[
+                                                              0]
+                                                          .userId,
+                                                      userName:
+                                                          controller.username,
+                                                      userLogin:
+                                                          controller.username,
+                                                      userMobileNumber:
+                                                          controller
+                                                              .mobileController
+                                                              .text,
+                                                      status: 1,
+                                                      isInactive: null));
+                                              campCreationController
+                                                  .userCreation(
+                                                      "${controller.locationNameController.text}"
+                                                      "${controller.campNumber}",
+                                                      campCreationController
+                                                          .userNameController
+                                                          .text,
+                                                      campCreationController
+                                                          .mobileController
+                                                          .text,
                                                       campCreationController
                                                           .memberTypeList[0]
-                                                          ?.lookupDetId,
-                                                  userId: controller
-                                                      .campCreationCardList[0]
-                                                      .userId,
-                                                  userName: controller.username,
-                                                  userLogin:
-                                                      controller.username,
-                                                  userMobileNumber: controller
-                                                      .mobileController.text,
-                                                  status: 1,
-                                                  isInactive: null));
-                                          campCreationController.userCreation(
-                                              "${controller.locationNameController.text}"
-                                              "${controller.campNumber}",
+                                                          ?.lookupDetId);
                                               campCreationController
-                                                  .userNameController.text,
-                                              campCreationController
-                                                  .mobileController.text,
-                                              campCreationController
-                                                  .memberTypeList[0]
-                                                  ?.lookupDetId);
-                                          campCreationController
-                                              .saveCampCreation();
-                                        },
-                                        iconData: Icon(
-                                          Icons.arrow_forward,
-                                          color: kWhiteColor,
-                                          size: responsiveHeight(24),
+                                                  .saveCampCreation();
+                                            }
+                                          },
+                                          iconData: Icon(
+                                            Icons.arrow_forward,
+                                            color: kWhiteColor,
+                                            size: responsiveHeight(24),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    SizedBox(
-                                      width: responsiveWidth(60),
-                                    ),
-                                    Flexible(
-                                      flex: 1,
-                                      child: AppButton(
-                                        title: "Clear",
-                                        onTap: () {
-                                          Get.back();
-                                        },
-                                        buttonColor: Colors.grey,
-                                        iconData: Icon(
-                                          Icons.arrow_forward,
-                                          color: kWhiteColor,
-                                          size: responsiveHeight(24),
+                                      SizedBox(
+                                        width: responsiveWidth(60),
+                                      ),
+                                      Flexible(
+                                        flex: 1,
+                                        child: AppButton(
+                                          title: "Clear",
+                                          onTap: () {
+                                            campCreationController.locationNameController.text = '';
+                                            campCreationController.dateTimeController.text = "";
+                                            campCreationController.distNameController.text = "";
+
+                                            campCreationController.designationType.text = "";
+                                            campCreationController.talukaController.text = "";
+
+                                            campCreationController.stakeHolderController.text = '';
+                                            campCreationController.userNameController.text = '';
+                                            campCreationController.mobileController.text = '';
+                                            campCreationController.username = '';
+                                            campCreationController.campCreationCardList.clear();
+                                          },
+                                          buttonColor: Colors.grey,
+                                          iconData: Icon(
+                                            Icons.arrow_forward,
+                                            color: kWhiteColor,
+                                            size: responsiveHeight(24),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         )
                   : InternetIssue(
@@ -841,18 +1085,18 @@ class _CampCreationNewState extends State<CampCreationNew> {
     );
   }
 
-  void addCard() {
-    campCreationController.campCreationCardList.add(TtCampCreateDetails());
-    setState(() {});
-  }
-
-  void removeCard(int index) {
-    if (campCreationController.campCreationCardList.length > 1) {
-      setState(() {
-        campCreationController.campCreationCardList.removeAt(index);
-      });
-    }
-  }
+  // void addCard() {
+  //   campCreationController.campCreationCardList.add(TtCampCreateDetails());
+  //   setState(() {});
+  // }
+  //
+  // void removeCard(int index) {
+  //   if (campCreationController.campCreationCardList.length > 1) {
+  //     setState(() {
+  //       campCreationController.campCreationCardList.removeAt(index);
+  //     });
+  //   }
+  // }
 
   String convertToIsoFormat(String dateString) {
     // Split the date and time portions

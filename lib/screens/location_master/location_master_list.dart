@@ -117,6 +117,9 @@ class _LocationMasterListState extends State<LocationMasterList> {
                     child: InkWell(
                       borderRadius: BorderRadius.circular(5),
                       onTap: () {
+                        locationMasterController.isSearch = false;
+                        locationMasterController.pagingController.refresh();
+                        locationMasterController.searchedDataModel = null;
                         Get.to(() => const AddLocationMaster(
                               isView: false,
                               isEdit: false,
@@ -151,7 +154,7 @@ class _LocationMasterListState extends State<LocationMasterList> {
                           locationMasterController.isSearch = false;
                           locationMasterController.pagingController.refresh();
                           locationMasterController.searchedDataModel = null;
-
+                          locationMasterController.searchController.text = '';
                           setState(() {});
                         },
                         icon: const Icon(Icons.cancel_presentation),
