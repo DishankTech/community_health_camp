@@ -1,7 +1,7 @@
 class CampCoordRegisteredPatientModel {
   String name;
   String mobile;
-  // List<Map<String, dynamic>> ttCampDashboardRefPatientsDetList = [];
+  // List<Map<String, dynamic>> ttCampDashboardRefPatientsDet_List = [];
 
   CampCoordRegisteredPatientModel({ required this.name,required this.mobile});
 

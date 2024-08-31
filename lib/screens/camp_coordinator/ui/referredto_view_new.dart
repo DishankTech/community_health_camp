@@ -141,6 +141,7 @@ class _ReferredToScreenState extends State<NewReferredToScreen> {
                       flex: 1,
                       child: AppButton(
                         onTap: () {
+                          Navigator.pop(context);
                         },
                         title: "Save",
                         iconData: Icon(
@@ -464,6 +465,7 @@ class _ReferredToScreenState extends State<NewReferredToScreen> {
                             stakeholderSubTypeControllers[index].text = p0.lookupDetHierDescEn; // Set the text property of the controller
                             stakeholderSubTypeIdControllers[index].text = p0.lookupDetHierId.toString(); // Set the text property of the controller
 
+                            campDetailsController.stakeHolderSubTypeId =p0.lookupDetHierId;
                             getStakeholdersDetails(p0.lookupDetHierId.toString());
                           })
                         },

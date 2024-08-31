@@ -15,17 +15,19 @@ class CampDetailsController extends GetxController {
   // List<Map<String, dynamic>> ttCampDashboardRefPatientsDetList = [];
   List<Map<String, dynamic>> ttCampDashboardRefPatientsDetList = [];
   List<Map<String, dynamic>> ttCampDashboardRefPatientsNamesList = [];
+
+  int stakeHolderSubTypeId=0;
   
   String camDashboardId="";
 
   late TtCampDashboardRefStakeHoldersDet stakeHolderDetailFromJson;
- var patientDetailsFromJson;
+  late TtCampDashboardRefPatients patientDetailsFromJson;
 
   TextEditingController patientsReferred = TextEditingController();
 
   List<CampDashboardRefPatients> patientList = [];
 
-  List<CampCoordRegisteredPatientModel> campregisteredpatients = [];
+  // List<CampCoordRegisteredPatientModel> campregisteredpatients = [];
 
 
 
@@ -37,7 +39,7 @@ class CampDetailsController extends GetxController {
       var patientDetail = TtCampDashboardRefStakeHoldersDet(
         dashboardRefPatientsDetId: null,
         dashboardRefPatientsId: null,
-        lookupDetHierIdStakeholderSubType2: null,
+        lookupDetHierIdStakeholderSubType2: stakeHolderSubTypeId,
         stakeholderMasterId: int.parse(selectedItems[i]["stakeholder_master_id"].toString()),
       );
       Map<String, dynamic> json = patientDetail.toJson();
@@ -50,37 +52,34 @@ class CampDetailsController extends GetxController {
     }
   }
 
-  createMultiplePatients(List<CampCoordRegisteredPatientModel> campRegisteredPatients) {
+  createMultiplePatients(List<CampCoordRegisteredPatientModel> patientList) {
 
-    List<TtCampDashboardRefStakeHoldersDet> detailsList = ttCampDashboardRefPatientsDetList
-        .map((item) => TtCampDashboardRefStakeHoldersDet.fromJson(item))
-        .toList();
 
-    for(int i=0;i<campRegisteredPatients.length;i++)
+    for(int i=0;i<patientList.length;i++)
     {
-      var patientDetail = TtCampDashboardRefPatients(
+      TtCampDashboardRefPatients patientDetail = TtCampDashboardRefPatients(
         dashboardRefPatientsId: null,
         campDashboardId: int.parse(camDashboardId),
         patientId: null,
-        patientName: campRegisteredPatients[i].name.toString(),
+        patientName: patientList[i].name.toString(),
         age: null,
         lookupDetIdGender: null,
-        contactNumber: campRegisteredPatients[i].mobile.toString(),
+        contactNumber: patientList[i].mobile.toString(),
         orgId: 1,
         status: 1,
-        detailsList: detailsList,
+        detailsList: campReferredPatientStakeholderList.toList(),
       );
       Map<String, dynamic> json = patientDetail.toJson();
       patientDetailsFromJson = TtCampDashboardRefPatients.fromJson(json);
 
       print("patientDetailFromJson===============");
       print(patientDetailsFromJson);
-
+      campReferredPatientList.add(patientDetailsFromJson);
 
     }
 
-    campReferredPatientList.add(patientDetailsFromJson);
-    patientDetailsFromJson = null;
+
+    // patientDetailsFromJson = null;
 
     Map<String, dynamic> json_actual = {
       "actual_list":

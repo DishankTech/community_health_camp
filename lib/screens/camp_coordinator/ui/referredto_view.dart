@@ -52,7 +52,7 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
 
   Map<String, dynamic>? selectedMobile;
 
-  List<CampCoordRegisteredPatientModel> campregisteredpatients = [];
+  // List<CampCoordRegisteredPatientModel> campregisteredpatients = [];
 
   bool isLoading = false;
 
@@ -88,7 +88,7 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
     clearAllFields();
 
     _widgetList = [];
-    campregisteredpatients = [];
+    // campregisteredpatients = [];
 
     _addDynamicWidget();
     getStakeholderSubType();
@@ -181,7 +181,7 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
                       flex: 1,
                       child: AppButton(
                         onTap: () {
-                          if (campregisteredpatients.isEmpty) {
+                          if (campDetailsController.campReferredPatientList.isEmpty) {
                             addCard();
 
                             // DataProvider().storePatientList(campregisteredpatients);
@@ -265,7 +265,7 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
       referredToId.text = "";
       stakeholderSubType.text = "";
       stakeholderSubTypeId.text = "";
-      campDetailsController.createMultiplePatients(campregisteredpatients);
+      // campDetailsController.createMultiplePatients(campDetailsController.campReferredPatientList);
       campDetailsController.patientsReferred.text = campDetailsController.campReferredPatientList.length.toString();
       campDetailsController.campReferredPatientStakeholderList.clear();
     });
@@ -296,7 +296,7 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
         if (index >= 0 && index < campDetailsController.campReferredPatientList.length) {
           setState(() {
             campDetailsController.campReferredPatientList.removeAt(index);
-            print(campregisteredpatients);
+            print(campDetailsController.campReferredPatientList);
           });
         } else {
           print("Invalid index: $index");
@@ -304,7 +304,7 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
 
         // campregisteredpatients.removeAt(index);
         // campDetailsController.campReferredPatientList.removeAt(index);
-        print(campregisteredpatients);
+        print(campDetailsController.campReferredPatientList);
         // carbonCommentsList.removeAt(index);
       });
     }
@@ -485,7 +485,7 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
 
   void clearAllFields() {
     setState(() {
-      campregisteredpatients.clear();
+      campDetailsController.campReferredPatientList.clear();
       patientNameController.text = "";
       countryCodeController.text = "";
       mobileController.text = "";

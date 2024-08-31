@@ -25,7 +25,7 @@ class ReferredPatientListScreen extends StatefulWidget {
 class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
   bool isLoading = false;
 
-  List<ReferredPatientList> patientsList = [];
+  List<ReferredPatientList>? patientsList = [];
 
   @override
   void initState() {
@@ -78,7 +78,7 @@ class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
                       ],
                     ),
                   )
-                : patientsList.isEmpty
+                : patientsList!.isEmpty
                     ? Center(
                       child: Container(
                         width: SizeConfig.designScreenWidth * 0.7,
@@ -89,7 +89,7 @@ class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
                     )
                     : Expanded(
                         child: ListView.builder(
-                            itemCount: patientsList.length,
+                            itemCount: patientsList!.length,
                             padding: EdgeInsets.zero,
                             itemBuilder: (context, index) {
                               // String name = getNameById(locationData, patientsList[index].locationMasterId);
@@ -115,7 +115,7 @@ class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                patientsList[index].patientName,
+                                                patientsList![index].patientName,
                                                 style: TextStyle(fontWeight: FontWeight.bold),
                                               ),
                                             ],
@@ -131,7 +131,7 @@ class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
                                                 "Mobile No. : ",
                                                 style: TextStyle(fontSize: responsiveFont(14), color: kBlackColor, fontWeight: FontWeight.bold),
                                               ),
-                                              Text(patientsList[index].contactNumber.toString()),
+                                              Text(patientsList![index].contactNumber.toString()),
                                             ],
                                           ),
                                           SizedBox(
@@ -147,7 +147,7 @@ class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
                                                 style: TextStyle(color: kTextColor, fontFamily: Montserrat, fontSize: responsiveFont(15), fontWeight: FontWeight.bold),
                                                 children: [
                                                   TextSpan(
-                                                      text: patientsList[index].stakeholderNamesEn.toString(),
+                                                      text: patientsList![index].stakeholderNamesEn.toString(),
                                                       style: TextStyle(fontFamily: Montserrat, fontSize: responsiveFont(15), color: kTextColor, fontWeight: FontWeight.normal),)
                                                 ],
                                               ),
@@ -172,7 +172,7 @@ class _ReferredPatientListScreenState extends State<ReferredPatientListScreen> {
     getAllPatientsList();
   }
 
-  Future<List<ReferredPatientList>> getAllPatientsList() async {
+  Future<List<ReferredPatientList>?> getAllPatientsList() async {
     setState(() {
       isLoading = true;
     });

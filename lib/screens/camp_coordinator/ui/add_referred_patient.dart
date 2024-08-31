@@ -10,6 +10,7 @@ import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/camp_coordinator/controller/camp_details_controller.dart';
+import 'package:community_health_app/screens/camp_coordinator/models/camp_details_referredpatients_request_model.dart';
 import 'package:community_health_app/screens/camp_coordinator/models/camp_dropdown_resp_model.dart';
 import 'package:community_health_app/screens/location_master/model/country/country_model.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
 
   Map<String, dynamic>? selectedMobile;
 
-/*  List<CampCoordRegisteredPatientModel> campregisteredpatients = [];*/
+  // List<CampCoordRegisteredPatientModel> campregisteredpatients = [];
 
   bool isLoading = false;
 
@@ -76,6 +77,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
   List<TextEditingController> countryCodeListController = [];
 
   bool isEmpty = true;
+
+  List<CampCoordRegisteredPatientModel> patientDetails = [];
 
   @override
   void initState() {
@@ -184,7 +187,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                                   campId.text = p0.campDashboardId.toString(),
                                                   // campCreationController.selectedStakeHolder = p0,
                                                   setState(() {
-                                                    campDetailsController.camDashboardId=p0.campDashboardId.toString();
+                                                    campDetailsController.camDashboardId = p0.campDashboardId.toString();
 
                                                     referredPatientCount.text = p0.referredPatients.toString();
                                                   })
@@ -252,7 +255,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                 ),
                               ),
                               Container(
-                                height: SizeConfig.designScreenHeight* 0.5,
+                                height: SizeConfig.designScreenHeight * 0.5,
                                 width: SizeConfig.designScreenWidth,
                                 child: Column(
                                   children: [
@@ -271,8 +274,11 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                             flex: 1,
                                             child: AppButton(
                                               onTap: () {
-
-                                               Navigator.pop(context);
+                                                for (int i = 0; i < patientNameListController.length; i++) {
+                                                  patientDetails.add(CampCoordRegisteredPatientModel(name: patientNameListController[i].text.trim(), mobile: mobileNoListCOntroller[i].text.trim()));
+                                                }
+                                                campDetailsController.createMultiplePatients(patientDetails);
+                                                Navigator.pop(context);
                                               },
                                               title: "Save",
                                               iconData: Icon(
@@ -306,7 +312,6 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                                   ],
                                 ),
                               ),
-
 
                               /* AppRoundTextField(
                                 controller: campName,
@@ -411,7 +416,6 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                   ),
                 ),
               ),
-
 
               /*   Container(
                 width: SizeConfig.screenWidth * 0.95,
@@ -717,7 +721,6 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                   return campCard(index, cardData);
                 }).toList(),
               ),*/
-
             ],
           ),
         ),
@@ -736,20 +739,18 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
       /*campDetailsController.campregisteredpatients
           .add(CampCoordRegisteredPatientModel(mobile: mobileNoListCOntroller[index].text.trim(), name: patientNameListController[index].text, ttCampDashboardRefPatientsDetList: []));
     */
-      print(campDetailsController.campregisteredpatients);
-      campDetailsController.createMultiplePatients(campDetailsController.campregisteredpatients);
       // campDetailsController.patientsReferred.text = campDetailsController.campReferredPatientList.length.toString();
       // campDetailsController.campReferredPatientStakeholderList.clear();
     });
   }
 
   void removeCard(int index) {
-    if (campDetailsController.campregisteredpatients.isNotEmpty) {
+    if (campDetailsController.campReferredPatientList.isNotEmpty) {
       setState(() {
         print(index);
         // campregisteredpatients.removeAt(index);
-        campDetailsController.campregisteredpatients.removeAt(index);
-        print(campDetailsController.campregisteredpatients);
+        campDetailsController.campReferredPatientList.removeAt(index);
+        print(campDetailsController.campReferredPatientList);
         // carbonCommentsList.removeAt(index);
       });
     }
@@ -979,7 +980,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
 
   void clearAllFields() {
     setState(() {
-      campDetailsController.campregisteredpatients.clear();
+      campDetailsController.campReferredPatientList.clear();
       // patientNameController.text = "";
       // countryCodeController.text = "";
       // mobileController.text = "";
@@ -988,39 +989,38 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
     });
   }
 
-  void _showDetailsDialog(BuildContext context, int index) {
+  void _showDetailsDialog(BuildContext context, int patientIndex) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Details'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: campDetailsController.campregisteredpatients.map((item) {
-                return ListTile(
-                  title: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Stakeholder: ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      // Text(item.ttCampDashboardRefPatientsDetList[index]['stakeholder_master_id'].toString()),
-                    ],
-                  ),
-                  subtitle: Row(
-                    children: [
-                      Text(
-                        'Referred To: ',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      // Text('Referred To: ${item['stakeholder_master_id']}'),
-                    ],
-                  ),
+          content: Container(
+            height: 200.0, // Adjust the height as needed
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: campDetailsController.ttCampDashboardRefPatientsNamesList.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: responsiveHeight(5),
+                    ),
+                    Text(
+                      "${(index + 1)}. Stakeholder Subtype : " + campDetailsController.ttCampDashboardRefPatientsNamesList[index]['lookup_det_hier_id_stakeholder_sub_type2'],
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                    Text(
+                      "Stakeholders : " + campDetailsController.ttCampDashboardRefPatientsNamesList[index]['stakeholder_master_id'],
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(5),
+                    ),
+                  ],
                 );
-              }).toList(),
+              },
             ),
           ),
           actions: <Widget>[
@@ -1047,6 +1047,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
 
   Widget buildDynamicWidget(int index) {
     return Container(
+      margin: EdgeInsets.all(8),
       width: SizeConfig.screenWidth * 0.95,
       height: SizeConfig.screenHeight / 3,
       decoration: BoxDecoration(
@@ -1150,7 +1151,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                   // margin: EdgeInsets.only(right: 15),
                   child: AppButton(
                     onTap: () {
-                      _showDetailsDialog(context,index);
+                      _showDetailsDialog(context, index);
                       // Navigator.pushNamed(context, AppRoutes.referredTo);
                     },
                     mWidth: SizeConfig.screenWidth * 0.4,
@@ -1221,19 +1222,14 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                         );
                       } else {
                         // addCard();
-                        if(campDetailsController.ttCampDashboardRefPatientsDetList.isEmpty){
+                        if (campDetailsController.ttCampDashboardRefPatientsDetList.isEmpty) {
                           print("add toast of empty list");
-                        }else{
-                          campDetailsController. campregisteredpatients.add(CampCoordRegisteredPatientModel(
-                              mobile: "${countryCodeListController[index].text} ${mobileNoListCOntroller[index].text}",
-                              name: patientNameListController[index].text.trim(),
-                              ));
-                          print(campDetailsController.campregisteredpatients);
-                          campDetailsController.ttCampDashboardRefPatientsDetList.clear();
-                          campDetailsController.ttCampDashboardRefPatientsNamesList.clear();
+                        } else {
+                          print(campDetailsController.campReferredPatientList);
+                          // campDetailsController.ttCampDashboardRefPatientsDetList.clear();
+                          // campDetailsController.ttCampDashboardRefPatientsNamesList.clear();
                           _addDynamicWidget();
                         }
-
 
                         // checkPatientDetails(campregisteredpatients, index);
                       }
@@ -1242,7 +1238,16 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                   SizedBox(
                     width: responsiveWidth(10),
                   ),
-
+                  Visibility(
+                    visible: index > 0 ? true : false,
+                    child: InkWell(
+                      child: Image.asset(
+                        "assets/icons/ic_delete1.png",
+                        color: Colors.red,
+                      ),
+                      onTap: () {},
+                    ),
+                  ),
                 ],
               ),
             )
@@ -1251,7 +1256,6 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
       ),
     );
   }
-
 
   void addPatients(int index) {
     campDetailsController.patientList.add(CampDashboardRefPatients(
