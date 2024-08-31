@@ -31,6 +31,12 @@ class GetExcelData extends DashboardEvent {
   List<Object> get props => [payload];
 }
 
-class GetDistrictWisePatientsCount extends DashboardEvent {}
+class GetDistrictWisePatientsCount extends DashboardEvent {
+  Map payload;
+  GetDistrictWisePatientsCount({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}
 
 class ResetDashboardState extends DashboardEvent {}

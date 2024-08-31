@@ -162,6 +162,286 @@ Future<dynamic> genderBottomSheet(
           ));
 }
 
+Future<dynamic> diseaseTypeBottomSheet(
+    BuildContext context, Function(LookupDet) onItemSelected) {
+  int selectedIndex = -1;
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => StatefulBuilder(
+            builder: (c, setState) => Container(
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(responsiveHeight(50)),
+                      topRight: Radius.circular(responsiveHeight(50)))),
+              child: Padding(
+                padding: EdgeInsets.all(responsiveHeight(30)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Select Disease Type",
+                            style: TextStyle(
+                                fontSize: responsiveFont(17),
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                icSquareClose,
+                                height: responsiveHeight(24),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(25),
+                    ),
+                    BlocBuilder<MasterDataBloc, MasterDataState>(
+                      builder: (context, state) {
+                        MasterResponseModel? responseModel;
+                        if (state.getDiseaseTypeResponse.isNotEmpty) {
+                          responseModel = MasterResponseModel.fromJson(
+                              jsonDecode(state.getDiseaseTypeResponse));
+                        }
+                        return responseModel != null &&
+                                responseModel.details != null &&
+                                responseModel.details![0].lookupDet != null
+                            ? Expanded(
+                                child: ListView.builder(
+                                  itemCount: responseModel
+                                      .details![0].lookupDet!.length,
+                                  itemBuilder: (c, i) => Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: () {
+                                          var selectedItem = {
+                                            'id': responseModel!.details![0]
+                                                .lookupDet![i].lookupDetId!,
+                                            'title': responseModel.details![0]
+                                                .lookupDet![i].lookupDetDescEn!
+                                          };
+                                          onItemSelected(responseModel!
+                                              .details![0].lookupDet![i]);
+                                          setState(
+                                            () {
+                                              selectedIndex = i;
+                                            },
+                                          );
+
+                                          Navigator.pop(context);
+                                        },
+                                        child: Ink(
+                                          decoration: BoxDecoration(
+                                            color: i == selectedIndex
+                                                ? Colors.transparent
+                                                : kListBGColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  i == selectedIndex
+                                                      ? icCircleDot
+                                                      : icCircle,
+                                                  height: responsiveHeight(20),
+                                                ),
+                                                SizedBox(
+                                                  width: responsiveWidth(20),
+                                                ),
+                                                Expanded(
+                                                  child: Text(responseModel!
+                                                      .details![0]
+                                                      .lookupDet![i]
+                                                      .lookupDetDescEn!),
+                                                ),
+                                                const Spacer(),
+                                                i == selectedIndex
+                                                    ? Image.asset(
+                                                        icCircleCheck,
+                                                        height:
+                                                            responsiveHeight(
+                                                                20),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Center(child: Text("Data Not Available"));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
+
+Future<dynamic> referToDepartmentBottomSheet(
+    BuildContext context, Function(LookupDet) onItemSelected) {
+  int selectedIndex = -1;
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => StatefulBuilder(
+            builder: (c, setState) => Container(
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(responsiveHeight(50)),
+                      topRight: Radius.circular(responsiveHeight(50)))),
+              child: Padding(
+                padding: EdgeInsets.all(responsiveHeight(30)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Select Refer To Department",
+                            style: TextStyle(
+                                fontSize: responsiveFont(17),
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                icSquareClose,
+                                height: responsiveHeight(24),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(25),
+                    ),
+                    BlocBuilder<MasterDataBloc, MasterDataState>(
+                      builder: (context, state) {
+                        MasterResponseModel? responseModel;
+                        if (state.getReferToDepartmentResponse.isNotEmpty) {
+                          responseModel = MasterResponseModel.fromJson(
+                              jsonDecode(state.getReferToDepartmentResponse));
+                        }
+                        return responseModel != null &&
+                                responseModel.details != null &&
+                                responseModel.details![0].lookupDet != null
+                            ? Expanded(
+                                child: ListView.builder(
+                                  itemCount: responseModel
+                                      .details![0].lookupDet!.length,
+                                  itemBuilder: (c, i) => Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: () {
+                                          var selectedItem = {
+                                            'id': responseModel!.details![0]
+                                                .lookupDet![i].lookupDetId!,
+                                            'title': responseModel.details![0]
+                                                .lookupDet![i].lookupDetDescEn!
+                                          };
+                                          onItemSelected(responseModel!
+                                              .details![0].lookupDet![i]);
+                                          setState(
+                                            () {
+                                              selectedIndex = i;
+                                            },
+                                          );
+
+                                          Navigator.pop(context);
+                                        },
+                                        child: Ink(
+                                          decoration: BoxDecoration(
+                                            color: i == selectedIndex
+                                                ? Colors.transparent
+                                                : kListBGColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  i == selectedIndex
+                                                      ? icCircleDot
+                                                      : icCircle,
+                                                  height: responsiveHeight(20),
+                                                ),
+                                                SizedBox(
+                                                  width: responsiveWidth(20),
+                                                ),
+                                                Expanded(
+                                                  child: Text(responseModel!
+                                                      .details![0]
+                                                      .lookupDet![i]
+                                                      .lookupDetDescEn!),
+                                                ),
+                                                const Spacer(),
+                                                i == selectedIndex
+                                                    ? Image.asset(
+                                                        icCircleCheck,
+                                                        height:
+                                                            responsiveHeight(
+                                                                20),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Center(child: Text("Data Not Available"));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
+
 Future<dynamic> stakeholderBottomSheet(
     BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;
@@ -494,8 +774,8 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
                     BlocBuilder<MasterDataBloc, MasterDataState>(
                       builder: (context, state) {
                         GetUserMasterWithHierResponse responseModel =
-                            GetUserMasterWithHierResponse.fromJson(jsonDecode(
-                                state.getStakeholderSubTypeResponse));
+                            GetUserMasterWithHierResponse.fromJson(jsonDecode(state
+                                .getStakeholderSubTypeWithLookupCodeResponse));
 
                         return responseModel.details != null &&
                                 responseModel

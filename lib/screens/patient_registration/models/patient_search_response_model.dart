@@ -1,21 +1,24 @@
-class RegisteredPatientResponseModel {
+class PatientSearchResponseModel {
   int? statusCode;
   String? message;
   String? path;
   String? dateTime;
-  PatientDetails? details;
+  List<PatientSearchData>? details;
 
-  RegisteredPatientResponseModel(
+  PatientSearchResponseModel(
       {this.statusCode, this.message, this.path, this.dateTime, this.details});
 
-  RegisteredPatientResponseModel.fromJson(Map<String, dynamic> json) {
+  PatientSearchResponseModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['status_code'];
     message = json['message'];
     path = json['path'];
     dateTime = json['dateTime'];
-    details = json['details'] != null
-        ? new PatientDetails.fromJson(json['details'])
-        : null;
+    if (json['details'] != null) {
+      details = <PatientSearchData>[];
+      json['details'].forEach((v) {
+        details!.add(new PatientSearchData.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -25,49 +28,13 @@ class RegisteredPatientResponseModel {
     data['path'] = path;
     data['dateTime'] = dateTime;
     if (details != null) {
-      data['details'] = details!.toJson();
+      data['details'] = details!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class PatientDetails {
-  int? totalPages;
-  int? page;
-  int? totalCount;
-  int? perPage;
-  List<PatientData>? data;
-
-  PatientDetails(
-      {this.totalPages, this.page, this.totalCount, this.perPage, this.data});
-
-  PatientDetails.fromJson(Map<String, dynamic> json) {
-    totalPages = json['total_pages'];
-    page = json['page'];
-    totalCount = json['total_count'];
-    perPage = json['per_page'];
-    if (json['data'] != null) {
-      data = <PatientData>[];
-      json['data'].forEach((v) {
-        data!.add(new PatientData.fromJson(v));
-      });
-    }
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['total_pages'] = totalPages;
-    data['page'] = page;
-    data['total_count'] = totalCount;
-    data['per_page'] = perPage;
-    if (this.data != null) {
-      data['data'] = this.data!.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class PatientData {
+class PatientSearchData {
   int? patientId;
   int? campCreateRequestId;
   String? campDate;
@@ -89,7 +56,7 @@ class PatientData {
   int? lookupDetHierIdDistrict;
   int? lookupDetHierIdTaluka;
   int? lookupDetHierIdCity;
-  Null? lookupDetIdDivision;
+  int? lookupDetIdDivision;
   int? status;
   String? countryDescEn;
   String? countryDescRg;
@@ -102,7 +69,7 @@ class PatientData {
   String? cityDescEn;
   String? cityDescRg;
 
-  PatientData(
+  PatientSearchData(
       {this.patientId,
       this.campCreateRequestId,
       this.campDate,
@@ -137,7 +104,7 @@ class PatientData {
       this.cityDescEn,
       this.cityDescRg});
 
-  PatientData.fromJson(Map<String, dynamic> json) {
+  PatientSearchData.fromJson(Map<String, dynamic> json) {
     patientId = json['patient_id'];
     campCreateRequestId = json['camp_create_request_id'];
     campDate = json['camp_date'];
@@ -174,7 +141,7 @@ class PatientData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['patient_id'] = patientId;
     data['camp_create_request_id'] = campCreateRequestId;
     data['camp_date'] = campDate;

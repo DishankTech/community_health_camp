@@ -21,6 +21,7 @@ import 'package:community_health_app/screens/patient_registration/ui/registered_
 import 'package:community_health_app/screens/camp_approval/camp_approval.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation.dart';
 import 'package:community_health_app/screens/location_master/add_location_master.dart';
+import 'package:community_health_app/screens/patient_registration/ui/registered_patients_search.dart';
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_edit.dart';
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_list.dart';
 
@@ -70,6 +71,8 @@ class AppRoutes {
   static const String locationMasterList = "/locationMasterList";
   static const String campCreation = "/campCreation";
   static const String patientRegListScreen = "/patientRegListScreen";
+  static const String patientRegListSearchScreen =
+      "/patientRegListSearchScreen";
   static const String patientRegScreen = "/patientRegScreen";
   static const String patientRegEditScreen = "/patientRegEditScreen";
   static const String userMasterScreen = "/userMasterScreen";
@@ -172,7 +175,7 @@ class AppRoutes {
         );
       case dateWiseCamps:
         return MaterialPageRoute(
-          builder: (_) => DateWiseCampsScreen(DateTime.now(),[]),
+          builder: (_) => DateWiseCampsScreen(DateTime.now(), []),
         );
       /*case districtWiseCamps:
         return MaterialPageRoute(
@@ -221,6 +224,10 @@ class AppRoutes {
       case addTreatmentDetailsScreen:
         return MaterialPageRoute(
           builder: (_) => const AddTreatmentDetailsScreen(),
+        );
+      case patientRegListSearchScreen:
+        return MaterialPageRoute(
+          builder: (_) => const RegisteredPatientsSearchScreen(),
         );
 
       default:

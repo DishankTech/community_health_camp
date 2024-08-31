@@ -11,6 +11,7 @@ import 'package:community_health_app/screens/dashboard_patient_registration/mode
 import 'package:community_health_app/screens/dashboard_patient_registration/models/district_date_wise_camp_response_model.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/models/district_wise_patient_response_model.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/sf_date_range_picker_view/SfDateRangePickerView.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,6 +43,8 @@ class DashboardPatientRegistrationScreen extends StatefulWidget {
 
 class _DashboardPatientRegistrationScreenState
     extends State<DashboardPatientRegistrationScreen> {
+  DistrictDateWiseCampResponseModel? districtDateWiseCampResponseModel;
+  DistrictWisePatientResponseModel? districtWisePatientResponseModel;
   int _selectedDateFilter = 0;
   bool isSelectedTillDate = true;
   bool isSelectedPatientsRegistered = true;
@@ -62,17 +65,24 @@ class _DashboardPatientRegistrationScreenState
   late List<ChartData> patientsSummaryPieData;
   String todayTitle = "Today";
 
+  // Create a map to group by date
+  final Map<String, List<Map<String, dynamic>>> groupedData = {};
   List<List<ChartData>> campConductedDistrictWiseList = [];
   List<List<ChartData>> totalPatientsRegisteredTillDateList = [];
   List<List<ChartData>> totalPatientsTreatmentsTillDateList = [];
   List<List<ChartData>> totalPatientsReferredTillDateList = [];
   List<List<ChartData>> totalPatientsSubReferredTillDateList = [];
+  int touchedIndex = -1;
+  int totalRegPatTouchedIndex = -1;
+  int referredPatTouchedIndex = -1;
+  int treatedPatTouchedIndex = -1;
 
   bool isShowPatientsSummary = true;
   bool isShowPatientsRegistered = false;
   bool isShowPatientsTreatments = false;
   bool isShowPatientsReferred = false;
   bool isShowPatientsSubReferred = false;
+  bool isCampConductedSubChart = false;
   int barSteps = 0;
 
   void _showBottomSheet() {
@@ -117,7 +127,14 @@ class _DashboardPatientRegistrationScreenState
                     "start_date": selectedStartDateWithRange,
                     "end_date": selectedEndDateWithRange
                   }));
-              context.read<DashboardBloc>().add(GetDistrictWisePatientsCount());
+              context
+                  .read<DashboardBloc>()
+                  .add(GetDistrictWisePatientsCount(payload: {
+                    "district_id": null,
+                    "start_date": selectedStartDateWithRange,
+                    "end_date": selectedEndDateWithRange
+                  }));
+
               // filterCountDashboard();
               setState(() {});
             },
@@ -495,45 +512,6 @@ class _DashboardPatientRegistrationScreenState
     );
   }
 
-  Future<void> downloadFile() async {
-    // Request storage permissions
-    if (await Permission.storage.request().isGranted) {
-      try {
-        // The URL from which to download the file
-        final url =
-            'http://210.89.42.117:8085/api/administrator/masters/download-excel/';
-
-        // Make the request
-        final response = await http.get(Uri.parse(url));
-
-        if (response.statusCode == 200) {
-          // Get the filename from the headers if needed
-          final contentDisposition = response.headers['content-disposition'];
-          final filename = contentDisposition?.split('filename=')?.last ??
-              'downloaded_file.xlsx';
-
-          // Get the application's documents directory
-          final directory = await getApplicationDocumentsDirectory();
-
-          // Create the file
-          final file = File('${directory.path}/$filename');
-
-          // Write the file
-          await file.writeAsBytes(response.bodyBytes);
-
-          print('File saved to ${file.path}');
-        } else {
-          print('Failed to download file: ${response.statusCode}');
-        }
-      } catch (e) {
-        print('Error: $e');
-        PermissionService().requestPermissions();
-      }
-    } else {
-      print('Storage permission denied.');
-    }
-  }
-
   @override
   void initState() {
     super.initState();
@@ -555,7 +533,11 @@ class _DashboardPatientRegistrationScreenState
             "start_date": selectedStartDateWithRange,
             "end_date": selectedEndDateWithRange
           }));
-      context.read<DashboardBloc>().add(GetDistrictWisePatientsCount());
+      context.read<DashboardBloc>().add(GetDistrictWisePatientsCount(payload: {
+            "district_id": null,
+            "start_date": selectedStartDateWithRange,
+            "end_date": selectedEndDateWithRange
+          }));
     });
     // filterCountDashboard();
   }
@@ -918,76 +900,454 @@ class _DashboardPatientRegistrationScreenState
         ],
       );
     } else if (isShowPatientsRegistered) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
-        child: SfCartesianChart(
-          isTransposed: true,
-          primaryXAxis: CategoryAxis(
-            axisLine: const AxisLine(color: Colors.grey),
-            labelStyle: TextStyle(fontSize: responsiveFont(10)),
-            labelRotation: -30,
-            autoScrollingDelta: 5,
-            autoScrollingMode: AutoScrollingMode.start,
-          ),
-          primaryYAxis: const NumericAxis(
-            minimum: 0,
-            // maximum: 40,
-            interval: 10,
-            axisLine: AxisLine(color: Colors.grey),
-          ),
-          zoomPanBehavior: ZoomPanBehavior(
-            enablePanning: true,
-          ),
-          series: _getBarTotalPatientsRegisteredTillDateSeries(),
-        ),
+      // return Padding(
+      //   padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+      //   child: SfCartesianChart(
+      //     isTransposed: true,
+      //     primaryXAxis: CategoryAxis(
+      //       axisLine: const AxisLine(color: Colors.grey),
+      //       labelStyle: TextStyle(fontSize: responsiveFont(10)),
+      //       labelRotation: -30,
+      //       autoScrollingDelta: 5,
+      //       autoScrollingMode: AutoScrollingMode.start,
+      //     ),
+      //     primaryYAxis: const NumericAxis(
+      //       minimum: 0,
+      //       // maximum: 40,
+      //       interval: 10,
+      //       axisLine: AxisLine(color: Colors.grey),
+      //     ),
+      //     zoomPanBehavior: ZoomPanBehavior(
+      //       enablePanning: true,
+      //     ),
+      //     series: _getBarTotalPatientsRegisteredTillDateSeries(),
+      //   ),
+      // );
+
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final barsSpace = 4.0 * constraints.maxWidth / 130;
+          final barsWidth = 8.0 * constraints.maxWidth / responsiveWidth(130);
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: SizedBox(
+                  width: SizeConfig.screenWidth,
+                  // height: responsiveHeight(380),
+                  child: AspectRatio(
+                    aspectRatio: 1.15,
+                    child: BarChart(
+                      BarChartData(
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          touchTooltipData: BarTouchTooltipData(
+                            fitInsideHorizontally:
+                                true, // Keep the tooltip inside horizontally
+                            fitInsideVertically:
+                                true, // Keep the tooltip inside vertically
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              return BarTooltipItem(
+                                  '${districtWisePatientResponseModel!.details![totalRegPatTouchedIndex].lookupDetHierDescEn}: ',
+                                  TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: responsiveFont(13),
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: (rod.toY).toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: responsiveFont(13),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                  textAlign: TextAlign.end);
+                            },
+                          ),
+                          handleBuiltInTouches: true,
+                          touchCallback:
+                              (FlTouchEvent event, barTouchResponse) {
+                            if (!event.isInterestedForInteractions ||
+                                barTouchResponse == null ||
+                                barTouchResponse.spot == null) {
+                              setState(() {
+                                totalRegPatTouchedIndex = -1;
+                              });
+                              return;
+                            }
+                            final rodIndex =
+                                barTouchResponse.spot!.touchedRodDataIndex;
+                            if (isShadowBar(rodIndex)) {
+                              setState(() {
+                                totalRegPatTouchedIndex = -1;
+                              });
+                              return;
+                            }
+                            setState(() {
+                              totalRegPatTouchedIndex =
+                                  barTouchResponse.spot!.touchedBarGroupIndex;
+                            });
+                          },
+                        ),
+                        alignment: BarChartAlignment.start,
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                            drawBelowEverything: false,
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 30,
+                              getTitlesWidget:
+                                  bottomTitlesForTotalPatientRegister,
+                            ),
+                          ),
+                          leftTitles: const AxisTitles(
+                            sideTitles: SideTitles(
+                              // interval:
+                              //     3, // Custom interval for Y-axis
+                              showTitles: true,
+                              reservedSize: 40,
+                              getTitlesWidget: leftTitles,
+                            ),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        gridData: FlGridData(
+                          show: false,
+                          checkToShowHorizontalLine: (value) => value % 10 == 0,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                            color: kPrimaryColor.withOpacity(0.1),
+                            strokeWidth: 1,
+                          ),
+                          drawVerticalLine: false,
+                        ),
+                        borderData: FlBorderData(
+                            show: true,
+                            border: const Border(
+                              left: BorderSide(width: 0.5, color: Colors.grey),
+                              bottom:
+                                  BorderSide(width: 0.5, color: Colors.grey),
+                            )),
+                        groupsSpace: barsSpace,
+                        barGroups: getDataForTotalPatientRegister(
+                            barsWidth, barsSpace),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       );
     } else if (isShowPatientsTreatments) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
-        child: SfCartesianChart(
-          isTransposed: true,
-          primaryXAxis: CategoryAxis(
-            axisLine: const AxisLine(color: Colors.grey),
-            labelStyle: TextStyle(fontSize: responsiveFont(10)),
-            labelRotation: -30,
-            autoScrollingDelta: 5,
-            autoScrollingMode: AutoScrollingMode.start,
-          ),
-          primaryYAxis: const NumericAxis(
-            minimum: 0,
-            // maximum: 40,
-            interval: 10,
-            axisLine: AxisLine(color: Colors.grey),
-          ),
-          zoomPanBehavior: ZoomPanBehavior(
-            enablePanning: true,
-          ),
-          series: _getBarTotalPatientsTreatmentsTillDateSeries(),
-        ),
+      // return Padding(
+      //   padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+      //   child: SfCartesianChart(
+      //     isTransposed: true,
+      //     primaryXAxis: CategoryAxis(
+      //       axisLine: const AxisLine(color: Colors.grey),
+      //       labelStyle: TextStyle(fontSize: responsiveFont(10)),
+      //       labelRotation: -30,
+      //       autoScrollingDelta: 5,
+      //       autoScrollingMode: AutoScrollingMode.start,
+      //     ),
+      //     primaryYAxis: const NumericAxis(
+      //       minimum: 0,
+      //       // maximum: 40,
+      //       interval: 10,
+      //       axisLine: AxisLine(color: Colors.grey),
+      //     ),
+      //     zoomPanBehavior: ZoomPanBehavior(
+      //       enablePanning: true,
+      //     ),
+      //     series: _getBarTotalPatientsTreatmentsTillDateSeries(),
+      //   ),
+      // );
+
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final barsSpace = 4.0 * constraints.maxWidth / 130;
+          final barsWidth = 8.0 * constraints.maxWidth / responsiveWidth(130);
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: SizedBox(
+                  width: SizeConfig.screenWidth,
+                  // height: responsiveHeight(380),
+                  child: AspectRatio(
+                    aspectRatio: 1.15,
+                    child: BarChart(
+                      BarChartData(
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          touchTooltipData: BarTouchTooltipData(
+                            fitInsideHorizontally:
+                                true, // Keep the tooltip inside horizontally
+                            fitInsideVertically:
+                                true, // Keep the tooltip inside vertically
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              return BarTooltipItem(
+                                  '${districtWisePatientResponseModel!.details![totalRegPatTouchedIndex].lookupDetHierDescEn}: ',
+                                  TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: responsiveFont(13),
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: (rod.toY).toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: responsiveFont(13),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                  textAlign: TextAlign.end);
+                            },
+                          ),
+                          handleBuiltInTouches: true,
+                          touchCallback:
+                              (FlTouchEvent event, barTouchResponse) {
+                            if (!event.isInterestedForInteractions ||
+                                barTouchResponse == null ||
+                                barTouchResponse.spot == null) {
+                              setState(() {
+                                totalRegPatTouchedIndex = -1;
+                              });
+                              return;
+                            }
+                            final rodIndex =
+                                barTouchResponse.spot!.touchedRodDataIndex;
+                            if (isShadowBar(rodIndex)) {
+                              setState(() {
+                                totalRegPatTouchedIndex = -1;
+                              });
+                              return;
+                            }
+                            setState(() {
+                              totalRegPatTouchedIndex =
+                                  barTouchResponse.spot!.touchedBarGroupIndex;
+                            });
+                          },
+                        ),
+                        alignment: BarChartAlignment.start,
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                            drawBelowEverything: false,
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 30,
+                              getTitlesWidget:
+                                  bottomTitlesForTotalPatientTreated,
+                            ),
+                          ),
+                          leftTitles: const AxisTitles(
+                            sideTitles: SideTitles(
+                              // interval:
+                              //     3, // Custom interval for Y-axis
+                              showTitles: true,
+                              reservedSize: 40,
+                              getTitlesWidget: leftTitles,
+                            ),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        gridData: FlGridData(
+                          show: false,
+                          checkToShowHorizontalLine: (value) => value % 10 == 0,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                            color: kPrimaryColor.withOpacity(0.1),
+                            strokeWidth: 1,
+                          ),
+                          drawVerticalLine: false,
+                        ),
+                        borderData: FlBorderData(
+                            show: true,
+                            border: const Border(
+                              left: BorderSide(width: 0.5, color: Colors.grey),
+                              bottom:
+                                  BorderSide(width: 0.5, color: Colors.grey),
+                            )),
+                        groupsSpace: barsSpace,
+                        barGroups:
+                            getDataForTotalPatientTreated(barsWidth, barsSpace),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       );
     } else if (isShowPatientsReferred && isShowPatientsSubReferred == false) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
-        child: SfCartesianChart(
-          isTransposed: true,
-          primaryXAxis: CategoryAxis(
-            axisLine: const AxisLine(color: Colors.grey),
-            labelStyle: TextStyle(fontSize: responsiveFont(10)),
-            labelRotation: -30,
-            autoScrollingDelta: 5,
-            autoScrollingMode: AutoScrollingMode.start,
-          ),
-          primaryYAxis: const NumericAxis(
-            minimum: 0,
-            // maximum: 40,
-            interval: 1,
-            axisLine: AxisLine(color: Colors.grey),
-          ),
-          zoomPanBehavior: ZoomPanBehavior(
-            enablePanning: true,
-          ),
-          series: _getBarTotalPatientsReferredTillDateSeries(),
-        ),
+      // return Padding(
+      //   padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+      //   child: SfCartesianChart(
+      //     isTransposed: true,
+      //     primaryXAxis: CategoryAxis(
+      //       axisLine: const AxisLine(color: Colors.grey),
+      //       labelStyle: TextStyle(fontSize: responsiveFont(10)),
+      //       labelRotation: -30,
+      //       autoScrollingDelta: 5,
+      //       autoScrollingMode: AutoScrollingMode.start,
+      //     ),
+      //     primaryYAxis: const NumericAxis(
+      //       minimum: 0,
+      //       // maximum: 40,
+      //       interval: 1,
+      //       axisLine: AxisLine(color: Colors.grey),
+      //     ),
+      //     zoomPanBehavior: ZoomPanBehavior(
+      //       enablePanning: true,
+      //     ),
+      //     series: _getBarTotalPatientsReferredTillDateSeries(),
+      //   ),
+      // );
+
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final barsSpace = 4.0 * constraints.maxWidth / 130;
+          final barsWidth = 8.0 * constraints.maxWidth / responsiveWidth(130);
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: SizedBox(
+                  width: SizeConfig.screenWidth,
+                  // height: responsiveHeight(380),
+                  child: AspectRatio(
+                    aspectRatio: 1.15,
+                    child: BarChart(
+                      BarChartData(
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          touchTooltipData: BarTouchTooltipData(
+                            fitInsideHorizontally:
+                                true, // Keep the tooltip inside horizontally
+                            fitInsideVertically:
+                                true, // Keep the tooltip inside vertically
+                            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                              return BarTooltipItem(
+                                  '${districtWisePatientResponseModel!.details![totalRegPatTouchedIndex].lookupDetHierDescEn}: ',
+                                  TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: responsiveFont(13),
+                                  ),
+                                  children: <TextSpan>[
+                                    TextSpan(
+                                      text: (rod.toY).toString(),
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: responsiveFont(13),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                  textAlign: TextAlign.end);
+                            },
+                          ),
+                          handleBuiltInTouches: true,
+                          touchCallback:
+                              (FlTouchEvent event, barTouchResponse) {
+                            if (!event.isInterestedForInteractions ||
+                                barTouchResponse == null ||
+                                barTouchResponse.spot == null) {
+                              setState(() {
+                                totalRegPatTouchedIndex = -1;
+                              });
+                              return;
+                            }
+                            final rodIndex =
+                                barTouchResponse.spot!.touchedRodDataIndex;
+                            if (isShadowBar(rodIndex)) {
+                              setState(() {
+                                totalRegPatTouchedIndex = -1;
+                              });
+                              return;
+                            }
+                            setState(() {
+                              totalRegPatTouchedIndex =
+                                  barTouchResponse.spot!.touchedBarGroupIndex;
+                            });
+                          },
+                        ),
+                        alignment: BarChartAlignment.start,
+                        titlesData: FlTitlesData(
+                          show: true,
+                          bottomTitles: AxisTitles(
+                            drawBelowEverything: false,
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 30,
+                              getTitlesWidget:
+                                  bottomTitlesForTotalPatientReferred,
+                            ),
+                          ),
+                          leftTitles: const AxisTitles(
+                            sideTitles: SideTitles(
+                              // interval:
+                              //     3, // Custom interval for Y-axis
+                              showTitles: true,
+                              reservedSize: 40,
+                              getTitlesWidget: leftTitles,
+                            ),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                        ),
+                        gridData: FlGridData(
+                          show: false,
+                          checkToShowHorizontalLine: (value) => value % 10 == 0,
+                          getDrawingHorizontalLine: (value) => FlLine(
+                            color: kPrimaryColor.withOpacity(0.1),
+                            strokeWidth: 1,
+                          ),
+                          drawVerticalLine: false,
+                        ),
+                        borderData: FlBorderData(
+                            show: true,
+                            border: const Border(
+                              left: BorderSide(width: 0.5, color: Colors.grey),
+                              bottom:
+                                  BorderSide(width: 0.5, color: Colors.grey),
+                            )),
+                        groupsSpace: barsSpace,
+                        barGroups: getDataForTotalPatientReferred(
+                            barsWidth, barsSpace),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
       );
     } else if (isShowPatientsReferred && isShowPatientsSubReferred) {
       return Padding(
@@ -1104,7 +1464,13 @@ class _DashboardPatientRegistrationScreenState
                               }));
                           context
                               .read<DashboardBloc>()
-                              .add(GetDistrictWisePatientsCount());
+                              .add(GetDistrictWisePatientsCount(payload: {
+                                "start_date": DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.now()),
+                                "end_date": DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.now()),
+                                "district_id": null
+                              }));
                           setState(() {});
                         },
                         child: Container(
@@ -1171,19 +1537,23 @@ class _DashboardPatientRegistrationScreenState
                           isShowPatientsTreatments = false;
                           isShowPatientsReferred = false;
                           // filterCountDashboard();
-                          context.read<DashboardBloc>().add(GetCount(payload: {
-                                "days": 0,
-                                "start_date": "2024-01-01",
-                                "end_date": DateFormat('yyyy-MM-dd')
-                                    .format(DateTime.now())
+                          context.read<DashboardBloc>().add(GetCount(
+                                  payload: const {
+                                    "days": null,
+                                    "start_date": null,
+                                    "end_date": null
+                                  }));
+                          context.read<DashboardBloc>().add(
+                                  GetDateWiseDistrictCount(payload: const {
+                                "start_date": null,
+                                "end_date": null,
+                                "district_id": null
                               }));
-                          context
-                              .read<DashboardBloc>()
-                              .add(GetDateWiseDistrictCount(payload: {
-                                "start_date": "2024-01-01",
-                                "end_date": DateFormat('yyyy-MM-dd')
-                                    .format(DateTime.now()),
-                                "district_id": 0
+                          context.read<DashboardBloc>().add(
+                                  GetDistrictWisePatientsCount(payload: const {
+                                "start_date": null,
+                                "end_date": null,
+                                "district_id": null
                               }));
                           setState(() {});
                         },
@@ -1465,9 +1835,7 @@ class _DashboardPatientRegistrationScreenState
                           //Pie Chart View
                           BlocBuilder<DashboardBloc, DashboardState>(
                             builder: (context, state) {
-                              DistrictWisePatientResponseModel?
-                                  districtWisePatientResponseModel;
-                              bool noData = false;
+                              bool noDistrictWiseData = false;
                               if (state
                                   .getDistrictWisePatientResponse.isNotEmpty) {
                                 districtWisePatientResponseModel =
@@ -1476,14 +1844,14 @@ class _DashboardPatientRegistrationScreenState
                                             .getDistrictWisePatientResponse));
                                 List<ChartData> chartDataList = [];
                                 if (districtWisePatientResponseModel != null &&
-                                    districtWisePatientResponseModel.details !=
+                                    districtWisePatientResponseModel!.details !=
                                         null &&
-                                    districtWisePatientResponseModel
+                                    districtWisePatientResponseModel!
                                         .details!.isNotEmpty) {
-                                  noData = false;
+                                  noDistrictWiseData = false;
 
                                   for (var element
-                                      in districtWisePatientResponseModel
+                                      in districtWisePatientResponseModel!
                                           .details!) {
                                     chartDataList.add(ChartData(
                                         element.lookupDetHierDescEn!,
@@ -1507,7 +1875,7 @@ class _DashboardPatientRegistrationScreenState
                                   List<ChartData> chartDataTreatedList = [];
 
                                   for (var element
-                                      in districtWisePatientResponseModel
+                                      in districtWisePatientResponseModel!
                                           .details!) {
                                     chartDataTreatedList.add(ChartData(
                                         element.lookupDetHierDescEn!,
@@ -1532,12 +1900,12 @@ class _DashboardPatientRegistrationScreenState
                                   List<ChartData> chartDataReffredList = [];
 
                                   for (var element
-                                      in districtWisePatientResponseModel
+                                      in districtWisePatientResponseModel!
                                           .details!) {
                                     chartDataReffredList.add(ChartData(
                                         element.lookupDetHierDescEn!,
                                         double.parse(
-                                            element.totalPatients == null
+                                            element.referredPatients == null
                                                 ? "0"
                                                 : element.referredPatients
                                                     .toString()),
@@ -1553,7 +1921,7 @@ class _DashboardPatientRegistrationScreenState
                                   totalPatientsReferredTillDateList =
                                       chartDataReferredFinalList;
                                 } else {
-                                  noData = true;
+                                  noDistrictWiseData = true;
                                 }
                               }
                               return Padding(
@@ -1575,82 +1943,92 @@ class _DashboardPatientRegistrationScreenState
                                       responsiveHeight(20),
                                     ),
                                   ),
-                                  child: Stack(
+                                  child: Column(
                                     children: [
                                       isShowPatientsSummary
                                           ? Container()
-                                          : Align(
-                                              alignment: Alignment.topRight,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.fromLTRB(
-                                                        0, 8, 10, 0),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    // if (barSteps == 0) {
-                                                    //   _selectedIndex = -1;
-                                                    //   isShowPatientsSummary = true;
-                                                    //   isShowPatientsTreatments = false;
-                                                    //   isShowPatientsReferred = false;
-                                                    // } else
-                                                    if (barSteps == 1) {
-                                                      _selectedIndex = -1;
-                                                      isShowPatientsSummary =
-                                                          true;
-                                                      isShowPatientsTreatments =
-                                                          false;
-                                                      isShowPatientsReferred =
-                                                          false;
-                                                    } else if (barSteps == 2) {
-                                                      isShowPatientsSummary =
-                                                          false;
-                                                      isShowPatientsTreatments =
-                                                          false;
-                                                      isShowPatientsReferred =
-                                                          true;
-                                                      isShowPatientsSubReferred =
-                                                          false;
-                                                    }
-                                                    barSteps -= 1;
-                                                    setState(() {});
-                                                  },
-                                                  child: Container(
-                                                    width: responsiveWidth(35),
-                                                    height:
-                                                        responsiveHeight(35),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.green,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                        responsiveHeight(8),
-                                                      ),
-                                                    ),
-                                                    child: Center(
-                                                      child: Image.asset(
-                                                          icArrowBack),
+                                          : Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          20, 10, 0, 0),
+                                                  child: Text(
+                                                    getBarTitleName(),
+                                                    style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize:
+                                                          responsiveFont(11),
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
                                                   ),
                                                 ),
-                                              ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.fromLTRB(
+                                                          0, 8, 10, 0),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      // if (barSteps == 0) {
+                                                      //   _selectedIndex = -1;
+                                                      //   isShowPatientsSummary = true;
+                                                      //   isShowPatientsTreatments = false;
+                                                      //   isShowPatientsReferred = false;
+                                                      // } else
+                                                      if (barSteps == 1) {
+                                                        _selectedIndex = -1;
+                                                        isShowPatientsSummary =
+                                                            true;
+                                                        isShowPatientsTreatments =
+                                                            false;
+                                                        isShowPatientsReferred =
+                                                            false;
+                                                      } else if (barSteps ==
+                                                          2) {
+                                                        isShowPatientsSummary =
+                                                            false;
+                                                        isShowPatientsTreatments =
+                                                            false;
+                                                        isShowPatientsReferred =
+                                                            true;
+                                                        isShowPatientsSubReferred =
+                                                            false;
+                                                      }
+                                                      barSteps -= 1;
+                                                      setState(() {});
+                                                    },
+                                                    child: Container(
+                                                      width:
+                                                          responsiveWidth(35),
+                                                      height:
+                                                          responsiveHeight(35),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.green,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                          responsiveHeight(8),
+                                                        ),
+                                                      ),
+                                                      child: Center(
+                                                        child: Image.asset(
+                                                            icArrowBack),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            20, 10, 0, 0),
-                                        child: Text(
-                                          getBarTitleName(),
-                                          style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: responsiveFont(11),
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                        ),
-                                      ),
                                       state.getCountStatus.isInProgress
                                           ? const Center(
                                               child:
                                                   CircularProgressIndicator(),
                                             )
-                                          : noData
+                                          : noDistrictWiseData
                                               ? const Align(
                                                   alignment:
                                                       FractionalOffset.center,
@@ -1704,8 +2082,7 @@ class _DashboardPatientRegistrationScreenState
                                         DashboardState>(
                                       builder: (context, state) {
                                         bool noData = true;
-                                        DistrictDateWiseCampResponseModel?
-                                            districtDateWiseCampResponseModel;
+
                                         if (state.getDateWiseDistrictCountStatus
                                             .isSuccess) {
                                           if (state
@@ -1717,14 +2094,14 @@ class _DashboardPatientRegistrationScreenState
                                                         .getDateWiseDistrictCountResponse));
                                             List<ChartData> chartDataList = [];
                                             if (districtDateWiseCampResponseModel != null &&
-                                                districtDateWiseCampResponseModel
+                                                districtDateWiseCampResponseModel!
                                                         .details !=
                                                     null &&
-                                                districtDateWiseCampResponseModel
+                                                districtDateWiseCampResponseModel!
                                                     .details!.isNotEmpty) {
                                               noData = false;
                                               for (var element
-                                                  in districtDateWiseCampResponseModel
+                                                  in districtDateWiseCampResponseModel!
                                                       .details!) {
                                                 chartDataList.add(ChartData(
                                                     element
@@ -1763,34 +2140,197 @@ class _DashboardPatientRegistrationScreenState
                                                     child: Text(
                                                         "Data not available for selected date"),
                                                   )
-                                                : SfCartesianChart(
-                                                    isTransposed: true,
-                                                    primaryXAxis: CategoryAxis(
-                                                      labelRotation: -45,
-                                                      autoScrollingMode:
-                                                          AutoScrollingMode
-                                                              .start,
-                                                      initialVisibleMinimum:
-                                                          (campConductedDistrictWiseList
-                                                                  .length -
-                                                              20),
-                                                      initialVisibleMaximum:
-                                                          (campConductedDistrictWiseList
-                                                                  .length -
-                                                              0),
+                                                : AspectRatio(
+                                                    aspectRatio: 1,
+                                                    child: LayoutBuilder(
+                                                      builder: (context,
+                                                          constraints) {
+                                                        final barsSpace = 4.0 *
+                                                            constraints
+                                                                .maxWidth /
+                                                            130;
+                                                        final barsWidth = 8.0 *
+                                                            constraints
+                                                                .maxWidth /
+                                                            responsiveWidth(
+                                                                130);
+                                                        return SingleChildScrollView(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          child: SizedBox(
+                                                            width: SizeConfig
+                                                                .screenWidth,
+                                                            child: BarChart(
+                                                              BarChartData(
+                                                                barTouchData:
+                                                                    BarTouchData(
+                                                                  enabled: true,
+                                                                  touchTooltipData:
+                                                                      BarTouchTooltipData(
+                                                                    fitInsideHorizontally:
+                                                                        true, // Keep the tooltip inside horizontally
+                                                                    fitInsideVertically:
+                                                                        true, // Keep the tooltip inside vertically
+                                                                    getTooltipItem: (group,
+                                                                        groupIndex,
+                                                                        rod,
+                                                                        rodIndex) {
+                                                                      return BarTooltipItem(
+                                                                          '${districtDateWiseCampResponseModel!.details![touchedIndex].lookupDetHierDescEn}: ',
+                                                                          TextStyle(
+                                                                            color:
+                                                                                Colors.white,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                            fontSize:
+                                                                                responsiveFont(13),
+                                                                          ),
+                                                                          children: <TextSpan>[
+                                                                            TextSpan(
+                                                                              text: (rod.toY).toString(),
+                                                                              style: TextStyle(
+                                                                                color: Colors.white,
+                                                                                fontSize: responsiveFont(13),
+                                                                                fontWeight: FontWeight.w500,
+                                                                              ),
+                                                                            ),
+                                                                          ],
+                                                                          textAlign:
+                                                                              TextAlign.end);
+                                                                    },
+                                                                  ),
+                                                                  handleBuiltInTouches:
+                                                                      true,
+                                                                  touchCallback:
+                                                                      (FlTouchEvent
+                                                                              event,
+                                                                          barTouchResponse) {
+                                                                    if (!event
+                                                                            .isInterestedForInteractions ||
+                                                                        barTouchResponse ==
+                                                                            null ||
+                                                                        barTouchResponse.spot ==
+                                                                            null) {
+                                                                      setState(
+                                                                          () {
+                                                                        touchedIndex =
+                                                                            -1;
+                                                                      });
+                                                                      return;
+                                                                    }
+                                                                    final rodIndex =
+                                                                        barTouchResponse
+                                                                            .spot!
+                                                                            .touchedRodDataIndex;
+                                                                    if (isShadowBar(
+                                                                        rodIndex)) {
+                                                                      setState(
+                                                                          () {
+                                                                        touchedIndex =
+                                                                            -1;
+                                                                      });
+                                                                      return;
+                                                                    }
+                                                                    setState(
+                                                                        () {
+                                                                      touchedIndex = barTouchResponse
+                                                                          .spot!
+                                                                          .touchedBarGroupIndex;
+                                                                    });
+                                                                  },
+                                                                ),
+                                                                alignment:
+                                                                    BarChartAlignment
+                                                                        .start,
+                                                                titlesData:
+                                                                    FlTitlesData(
+                                                                  show: true,
+                                                                  bottomTitles:
+                                                                      AxisTitles(
+                                                                    drawBelowEverything:
+                                                                        false,
+                                                                    sideTitles:
+                                                                        SideTitles(
+                                                                      showTitles:
+                                                                          true,
+                                                                      reservedSize:
+                                                                          30,
+                                                                      getTitlesWidget:
+                                                                          bottomTitlesForCampConduct,
+                                                                    ),
+                                                                  ),
+                                                                  leftTitles:
+                                                                      const AxisTitles(
+                                                                    sideTitles:
+                                                                        SideTitles(
+                                                                      // interval:
+                                                                      //     3, // Custom interval for Y-axis
+                                                                      showTitles:
+                                                                          true,
+                                                                      reservedSize:
+                                                                          40,
+                                                                      getTitlesWidget:
+                                                                          leftTitles,
+                                                                    ),
+                                                                  ),
+                                                                  topTitles:
+                                                                      const AxisTitles(
+                                                                    sideTitles: SideTitles(
+                                                                        showTitles:
+                                                                            false),
+                                                                  ),
+                                                                  rightTitles:
+                                                                      const AxisTitles(
+                                                                    sideTitles: SideTitles(
+                                                                        showTitles:
+                                                                            false),
+                                                                  ),
+                                                                ),
+                                                                gridData:
+                                                                    FlGridData(
+                                                                  show: false,
+                                                                  checkToShowHorizontalLine:
+                                                                      (value) =>
+                                                                          value %
+                                                                              10 ==
+                                                                          0,
+                                                                  getDrawingHorizontalLine:
+                                                                      (value) =>
+                                                                          FlLine(
+                                                                    color: kPrimaryColor
+                                                                        .withOpacity(
+                                                                            0.1),
+                                                                    strokeWidth:
+                                                                        1,
+                                                                  ),
+                                                                  drawVerticalLine:
+                                                                      false,
+                                                                ),
+                                                                borderData:
+                                                                    FlBorderData(
+                                                                        show:
+                                                                            true,
+                                                                        border:
+                                                                            const Border(
+                                                                          left: BorderSide(
+                                                                              width: 0.5,
+                                                                              color: Colors.grey),
+                                                                          bottom: BorderSide(
+                                                                              width: 0.5,
+                                                                              color: Colors.grey),
+                                                                        )),
+                                                                groupsSpace:
+                                                                    barsSpace,
+                                                                barGroups:
+                                                                    getDataForCampConduct(
+                                                                        barsWidth,
+                                                                        barsSpace),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
                                                     ),
-                                                    primaryYAxis:
-                                                        const NumericAxis(
-                                                      minimum: 0,
-                                                      // maximum: 40,
-                                                      interval: 10,
-                                                    ),
-                                                    zoomPanBehavior:
-                                                        ZoomPanBehavior(
-                                                      enablePanning: true,
-                                                    ),
-                                                    series:
-                                                        _getBarCampConductedDistrictWiseSeries(),
                                                   );
                                       },
                                     ),
@@ -1815,6 +2355,255 @@ class _DashboardPatientRegistrationScreenState
       ),
     );
   }
+
+  bool isShadowBar(int rodIndex) => rodIndex == 1;
+
+  Widget bottomTitlesForCampConduct(double value, TitleMeta meta) {
+    var style = TextStyle(
+      fontSize: responsiveFont(10),
+    );
+
+    if (districtDateWiseCampResponseModel != null) {
+      for (var i = 0;
+          i < districtDateWiseCampResponseModel!.details!.length;
+          i++) {
+        if (value.toInt() == i) {
+          return SideTitleWidget(
+            axisSide: meta.axisSide,
+            angle: -45,
+            child: Text(
+                districtDateWiseCampResponseModel!
+                        .details![i].lookupDetHierDescEn ??
+                    'NA',
+                style: style),
+          );
+        }
+      }
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text('NA', style: style),
+    );
+  }
+
+  List<BarChartGroupData> getDataForCampConduct(
+      double barsWidth, double barsSpace) {
+    List<BarChartGroupData> barData = [];
+
+    for (var i = 0;
+        i < districtDateWiseCampResponseModel!.details!.length;
+        i++) {
+      barData.add(
+        BarChartGroupData(
+          x: i,
+          barsSpace: barsSpace,
+          barRods: [
+            BarChartRodData(
+              toY: double.parse(districtDateWiseCampResponseModel!
+                  .details![i].districtWiseCamp
+                  .toString()),
+              borderRadius: BorderRadius.zero,
+              width: barsWidth,
+            ),
+          ],
+        ),
+      );
+    }
+    return barData;
+  }
+
+  Widget bottomTitlesForTotalPatientRegister(double value, TitleMeta meta) {
+    var style = TextStyle(
+      fontSize: responsiveFont(10),
+    );
+
+    if (districtWisePatientResponseModel != null) {
+      for (var i = 0;
+          i < districtWisePatientResponseModel!.details!.length;
+          i++) {
+        if (value.toInt() == i) {
+          return SideTitleWidget(
+            axisSide: meta.axisSide,
+            angle: -45,
+            child: Text(
+                districtWisePatientResponseModel!
+                        .details![i].lookupDetHierDescEn ??
+                    'NA',
+                style: style),
+          );
+        }
+      }
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text('NA', style: style),
+    );
+  }
+
+  List<BarChartGroupData> getDataForTotalPatientRegister(
+      double barsWidth, double barsSpace) {
+    List<BarChartGroupData> barData = [];
+
+    for (var i = 0;
+        i < districtWisePatientResponseModel!.details!.length;
+        i++) {
+      barData.add(
+        BarChartGroupData(
+          x: i,
+          barsSpace: barsSpace,
+          barRods: [
+            BarChartRodData(
+              color: totlPaitentRegisterdPieChartColor,
+              toY: double.parse(districtWisePatientResponseModel!
+                  .details![i].totalPatients
+                  .toString()),
+              borderRadius: BorderRadius.zero,
+              width: barsWidth,
+            ),
+          ],
+        ),
+      );
+    }
+    return barData;
+  }
+
+  Widget bottomTitlesForTotalPatientReferred(double value, TitleMeta meta) {
+    var style = TextStyle(
+      fontSize: responsiveFont(10),
+    );
+
+    if (districtWisePatientResponseModel != null) {
+      for (var i = 0;
+          i < districtWisePatientResponseModel!.details!.length;
+          i++) {
+        if (value.toInt() == i) {
+          return SideTitleWidget(
+            axisSide: meta.axisSide,
+            angle: -45,
+            child: Text(
+                districtWisePatientResponseModel!
+                        .details![i].lookupDetHierDescEn ??
+                    'NA',
+                style: style),
+          );
+        }
+      }
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text('NA', style: style),
+    );
+  }
+
+  List<BarChartGroupData> getDataForTotalPatientReferred(
+      double barsWidth, double barsSpace) {
+    List<BarChartGroupData> barData = [];
+
+    for (var i = 0;
+        i < districtWisePatientResponseModel!.details!.length;
+        i++) {
+      barData.add(
+        BarChartGroupData(
+          x: i,
+          barsSpace: barsSpace,
+          barRods: [
+            BarChartRodData(
+              color: totlPaitentReferredPieChartColor,
+              toY: double.parse(districtWisePatientResponseModel!
+                  .details![i].referredPatients
+                  .toString()),
+              borderRadius: BorderRadius.zero,
+              width: barsWidth,
+            ),
+          ],
+        ),
+      );
+    }
+    return barData;
+  }
+
+  Widget bottomTitlesForTotalPatientTreated(double value, TitleMeta meta) {
+    var style = TextStyle(
+      fontSize: responsiveFont(10),
+    );
+
+    if (districtWisePatientResponseModel != null) {
+      for (var i = 0;
+          i < districtWisePatientResponseModel!.details!.length;
+          i++) {
+        if (value.toInt() == i) {
+          return SideTitleWidget(
+            axisSide: meta.axisSide,
+            angle: -45,
+            child: Text(
+                districtWisePatientResponseModel!
+                        .details![i].lookupDetHierDescEn ??
+                    'NA',
+                style: style),
+          );
+        }
+      }
+    }
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text('NA', style: style),
+    );
+  }
+
+  List<BarChartGroupData> getDataForTotalPatientTreated(
+      double barsWidth, double barsSpace) {
+    List<BarChartGroupData> barData = [];
+
+    for (var i = 0;
+        i < districtWisePatientResponseModel!.details!.length;
+        i++) {
+      barData.add(
+        BarChartGroupData(
+          x: i,
+          barsSpace: barsSpace,
+          barRods: [
+            BarChartRodData(
+              color: totlPaitentTreatementPieChartColor,
+              toY: double.parse(districtWisePatientResponseModel!
+                  .details![i].treatedPatients
+                  .toString()),
+              borderRadius: BorderRadius.zero,
+              width: barsWidth,
+            ),
+          ],
+        ),
+      );
+    }
+    return barData;
+  }
+}
+
+bool isDecimalString(String value) {
+  return value.contains('.5') ||
+      value.contains('.2') ||
+      value.contains('.4') ||
+      value.contains('.6') ||
+      value.contains('.8');
+}
+
+Widget leftTitles(double value, TitleMeta meta) {
+  if (value == meta.max) {
+    return Container();
+  }
+
+  if (isDecimalString(value.toString())) {
+    return Container();
+  }
+  var style = TextStyle(
+    fontSize: responsiveFont(10),
+  );
+  return SideTitleWidget(
+    axisSide: meta.axisSide,
+    child: Text(
+      meta.formattedValue,
+      style: style,
+    ),
+  );
 }
 
 class ChartData {

@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:community_health_app/screens/patient_registration/models/patient_search_response_model.dart';
 import 'package:community_health_app/screens/patient_registration/repository/patient_registration_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
@@ -17,10 +18,13 @@ class PatientRegistrationBloc
             patientRegistrationResponse: '',
             patientRegistrationStatus: FormzSubmissionStatus.initial,
             patientListResponse: '',
-            patientListStatus: FormzSubmissionStatus.initial)) {
+            patientListStatus: FormzSubmissionStatus.initial,
+            patientSearchListResponse: '',
+            patientSearchListStatus: FormzSubmissionStatus.initial)) {
     on<PatientRegistrationRequest>(_onPatientRegistrationRequest);
     on<GetPatientListRequest>(_onGetPatientListRequest);
     on<ResetPatientRegistrationState>(_onResetPatientRegistrationState);
+    on<SearchPatientRequest>(_onSearchPatientRequest);
   }
 
   FutureOr<void> _onPatientRegistrationRequest(PatientRegistrationRequest event,
@@ -89,7 +93,40 @@ class PatientRegistrationBloc
     try {
       emit(state.copyWith(
           patientListStatus: FormzSubmissionStatus.initial,
-          patientRegistrationStatus: FormzSubmissionStatus.initial));
+          patientRegistrationStatus: FormzSubmissionStatus.initial,
+          patientSearchListStatus: FormzSubmissionStatus.initial,
+          patientSearchListResponse: ''));
     } catch (e) {}
+  }
+
+  FutureOr<void> _onSearchPatientRequest(SearchPatientRequest event,
+      Emitter<PatientRegistrationState> emit) async {
+    try {
+      emit(state.copyWith(
+          patientRegistrationResponse: '',
+          patientRegistrationStatus: FormzSubmissionStatus.initial,
+          patientSearchListResponse: '',
+          patientSearchListStatus: FormzSubmissionStatus.inProgress));
+
+      http.Response res =
+          await patientRegistrationRepository.searchPatient(event.name);
+
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            patientSearchListResponse: res.body,
+            patientSearchListStatus: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+            patientSearchListResponse: res.reasonPhrase,
+            patientSearchListStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(state.copyWith(
+          patientSearchListResponse: e.toString(),
+          patientSearchListStatus: FormzSubmissionStatus.failure));
+    }
   }
 }

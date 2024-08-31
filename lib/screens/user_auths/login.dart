@@ -58,7 +58,9 @@ class _LoginPageState extends State<LoginPage> {
     _usernameController.text = '';
     _passwordController.text = '';
     super.initState();
-    PermissionService().requestPermissions();
+    if (Platform.isAndroid) {
+      PermissionService().requestPermissions();
+    }
   }
 
   @override

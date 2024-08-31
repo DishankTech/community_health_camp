@@ -168,7 +168,7 @@ class DashboardBloc extends Bloc<DashboardEvent, DashboardState> {
           // getDateWiseDistrictCountStatus: FormzSubmissionStatus.initial,
           getDistrictWisePatientStatus: FormzSubmissionStatus.inProgress));
       http.Response res =
-          await dashboardRepository.getDistrictWisePatientCount();
+          await dashboardRepository.getDistrictWisePatientCount(event.payload);
       if (res.statusCode == 200) {
         emit(state.copyWith(
             getDistrictWisePatientResponse: res.body,

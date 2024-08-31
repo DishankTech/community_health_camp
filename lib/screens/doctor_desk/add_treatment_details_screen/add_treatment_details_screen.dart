@@ -940,9 +940,9 @@ extension ListExtensions on List {
   }
 
   String displayText() {
-    return where((item) =>
-            item.lookupDetHierDescEn != null) // Filter out null values
-        .map((item) => item.lookupDetHierDescEn!)
+    return where(
+            (item) => item.stakeholderNameEn != null) // Filter out null values
+        .map((item) => item.stakeholderNameEn!)
         .join(', '); // Joins with a comma and space separator
   }
 }

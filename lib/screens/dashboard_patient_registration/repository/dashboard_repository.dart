@@ -23,10 +23,9 @@ class DashboardRepository {
         body: jsonEncode(payload), headers: header);
   }
 
-  Future<http.Response> getDistrictWisePatientCount() async {
+  Future<http.Response> getDistrictWisePatientCount(Map payload) async {
     var header = {'Content-Type': 'application/json'};
-    return await http.post(
-      Uri.parse('$kBaseUrl$kDistrictWisePatientCount'),
-    );
+    return await http.post(Uri.parse('$kBaseUrl$kDistrictWisePatientCount'),
+        body: jsonEncode(payload), headers: header);
   }
 }

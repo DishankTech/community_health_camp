@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class AppRoundTextField extends StatelessWidget {
-  const AppRoundTextField(
+  AppRoundTextField(
       {super.key,
       required this.label,
       this.controller,
@@ -25,7 +25,9 @@ class AppRoundTextField extends StatelessWidget {
       this.onChange,
       this.isFloatingLabelEnable,
       this.borderRaius,
-      this.inputFormatter});
+      this.inputFormatter,
+      this.width,
+      this.height});
 
   final String? initialValue;
   final Widget label;
@@ -47,6 +49,8 @@ class AppRoundTextField extends StatelessWidget {
   final Function(String)? onChange;
   final double? borderRaius;
   final TextInputFormatter? inputFormatter;
+  double? height;
+  double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +58,8 @@ class AppRoundTextField extends StatelessWidget {
     return Column(
       children: [
         Container(
+          width: width ?? double.infinity,
+          height: height,
           decoration: BoxDecoration(
               border: Border.all(color: kTextFieldBorder, width: 1),
               borderRadius:
@@ -91,9 +97,6 @@ class AppRoundTextField extends StatelessWidget {
                   errorStyle: const TextStyle(fontSize: 0.1),
                   label: label,
                   counterText: "",
-                  // constraints: (maxLines != null && maxLines! > 1)
-                  //     ? null
-                  //     : BoxConstraints(maxHeight: responsiveHeight(50)),
                   floatingLabelStyle: TextStyle(
                     fontSize:
                         (controller?.text ?? (initialValue ?? '')).isNotEmpty

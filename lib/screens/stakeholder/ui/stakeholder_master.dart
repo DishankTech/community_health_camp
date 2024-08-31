@@ -448,18 +448,6 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                         Validators.validateStakeholderSubType,
                                     inputType: TextInputType.text,
                                     onTap: () {
-                                      // if (state.getStakeholderSubTypeResponse
-                                      //     .isNotEmpty) {
-                                      //   stakeholderSubTypeBottomSheet(context,
-                                      //       (p0) {
-                                      //     setState(() {
-                                      //       _selectedStakeholderSubType = p0;
-                                      //       _stakeholderSubTypeTextController
-                                      //           .text = p0.lookupDetHierDescEn!;
-                                      //     });
-                                      //   });
-                                      //   return;
-                                      // }
                                       if (_selectedStakeholderType == null) {
                                         ScaffoldMessenger.of(context)
                                           ..clearSnackBars()
@@ -1081,7 +1069,7 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                           readOnly: true,
                                           label: RichText(
                                             text: const TextSpan(
-                                                text: 'City',
+                                                text: 'Village',
                                                 style: TextStyle(
                                                     color: kHintColor,
                                                     fontFamily: Montserrat),
