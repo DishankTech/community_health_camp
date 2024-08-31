@@ -1579,7 +1579,7 @@ Future<dynamic> townBottomSheet(
                       child: Row(
                         children: [
                           Text(
-                            "City",
+                            "Village",
                             style: TextStyle(
                                 fontSize: responsiveFont(17),
                                 fontWeight: FontWeight.bold,
@@ -1724,7 +1724,7 @@ Future<dynamic> townBottomSheetV1(
                       child: Row(
                         children: [
                           Text(
-                            "City",
+                            "Village",
                             style: TextStyle(
                                 fontSize: responsiveFont(17),
                                 fontWeight: FontWeight.bold,

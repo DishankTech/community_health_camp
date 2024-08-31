@@ -656,7 +656,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                                         locationMasterController
                                                             .update(),
                                                       },
-                                                  "City",
+                                                  "Village",
                                                   locationMasterController
                                                           .cityModel?.details ??
                                                       [],false);
@@ -667,7 +667,7 @@ class _AddLocationMasterState extends State<AddLocationMaster> {
                                         readOnly: true,
                                         label: RichText(
                                           text: const TextSpan(
-                                              text: 'City',
+                                              text: 'Village',
                                               style: TextStyle(
                                                   color: kHintColor,
                                                   fontFamily: Montserrat),
