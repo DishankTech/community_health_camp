@@ -46,7 +46,7 @@ class DoctorDeskController extends GetxController {
   List<ReferToDetails> selectedStakeH = [];
   LookupDetHierarchical? selectedStakeHType;
   LookupDetHierarchical? selectedDiseases;
-  ReferralLookupDet? selectedReferralSer;
+  List<ReferralLookupDet> selectedReferralSer =[];
   String? selectedStakeHVal;
   String? selectedStakeHTypeVal;
   String? selectedDiseasesVal;
@@ -406,10 +406,12 @@ class DoctorDeskController extends GetxController {
   getDisease() async {
     isLoading = true;
     final uri =
-        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getAllAddress}');
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getDivision}');
     final Map<String, dynamic> body = {
-      "lookup_det_code_list1": [
-        {"lookup_det_code": "DIS"}
+      "lookup_code_list1": [
+        {
+          "lookup_code": "DIS"
+        }
       ]
     };
     Map<String, String> headers = {

@@ -7,6 +7,7 @@ import 'package:community_health_app/screens/doctor_desk/model/add_treatment_det
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk_ref.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
+import 'package:community_health_app/screens/doctor_desk/model/referral/referral_lookup_det.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
 import 'package:community_health_app/screens/doctor_desk/model/search/search_doc_desk_details.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -645,20 +646,18 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                 inputType: TextInputType.text,
                                                 onChange: (p0) {},
                                                 onTap: () async {
-                                                  await commonBottomSheet(
+                                                  await commonBottomSheets(
                                                       context,
                                                       (p0) async => {
                                                             controller
                                                                     .selectedDiseasesVal =
-                                                                p0.lookupDetHierDescEn,
+                                                                p0.lookupDetDescEn,
                                                             controller
                                                                 .diseasesTypeController
                                                                 .text = p0
-                                                                    .lookupDetHierDescEn ??
+                                                                    .lookupDetDescEn ??
                                                                 "",
-                                                            await controller
-                                                                .getReferTo(p0
-                                                                    .lookupDetHierId),
+
                                                             controller
                                                                 .selectedDiseases = p0,
                                                             controller.update()
@@ -668,7 +667,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                               .diseaseLookupDetHierarchical
                                                               ?.details
                                                               ?.first
-                                                              .lookupDetHierarchical ??
+                                                              .lookupDet ??
                                                           [],
                                                       true);
                                                 },
@@ -892,16 +891,19 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                     .selectedReferralSerVal =
                                                                 p0.lookupDetDescEn,
                                                             controller
-                                                                .referralService
-                                                                .text = p0
-                                                                    .lookupDetDescEn ??
-                                                                "",
-                                                            // await controller
-                                                            //     .getReferTo(p0
-                                                            //         .lookupDetDescEn),
+                                                                .selectedReferralSer
+                                                                .addIfReferralNotExist(
+                                                                    p0),
+
                                                             controller
-                                                                .selectedReferralSer = p0,
+                                                                    .referralService
+                                                                    .text =
+                                                                controller
+                                                                    .selectedReferralSer
+                                                                    .displayReferralText(),
+
                                                             controller.update()
+
                                                           },
                                                       "Referral Services",
                                                       controller
@@ -1293,18 +1295,30 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                   controller
                                                       .addTreatmentDetailsModel
                                                       .doctorDeskRefServiceList = [];
-
-                                                  controller
-                                                      .addTreatmentDetailsModel
-                                                      .doctorDeskRefServiceList
-                                                      ?.add(DoctorDeskRefServiceList(
-                                                    patientDoctorDeskReferralServicesId: controller.selectedReferralSer?.lookupDetOthers,
-                                                          patientDoctorDeskId:
-                                                              null,
-                                                          lookupDetIdReferralServices:controller.selectedReferralSer?.lookupDetId ,
-                                                          orgId: 1,
-                                                          status: 1,
-                                                          isInactive: null));
+                                                  for (ReferralLookupDet item
+                                                      in controller
+                                                          .selectedReferralSer) {
+                                                    controller.addTreatmentDetailsModel.doctorDeskRefServiceList?.add(
+                                                        DoctorDeskRefServiceList(
+                                                            patientDoctorDeskReferralServicesId:
+                                                                item
+                                                                    .lookupDetOthers
+                                                            // controller
+                                                            //     .selectedReferralSer
+                                                            //     ?.lookupDetOthers
+                                                            ,
+                                                            patientDoctorDeskId:
+                                                                null,
+                                                            lookupDetIdReferralServices:
+                                                                item.lookupDetId
+                                                            // controller
+                                                            //     .selectedReferralSer
+                                                            //     ?.lookupDetId
+                                                            ,
+                                                            orgId: 1,
+                                                            status: 1,
+                                                            isInactive: null));
+                                                  }
 
                                                   controller
                                                       .addTreatmentDetails();
@@ -1390,6 +1404,30 @@ extension ListExtensions on List {
     return where((item) =>
             item.lookupDetHierDescEn != null) // Filter out null values
         .map((item) => item.stakeholderNameEn!)
+        .join(', '); // Joins with a comma and space separator
+  }
+}
+
+extension ListExtensionsReferral on List {
+  void addIfReferralNotExist(ReferralLookupDet element,
+      {bool Function(ReferralLookupDet item)? condition}) {
+    bool exists;
+
+    if (condition != null) {
+      exists = any((item) => condition(item));
+    } else {
+      exists = contains(element);
+    }
+
+    if (!exists) {
+      add(element);
+    }
+  }
+
+  String displayReferralText() {
+    return where(
+            (item) => item.lookupDetDescEn != null) // Filter out null values
+        .map((item) => item.lookupDetDescEn!)
         .join(', '); // Joins with a comma and space separator
   }
 }

@@ -2658,7 +2658,7 @@ class _CommonBottomSheetContentsState
                   suggestionsCallback: (search) {
                     return widget.list.where((stakeHolder) {
                       final stakeHNameLower =
-                          stakeHolder.lookupDetHierDescEn?.toLowerCase() ?? "";
+                          stakeHolder.lookupDetDescEn?.toLowerCase() ?? "";
                       final searchLower = search.toLowerCase();
                       return stakeHNameLower.contains(searchLower);
                     }).toList();
@@ -2705,7 +2705,7 @@ class _CommonBottomSheetContentsState
                             ),
                             Expanded(
                               child: Text(
-                                stakeholder.lookupDetHierDescEn ?? "",
+                                stakeholder.lookupDetDescEn ?? "",
                                 style: TextStyle(
                                   fontSize: responsiveFont(14.0),
                                   fontWeight: isSelected
@@ -2731,7 +2731,7 @@ class _CommonBottomSheetContentsState
                     // );
                   },
                   onSelected: (dynamic selectedStakeH) {
-                    txtContro.text = selectedStakeH.lookupDetHierDescEn ?? '';
+                    txtContro.text = selectedStakeH.lookupDetDescEn ?? '';
                     setState(() {
                       // Move the selected item to the top of the list
                       int selectedIndex = widget.list.indexOf(selectedStakeH);

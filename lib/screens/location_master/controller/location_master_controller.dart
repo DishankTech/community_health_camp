@@ -162,21 +162,22 @@ class LocationMasterController extends GetxController {
       address2.text = locationDetailsModel?.details?.address2 ?? "";
 
       await getCountry(true);
-      if (locationDetailsModel?.details?.lookupDetHierIdState != null) {
+      if (locationDetailsModel?.details?.lookupDetHierIdCountry != null) {
         await getState(
+            locationDetailsModel?.details?.lookupDetHierIdCountry, true);
+      }
+      if (locationDetailsModel?.details?.lookupDetHierIdState != null) {
+        await getDist(
             locationDetailsModel?.details?.lookupDetHierIdState, true);
       }
+
       if (locationDetailsModel?.details?.lookupDetHierIdDistrict != null) {
-        await getDist(
+        await getTaluka(
             locationDetailsModel?.details?.lookupDetHierIdDistrict, true);
       }
-
       if (locationDetailsModel?.details?.lookupDetHierIdTaluka != null) {
-        await getTaluka(
+        await getCity(
             locationDetailsModel?.details?.lookupDetHierIdTaluka, true);
-      }
-      if (locationDetailsModel?.details?.lookupDetHierIdCity != null) {
-        await getCity(locationDetailsModel?.details?.lookupDetHierIdCity, true);
       }
       update();
     } else if (response.statusCode == 401) {
@@ -226,7 +227,6 @@ class LocationMasterController extends GetxController {
     }
     update();
   }
-
 
   updateLocationMaster(locationMasterid) async {
     isLoading = true;
@@ -436,7 +436,7 @@ class LocationMasterController extends GetxController {
       // if (data['status'] == 'Success') {
       isLoading = false;
       stateModel = SubLocationModel.fromJson(data);
-      debugPrint(countryModel?.details?.first.lookupDetValue ?? "");
+
       if (isView == true) {
         stateController.text =
             stateModel?.details?.first.lookupDetHierDescEn ?? "";
@@ -481,10 +481,12 @@ class LocationMasterController extends GetxController {
 
       // distController.text = distModel?.details?.first.lookupDetHierDescEn ?? "";
       if (isView == true) {
-        distController.text =
-            distModel?.details?.first.lookupDetHierDescEn ?? "";
-        selectedDist = distModel?.details?.first;
-        selectedDistVal = distModel?.details?.first.lookupDetHierDescEn ?? "";
+        SubLocationDetails? dist = distModel?.details?.firstWhere((e) =>
+            e.lookupDetHierId ==
+            locationDetailsModel?.details?.lookupDetHierIdDistrict);
+        distController.text = dist?.lookupDetHierDescEn ?? "";
+        selectedDist = dist;
+        selectedDistVal = dist?.lookupDetHierDescEn ?? "";
       }
       update();
     } else if (response.statusCode == 401) {
@@ -523,11 +525,13 @@ class LocationMasterController extends GetxController {
       talukaModel = SubLocationModel.fromJson(data);
 
       if (isView == true && talukaModel!.details!.isNotEmpty) {
-        talukaController.text =
-            talukaModel?.details?.first.lookupDetHierDescEn ?? "";
-        selectedTaluka = talukaModel?.details?.first;
-        selectedTalukaVal =
-            talukaModel?.details?.first.lookupDetHierDescEn ?? "";
+        SubLocationDetails? tal = talukaModel?.details?.firstWhere((e) =>
+            e.lookupDetHierId ==
+            locationDetailsModel?.details?.lookupDetHierIdTaluka);
+
+        talukaController.text = tal?.lookupDetHierDescEn ?? "";
+        selectedTaluka = tal;
+        selectedTalukaVal = tal?.lookupDetHierDescEn ?? "";
       }
       update();
     } else if (response.statusCode == 401) {
@@ -566,10 +570,13 @@ class LocationMasterController extends GetxController {
       cityModel = SubLocationModel.fromJson(data);
 
       if (isView == true && cityModel!.details!.isNotEmpty) {
-        cityController.text =
-            cityModel!.details!.first.lookupDetHierDescEn ?? "";
-        selectedCity = cityModel?.details?.first;
-        selectedCityVal = cityModel!.details!.first.lookupDetHierDescEn ?? '';
+        SubLocationDetails? city = cityModel?.details?.firstWhere((e) =>
+            e.lookupDetHierId ==
+            locationDetailsModel?.details?.lookupDetHierIdCity);
+
+        cityController.text = city?.lookupDetHierDescEn ?? "";
+        selectedCity = city;
+        selectedCityVal = city?.lookupDetHierDescEn ?? '';
       } else {
         cityController.text = "";
       }

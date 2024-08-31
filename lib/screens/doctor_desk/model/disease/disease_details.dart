@@ -1,31 +1,31 @@
-import 'disease_lookup_det_hierarchical.dart';
+import 'disease_lookup_det.dart';
 
-class Details {
-  Details({
-      this.lookupDetId, 
-      this.lookupDetValue, 
-      this.lookupDetHierarchical,});
+class DiseaseDetails {
+  DiseaseDetails({
+      this.lookupId, 
+      this.lookupCode, 
+      this.lookupDet,});
 
-  Details.fromJson(dynamic json) {
-    lookupDetId = json['lookup_det_id'];
-    lookupDetValue = json['lookup_det_value'];
-    if (json['lookup_det_hierarchical'] != null) {
-      lookupDetHierarchical = [];
-      json['lookup_det_hierarchical'].forEach((v) {
-        lookupDetHierarchical?.add(DiseaseLookupDetHierarchical.fromJson(v));
+  DiseaseDetails.fromJson(dynamic json) {
+    lookupId = json['lookup_id'];
+    lookupCode = json['lookup_code'];
+    if (json['lookup_det'] != null) {
+      lookupDet = [];
+      json['lookup_det'].forEach((v) {
+        lookupDet?.add(DiseaseLookupDet.fromJson(v));
       });
     }
   }
-  int? lookupDetId;
-  String? lookupDetValue;
-  List<DiseaseLookupDetHierarchical>? lookupDetHierarchical;
+  int? lookupId;
+  String? lookupCode;
+  List<DiseaseLookupDet>? lookupDet;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['lookup_det_id'] = lookupDetId;
-    map['lookup_det_value'] = lookupDetValue;
-    if (lookupDetHierarchical != null) {
-      map['lookup_det_hierarchical'] = lookupDetHierarchical?.map((v) => v.toJson()).toList();
+    map['lookup_id'] = lookupId;
+    map['lookup_code'] = lookupCode;
+    if (lookupDet != null) {
+      map['lookup_det'] = lookupDet?.map((v) => v.toJson()).toList();
     }
     return map;
   }

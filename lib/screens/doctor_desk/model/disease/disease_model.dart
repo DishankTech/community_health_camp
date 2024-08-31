@@ -16,7 +16,7 @@ class DiseaseModel {
     if (json['details'] != null) {
       details = [];
       json['details'].forEach((v) {
-        details?.add(Details.fromJson(v));
+        details?.add(DiseaseDetails.fromJson(v));
       });
     }
   }
@@ -24,7 +24,7 @@ class DiseaseModel {
   String? message;
   String? path;
   String? dateTime;
-  List<Details>? details;
+  List<DiseaseDetails>? details;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
