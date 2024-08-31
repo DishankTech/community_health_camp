@@ -622,6 +622,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
 
 
           setState(() {
+
             isSaveLoad = false;
             // clearAllFields();
           });

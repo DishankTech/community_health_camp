@@ -1,19 +1,18 @@
 class CampCoordRegisteredPatientModel {
   String name;
   String mobile;
-  String referredTo;
-  String? referredToId;
-  // String? campDashboardId;
+  // List<Map<String, dynamic>> ttCampDashboardRefPatientsDetList = [];
 
-  CampCoordRegisteredPatientModel({ required this.name,required this.mobile, required this.referredTo,required this.referredToId});
+  CampCoordRegisteredPatientModel({ required this.name,required this.mobile});
 
   // Convert a CampCoordRegisteredPatientModel object to a Map
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'mobile': mobile,
-      'referredTo': referredTo,
-      'referredToId': referredToId,
+      // 'ttCampDashboardRefPatientsDetList':ttCampDashboardRefPatientsDetList,
+      // 'referredTo': referredTo,
+      // 'referredToId': referredToId,
     };
   }
 
@@ -22,8 +21,8 @@ class CampCoordRegisteredPatientModel {
     return CampCoordRegisteredPatientModel(
       name: json['name'],
       mobile: json['mobile'],
-      referredTo: json['referredTo'],
-      referredToId: json['referredToId'],
+      // referredTo: json['referredTo'],
+      // referredToId: json['referredToId'],
     );
   }
 

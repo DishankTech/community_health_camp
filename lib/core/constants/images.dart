@@ -1,5 +1,6 @@
 const String logo = "assets/images/logo.jpeg";
-const String splashImg = 'assets/images/splash.jpg';
+// const String splashImg = 'assets/images/splash.jpg';
+const String splashImg = 'assets/images/splash_updated.png';
 const String smallLogo = "assets/images/small_logo.png";
 const String background = "assets/images/background1.png";
 const String dialysis = "assets/images/dialysis.png";

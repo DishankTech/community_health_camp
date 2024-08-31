@@ -22,14 +22,14 @@ import 'package:http/http.dart' as http;
 
 import '../models/multiple_referred_to_request_model.dart';
 
-class ReferredToScreen extends StatefulWidget {
-  const ReferredToScreen({super.key});
+class NewReferredToScreen extends StatefulWidget {
+  const NewReferredToScreen({super.key});
 
   @override
-  State<ReferredToScreen> createState() => _ReferredToScreenState();
+  State<NewReferredToScreen> createState() => _ReferredToScreenState();
 }
 
-class _ReferredToScreenState extends State<ReferredToScreen> {
+class _ReferredToScreenState extends State<NewReferredToScreen> {
   XFile? capturedFile;
   List<CardData> carbonCommentsList = [];
 
@@ -44,13 +44,6 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
   Map<String, dynamic>? selectedDesignationType;
   Map<String, dynamic>? selecteStakeholderSubType;
 
-  TextEditingController countryCodeController = TextEditingController();
-
-  Map<String, dynamic>? selectedCountryCode;
-
-  TextEditingController mobileController = TextEditingController();
-
-  Map<String, dynamic>? selectedMobile;
 
   List<CampCoordRegisteredPatientModel> campregisteredpatients = [];
 
@@ -68,8 +61,6 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
 
   List<Widget> _widgetList = [];
 
-  List<TextEditingController> patientNameControllers = [];
-  List<TextEditingController> mobileControllers = [];
   List<TextEditingController> referredToControllers = [];
   List<TextEditingController> referredToIdControllers = [];
   List<TextEditingController> stakeholderSubTypeControllers = [];
@@ -81,8 +72,6 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
   void initState() {
     // TODO: implement initState
     patientNameController.text = "";
-    countryCodeController.text = "";
-    mobileController.text = "";
     referredTo.text = "";
     // carbonCommentsList.add(CardData(""));
     clearAllFields();
@@ -106,35 +95,6 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
       statusBarBrightness: Brightness.light,
       statusBarIconBrightness: Brightness.light, // For light text/icons on the status bar
     ));
-   /* return Scaffold(
-      body: Container(
-        height: SizeConfig.designScreenHeight,
-        width: SizeConfig.designScreenWidth,
-        decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            mAppBarV1(
-                title: "Add Referred Patient",
-                context: context,
-                onBackButtonPress: () {
-                  Navigator.pop(context);
-                }),
-            SizedBox(
-              height: responsiveHeight(10),
-            ),
-            Expanded(
-              child: _widgetList.isNotEmpty
-                  ? ListView.builder(
-                      itemCount: _widgetList.length,
-                      itemBuilder: (context, index) => _widgetList[index],
-                    )
-                  : Center(child: Text("No data available")),
-            ),
-          ],
-        ),
-      ),
-    );*/
 
     return Scaffold(
       body: Container(
@@ -181,30 +141,6 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
                       flex: 1,
                       child: AppButton(
                         onTap: () {
-                          if (campregisteredpatients.isEmpty) {
-                            addCard();
-
-                            // DataProvider().storePatientList(campregisteredpatients);
-                            Navigator.pop(context);
-                            patientNameController.text = "";
-                            countryCodeController.text = "";
-                            mobileController.text = "";
-                            referredTo.text = "";
-                            referredToId.text = "";
-                            stakeholderSubType.text = "";
-                            stakeholderSubTypeId.text = "";
-                          } else {
-                            // DataProvider().storePatientList(campregisteredpatients);
-                            patientNameController.text = "";
-                            countryCodeController.text = "";
-                            mobileController.text = "";
-                            referredTo.text = "";
-                            referredToId.text = "";
-                            stakeholderSubType.text = "";
-                            stakeholderSubTypeId.text = "";
-                            campDetailsController.patientsReferred.text = campDetailsController.campReferredPatientList.length.toString();
-                            Navigator.pop(context);
-                          }
                         },
                         title: "Save",
                         iconData: Icon(
@@ -246,26 +182,17 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
   void addCard() {
     // carbonCommentsList.add(CardData(""));
     setState(() {
-     /* campregisteredpatients
-          .add(CampCoordRegisteredPatientModel(mobile: mobileController.text.trim(), name: patientNameController.text.trim(), referredTo: referredTo.text, referredToId: referredToId.text));
-      print(campregisteredpatients);*/
 
 
-
-      patientNameControllers.add(TextEditingController());
-      mobileControllers.add(TextEditingController());
-      referredToControllers.add(TextEditingController());
-      stakeholderSubTypeControllers.add(TextEditingController());
-      stakeholderSubTypeIdControllers.add(TextEditingController());
+      // referredToControllers.add(TextEditingController());
+      // stakeholderSubTypeControllers.add(TextEditingController());
+      // stakeholderSubTypeIdControllers.add(TextEditingController());
 
       patientNameController.text = "";
-      countryCodeController.text = "";
-      mobileController.text = "";
       referredTo.text = "";
       referredToId.text = "";
       stakeholderSubType.text = "";
       stakeholderSubTypeId.text = "";
-      campDetailsController.createMultiplePatients(campregisteredpatients);
       campDetailsController.patientsReferred.text = campDetailsController.campReferredPatientList.length.toString();
       campDetailsController.campReferredPatientStakeholderList.clear();
     });
@@ -276,8 +203,6 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
       setState(() {
         print(index);
 
-        patientNameControllers[index].dispose();
-        mobileControllers[index].dispose();
         referredToControllers[index].dispose();
         stakeholderSubTypeControllers[index].dispose();
         stakeholderSubTypeIdControllers[index].dispose();
@@ -285,8 +210,6 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
         referredToIdControllers[index].dispose();
         referredToIdControllers[index].dispose();
 
-        patientNameControllers.removeAt(index);
-        mobileControllers.removeAt(index);
         stakeholderSubTypeControllers.removeAt(index);
         stakeholderSubTypeIdControllers.removeAt(index);
 
@@ -365,15 +288,9 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
       isLoading = true;
     });
 
-    // final url = Uri.parse('http://210.89.42.117:8085/api/administrator/masters/all-stake-holder-master-pagination');
     final url = Uri.parse('http://210.89.42.117:8085/api/administrator/masters/dropdown/stake-holder-by-sub-type-list/$subtypeId');
     var headers = {'Content-Type': 'application/json'};
     try {
-      // final response = await http.post(url);
-
-      // var body = json.encode({"lookup_det_hier_parent_id ": 20, "page": 1, "total_count": 10, "per_page": 10, "data": null});
-
-      // print(body);
 
       print(url);
 
@@ -386,17 +303,14 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
         Map<String, dynamic> decodedJson = jsonDecode(response.body);
 
         List<dynamic> detailsArray = decodedJson['details'];
-        // List<dynamic> dataArray = detailsArray['data'];
 
         setState(() {
           isLoading = false;
         });
 
-        // Create a List of Maps to store the desired information
         extractedStackholderData = detailsArray.map((item) {
           return {
             'stakeholder_master_id': item['stakeholder_master_id'],
-            // 'lookup_det_hier_desc_en': item['lookup_det_hier_desc_en'].toString(),
             'stakeholder_name_en': item['stakeholder_name_en'].toString(),
           };
         }).toList();
@@ -487,15 +401,11 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
     setState(() {
       campregisteredpatients.clear();
       patientNameController.text = "";
-      countryCodeController.text = "";
-      mobileController.text = "";
       stakeholderSubType.text = "";
       stakeholderSubTypeId.text = "";
       referredTo.text = "";
       referredToId.text = "";
 
-      patientNameControllers.forEach((controller) => controller.clear());
-      mobileControllers.forEach((controller) => controller.clear());
       referredToControllers.forEach((controller) => controller.clear());
       stakeholderSubTypeControllers.forEach((controller) => controller.clear());
     });
@@ -596,6 +506,8 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
                     setState(() {
                       selectedItems = items;
 
+
+
                         for (int i = 0; i < selectedItems.length; i++) {
                           // Create a new map for each referredTo entry
                           Map<String, dynamic> patientData = {
@@ -609,7 +521,10 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
 
                           // Add the generated map to the list
                         campDetailsController.ttCampDashboardRefPatientsDetList.add(patientData);
+
                       }
+
+
 
 
 
@@ -618,6 +533,22 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
 
                       referredToControllers[index].text=(referredTo.text);
                       referredToIdControllers[index].text=(referredToId.text);
+
+
+                        // Create a new map for each referredTo entry
+                        Map<String, dynamic> patientData = {
+                          "dashboard_ref_patients_det_id": null,
+                          "dashboard_ref_patients_id": null,
+                          "lookup_det_hier_id_stakeholder_sub_type2":stakeholderSubTypeControllers[index].text.toString(),
+                          "stakeholder_master_id": referredTo.text,
+                          "org_id": 1,
+                          "status": 1,
+                        };
+
+                        // Add the generated map to the list
+                        campDetailsController.ttCampDashboardRefPatientsNamesList.add(patientData);
+
+
 
                       // referredTo.text = selectedItems.join(', ');
                     });
@@ -652,7 +583,7 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
                     child: Image.asset("assets/icons/add.png"),
                     onTap: () {
                       _addDynamicWidget();
-                      addCard();
+                      // addCard();
                     },
                   ),
                   SizedBox(
@@ -666,6 +597,10 @@ class _ReferredToScreenState extends State<ReferredToScreen> {
       ),
     );
   }
+
+
+
+
 }
 
 class CardData {
