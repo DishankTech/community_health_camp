@@ -1554,9 +1554,9 @@ class _PatientRegistrationEditScreenState
                                                             .text,
                                                     "abha_card": "",
                                                     "lookup_det_hier_id_country":
-                                                        null,
+                                                        1,
                                                     "lookup_det_hier_id_state":
-                                                        4,
+                                                        2,
                                                     "lookup_det_hier_id_district":
                                                         _selectedDistrict !=
                                                                 null
@@ -1589,33 +1589,35 @@ class _PatientRegistrationEditScreenState
                                                     "address1":
                                                         _addressTextController
                                                             .text,
-                                                    "address2": "",
+                                                    "address2":
+                                                        _addressTextController
+                                                            .text,
                                                   },
                                                   "tt_patient_ref_list": [
                                                     {
-                                                      "patient_refer_id": 0,
-                                                      "patient_id": 0,
+                                                      "patient_refer_id": null,
+                                                      "patient_id": null,
                                                       "stakeholder_master_id":
-                                                          0,
+                                                          1,
                                                       "lookup_det_id_ref_department":
-                                                          0,
+                                                          null,
                                                       "lookup_det_hier_id_stakeholder_sub_type2":
-                                                          0,
-                                                      "org_id": 0,
-                                                      "status": 0,
-                                                      "is_inactive": ["string"]
+                                                          null,
+                                                      "org_id": 1,
+                                                      "status": 1,
+                                                      "is_inactive": null
                                                     }
                                                   ],
                                                   "tt_patient_disease_list": [
                                                     {
                                                       "patient_disease_types_id":
-                                                          0,
-                                                      "patient_id": 0,
+                                                          null,
+                                                      "patient_id": null,
                                                       "lookup_det_id_disease_types":
-                                                          0,
-                                                      "org_id": 0,
-                                                      "status": 0,
-                                                      "is_inactive": ["string"]
+                                                          null,
+                                                      "org_id": 1,
+                                                      "status": 1,
+                                                      "is_inactive": null
                                                     }
                                                   ]
                                                 };
@@ -1663,9 +1665,9 @@ class _PatientRegistrationEditScreenState
                                                         _abhaIDTextController
                                                             .text,
                                                     "lookup_det_hier_id_country":
-                                                        null,
+                                                        1,
                                                     "lookup_det_hier_id_state":
-                                                        4,
+                                                        2,
                                                     "lookup_det_hier_id_district":
                                                         _selectedDistrict !=
                                                                 null
@@ -1693,37 +1695,40 @@ class _PatientRegistrationEditScreenState
                                                     "org_id": null,
                                                     "status": 1,
                                                     "lookup_det_id_ref_department":
-                                                        0,
+                                                        _selectedReferToDepartmentType
+                                                            ?.lookupDetId,
                                                     "address1":
                                                         _addressTextController
                                                             .text,
-                                                    "address2": "",
+                                                    "address2":
+                                                        _addressTextController
+                                                            .text,
                                                   },
                                                   "tt_patient_ref_list": [
                                                     {
-                                                      "patient_refer_id": 0,
-                                                      "patient_id": 0,
+                                                      "patient_refer_id": null,
+                                                      "patient_id": null,
                                                       "stakeholder_master_id":
-                                                          0,
+                                                          1,
                                                       "lookup_det_id_ref_department":
-                                                          0,
+                                                          null,
                                                       "lookup_det_hier_id_stakeholder_sub_type2":
-                                                          0,
-                                                      "org_id": 0,
-                                                      "status": 0,
-                                                      "is_inactive": ["string"]
+                                                          null,
+                                                      "org_id": 1,
+                                                      "status": 1,
+                                                      "is_inactive": null
                                                     }
                                                   ],
                                                   "tt_patient_disease_list": [
                                                     {
                                                       "patient_disease_types_id":
-                                                          0,
-                                                      "patient_id": 0,
+                                                          null,
+                                                      "patient_id": null,
                                                       "lookup_det_id_disease_types":
-                                                          0,
-                                                      "org_id": 0,
-                                                      "status": 0,
-                                                      "is_inactive": ["string"]
+                                                          null,
+                                                      "org_id": 1,
+                                                      "status": 1,
+                                                      "is_inactive": null
                                                     }
                                                   ]
                                                 };

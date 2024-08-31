@@ -1430,7 +1430,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                                   "org_id": 1,
                                                   "status": 1,
                                                   "lookup_det_id_ref_department":
-                                                      null,
+                                                      _selectedReferToDepartmentType
+                                                          ?.lookupDetId,
                                                   "address1":
                                                       _addressTextController
                                                           .text,
