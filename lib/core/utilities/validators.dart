@@ -62,6 +62,14 @@ class Validators {
     return null;
   }
 
+  static String? validateReferTo(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select Refer To';
+    }
+
+    return null;
+  }
+
   static String? validateDesignationType(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please select Designation/Member Type';

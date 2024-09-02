@@ -1198,7 +1198,7 @@ class _PatientRegistrationEditScreenState
                                 AppRoundTextField(
                                   controller: _addressTextController,
                                   maxLines: 5,
-                                  borderRaius: responsiveHeight(20),
+                                  borderRadius: responsiveHeight(20),
                                   errorText: null,
                                   onChange: (p0) {},
                                   inputType: TextInputType.multiline,

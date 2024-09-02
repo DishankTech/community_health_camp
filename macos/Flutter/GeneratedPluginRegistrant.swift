@@ -8,7 +8,7 @@ import Foundation
 import connectivity_plus
 import device_info_plus
 import file_selector_macos
-import open_file
+import open_file_mac
 import package_info_plus
 import path_provider_foundation
 import share_plus
