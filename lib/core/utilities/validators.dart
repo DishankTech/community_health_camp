@@ -140,4 +140,20 @@ class Validators {
 
     return null;
   }
+
+  static String? validateLocationName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select location name';
+    }
+
+    return null;
+  }
+
+  static String? validateCampId(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select camp Id';
+    }
+
+    return null;
+  }
 }

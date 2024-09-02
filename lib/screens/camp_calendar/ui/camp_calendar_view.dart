@@ -56,6 +56,8 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
   List<Datum>? campDetailsList = [];
 
+   List<Map<String, dynamic>> filteredData = [];
+
   // Using a `LinkedHashSet` is recommended due to equality comparison override
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
     equals: isSameDay,
@@ -106,7 +108,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => DateWiseCampsScreen(selectedDay),
+        builder: (context) => DateWiseCampsScreen(selectedDay,filteredData),
       ),
     );
 
@@ -262,7 +264,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
     );
   }
 
-  Widget _buildCellDate(DateTime day, {DateTime? focusedDay}) {
+/*  Widget _buildCellDate(DateTime day, {DateTime? focusedDay}) {
     return Container(
       margin: const EdgeInsets.all(5),
       alignment: Alignment.center,
@@ -276,7 +278,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
         style: TextStyle(color: Colors.black),
       ),
     );
-  }
+  }*/
 
   Future<Map<DateTime, List>> getAllCamps() async {
     setState(() {
@@ -288,10 +290,10 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
     var headers = {'Content-Type': 'application/json'};
 
-    var body = json.encode({{
+    var body = json.encode({
       "start_date": "2024-08-01",
       "end_date": "2024-08-31"
-    }});
+    });
 
     try {
       // Use the post method directly to get the response
@@ -312,7 +314,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
             }
           }*/
 
-        List<dynamic> dataList = jsonResponse['details']['data'];
+        List<dynamic> dataList = jsonResponse['details'];
         uniqueLocationList = [];
 
       /*  for (var camp in dataList) {
@@ -328,12 +330,12 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
 
         // Set to track unique location_master_id and date combinations
         final Set<String> uniqueEntries = {};
-        final List<Map<String, dynamic>> filteredData = [];
+         filteredData = [];
 
         for (var entry in dataList) {
           // Extract location_master_id and date (yyyy-MM-dd)
-          final locationMasterId = entry['location_master_id'].toString();
-          final propCampDate = entry['prop_camp_date'].substring(0, 10);
+          final locationMasterId = entry['location_name'].toString();
+          final propCampDate = entry['confirm_camp_date'].substring(0, 10);
 
           // Create a unique key using location_master_id and date
           final uniqueKey = '$locationMasterId-$propCampDate';
@@ -354,7 +356,7 @@ class _CampCalendarPageState extends State<CampCalendarPage> {
           // String dateStr = item['prop_camp_date'].split('T')[0];
           // String dateStr = item.propCampDate.timeZoneName.split('T')[0];
           // String dateStr = item['prop_camp_date'].timeZoneName.split('T')[0];
-          String dateStr = item['prop_camp_date'].split('T')[0];
+          String dateStr = item['confirm_camp_date'].split('T')[0];
           // Parse the string into a DateTime object
           DateTime dateTime = DateTime.parse(dateStr + ' 00:00:00.000Z');
 

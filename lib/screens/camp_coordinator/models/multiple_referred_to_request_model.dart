@@ -5,6 +5,7 @@ class TtCampDashboardRefStakeHoldersDet {
   int stakeholderMasterId;
   int orgId;
   int status;
+  String? stakeholders;
 
   TtCampDashboardRefStakeHoldersDet({
     this.dashboardRefPatientsDetId,
@@ -13,6 +14,7 @@ class TtCampDashboardRefStakeHoldersDet {
     required this.stakeholderMasterId,
     this.orgId = 1,
     this.status = 1,
+    this.stakeholders,
   });
 
   // Factory method to create an instance from JSON
@@ -24,6 +26,7 @@ class TtCampDashboardRefStakeHoldersDet {
       stakeholderMasterId: int.parse(json['stakeholder_master_id'].toString()),
       orgId: json['org_id'] ?? 1,
       status: json['status'] ?? 1,
+
     );
   }
 

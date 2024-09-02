@@ -25,3 +25,11 @@ class GetPatientListRequest extends PatientRegistrationEvent {
 }
 
 class ResetPatientRegistrationState extends PatientRegistrationEvent {}
+
+class SearchPatientRequest extends PatientRegistrationEvent {
+  String name;
+  SearchPatientRequest({required this.name});
+  @override
+  // TODO: implement props
+  List<Object> get props => [name];
+}

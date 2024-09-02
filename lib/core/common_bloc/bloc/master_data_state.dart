@@ -50,6 +50,12 @@ class MasterDataState extends Equatable {
     required this.getCampDropdownListStatus,
     required this.getSectorTypeResponse,
     required this.getSectorTypeStatus,
+    required this.getStakeholderSubTypeWithLookupCodeResponse,
+    required this.getStakeholderSubTypeWithLookupCodeStatus,
+    required this.getDiseaseTypeResponse,
+    required this.getDiseaseTypeStatus,
+    required this.getReferToDepartmentStatus,
+    required this.getReferToDepartmentResponse,
   });
 
   final FormzSubmissionStatus prefixStatus;
@@ -111,16 +117,27 @@ class MasterDataState extends Equatable {
 
   final FormzSubmissionStatus getMasterDesignationTypeStatus;
   final String getMasterDesignationTypeResponse;
+
   final FormzSubmissionStatus getGenderStatus;
   final String getGenderResponse;
 
   final FormzSubmissionStatus getStakeholderSubTypeStatus;
   final String getStakeholderSubTypeResponse;
+
+  final FormzSubmissionStatus getStakeholderSubTypeWithLookupCodeStatus;
+  final String getStakeholderSubTypeWithLookupCodeResponse;
+
   final FormzSubmissionStatus getCampDropdownListStatus;
   final String getCampDropdownListResponse;
 
   final FormzSubmissionStatus getSectorTypeStatus;
   final String getSectorTypeResponse;
+
+  final FormzSubmissionStatus getDiseaseTypeStatus;
+  final String getDiseaseTypeResponse;
+
+  final FormzSubmissionStatus getReferToDepartmentStatus;
+  final String getReferToDepartmentResponse;
 
   MasterDataState copyWith({
     FormzSubmissionStatus? getUnitListStatus,
@@ -171,6 +188,12 @@ class MasterDataState extends Equatable {
     String? getCampDropdownListResponse,
     FormzSubmissionStatus? getSectorTypeStatus,
     String? getSectorTypeResponse,
+    FormzSubmissionStatus? getStakeholderSubTypeWithLookupCodeStatus,
+    String? getStakeholderSubTypeWithLookupCodeResponse,
+    FormzSubmissionStatus? getDiseaseTypeStatus,
+    String? getDiseaseTypeResponse,
+    FormzSubmissionStatus? getReferToDepartmentStatus,
+    String? getReferToDepartmentResponse,
   }) {
     return MasterDataState(
       prefixResponse: prefixResponse ?? this.prefixResponse,
@@ -247,6 +270,19 @@ class MasterDataState extends Equatable {
       getSectorTypeResponse:
           getSectorTypeResponse ?? this.getSectorTypeResponse,
       getSectorTypeStatus: getSectorTypeStatus ?? this.getSectorTypeStatus,
+      getStakeholderSubTypeWithLookupCodeResponse:
+          getStakeholderSubTypeWithLookupCodeResponse ??
+              this.getStakeholderSubTypeWithLookupCodeResponse,
+      getStakeholderSubTypeWithLookupCodeStatus:
+          getStakeholderSubTypeWithLookupCodeStatus ??
+              this.getStakeholderSubTypeWithLookupCodeStatus,
+      getDiseaseTypeResponse:
+          getDiseaseTypeResponse ?? this.getDiseaseTypeResponse,
+      getDiseaseTypeStatus: getDiseaseTypeStatus ?? this.getDiseaseTypeStatus,
+      getReferToDepartmentStatus:
+          getReferToDepartmentStatus ?? this.getReferToDepartmentStatus,
+      getReferToDepartmentResponse:
+          getReferToDepartmentResponse ?? this.getReferToDepartmentResponse,
     );
   }
 
@@ -299,6 +335,12 @@ class MasterDataState extends Equatable {
         getCampDropdownListResponse,
         getCampDropdownListStatus,
         getSectorTypeResponse,
-        getSectorTypeStatus
+        getSectorTypeStatus,
+        getStakeholderSubTypeWithLookupCodeResponse,
+        getStakeholderSubTypeWithLookupCodeStatus,
+        getDiseaseTypeResponse,
+        getDiseaseTypeStatus,
+        getReferToDepartmentResponse,
+        getReferToDepartmentStatus
       ];
 }

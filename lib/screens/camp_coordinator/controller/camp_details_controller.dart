@@ -1,5 +1,6 @@
 import 'package:community_health_app/screens/camp_coordinator/models/camp_details_referredpatients_request_model.dart';
 import 'package:community_health_app/screens/camp_coordinator/models/multiple_referred_to_request_model.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 
@@ -12,6 +13,8 @@ class CampDetailsController extends GetxController {
 
   late TtCampDashboardRefStakeHoldersDet stakeHolderDetailFromJson;
  var patientDetailsFromJson;
+
+  TextEditingController patientsReferred = TextEditingController();
 
 
    createMultiStakeholderJson(List selectedItems) {

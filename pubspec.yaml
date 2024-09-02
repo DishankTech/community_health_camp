@@ -69,6 +69,8 @@ dependencies:
   syncfusion_flutter_datepicker: ^26.1.35
   flutter_datetime_picker_plus: ^2.2.0
   flutter_typeahead: ^5.2.0
+  device_preview: ^1.2.0
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:

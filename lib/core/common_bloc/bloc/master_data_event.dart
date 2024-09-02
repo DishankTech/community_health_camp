@@ -126,8 +126,17 @@ class GetGenderRequest extends MasterDataEvent {
 }
 
 class GetStakeholderSubType extends MasterDataEvent {
-  Map payload;
+  int payload;
+
   GetStakeholderSubType({required this.payload});
+
+  @override
+  List<Object> get props => [payload];
+}
+
+class GetStakeholderSubTypeWithLookupCode extends MasterDataEvent {
+  Map payload;
+  GetStakeholderSubTypeWithLookupCode({required this.payload});
 
   @override
   List<Object> get props => [payload];
@@ -150,4 +159,22 @@ class GetCampListDropdown extends MasterDataEvent {
   @override
   // TODO: implement props
   List<Object> get props => [locationId];
+}
+
+class GetDiseaseTypes extends MasterDataEvent {
+  Map payload;
+  GetDiseaseTypes({required this.payload});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
+
+class GetReferToDepartment extends MasterDataEvent {
+  Map payload;
+  GetReferToDepartment({required this.payload});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
 }

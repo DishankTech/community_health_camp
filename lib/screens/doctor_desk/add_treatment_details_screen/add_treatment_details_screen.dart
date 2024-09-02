@@ -657,7 +657,6 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                 .text = p0
                                                                     .lookupDetDescEn ??
                                                                 "",
-
                                                             controller
                                                                 .selectedDiseases = p0,
                                                             controller.update()
@@ -894,16 +893,13 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                                 .selectedReferralSer
                                                                 .addIfReferralNotExist(
                                                                     p0),
-
                                                             controller
                                                                     .referralService
                                                                     .text =
                                                                 controller
                                                                     .selectedReferralSer
                                                                     .displayReferralText(),
-
                                                             controller.update()
-
                                                           },
                                                       "Referral Services",
                                                       controller
@@ -1019,7 +1015,7 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                               ?.first
                                                               .lookupDetHierarchical ??
                                                           [],
-                                                      true);
+                                                      isVisible: true);
                                                 },
                                                 // maxLength: 12,
                                                 readOnly: true,

@@ -19,7 +19,8 @@ import '../../../core/common_widgets/app_bar_v1.dart';
 import '../../../core/constants/constants.dart';
 
 class DistrictWiseCampsScreen extends StatefulWidget {
-  Datum campDetailsList;
+  // Datum campDetailsList;
+  List<Map<String, dynamic>> campDetailsList;
   String locationName;
   String totalCamps;
 
@@ -55,7 +56,7 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
     });*/
 
     _districtName.text = widget.locationName.toString();
-    _date.text = widget.campDetailsList.propCampDate.toString();
+    // _date.text = widget.campDetailsList.propCampDate.toString();
 
     loadInit();
 
@@ -322,7 +323,8 @@ class _DistrictWiseCampsScreen extends State<DistrictWiseCampsScreen> {
       isLoading = true;
     });
 
-    var locationId = widget.campDetailsList.locationMasterId.toString();
+    // var locationId = widget.campDetailsList['lookup_det_hier_id'].toString();
+    var locationId = 0;
 
     var url = Uri.parse('http://210.89.42.117:8085/api/administrator/masters/get/district-wise-camp-details/$locationId');
 

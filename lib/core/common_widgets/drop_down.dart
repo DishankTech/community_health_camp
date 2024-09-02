@@ -163,6 +163,286 @@ Future<dynamic> genderBottomSheet(
           ));
 }
 
+Future<dynamic> diseaseTypeBottomSheet(
+    BuildContext context, Function(LookupDet) onItemSelected) {
+  int selectedIndex = -1;
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => StatefulBuilder(
+            builder: (c, setState) => Container(
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(responsiveHeight(50)),
+                      topRight: Radius.circular(responsiveHeight(50)))),
+              child: Padding(
+                padding: EdgeInsets.all(responsiveHeight(30)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Select Disease Type",
+                            style: TextStyle(
+                                fontSize: responsiveFont(17),
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                icSquareClose,
+                                height: responsiveHeight(24),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(25),
+                    ),
+                    BlocBuilder<MasterDataBloc, MasterDataState>(
+                      builder: (context, state) {
+                        MasterResponseModel? responseModel;
+                        if (state.getDiseaseTypeResponse.isNotEmpty) {
+                          responseModel = MasterResponseModel.fromJson(
+                              jsonDecode(state.getDiseaseTypeResponse));
+                        }
+                        return responseModel != null &&
+                                responseModel.details != null &&
+                                responseModel.details![0].lookupDet != null
+                            ? Expanded(
+                                child: ListView.builder(
+                                  itemCount: responseModel
+                                      .details![0].lookupDet!.length,
+                                  itemBuilder: (c, i) => Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: () {
+                                          var selectedItem = {
+                                            'id': responseModel!.details![0]
+                                                .lookupDet![i].lookupDetId!,
+                                            'title': responseModel.details![0]
+                                                .lookupDet![i].lookupDetDescEn!
+                                          };
+                                          onItemSelected(responseModel!
+                                              .details![0].lookupDet![i]);
+                                          setState(
+                                            () {
+                                              selectedIndex = i;
+                                            },
+                                          );
+
+                                          Navigator.pop(context);
+                                        },
+                                        child: Ink(
+                                          decoration: BoxDecoration(
+                                            color: i == selectedIndex
+                                                ? Colors.transparent
+                                                : kListBGColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  i == selectedIndex
+                                                      ? icCircleDot
+                                                      : icCircle,
+                                                  height: responsiveHeight(20),
+                                                ),
+                                                SizedBox(
+                                                  width: responsiveWidth(20),
+                                                ),
+                                                Expanded(
+                                                  child: Text(responseModel!
+                                                      .details![0]
+                                                      .lookupDet![i]
+                                                      .lookupDetDescEn!),
+                                                ),
+                                                const Spacer(),
+                                                i == selectedIndex
+                                                    ? Image.asset(
+                                                        icCircleCheck,
+                                                        height:
+                                                            responsiveHeight(
+                                                                20),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Center(child: Text("Data Not Available"));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
+
+Future<dynamic> referToDepartmentBottomSheet(
+    BuildContext context, Function(LookupDet) onItemSelected) {
+  int selectedIndex = -1;
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => StatefulBuilder(
+            builder: (c, setState) => Container(
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(responsiveHeight(50)),
+                      topRight: Radius.circular(responsiveHeight(50)))),
+              child: Padding(
+                padding: EdgeInsets.all(responsiveHeight(30)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Select Refer To Department",
+                            style: TextStyle(
+                                fontSize: responsiveFont(17),
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                icSquareClose,
+                                height: responsiveHeight(24),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(25),
+                    ),
+                    BlocBuilder<MasterDataBloc, MasterDataState>(
+                      builder: (context, state) {
+                        MasterResponseModel? responseModel;
+                        if (state.getReferToDepartmentResponse.isNotEmpty) {
+                          responseModel = MasterResponseModel.fromJson(
+                              jsonDecode(state.getReferToDepartmentResponse));
+                        }
+                        return responseModel != null &&
+                                responseModel.details != null &&
+                                responseModel.details![0].lookupDet != null
+                            ? Expanded(
+                                child: ListView.builder(
+                                  itemCount: responseModel
+                                      .details![0].lookupDet!.length,
+                                  itemBuilder: (c, i) => Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: () {
+                                          var selectedItem = {
+                                            'id': responseModel!.details![0]
+                                                .lookupDet![i].lookupDetId!,
+                                            'title': responseModel.details![0]
+                                                .lookupDet![i].lookupDetDescEn!
+                                          };
+                                          onItemSelected(responseModel!
+                                              .details![0].lookupDet![i]);
+                                          setState(
+                                            () {
+                                              selectedIndex = i;
+                                            },
+                                          );
+
+                                          Navigator.pop(context);
+                                        },
+                                        child: Ink(
+                                          decoration: BoxDecoration(
+                                            color: i == selectedIndex
+                                                ? Colors.transparent
+                                                : kListBGColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  i == selectedIndex
+                                                      ? icCircleDot
+                                                      : icCircle,
+                                                  height: responsiveHeight(20),
+                                                ),
+                                                SizedBox(
+                                                  width: responsiveWidth(20),
+                                                ),
+                                                Expanded(
+                                                  child: Text(responseModel!
+                                                      .details![0]
+                                                      .lookupDet![i]
+                                                      .lookupDetDescEn!),
+                                                ),
+                                                const Spacer(),
+                                                i == selectedIndex
+                                                    ? Image.asset(
+                                                        icCircleCheck,
+                                                        height:
+                                                            responsiveHeight(
+                                                                20),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Center(child: Text("Data Not Available"));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
+
 Future<dynamic> stakeholderBottomSheet(
     BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;
@@ -495,8 +775,8 @@ Future<dynamic> stakeholderSubTypeBottomSheet(
                     BlocBuilder<MasterDataBloc, MasterDataState>(
                       builder: (context, state) {
                         GetUserMasterWithHierResponse responseModel =
-                            GetUserMasterWithHierResponse.fromJson(jsonDecode(
-                                state.getStakeholderSubTypeResponse));
+                            GetUserMasterWithHierResponse.fromJson(jsonDecode(state
+                                .getStakeholderSubTypeWithLookupCodeResponse));
 
                         return responseModel.details != null &&
                                 responseModel
@@ -1556,6 +1836,140 @@ Future<dynamic> talukaBottomSheetV1(
           ));
 }
 
+Future<dynamic> stakeholderSubTypeBottomSheetV1(
+    BuildContext context, Function(LookupDetHierDetails) onItemSelected) {
+  int selectedIndex = -1;
+  return showModalBottomSheet(
+      context: context,
+      isScrollControlled: false,
+      builder: (c) => StatefulBuilder(
+            builder: (c, setState) => Container(
+              width: SizeConfig.screenWidth,
+              decoration: BoxDecoration(
+                  color: kWhiteColor,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(responsiveHeight(50)),
+                      topRight: Radius.circular(responsiveHeight(50)))),
+              child: Padding(
+                padding: EdgeInsets.all(responsiveHeight(30)),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "Stakeholder Sub Type",
+                            style: TextStyle(
+                                fontSize: responsiveFont(17),
+                                fontWeight: FontWeight.bold,
+                                color: kPrimaryColor),
+                          ),
+                          const Spacer(),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                icSquareClose,
+                                height: responsiveHeight(24),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(25),
+                    ),
+                    BlocBuilder<MasterDataBloc, MasterDataState>(
+                      builder: (context, state) {
+                        MasterLookupDetHierResponseModel? responseModel;
+
+                        if (state.getStakeholderSubTypeResponse.isNotEmpty) {
+                          responseModel =
+                              MasterLookupDetHierResponseModel.fromJson(
+                                  jsonDecode(
+                                      state.getStakeholderSubTypeResponse));
+                        }
+
+                        return responseModel != null &&
+                                responseModel.details != null
+                            ? Expanded(
+                                child: ListView.builder(
+                                  itemCount: responseModel.details!.length,
+                                  itemBuilder: (c, i) => Padding(
+                                    padding: const EdgeInsets.all(2.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        borderRadius: BorderRadius.circular(10),
+                                        onTap: () {
+                                          onItemSelected(
+                                              responseModel!.details![i]);
+                                          setState(
+                                            () {
+                                              selectedIndex = i;
+                                            },
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                        child: Ink(
+                                          decoration: BoxDecoration(
+                                            color: i == selectedIndex
+                                                ? Colors.transparent
+                                                : kListBGColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  i == selectedIndex
+                                                      ? icCircleDot
+                                                      : icCircle,
+                                                  height: responsiveHeight(20),
+                                                ),
+                                                SizedBox(
+                                                  width: responsiveWidth(20),
+                                                ),
+                                                Expanded(
+                                                  child: Text(responseModel!
+                                                      .details![i]
+                                                      .lookupDetHierDescEn!),
+                                                ),
+                                                const Spacer(),
+                                                i == selectedIndex
+                                                    ? Image.asset(
+                                                        icCircleCheck,
+                                                        height:
+                                                            responsiveHeight(
+                                                                20),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : const Center(child: Text("Data Not Available"));
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ));
+}
+
 Future<dynamic> townBottomSheet(
     BuildContext context, Function(LookupDetHierarchical) onItemSelected) {
   int selectedIndex = -1;
@@ -1964,7 +2378,6 @@ Future<dynamic> campListDropdownBottomSheet(
           ));
 }
 
-
 Future<dynamic> commonBottonSheet(
     BuildContext context,
     Function(Map<String, dynamic>) onItemSelected,
@@ -2062,12 +2475,11 @@ Future<dynamic> commonBottonSheet(
 }
 
 Future<dynamic> commonBottomSheet(
-  final BuildContext context,
-  final Function(dynamic) onItemSelected,
-  final String bottomSheetTitle,
-  final List<dynamic> list,
-  final bool isVisible,
-) {
+    BuildContext context,
+    Function(dynamic) onItemSelected,
+    String bottomSheetTitle,
+    List<dynamic> list,
+    {bool? isVisible}) {
   return showModalBottomSheet(
     context: context,
     isScrollControlled: false,
@@ -2075,7 +2487,7 @@ Future<dynamic> commonBottomSheet(
       onItemSelected: onItemSelected,
       bottomSheetTitle: bottomSheetTitle,
       list: list,
-      isVisible: isVisible,
+      isVisible: isVisible ?? true,
     ),
   );
 }
@@ -2164,7 +2576,8 @@ class _CommonBottomSheetContentState extends State<_CommonBottomSheetContent> {
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          contentPadding:
+                              const EdgeInsets.only(left: 8, top: 12),
                           suffixIcon:
                               const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
@@ -2419,7 +2832,8 @@ class _CommonBottomSheetContent1State
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          contentPadding:
+                              const EdgeInsets.only(left: 8, top: 12),
                           suffixIcon:
                               const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
@@ -2597,7 +3011,8 @@ class _CommonBottomSheetContents extends StatefulWidget {
   const _CommonBottomSheetContents({
     required this.onItemSelected,
     required this.bottomSheetTitle,
-    required this.list, required this.isVisible,
+    required this.list,
+    required this.isVisible,
   });
 
   @override
@@ -2671,9 +3086,10 @@ class _CommonBottomSheetContentsState
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          contentPadding:
+                              const EdgeInsets.only(left: 8, top: 12),
                           suffixIcon:
-                          const Icon(Icons.search, color: kPrimaryColor),
+                              const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
                           hintText: "Search ${widget.bottomSheetTitle}",
                         ));
@@ -2692,14 +3108,14 @@ class _CommonBottomSheetContentsState
                           children: [
                             isSelected
                                 ? Icon(
-                              Icons.radio_button_checked,
-                              color: kPrimaryColor,
-                              size: responsiveFont(14.0),
-                            )
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
                                 : Icon(
-                              Icons.circle_outlined,
-                              size: responsiveFont(14.0),
-                            ),
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
                             SizedBox(
                               width: responsiveWidth(6),
                             ),
@@ -2739,7 +3155,7 @@ class _CommonBottomSheetContentsState
                         var selectedItem = widget.list.removeAt(selectedIndex);
                         widget.list.insert(0, selectedItem);
                         this.selectedIndex =
-                        0; // Update the selectedIndex for the ListView
+                            0; // Update the selectedIndex for the ListView
                       }
                     });
                     widget.onItemSelected(selectedStakeH);
@@ -2749,7 +3165,6 @@ class _CommonBottomSheetContentsState
               ),
             ),
           ),
-
           Expanded(
             child: ListView.builder(
               itemCount: widget.list.length,
@@ -3075,7 +3490,7 @@ class CreateUserBottomSheetState extends State<CreateUserBottomSheet> {
                       },
                   "Stakeholder Type",
                   widget.list,
-                  true);
+                  isVisible: true);
             },
             // maxLength: 12,
             readOnly: true,
@@ -3274,7 +3689,8 @@ class LocationNameBottomSheetContentState
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          contentPadding:
+                              const EdgeInsets.only(left: 8, top: 12),
                           suffixIcon:
                               const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
@@ -3833,7 +4249,8 @@ class StakeHolderNameBottomSheetContentState
                         focusNode: focusNode,
                         autofocus: true,
                         decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.only(left: 8,top: 12),
+                          contentPadding:
+                              const EdgeInsets.only(left: 8, top: 12),
                           suffixIcon:
                               const Icon(Icons.search, color: kPrimaryColor),
                           border: InputBorder.none,
@@ -3887,7 +4304,6 @@ class StakeHolderNameBottomSheetContentState
                         ).paddingSymmetric(horizontal: 4, vertical: 2),
                       ),
                     );
-
                   },
                   onSelected: (dynamic selectedStakeH) {
                     txtContro.text = selectedStakeH.stakeholderNameEn ?? '';
@@ -4070,8 +4486,14 @@ class _MultiSelectBottomSheetContentState
                     return ListTile(
                       title: Text(item['stakeholder_name_en'].toString()),
                       trailing: isSelected
-                          ? Icon(Icons.check_box)
-                          : Icon(Icons.check_box_outline_blank),
+                          ? Icon(
+                              Icons.check_box,
+                              color: kPrimaryColor,
+                            )
+                          : Icon(
+                              Icons.check_box_outline_blank,
+                              color: kPrimaryColor,
+                            ),
                       onTap: () => _onItemTapped(item),
                     );
                   },
@@ -4096,4 +4518,149 @@ class _MultiSelectBottomSheetContentState
   }
 }
 
+Future<dynamic> commonReferredCampBottomSheet(
+    BuildContext context,
+    Function(dynamic) onItemSelected,
+    String bottomSheetTitle,
+    List<dynamic> list,
+    {bool? isVisible}) {
+  return showModalBottomSheet(
+    context: context,
+    isScrollControlled: false,
+    builder: (c) => _CommonReferredCampsBottomSheetContent(
+      onItemSelected: onItemSelected,
+      bottomSheetTitle: bottomSheetTitle,
+      list: list,
+      isVisible: isVisible ?? true,
+    ),
+  );
+}
 
+class _CommonReferredCampsBottomSheetContent extends StatefulWidget {
+  final Function(dynamic) onItemSelected;
+  final String bottomSheetTitle;
+  final List<dynamic> list;
+  final bool isVisible;
+
+  const _CommonReferredCampsBottomSheetContent({
+    required this.onItemSelected,
+    required this.bottomSheetTitle,
+    required this.list,
+    required this.isVisible,
+  });
+
+  @override
+  State<_CommonReferredCampsBottomSheetContent> createState() =>
+      _CommonReferredCampsBottomSheetContentState();
+}
+
+class _CommonReferredCampsBottomSheetContentState
+    extends State<_CommonReferredCampsBottomSheetContent> {
+  int? selectedIndex;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth,
+      decoration: BoxDecoration(
+        color: kWhiteColor,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(responsiveHeight(50)),
+          topRight: Radius.circular(responsiveHeight(50)),
+        ),
+      ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.bottomSheetTitle,
+                  style: TextStyle(
+                    fontSize: responsiveFont(17),
+                    fontWeight: FontWeight.bold,
+                    color: kPrimaryColor,
+                  ),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.cancel_presentation),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget.list.length,
+              shrinkWrap: true,
+              itemBuilder: (c, i) => Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 12,
+                  ),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selectedIndex = i;
+                      });
+
+                      widget.onItemSelected(widget.list[i]);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: kContainerBack,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            selectedIndex == i
+                                ? Icon(
+                                    Icons.radio_button_checked,
+                                    color: kPrimaryColor,
+                                    size: responsiveFont(14.0),
+                                  )
+                                : Icon(
+                                    Icons.circle_outlined,
+                                    size: responsiveFont(14.0),
+                                  ),
+                            SizedBox(
+                              width: responsiveWidth(6),
+                            ),
+                            Text(
+                              widget.list[i].campNumber ?? "",
+                              style: TextStyle(
+                                  fontSize: responsiveFont(14.0),
+                                  fontWeight: selectedIndex == i
+                                      ? FontWeight.bold
+                                      : FontWeight.w500),
+                            ),
+                            const Spacer(),
+                            if (selectedIndex == i)
+                              Icon(
+                                Icons.check_circle,
+                                color: kPrimaryColor,
+                                size: responsiveFont(14.0),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

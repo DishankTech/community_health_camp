@@ -6,6 +6,10 @@ class Utilities {
         .format(DateTime.fromMillisecondsSinceEpoch(date));
   }
 
+  static String dateFormatYYYYMMDD() {
+    return "yyyy-MM-dd";
+  }
+
   static equalIgnoreCase(String s1, String s2) {
     return s1.toLowerCase() == s2.toLowerCase();
   }

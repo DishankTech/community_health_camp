@@ -60,10 +60,9 @@ class _CampCoordinatorState extends State<CampCoordinator> {
 
   Map<String, dynamic>? selectedCountryCode;
 
-  TextEditingController mobileController = TextEditingController();
   TextEditingController patientsRegistered = TextEditingController();
   TextEditingController patientsTreated = TextEditingController();
-  TextEditingController patientsReferred = TextEditingController();
+  // TextEditingController patientsReferred = TextEditingController();
   TextEditingController campStartDateTime = TextEditingController();
   TextEditingController campStartDateTimeId = TextEditingController();
   TextEditingController campCloseDateTime = TextEditingController();
@@ -355,7 +354,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
                                         ),
                                       ),
                                       AppRoundTextField(
-                                        controller: patientsReferred,
+                                        controller: campDetailsController.patientsReferred,
                                         inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
                                         inputType: TextInputType.number,
                                         onChange: (p0) {},
@@ -470,220 +469,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
     );
   }
 
-  Widget campCard(int index, CardData card) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        width: SizeConfig.screenWidth * 0.95,
-        // height: SizeConfig.screenHeight /3,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(responsiveHeight(25)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5), // Shadow color
-              spreadRadius: 2, // Spread radius
-              blurRadius: 7, // Blur radius
-              offset: Offset(0, 3), // changes position of shadow
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: responsiveHeight(20),
-              ),
-              AppRoundTextField(
-                controller: TextEditingController(),
-                inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
-                inputType: TextInputType.number,
-                onChange: (p0) {},
-                label: RichText(
-                  text: const TextSpan(text: 'Enter Count', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
-                ),
-                hint: "",
-              ),
-              SizedBox(
-                height: responsiveHeight(20),
-              ),
-              AppRoundTextField(
-                controller: TextEditingController(),
-                inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
-                inputType: TextInputType.number,
-                onChange: (p0) {},
-                label: RichText(
-                  text: const TextSpan(text: 'Login Name', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
-                ),
-                hint: "",
-              ),
-              SizedBox(
-                height: responsiveHeight(30),
-              ),
-              AppRoundTextField(
-                controller: TextEditingController(),
-                inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
-                inputType: TextInputType.number,
-                onChange: (p0) {},
-                onTap: () {
-                  List<Map<String, dynamic>> list = [
-                    {"title": "Accountant", "id": 1},
-                    {"title": "Admin", "id": 2},
-                    {"title": "Scrutiny", "id": 2},
-                  ];
-                  commonBottonSheet(
-                      context,
-                      (p0) => {
-                            setState(() {
-                              selectedDesignationType = p0;
-                              designationType.text = selectedDesignationType!['title'];
-                            })
-                          },
-                      "Designation/Member Type",
-                      list);
-                },
-                readOnly: true,
-                label: RichText(
-                  text: const TextSpan(
-                      text: 'Designation/Member Type', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
-                ),
-                hint: "",
-                suffix: SizedBox(
-                  height: responsiveHeight(20),
-                  width: responsiveHeight(20),
-                  child: Center(
-                    child: Image.asset(
-                      icArrowDownOrange,
-                      height: responsiveHeight(20),
-                      width: responsiveHeight(20),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: responsiveHeight(30),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: AppRoundTextField(
-                      controller: TextEditingController(),
-                      inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
-                      inputType: TextInputType.number,
-                      onChange: (p0) {},
-                      onTap: () {
-                        List<Map<String, dynamic>> list = [
-                          {"title": "+91", "id": 1},
-                          {"title": "+11", "id": 2},
-                          {"title": "+43", "id": 2},
-                        ];
-                        commonBottonSheet(
-                            context,
-                            (p0) => {
-                                  setState(() {
-                                    selectedCountryCode = p0;
-                                    countryCodeController.text = selectedCountryCode!['title'];
-                                  })
-                                },
-                            "Country Code",
-                            list);
-                      },
-                      maxLength: 12,
-                      readOnly: true,
-                      label: RichText(
-                        text: const TextSpan(text: 'Country Code', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
-                      ),
-                      hint: "",
-                      suffix: SizedBox(
-                        height: responsiveHeight(20),
-                        width: responsiveHeight(20),
-                        child: Center(
-                          child: Image.asset(
-                            icArrowDownOrange,
-                            height: responsiveHeight(20),
-                            width: responsiveHeight(20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: responsiveWidth(10),
-                  ),
-                  Expanded(
-                    child: AppRoundTextField(
-                      controller: mobileController,
-                      inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
-                      inputType: TextInputType.number,
-                      onChange: (p0) {},
-                      onTap: () {
-                        List<Map<String, dynamic>> list = [
-                          {"title": "987547869", "id": 1},
-                          {"title": "2456784653", "id": 2},
-                          {"title": "8976543456", "id": 2},
-                        ];
-                        commonBottonSheet(
-                            context,
-                            (p0) => {
-                                  setState(() {
-                                    selectedMobile = p0;
-                                    mobileController.text = selectedMobile!['title'];
-                                  })
-                                },
-                            "Mobile no",
-                            list);
-                      },
-                      maxLength: 10,
-                      label: RichText(
-                        text: const TextSpan(text: 'Mobile No', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
-                      ),
-                      hint: "",
-                      suffix: SizedBox(
-                        height: responsiveHeight(20),
-                        width: responsiveHeight(20),
-                        child: Center(
-                          child: Image.asset(
-                            icArrowDownOrange,
-                            height: responsiveHeight(20),
-                            width: responsiveHeight(20),
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 12, bottom: 12, right: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    InkWell(
-                      child: Image.asset("assets/icons/add.png"),
-                      onTap: () {
-                        addCard();
-                      },
-                    ),
-                    SizedBox(
-                      width: responsiveWidth(10),
-                    ),
-                    InkWell(
-                      child: Image.asset("assets/icons/remove.png"),
-                      onTap: () {
-                        removeCard(carbonCommentsList.length - 1);
-                      },
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+
 
   void addCard() {
     carbonCommentsList.add(CardData(""));
@@ -805,7 +591,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
         "camp_clousure_time": campCloseDateTimeUTC.text.trim(),
         "total_patients": int.parse(patientsRegistered.text),
         "treated_patients": int.parse(patientsTreated.text),
-        "referred_patients": int.parse(patientsReferred.text),
+        "referred_patients": int.parse(campDetailsController.patientsReferred.text),
         "remark": null,
         "org_id": 1,
         "status": 1
@@ -827,12 +613,13 @@ class _CampCoordinatorState extends State<CampCoordinator> {
         if (data['status_code'] == 200) {
           DataProvider().storeCampDashboardId(data['uniquerId']);
 
-          Future<List<CampCoordRegisteredPatientModel>> campRefPatientList = DataProvider().getPatientList();
+          // Future<List<CampCoordRegisteredPatientModel>> campRefPatientList = DataProvider().getPatientList();
 
-          List<CampCoordRegisteredPatientModel> tempList = await campRefPatientList;
-          if (tempList.isNotEmpty) {
-            sendPostRequest(data['uniquerId'], tempList);
-          }
+          // List<CampCoordRegisteredPatientModel> tempList = await campRefPatientList;
+
+          campDetailsController.campReferredPatientList.isNotEmpty?sendPostRequest(data['uniquerId']):null;
+
+
 
           setState(() {
             isSaveLoad = false;
@@ -875,11 +662,11 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       campStartDateTimeList.clear();
       patientsRegistered.text = "";
       patientsTreated.text = "";
-      patientsReferred.text = "";
+      campDetailsController.patientsReferred.text = "";
     });
   }
 
-  Future<void> sendPostRequest(data, List campRefPatientList) async {
+  Future<void> sendPostRequest(data) async {
     // List<CampCoordRegisteredPatientModel> campregisteredpatients = campRefPatientList;
     setState(() {
       isSaveLoad = true;
@@ -920,67 +707,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       print('Error occurred: $e');
     }
 
-    /* for (int i = 0; i < campRefPatientList.length; i++) {
-      var headers = {
-        'Content-Type': 'application/json',
-      };
 
-
-
-
-   */ /*   var body = json.encode({
-        "tt_camp_dashboard_ref_patients_list": [
-          {
-            "dashboard_ref_patients_id": null,
-            "camp_dashboard_id": data,
-            "patient_id": null,
-            "patient_name": campRefPatientList[i].name,
-            "age": 0,
-            "lookup_det_id_gender": null,
-            "contact_number": campRefPatientList[i].mobile,
-            "org_id": 1,
-            "status": 1,
-            "tt_camp_dashboard_ref_patients_det_list": [
-              {
-                "dashboard_ref_patients_det_id": null,
-                "dashboard_ref_patients_id": null,
-                "lookup_det_hier_id_stakeholder_sub_type2": null,
-                "stakeholder_master_id": int.parse(campRefPatientList[i].referredToId.toString()),
-                "org_id": 1,
-                "status": 1
-              }
-            ]
-          }
-        ]
-      });*/ /*
-      print(json);
-      var response = await http.post(
-        Uri.parse('http://210.89.42.117:8085/api/administrator/masters/add/dashboard-patient-ref-details'),
-        headers: headers,
-        body: json,
-      );
-
-      if (response.statusCode == 200) {
-        print(response.body);
-      */ /*  final data = json.decode(response.body);
-        if (data['status_code'] == 200) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                'Patients Saved Successfully',
-              ),
-              backgroundColor: Colors.green,
-            ),
-          );
-          // Navigator.pop(context);
-          SharedPreferences prefrences = await SharedPreferences.getInstance();
-          await prefrences.remove('patients');
-          Navigator.pushNamed(context, AppRoutes.referredPatientList);
-        }*/ /*
-      } else {
-        print('Request failed with status: ${response.statusCode}. ${response.reasonPhrase}');
-      }
-    }*/
   }
 }
 

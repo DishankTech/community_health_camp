@@ -57,7 +57,7 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
   late TextEditingController _divisionTextController;
   LookupDetHierarchical? _selectedStakeholderType;
   LookupDet? _selectedSectorType;
-  LookupDetHierarchical? _selectedStakeholderSubType;
+  LookupDetHierDetails? _selectedStakeholderSubType;
   Map? _selectedStatus;
   bool _isObscure = true;
   LookupDet? _selectedDivision;
@@ -223,6 +223,8 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
             setState(() {
               _selectedStakeholderType = p0;
               _stakeholderTypeTextController.text = p0.lookupDetHierDescEn!;
+              _selectedStakeholderSubType = null;
+              _stakeholderSubTypeTextController.clear();
             });
 
             context.read<MasterDataBloc>().add(ResetMasterState());
@@ -278,7 +280,7 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
         }
 
         if (state.getStakeholderSubTypeStatus.isSuccess) {
-          stakeholderSubTypeBottomSheet(context, (p0) {
+          stakeholderSubTypeBottomSheetV1(context, (p0) {
             setState(() {
               _selectedStakeholderSubType = p0;
               _stakeholderSubTypeTextController.text = p0.lookupDetHierDescEn!;
@@ -446,25 +448,21 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                         Validators.validateStakeholderSubType,
                                     inputType: TextInputType.text,
                                     onTap: () {
-                                      // if (state.getStakeholderSubTypeResponse
-                                      //     .isNotEmpty) {
-                                      //   stakeholderSubTypeBottomSheet(context,
-                                      //       (p0) {
-                                      //     setState(() {
-                                      //       _selectedStakeholderSubType = p0;
-                                      //       _stakeholderSubTypeTextController
-                                      //           .text = p0.lookupDetHierDescEn!;
-                                      //     });
-                                      //   });
-                                      //   return;
-                                      // }
+                                      if (_selectedStakeholderType == null) {
+                                        ScaffoldMessenger.of(context)
+                                          ..clearSnackBars()
+                                          ..showSnackBar(const SnackBar(
+                                            content: Text(
+                                                "Please select Stakeholder Type"),
+                                            backgroundColor: Colors.amber,
+                                            duration: Duration(seconds: 2),
+                                          ));
+                                        return;
+                                      }
                                       context.read<MasterDataBloc>().add(
-                                              GetStakeholderSubType(
-                                                  payload: const {
-                                                "lookup_det_code_list1": [
-                                                  {"lookup_det_code": "SUY"}
-                                                ]
-                                              }));
+                                          GetStakeholderSubType(
+                                              payload: _selectedStakeholderType!
+                                                  .lookupDetHierId!));
                                     },
                                     readOnly: true,
                                     label: RichText(
@@ -725,6 +723,38 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                               SizedBox(
                                 height: responsiveHeight(20),
                               ),
+                              AppRoundTextField(
+                                controller: _address1TextController,
+                                inputType: TextInputType.streetAddress,
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Address 1',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: []),
+                                ),
+                                hint: "",
+                              ),
+                              SizedBox(
+                                height: responsiveHeight(20),
+                              ),
+                              AppRoundTextField(
+                                controller: _address2TextController,
+                                inputType: TextInputType.streetAddress,
+                                label: RichText(
+                                  text: const TextSpan(
+                                      text: 'Address 2',
+                                      style: TextStyle(
+                                          color: kHintColor,
+                                          fontFamily: Montserrat),
+                                      children: []),
+                                ),
+                                hint: "",
+                              ),
+                              SizedBox(
+                                height: responsiveHeight(20),
+                              ),
                               Row(
                                 children: [
                                   Flexible(
@@ -830,19 +860,6 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                           ),
                                           hint: "",
                                           onTap: () {
-                                            // if (state.getDivisionListResponse
-                                            //     .isNotEmpty) {
-                                            //   divisionBottomSheet(context, (p0) {
-                                            //     setState(() {
-                                            //       _selectedDivision = p0;
-                                            //       _divisionTextController.text =
-                                            //           p0.lookupDetDescEn!;
-                                            //     });
-                                            //   });
-
-                                            //   return;
-                                            // }
-
                                             context.read<MasterDataBloc>().add(
                                                     GetDivisionList(
                                                         payload: const {
@@ -913,18 +930,6 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                           ),
                                           hint: "",
                                           onTap: () {
-                                            // if (state.getDistrictListResponse
-                                            //     .isNotEmpty) {
-                                            //   districtBottomSheet(context, (p0) {
-                                            //     setState(() {
-                                            //       _selectedDistrict = p0;
-                                            //       _districtTextController.text =
-                                            //           p0.lookupDetHierDescEn!;
-                                            //     });
-                                            //   });
-                                            //   return;
-                                            // }
-
                                             var payload = {
                                               "lookup_det_code_list1": [
                                                 {"lookup_det_code": "DIS"}
@@ -998,19 +1003,6 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                           ),
                                           hint: "",
                                           onTap: () {
-                                            // if (state.getTalukaListResponse
-                                            //     .isNotEmpty) {
-                                            //   talukaBottomSheet(context, (p0) {
-                                            //     setState(() {
-                                            //       _selectedTaluka = p0;
-                                            //       _talukaTextController.text =
-                                            //           p0.lookupDetHierDescEn!;
-                                            //     });
-                                            //   });
-
-                                            //   return;
-                                            // }
-
                                             var payload = {
                                               "lookup_det_code_list1": [
                                                 {"lookup_det_code": "TLK"}
@@ -1077,7 +1069,7 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                           readOnly: true,
                                           label: RichText(
                                             text: const TextSpan(
-                                                text: 'City',
+                                                text: 'Village',
                                                 style: TextStyle(
                                                     color: kHintColor,
                                                     fontFamily: Montserrat),
@@ -1170,71 +1162,6 @@ class _StakeHolderMasterScreenState extends State<StakeHolderMasterScreen> {
                                 ),
                                 hint: "",
                               ),
-                              SizedBox(
-                                height: responsiveHeight(20),
-                              ),
-                              AppRoundTextField(
-                                controller: _address1TextController,
-                                inputType: TextInputType.streetAddress,
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: 'Address 1',
-                                      style: TextStyle(
-                                          color: kHintColor,
-                                          fontFamily: Montserrat),
-                                      children: []),
-                                ),
-                                hint: "",
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(20),
-                              ),
-                              AppRoundTextField(
-                                controller: _address2TextController,
-                                inputType: TextInputType.streetAddress,
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: 'Address 2',
-                                      style: TextStyle(
-                                          color: kHintColor,
-                                          fontFamily: Montserrat),
-                                      children: []),
-                                ),
-                                hint: "",
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(30),
-                              ),
-                              // AppRoundTextField(
-                              //   controller: _statusTextController,
-                              //   label: RichText(
-                              //     text: const TextSpan(
-                              //         text: 'Status',
-                              //         style: TextStyle(
-                              //             color: kHintColor,
-                              //             fontFamily: Montserrat),
-                              //         children: []),
-                              //   ),
-                              //   hint: "",
-                              //   readOnly: true,
-                              //   onTap: () {
-                              //     stakeholderStatusBottomSheet(context, (p0) {
-                              //       _selectedStatus = p0;
-                              //       _statusTextController.text = p0['title'];
-                              //     });
-                              //   },
-                              //   suffix: SizedBox(
-                              //     height: responsiveHeight(20),
-                              //     width: responsiveHeight(20),
-                              //     child: Center(
-                              //       child: Image.asset(
-                              //         icArrowDownOrange,
-                              //         height: responsiveHeight(20),
-                              //         width: responsiveHeight(20),
-                              //       ),
-                              //     ),
-                              //   ),
-                              // ),
                               SizedBox(
                                 height: responsiveHeight(30),
                               ),

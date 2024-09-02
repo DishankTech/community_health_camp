@@ -5,6 +5,7 @@ import 'package:community_health_app/screens/camp_calendar/ui/date_wise_camps.da
 import 'package:community_health_app/screens/camp_coordinator/ui/add_referred_patient.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/camp_coordinator_screen.dart';
 import 'package:community_health_app/screens/camp_coordinator/ui/referred_patients_view.dart';
+import 'package:community_health_app/screens/camp_coordinator/ui/referredto_view.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation_new.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_patient_registration_screen.dart';
@@ -17,6 +18,7 @@ import 'package:community_health_app/screens/patient_registration/ui/patient_reg
 import 'package:community_health_app/screens/patient_registration/ui/registered_patients.dart';
 import 'package:community_health_app/screens/splash_screen.dart';
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master.dart';
+import 'package:community_health_app/screens/patient_registration/ui/registered_patients_search.dart';
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_edit.dart';
 import 'package:community_health_app/screens/stakeholder/ui/stakeholder_master_list.dart';
 import 'package:community_health_app/screens/user_auths/createnewpassword_view.dart';
@@ -60,6 +62,8 @@ class AppRoutes {
   static const String locationMasterList = "/locationMasterList";
   static const String campCreation = "/campCreation";
   static const String patientRegListScreen = "/patientRegListScreen";
+  static const String patientRegListSearchScreen =
+      "/patientRegListSearchScreen";
   static const String patientRegScreen = "/patientRegScreen";
   static const String patientRegEditScreen = "/patientRegEditScreen";
   static const String userMasterScreen = "/userMasterScreen";
@@ -84,6 +88,7 @@ class AppRoutes {
   static const String registrationDashboard = "/registrationDashboard";
   static const String doctorDesk = "/doctorDesk";
   static const String addTreatmentDetailsScreen = "/addTreatmentDetailsScreen";
+  static const String referredTo = "/referredTo";
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -160,7 +165,7 @@ class AppRoutes {
         );
       case dateWiseCamps:
         return MaterialPageRoute(
-          builder: (_) => DateWiseCampsScreen(DateTime.now()),
+          builder: (_) => DateWiseCampsScreen(DateTime.now(), []),
         );
       /*case districtWiseCamps:
         return MaterialPageRoute(
@@ -209,6 +214,14 @@ class AppRoutes {
       case addTreatmentDetailsScreen:
         return MaterialPageRoute(
           builder: (_) => const AddTreatmentDetailsScreen(),
+        );
+      case referredTo:
+        return MaterialPageRoute(
+          builder: (_) => const ReferredToScreen(),
+        );
+      case patientRegListSearchScreen:
+        return MaterialPageRoute(
+          builder: (_) => const RegisteredPatientsSearchScreen(),
         );
 
       default:

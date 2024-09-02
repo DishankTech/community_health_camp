@@ -9,6 +9,7 @@ import 'package:community_health_app/screens/stakeholder/repository/stakeholder_
 import 'package:community_health_app/screens/user_master/bloc/user_master_bloc.dart';
 import 'package:community_health_app/screens/user_master/repository/user_master_repository.dart';
 import 'package:community_health_app/screens/user_auths/cubit/profile_cubit.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,39 +28,45 @@ void main() {
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
-  runApp(MultiRepositoryProvider(
-      providers: [
-        RepositoryProvider(create: (context) => MasterDataRepository()),
-        RepositoryProvider(create: (context) => UserMasterRepository()),
-        RepositoryProvider(
-            create: (context) => PatientRegistrationRepository()),
-        RepositoryProvider(create: (context) => StakeholderRepository()),
-        RepositoryProvider(create: (context) => DashboardRepository())
-      ],
-      child: MultiBlocProvider(providers: [
-        BlocProvider(create: (context) => ProfileCubit()),
-        BlocProvider(
-            create: (context) => MasterDataBloc(
-                masterDataRepository:
-                    RepositoryProvider.of<MasterDataRepository>(context))),
-        BlocProvider(
-            create: (context) => UserMasterBloc(
-                userMasterRepository:
-                    RepositoryProvider.of<UserMasterRepository>(context))),
-        BlocProvider(
-            create: (context) => PatientRegistrationBloc(
-                patientRegistrationRepository:
-                    RepositoryProvider.of<PatientRegistrationRepository>(
-                        context))),
-        BlocProvider(
-            create: (context) => StakeholderMasterBloc(
-                stakeholderRepository:
-                    RepositoryProvider.of<StakeholderRepository>(context))),
-        BlocProvider(
-            create: (context) => DashboardBloc(
-                dashboardRepository:
-                    RepositoryProvider.of<DashboardRepository>(context))),
-      ], child: const MyApp())));
+  runApp(DevicePreview(
+    enabled: false,
+    tools: const [
+      ...DevicePreview.defaultTools,
+    ],
+    builder: (context)=> MultiRepositoryProvider(
+        providers: [
+          RepositoryProvider(create: (context) => MasterDataRepository()),
+          RepositoryProvider(create: (context) => UserMasterRepository()),
+          RepositoryProvider(
+              create: (context) => PatientRegistrationRepository()),
+          RepositoryProvider(create: (context) => StakeholderRepository()),
+          RepositoryProvider(create: (context) => DashboardRepository())
+        ],
+        child: MultiBlocProvider(providers: [
+          BlocProvider(create: (context) => ProfileCubit()),
+          BlocProvider(
+              create: (context) => MasterDataBloc(
+                  masterDataRepository:
+                      RepositoryProvider.of<MasterDataRepository>(context))),
+          BlocProvider(
+              create: (context) => UserMasterBloc(
+                  userMasterRepository:
+                      RepositoryProvider.of<UserMasterRepository>(context))),
+          BlocProvider(
+              create: (context) => PatientRegistrationBloc(
+                  patientRegistrationRepository:
+                      RepositoryProvider.of<PatientRegistrationRepository>(
+                          context))),
+          BlocProvider(
+              create: (context) => StakeholderMasterBloc(
+                  stakeholderRepository:
+                      RepositoryProvider.of<StakeholderRepository>(context))),
+          BlocProvider(
+              create: (context) => DashboardBloc(
+                  dashboardRepository:
+                      RepositoryProvider.of<DashboardRepository>(context))),
+        ], child: const MyApp())),
+  ));
   // Set the status bar color
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent, // Change to your desired color
