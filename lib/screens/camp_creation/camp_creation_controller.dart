@@ -39,22 +39,24 @@ class CampCreationController extends GetxController {
 
   TextEditingController countryCodeController = TextEditingController();
   TextEditingController stakeholderSubTypeId = TextEditingController();
+
   // Map<String, dynamic>? selectedCountryCode;
 
   // TextEditingController mobileController = TextEditingController();
   // TextEditingController memberTypeController = TextEditingController();
   TextEditingController stakHolderUserCreation = TextEditingController();
   TextEditingController loginNameUserCreation = TextEditingController();
-String? errorMobile;
-String? errorLocation;
-String? errorDistrict;
-String? errorTaluka;
-String? errorStakeHolder;
-String? errorDate;
-String? errorDesignation;
-String? errorFullName;
-String? errorCountryCode;
-String? errorUserName;
+  String? errorMobile;
+  String? errorLocation;
+  String? errorDistrict;
+  String? errorTaluka;
+  String? errorStakeHolder;
+  String? errorDate;
+  String? errorDesignation;
+  String? errorFullName;
+  String? errorCountryCode;
+  String? errorUserName;
+  String? errorCampId;
   bool isLoading = false;
 
   String? status;
@@ -91,6 +93,7 @@ String? errorUserName;
 
   String? campNumber;
   String? username;
+  String? campId;
 
   saveCampCreation() async {
     isLoading = true;
@@ -115,8 +118,6 @@ String? errorUserName;
       CustomMessage.toast("Save Successfully");
       Get.back();
 
-
-
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
@@ -140,8 +141,7 @@ String? errorUserName;
 
     var body = {
       "user_id": null,
-      "stakeholder_master_id": selectedStakeHName
-          ?.stakeholderMasterId,
+      "stakeholder_master_id": selectedStakeHName?.stakeholderMasterId,
       // "stakeholder_master_id": selectedStakeHolder?.lookupDetHierId,
       "full_name": fullName,
       "login_name": loginName,
@@ -236,10 +236,10 @@ String? errorUserName;
     update();
   }
 
-
   getUserCode() async {
     isLoading = true;
-    final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.generateCampNumber);
+    final uri =
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.generateCampNumber);
 
     Map<String, String> headers = {
       "Content-Type": "application/json",
@@ -258,7 +258,8 @@ String? errorUserName;
       // if (data['status'] == 'Success') {
       isLoading = false;
       campNumber = data['details'];
-
+      campId = campNumber;
+      username = "C${campNumber!}";
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
@@ -271,7 +272,6 @@ String? errorUserName;
     }
     update();
   }
-
 
   getMemberType() async {
     isLoading = true;

@@ -43,11 +43,11 @@ class _CampCreationNewState extends State<CampCreationNew> {
             connectivityResult.contains(ConnectivityResult.wifi));
 
     if (campCreationController.hasInternet) {
-      campCreationController.getLocationName();
-      campCreationController.getUserCode();
-      campCreationController.getStakHolder();
-      campCreationController.getMemberType();
-      campCreationController.getUserList();
+      await campCreationController.getLocationName();
+      await campCreationController.getUserCode();
+      await campCreationController.getStakHolder();
+      await campCreationController.getMemberType();
+      await campCreationController.getUserList();
     }
 
     campCreationController.update();
@@ -66,7 +66,6 @@ class _CampCreationNewState extends State<CampCreationNew> {
     campCreationController.stakeHolderController.text = '';
     campCreationController.userNameController.text = '';
     campCreationController.mobileController.text = '';
-    campCreationController.username = '';
     campCreationController.campCreationCardList.clear();
     campCreationController.campCreationCardList.add(TtCampCreateDetails());
     checkInternetAndLoadData();
@@ -219,9 +218,9 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                                                     e.lookupDetDescEn ==
                                                                     "Co-ordinators")
                                                                 .lookupDetDescEn,
-                                                        controller.username =
-                                                            "${controller.locationNameController.text.trim()}"
-                                                                "${controller.campNumber}",
+                                                        // controller.username =
+                                                        //     "${controller.locationNameController.text.trim()}"
+                                                        //         "${controller.campNumber}",
                                                         controller.update(),
                                                       },
                                                   "Location",
@@ -348,6 +347,50 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                                 ),
                                               ),
                                             ),
+                                          ),
+                                          SizedBox(
+                                            height: responsiveHeight(10),
+                                          ),
+                                          AppRoundTextField(
+                                            readOnly: true,
+                                            initialValue: controller.campId,
+                                            inputStyle: TextStyle(
+                                                fontSize: responsiveFont(14),
+                                                color: kTextBlackColor),
+                                            inputType: TextInputType.text,
+                                            onChange: (p0) {},
+                                            errorText: campCreationController
+                                                .errorCampId,
+                                            validators: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                campCreationController
+                                                    .errorCampId =
+                                                'Please enter campID';
+                                                campCreationController.update();
+                                                return '';
+                                              } else {
+                                                campCreationController
+                                                    .errorCampId = null;
+                                                campCreationController.update();
+                                              }
+
+                                              return null;
+                                            },
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Camp ID',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
                                           ),
                                           SizedBox(
                                             height: responsiveHeight(10),
@@ -826,16 +869,18 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                                       campCreationController
                                                           .update();
                                                       return '';
-                                                    } else if (RegExp(
-                                                            r"^(0/91)?[6-9][0-9]{9}")
-                                                        .hasMatch(value)) {
-                                                      campCreationController
-                                                              .errorMobile =
-                                                          'Please enter a valid 10-digit Indian mobile number';
-                                                      campCreationController
-                                                          .update();
-                                                      return '';
-                                                    } else {
+                                                    }
+                                                    // else if (RegExp(
+                                                    //         r"^(0/91)?[6-9][0-9]{9}")
+                                                    //     .hasMatch(value)) {
+                                                    //   campCreationController
+                                                    //           .errorMobile =
+                                                    //       'Please enter a valid 10-digit Indian mobile number';
+                                                    //   campCreationController
+                                                    //       .update();
+                                                    //   return '';
+                                                    // }
+                                                    else {
                                                       campCreationController
                                                           .errorMobile = null;
                                                       campCreationController
@@ -979,7 +1024,7 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                               campCreationController
                                                   .saveCampReqModel
                                                   .ttCampCreate
-                                                  ?.campNumber = null;
+                                                  ?.campNumber = controller.campId;
 
                                               campCreationController
                                                   .saveCampReqModel
