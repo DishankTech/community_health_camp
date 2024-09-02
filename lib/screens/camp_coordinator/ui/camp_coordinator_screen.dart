@@ -617,11 +617,12 @@ class _CampCoordinatorState extends State<CampCoordinator> {
 
           // List<CampCoordRegisteredPatientModel> tempList = await campRefPatientList;
 
-          campDetailsController.campReferredPatientList.isNotEmpty?sendPostRequest(data['uniquerId']):null;
+          campDetailsController.campReferredPatientList.isEmpty?sendPostRequest(data['uniquerId']):null;
 
 
 
           setState(() {
+
             isSaveLoad = false;
             // clearAllFields();
           });
@@ -634,9 +635,7 @@ class _CampCoordinatorState extends State<CampCoordinator> {
               backgroundColor: Colors.green,
             ),
           );
-          campDetailsController.campReferredPatientList.clear();
-          campDetailsController.campReferredPatientStakeholderList.clear();
-          Navigator.pushNamed(context, AppRoutes.referredPatientList);
+
         }
       } else {
         setState(() {
@@ -676,7 +675,10 @@ class _CampCoordinatorState extends State<CampCoordinator> {
       patient.campDashboardId ??= data;
     }
 
+
+
     Map<String, dynamic> json = {"tt_camp_dashboard_ref_patients_list": campDetailsController.campReferredPatientList.map((patient) => patient.toJson()).toList()};
+    // Map<String, dynamic> json = {"tt_camp_dashboard_ref_patients_list": campDetailsController.patientDetailsFromJson};
 
     // Convert the JSON map to a string
     String jsonString = jsonEncode(json);
@@ -699,6 +701,9 @@ class _CampCoordinatorState extends State<CampCoordinator> {
 
       // Check the response status
       if (response.statusCode == 200) {
+        campDetailsController.campReferredPatientList.clear();
+        campDetailsController.campReferredPatientStakeholderList.clear();
+        Navigator.pushNamed(context, AppRoutes.referredPatientList);
         print('Request successful: ${response.body}');
       } else {
         print('Request failed with status: ${response.statusCode}.');

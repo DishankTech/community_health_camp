@@ -8,9 +8,9 @@ import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
-import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/camp_coordinator/controller/camp_details_controller.dart';
+import 'package:community_health_app/screens/camp_coordinator/models/camp_details_referredpatients_request_model.dart';
 import 'package:community_health_app/screens/camp_coordinator/models/camp_dropdown_resp_model.dart';
 import 'package:community_health_app/screens/location_master/model/country/country_model.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +23,7 @@ import '../models/camp_coordinator_registered_patient_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/multiple_referred_to_request_model.dart';
+import '../models/tt_camp_dashboard_ref_patients_list.dart';
 
 class AddReferredPatient extends StatefulWidget {
   const AddReferredPatient({super.key});
@@ -35,28 +36,26 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
   XFile? capturedFile;
   List<CardData> carbonCommentsList = [];
 
-  TextEditingController patientNameController = TextEditingController();
+  // TextEditingController patientNameController = TextEditingController();
   TextEditingController referredPatientCount = TextEditingController();
   TextEditingController referredPatientPendingCount = TextEditingController();
   TextEditingController listpatientNameController = TextEditingController();
 
-  TextEditingController referredTo = TextEditingController();
-  TextEditingController referredToId = TextEditingController();
-  TextEditingController stakeholderSubType = TextEditingController();
-  TextEditingController stakeholderSubTypeId = TextEditingController();
+  TextEditingController campName = TextEditingController();
+  TextEditingController campId = TextEditingController();
 
   Map<String, dynamic>? selectedDesignationType;
   Map<String, dynamic>? selecteStakeholderSubType;
 
-  TextEditingController countryCodeController = TextEditingController();
+  // TextEditingController countryCodeController = TextEditingController();
 
   Map<String, dynamic>? selectedCountryCode;
 
-  TextEditingController mobileController = TextEditingController();
+  // TextEditingController mobileController = TextEditingController();
 
   Map<String, dynamic>? selectedMobile;
 
-  List<CampCoordRegisteredPatientModel> campregisteredpatients = [];
+  // List<CampCoordRegisteredPatientModel> campregisteredpatients = [];
 
   bool isLoading = false;
 
@@ -71,23 +70,33 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
   CountryModel? stakeHolderModel;
   CampDropdownRespModel? _referredCampDetails;
 
+  List<Widget> _widgetList = [];
+
+  List<TextEditingController> patientNameListController = [];
+  List<TextEditingController> mobileNoListCOntroller = [];
+  List<TextEditingController> countryCodeListController = [];
+
+  bool isEmpty = true;
+
+  List<CampCoordRegisteredPatientModel> patientDetails = [];
+
   @override
   void initState() {
     // TODO: implement initState
-    patientNameController.text = "";
-    countryCodeController.text = "";
-    mobileController.text = "";
-    referredTo.text = "";
+    // patientNameController.text = "";
+    // countryCodeController.text = "";
+    // mobileController.text = "";
 
-    referredPatientCount.text="0";
-    referredPatientPendingCount.text="0";
-
+    // referredPatientCount.text = "0";
+    // referredPatientPendingCount.text = "0";
 
     // carbonCommentsList.add(CardData(""));
-    clearAllFields();
+    // clearAllFields();
     getStakeholderSubType();
     getCampsDetailsDropdown();
     // getStakeholdersDetails();
+
+    _addDynamicWidget();
 
     super.initState();
   }
@@ -103,7 +112,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-          height: SizeConfig.designScreenHeight,
+          // height: SizeConfig.designScreenHeight,
           width: SizeConfig.designScreenWidth,
           decoration: const BoxDecoration(image: DecorationImage(image: AssetImage(patRegBg), fit: BoxFit.fill)),
           child: Column(
@@ -160,96 +169,163 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                           )
                         : Column(
                             children: [
-                              SizedBox(
-                                height: responsiveHeight(20),
-                              ),
-                              AppRoundTextField(
-                                controller: stakeholderSubType,
-                                inputType: TextInputType.text,
-                                onChange: (p0) {},
-                                onTap: () async {
-                                  await commonReferredCampBottomSheet(
-                                      context,
-                                      (p0) => {
-                                            stakeholderSubType.text = p0.campNumber.toString(),
-                                            stakeholderSubTypeId.text = p0.campDashboardId.toString(),
-                                            // campCreationController.selectedStakeHolder = p0,
-                                            setState(() {
-                                              referredPatientCount.text = p0.referredPatients.toString();
-                                            })
-                                          },
-                                      "Camp",
-                                      _referredCampDetails?.details ?? []);
-                                },
-                                // maxLength: 12,
-                                readOnly: true,
-                                label: RichText(
-                                  text: const TextSpan(text: 'Camp', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
-                                ),
-                                hint: "",
-                                suffix: SizedBox(
-                                  height: getProportionateScreenHeight(20),
-                                  width: getProportionateScreenHeight(20),
-                                  child: Center(
-                                    child: Image.asset(
-                                      icArrowDownOrange,
-                                      height: getProportionateScreenHeight(20),
-                                      width: getProportionateScreenHeight(20),
+                              Container(
+                                child: Column(
+                                  children: [
+                                    SizedBox(
+                                      height: responsiveHeight(20),
                                     ),
-                                  ),
+                                    AppRoundTextField(
+                                      controller: campName,
+                                      inputType: TextInputType.text,
+                                      onChange: (p0) {},
+                                      onTap: () async {
+                                        await commonReferredCampBottomSheet(
+                                            context,
+                                            (p0) => {
+                                                  campName.text = p0.campNumber.toString(),
+                                                  campId.text = p0.campDashboardId.toString(),
+                                                  // campCreationController.selectedStakeHolder = p0,
+                                                  setState(() {
+                                                    campDetailsController.camDashboardId = p0.campDashboardId.toString();
+
+                                                    referredPatientCount.text = p0.referredPatients.toString();
+                                                  })
+                                                },
+                                            "Camp",
+                                            _referredCampDetails?.details ?? []);
+                                      },
+                                      // maxLength: 12,
+                                      readOnly: true,
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Camp', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                                      ),
+                                      hint: "",
+                                      suffix: SizedBox(
+                                        height: getProportionateScreenHeight(20),
+                                        width: getProportionateScreenHeight(20),
+                                        child: Center(
+                                          child: Image.asset(
+                                            icArrowDownOrange,
+                                            height: getProportionateScreenHeight(20),
+                                            width: getProportionateScreenHeight(20),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: responsiveHeight(20),
+                                    ),
+                                    AppRoundTextField(
+                                      readOnly: true,
+                                      controller: referredPatientCount,
+                                      inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                                      inputType: TextInputType.none,
+                                      onChange: (p0) {},
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Total Referred Patient',
+                                            style: TextStyle(color: kHintColor, fontFamily: Montserrat),
+                                            children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                                      ),
+                                      hint: "",
+                                    ),
+                                    SizedBox(
+                                      height: responsiveHeight(20),
+                                    ),
+                                    AppRoundTextField(
+                                      readOnly: true,
+                                      controller: referredPatientPendingCount,
+                                      inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                                      inputType: TextInputType.none,
+                                      onChange: (p0) {},
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: "Total Referred Patient's Details Pending",
+                                            style: TextStyle(color: kHintColor, fontFamily: Montserrat),
+                                            children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                                      ),
+                                      hint: "",
+                                    ),
+                                    SizedBox(
+                                      height: responsiveHeight(5),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(
-                                height: responsiveHeight(20),
-                              ),
-                              AppRoundTextField(
-                                readOnly: true,
-                                controller: referredPatientCount,
-                                inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
-                                inputType: TextInputType.none,
-                                onChange: (p0) {},
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: 'Total Referred Patient',
-                                      style: TextStyle(color: kHintColor, fontFamily: Montserrat),
-                                      children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                              Container(
+                                height: SizeConfig.designScreenHeight * 0.5,
+                                width: SizeConfig.designScreenWidth,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: ListView.builder(
+                                        padding: EdgeInsets.only(bottom: responsiveHeight(80)), // Bottom padding for ListView
+                                        itemCount: _widgetList.length,
+                                        itemBuilder: (context, index) => _widgetList[index],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          Flexible(
+                                            flex: 1,
+                                            child: AppButton(
+                                              onTap: () {
+                                                for (int i = 0; i < patientNameListController.length; i++) {
+                                                  patientDetails.add(CampCoordRegisteredPatientModel(name: patientNameListController[i].text.trim(), mobile: mobileNoListCOntroller[i].text.trim()));
+                                                }
+                                                campDetailsController.createMultiplePatients(patientDetails);
+                                                Navigator.pop(context);
+                                              },
+                                              title: "Save",
+                                              iconData: Icon(
+                                                Icons.arrow_back_outlined,
+                                                color: kWhiteColor,
+                                                size: responsiveHeight(24),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: responsiveWidth(60),
+                                          ),
+                                          Flexible(
+                                            flex: 1,
+                                            child: AppButton(
+                                              onTap: () {
+                                                clearAllFields();
+                                              },
+                                              title: "Clear",
+                                              buttonColor: Colors.grey,
+                                              iconData: Icon(
+                                                Icons.arrow_forward,
+                                                color: kWhiteColor,
+                                                size: responsiveHeight(24),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
                                 ),
-                                hint: "",
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(20),
-                              ),
-                              AppRoundTextField(
-                                readOnly: true,
-                                controller: referredPatientPendingCount,
-                                inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
-                                inputType: TextInputType.none,
-                                onChange: (p0) {},
-                                label: RichText(
-                                  text: const TextSpan(
-                                      text: "Total Referred Patient's Details Pending",
-                                      style: TextStyle(color: kHintColor, fontFamily: Montserrat),
-                                      children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
-                                ),
-                                hint: "",
-                              ),
-                              SizedBox(
-                                height: responsiveHeight(20),
                               ),
 
                               /* AppRoundTextField(
-                                controller: stakeholderSubType,
+                                controller: campName,
                                 inputType: TextInputType.text,
                                 onChange: (p0) {},
                                 onTap: () async {
                                   await commonBottomSheet(
                                       context,
                                       (p0) => {
-                                            stakeholderSubType.text = p0.lookupDetHierDescEn,
-                                            stakeholderSubTypeId.text = p0.lookupDetHierId.toString(),
+                                            campName.text = p0.lookupDetHierDescEn,
+                                            campId.text = p0.lookupDetHierId.toString(),
                                             // campCreationController.selectedStakeHolder = p0,
                                             setState(() {
-                                              getStakeholdersDetails(stakeholderSubTypeId.text.toString());
+                                              getStakeholdersDetails(campId.text.toString());
                                             })
                                           },
                                       "Stakeholder Type",
@@ -340,7 +416,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                   ),
                 ),
               ),
-              Container(
+
+              /*   Container(
                 width: SizeConfig.screenWidth * 0.95,
                 // height: SizeConfig.screenHeight /3,
                 decoration: BoxDecoration(
@@ -446,6 +523,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                             // margin: EdgeInsets.only(right: 15),
                             child: AppButton(
                               onTap: () {
+                                _showDetailsDialog(context);
                                 // Navigator.pushNamed(context, AppRoutes.referredTo);
                               },
                               mWidth: SizeConfig.screenWidth * 0.4,
@@ -479,7 +557,8 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                           ),
                         ],
                       ),
-                      Padding(
+
+                     */ /* Padding(
                         padding: const EdgeInsets.only(top: 12, bottom: 12, right: 12),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -522,19 +601,19 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                             SizedBox(
                               width: responsiveWidth(10),
                             ),
-                            /*InkWell(
+                            */ /**/ /*InkWell(
                                         child: Image.asset("assets/icons/remove.png"),
                                         onTap: () {
                                           removeCard(carbonCommentsList.length );
                                         },
-                                      ),*/
+                                      ),*/ /**/ /*
                           ],
                         ),
-                      )
+                      )*/ /*
                     ],
                   ),
                 ),
-              ),
+              ),*/
               /*   Visibility(
                 visible: campDetailsController.campReferredPatientList.isNotEmpty ? true : false,
                 child: Flexible(
@@ -642,71 +721,6 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
                   return campCard(index, cardData);
                 }).toList(),
               ),*/
-              SizedBox(
-                height: responsiveHeight(10),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Flexible(
-                      flex: 1,
-                      child: AppButton(
-                        onTap: () {
-                          if (campregisteredpatients.isEmpty) {
-                            addCard();
-
-                            // DataProvider().storePatientList(campregisteredpatients);
-                            Navigator.pop(context);
-                            patientNameController.text = "";
-                            countryCodeController.text = "";
-                            mobileController.text = "";
-                            referredTo.text = "";
-                            referredToId.text = "";
-                            stakeholderSubType.text = "";
-                            stakeholderSubTypeId.text = "";
-                          } else {
-                            // DataProvider().storePatientList(campregisteredpatients);
-                            patientNameController.text = "";
-                            countryCodeController.text = "";
-                            mobileController.text = "";
-                            referredTo.text = "";
-                            referredToId.text = "";
-                            stakeholderSubType.text = "";
-                            stakeholderSubTypeId.text = "";
-                            campDetailsController.patientsReferred.text = campDetailsController.campReferredPatientList.length.toString();
-                            Navigator.pop(context);
-                          }
-                        },
-                        title: "Save",
-                        iconData: Icon(
-                          Icons.arrow_back_outlined,
-                          color: kWhiteColor,
-                          size: responsiveHeight(24),
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      width: responsiveWidth(60),
-                    ),
-                    Flexible(
-                      flex: 1,
-                      child: AppButton(
-                        onTap: () {
-                          clearAllFields();
-                        },
-                        title: "Clear",
-                        buttonColor: Colors.grey,
-                        iconData: Icon(
-                          Icons.arrow_forward,
-                          color: kWhiteColor,
-                          size: responsiveHeight(24),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
         ),
@@ -714,23 +728,19 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
     );
   }
 
-  void addCard() {
+  void addCard(index) {
     // carbonCommentsList.add(CardData(""));
     setState(() {
-      campregisteredpatients
-          .add(CampCoordRegisteredPatientModel(mobile: mobileController.text.trim(), name: patientNameController.text.trim(), referredTo: referredTo.text, referredToId: referredToId.text));
-      print(campregisteredpatients);
-
-      patientNameController.text = "";
-      countryCodeController.text = "";
-      mobileController.text = "";
-      referredTo.text = "";
-      referredToId.text = "";
-      stakeholderSubType.text = "";
-      stakeholderSubTypeId.text = "";
-      campDetailsController.createMultiplePatients(campregisteredpatients);
-      campDetailsController.patientsReferred.text = campDetailsController.campReferredPatientList.length.toString();
-      campDetailsController.campReferredPatientStakeholderList.clear();
+      // patientNameController.text = "";
+      // countryCodeController.text = "";
+      // mobileController.text = "";
+      // campName.text = "";
+      // campId.text = "";
+      /*campDetailsController.campregisteredpatients
+          .add(CampCoordRegisteredPatientModel(mobile: mobileNoListCOntroller[index].text.trim(), name: patientNameListController[index].text, ttCampDashboardRefPatientsDetList: []));
+    */
+      // campDetailsController.patientsReferred.text = campDetailsController.campReferredPatientList.length.toString();
+      // campDetailsController.campReferredPatientStakeholderList.clear();
     });
   }
 
@@ -740,7 +750,7 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
         print(index);
         // campregisteredpatients.removeAt(index);
         campDetailsController.campReferredPatientList.removeAt(index);
-        print(campregisteredpatients);
+        print(campDetailsController.campReferredPatientList);
         // carbonCommentsList.removeAt(index);
       });
     }
@@ -970,15 +980,319 @@ class _AddReferredPatientState extends State<AddReferredPatient> {
 
   void clearAllFields() {
     setState(() {
-      campregisteredpatients.clear();
-      patientNameController.text = "";
-      countryCodeController.text = "";
-      mobileController.text = "";
-      stakeholderSubType.text = "";
-      stakeholderSubTypeId.text = "";
-      referredTo.text = "";
-      referredToId.text = "";
+      campDetailsController.campReferredPatientList.clear();
+      // patientNameController.text = "";
+      // countryCodeController.text = "";
+      // mobileController.text = "";
+      campName.text = "";
+      campId.text = "";
     });
+  }
+
+  void _showDetailsDialog(BuildContext context, int patientIndex) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Details'),
+          content: Container(
+            height: 200.0, // Adjust the height as needed
+            width: double.maxFinite,
+            child: ListView.builder(
+              itemCount: campDetailsController.ttCampDashboardRefPatientsNamesList.length,
+              itemBuilder: (context, index) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: responsiveHeight(5),
+                    ),
+                    Text(
+                      "${(index + 1)}. Stakeholder Subtype : " + campDetailsController.ttCampDashboardRefPatientsNamesList[index]['lookup_det_hier_id_stakeholder_sub_type2'],
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                    Text(
+                      "Stakeholders : " + campDetailsController.ttCampDashboardRefPatientsNamesList[index]['stakeholder_master_id'],
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                    SizedBox(
+                      height: responsiveHeight(5),
+                    ),
+                  ],
+                );
+              },
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _addDynamicWidget() {
+    setState(() {
+      patientNameListController.add(TextEditingController());
+      mobileNoListCOntroller.add(TextEditingController());
+      countryCodeListController.add(TextEditingController());
+      _widgetList.add(buildDynamicWidget(_widgetList.length));
+    });
+  }
+
+  Widget buildDynamicWidget(int index) {
+    return Container(
+      margin: EdgeInsets.all(8),
+      width: SizeConfig.screenWidth * 0.95,
+      height: SizeConfig.screenHeight / 3,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(responsiveHeight(25)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5), // Shadow color
+            spreadRadius: 2, // Spread radius
+            blurRadius: 7, // Blur radius
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+          children: [
+            AppRoundTextField(
+              controller: patientNameListController[index],
+              inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+              inputType: TextInputType.name,
+              onChange: (p0) {},
+              label: RichText(
+                text: const TextSpan(text: 'Patient Name', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+              ),
+              hint: "",
+            ),
+            SizedBox(
+              height: responsiveHeight(10),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: AppRoundTextField(
+                    controller: countryCodeListController[index],
+                    inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                    // inputType: TextInputType.number,
+                    onChange: (p0) {},
+                    onTap: () {
+                      List<Map<String, dynamic>> list = [
+                        {"title": "+91", "id": 1},
+                      ];
+                      commonBottonSheet(
+                          context,
+                          (p0) => {
+                                setState(() {
+                                  selectedCountryCode = p0;
+                                  countryCodeListController[index].text = selectedCountryCode!['title'].toString();
+                                })
+                              },
+                          "Country Code",
+                          list);
+                    },
+                    maxLength: 3,
+                    readOnly: true,
+                    label: RichText(
+                      text: const TextSpan(text: 'Country Code', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                    ),
+                    hint: "",
+                    suffix: SizedBox(
+                      height: responsiveHeight(20),
+                      width: responsiveHeight(20),
+                      child: Center(
+                        child: Image.asset(
+                          icArrowDownOrange,
+                          height: responsiveHeight(20),
+                          width: responsiveHeight(20),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: responsiveWidth(10),
+                ),
+                Expanded(
+                  child: AppRoundTextField(
+                    controller: mobileNoListCOntroller[index],
+                    inputStyle: TextStyle(fontSize: responsiveFont(14), color: kTextBlackColor),
+                    inputType: TextInputType.number,
+                    onChange: (p0) {},
+                    maxLength: 10,
+                    label: RichText(
+                      text: const TextSpan(text: 'Mobile No', style: TextStyle(color: kHintColor, fontFamily: Montserrat), children: [TextSpan(text: "*", style: TextStyle(color: Colors.red))]),
+                    ),
+                    hint: "",
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: responsiveHeight(30),
+            ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  // width: MediaQuery.sizeOf(context).width * 0.4,
+                  // margin: EdgeInsets.only(right: 15),
+                  child: AppButton(
+                    onTap: () {
+                      _showDetailsDialog(context, index);
+                      // Navigator.pushNamed(context, AppRoutes.referredTo);
+                    },
+                    mWidth: SizeConfig.screenWidth * 0.4,
+                    title: "View Referred",
+                    iconData: Icon(
+                      Icons.remove_red_eye,
+                      color: kWhiteColor,
+                      size: responsiveHeight(24),
+                    ),
+                  ),
+                ),
+                Container(
+                  // width: MediaQuery.sizeOf(context).width * 0.4,
+                  // margin: EdgeInsets.only(right: 15),
+                  child: AppButton(
+                    onTap: () {
+                      if (patientNameListController[index].text.isEmpty || countryCodeListController[index].text.isEmpty || mobileNoListCOntroller[index].text.isEmpty) {
+                        CustomMessage.toast("Please fill Patient Details");
+                      } else {
+                        Navigator.pushNamed(context, AppRoutes.referredTo);
+                      }
+                    },
+                    mWidth: SizeConfig.screenWidth * 0.4,
+                    title: "Add Referred to",
+                    iconData: Icon(
+                      Icons.arrow_forward,
+                      color: kWhiteColor,
+                      size: responsiveHeight(24),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 5, bottom: 5, right: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    child: Image.asset("assets/icons/add.png"),
+                    onTap: () {
+                      if (patientNameListController[index].text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Enter Patient Name',
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      } else if (countryCodeListController[index].text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Select Country Code',
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      } else if (mobileNoListCOntroller[index].text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Enter Mobile Number',
+                            ),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      } else {
+                        // addCard();
+                        if (campDetailsController.ttCampDashboardRefPatientsDetList.isEmpty) {
+                          print("add toast of empty list");
+                        } else {
+                          print(campDetailsController.campReferredPatientList);
+                          // campDetailsController.ttCampDashboardRefPatientsDetList.clear();
+                          // campDetailsController.ttCampDashboardRefPatientsNamesList.clear();
+                          _addDynamicWidget();
+                        }
+
+                        // checkPatientDetails(campregisteredpatients, index);
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    width: responsiveWidth(10),
+                  ),
+                  Visibility(
+                    visible: index > 0 ? true : false,
+                    child: InkWell(
+                      child: Image.asset(
+                        "assets/icons/ic_delete1.png",
+                        color: Colors.red,
+                      ),
+                      onTap: () {},
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void addPatients(int index) {
+    campDetailsController.patientList.add(CampDashboardRefPatients(
+      dashboardRefPatientsId: null,
+      campDashboardId: null,
+      patientId: null,
+      patientName: patientNameListController[index].text,
+      age: 0,
+      lookupDetIdGender: null,
+      contactNumber: countryCodeListController[index].text + " " + mobileNoListCOntroller[index].text,
+      orgId: 1,
+      status: 1,
+      ttCampDashboardRefPatientsDetList: [],
+    ));
+  }
+
+  void updateStakeholdersDataToPatientList(index) {
+    updatePatientDetails(0, [
+      CampDashboardRefPatientsDet(
+        stakeholderMasterId: 3168,
+        orgId: 1,
+        status: 1,
+      ),
+      CampDashboardRefPatientsDet(
+        stakeholderMasterId: 3169,
+        orgId: 1,
+        status: 1,
+      ),
+    ]);
+  }
+
+  bool isDetailsListEmpty(int index) {
+    if (index >= 0 && index < ttCampDashboardRefPatientsList.length) {
+      return ttCampDashboardRefPatientsList[index].ttCampDashboardRefPatientsDetList.isEmpty;
+    }
+    print("Invalid index.");
+    return true; // Return true by default if the index is invalid
   }
 }
 
