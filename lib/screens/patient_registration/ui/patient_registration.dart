@@ -15,7 +15,6 @@ import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
-import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/core/utilities/validators.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
@@ -24,14 +23,13 @@ import 'package:community_health_app/screens/doctor_desk/add_treatment_details_s
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
 import 'package:community_health_app/screens/patient_registration/bloc/patient_registration_bloc.dart';
+import 'package:community_health_app/screens/patient_registration/models/refer_to_req_model.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:get/get.dart';
-
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -58,6 +56,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   late TextEditingController _mobileNoTextController;
   late TextEditingController _mobileNoCountryCodeTextController;
   late TextEditingController _patientNameTextController;
+  late TextEditingController _investigationTextController;
+  late TextEditingController _provisionTextController;
   late TextEditingController _ageTextController;
   late TextEditingController _aadhaarNoTextController;
   late TextEditingController _abhaIDTextController;
@@ -82,7 +82,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   CampDetails? _selectedCamp;
   LookupDetHierarchical? _selectedStakeholderSubType;
 
-  DateTime? _selectedCampDate;
+  // DateTime? _selectedCampDate;
 
   late TextEditingController _locationNameController;
 
@@ -168,7 +168,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
     _referToTextController = TextEditingController();
     _referToDepartmentTextController = TextEditingController();
     _locationNameController = TextEditingController();
-
+    _investigationTextController = TextEditingController();
+    _provisionTextController = TextEditingController();
     _mobileNoCountryCodeTextController.text = "+91";
   }
 
@@ -297,6 +298,16 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
               setState(() {
                 _selectedCamp = p0;
                 _campIDTextController.text = p0.campCreateRequestId.toString()!;
+
+                DateTime dateTime = DateTime.parse(p0.propCampDate ?? "");
+
+                // Format the DateTime object to the desired format
+                // String formattedDate =
+                //     DateFormat('dd-MM-yyyy').format(dateTime);
+
+                String formattedDate =
+                DateFormat('yyyy-MM-dd').format(dateTime);
+                _campDateTextController.text = formattedDate;
               });
               context.read<MasterDataBloc>().add(ResetMasterState());
             });
@@ -580,31 +591,31 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       controller: _campDateTextController,
                                       inputType: TextInputType.number,
                                       onChange: (p0) {},
-                                      readOnly: true,
-                                      onTap: () {
-                                        showDatePicker(
-                                                helpText: "Select Camp Date",
-                                                context: context,
-                                                initialEntryMode:
-                                                    DatePickerEntryMode
-                                                        .calendarOnly,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime.now(),
-                                                lastDate: DateTime.now().add(
-                                                    const Duration(days: 15)))
-                                            .then((pickedDate) {
-                                          if (pickedDate == null) {
-                                            return;
-                                          }
-                                          setState(() {
-                                            _selectedCampDate = pickedDate;
-                                            _campDateTextController.text =
-                                                DateFormat("dd-MM-yyyy")
-                                                    .format(pickedDate);
-                                          });
-                                        });
-                                      },
-                                      maxLength: 12,
+                                      readOnly: false,
+                                      // onTap: () {
+                                      //   showDatePicker(
+                                      //           helpText: "Select Camp Date",
+                                      //           context: context,
+                                      //           initialEntryMode:
+                                      //               DatePickerEntryMode
+                                      //                   .calendarOnly,
+                                      //           initialDate: DateTime.now(),
+                                      //           firstDate: DateTime.now(),
+                                      //           lastDate: DateTime.now().add(
+                                      //               const Duration(days: 15)))
+                                      //       .then((pickedDate) {
+                                      //     if (pickedDate == null) {
+                                      //       return;
+                                      //     }
+                                      //     setState(() {
+                                      //       _selectedCampDate = pickedDate;
+                                      //       _campDateTextController.text =
+                                      //           DateFormat("dd-MM-yyyy")
+                                      //               .format(pickedDate);
+                                      //     });
+                                      //   });
+                                      // },
+                                      // maxLength: 12,
                                       hint: "",
                                       label: RichText(
                                         text: const TextSpan(
@@ -726,78 +737,78 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     SizedBox(
                                       height: responsiveHeight(20),
                                     ),
-                                    BlocBuilder<MasterDataBloc,
-                                        MasterDataState>(
-                                      builder: (context, state) {
-                                        return AppRoundTextField(
-                                          controller:
-                                              _referToDepartmentTextController,
-                                          onChange: (p0) {
-                                            setState(() {});
-                                          },
-                                          errorText: Validators
-                                              .validateStakeholderSubType(
-                                                  _referToDepartmentTextController
-                                                      .text),
-                                          validators: Validators
-                                              .validateStakeholderSubType,
-                                          inputType: TextInputType.text,
-                                          onTap: () {
-                                            context.read<MasterDataBloc>().add(
-                                                    GetReferToDepartment(
-                                                        payload: const {
-                                                      "lookup_code_list1": [
-                                                        {"lookup_code": "DRF"}
-                                                      ]
-                                                    }));
-                                          },
-                                          readOnly: true,
-                                          label: RichText(
-                                            text: const TextSpan(
-                                                text: 'Refer To Department',
-                                                style: TextStyle(
-                                                    color: kHintColor,
-                                                    fontFamily: Montserrat),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "*",
-                                                      style: TextStyle(
-                                                          color: Colors.red))
-                                                ]),
-                                          ),
-                                          hint: "",
-                                          suffix: state
-                                                  .getStakeholderSubTypeStatus
-                                                  .isInProgress
-                                              ? SizedBox(
-                                                  height: responsiveHeight(20),
-                                                  width: responsiveHeight(20),
-                                                  child: const Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  ),
-                                                )
-                                              : SizedBox(
-                                                  height: responsiveHeight(20),
-                                                  width: responsiveHeight(20),
-                                                  child: Center(
-                                                    child: Image.asset(
-                                                      icArrowDownOrange,
-                                                      height:
-                                                          responsiveHeight(20),
-                                                      width:
-                                                          responsiveHeight(20),
-                                                    ),
-                                                  ),
-                                                ),
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(
-                                      height: responsiveHeight(20),
-                                    ),
+                                    // BlocBuilder<MasterDataBloc,
+                                    //     MasterDataState>(
+                                    //   builder: (context, state) {
+                                    //     return AppRoundTextField(
+                                    //       controller:
+                                    //           _referToDepartmentTextController,
+                                    //       onChange: (p0) {
+                                    //         setState(() {});
+                                    //       },
+                                    //       errorText: Validators
+                                    //           .validateStakeholderSubType(
+                                    //               _referToDepartmentTextController
+                                    //                   .text),
+                                    //       validators: Validators
+                                    //           .validateStakeholderSubType,
+                                    //       inputType: TextInputType.text,
+                                    //       onTap: () {
+                                    //         context.read<MasterDataBloc>().add(
+                                    //                 GetReferToDepartment(
+                                    //                     payload: const {
+                                    //                   "lookup_code_list1": [
+                                    //                     {"lookup_code": "DRF"}
+                                    //                   ]
+                                    //                 }));
+                                    //       },
+                                    //       readOnly: true,
+                                    //       label: RichText(
+                                    //         text: const TextSpan(
+                                    //             text: 'Refer To Department',
+                                    //             style: TextStyle(
+                                    //                 color: kHintColor,
+                                    //                 fontFamily: Montserrat),
+                                    //             children: [
+                                    //               TextSpan(
+                                    //                   text: "*",
+                                    //                   style: TextStyle(
+                                    //                       color: Colors.red))
+                                    //             ]),
+                                    //       ),
+                                    //       hint: "",
+                                    //       suffix: state
+                                    //               .getStakeholderSubTypeStatus
+                                    //               .isInProgress
+                                    //           ? SizedBox(
+                                    //               height: responsiveHeight(20),
+                                    //               width: responsiveHeight(20),
+                                    //               child: const Center(
+                                    //                 child:
+                                    //                     CircularProgressIndicator(),
+                                    //               ),
+                                    //             )
+                                    //           : SizedBox(
+                                    //               height: responsiveHeight(20),
+                                    //               width: responsiveHeight(20),
+                                    //               child: Center(
+                                    //                 child: Image.asset(
+                                    //                   icArrowDownOrange,
+                                    //                   height:
+                                    //                       responsiveHeight(20),
+                                    //                   width:
+                                    //                       responsiveHeight(20),
+                                    //                 ),
+                                    //               ),
+                                    //             ),
+                                    //     );
+                                    //   },
+                                    // ),
+                                    // SizedBox(
+                                    //   height: responsiveHeight(20),
+                                    // ),
                                     AppRoundTextField(
-                                      controller: _patientNameTextController,
+                                      controller: _investigationTextController,
                                       inputType: TextInputType.name,
                                       textCapitalization:
                                           TextCapitalization.words,
@@ -816,7 +827,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       height: responsiveHeight(20),
                                     ),
                                     AppRoundTextField(
-                                      controller: _patientNameTextController,
+                                      controller: _provisionTextController,
                                       inputType: TextInputType.name,
                                       maxLines: 4,
                                       borderRadius: responsiveHeight(20),
@@ -850,7 +861,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       },
                                       onChange: (p0) {},
                                       readOnly: true,
-                                      maxLength: 12,
+                                      // maxLength: 12,
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Disease Type',
@@ -891,153 +902,154 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     SizedBox(
                                       height: responsiveHeight(20),
                                     ),
-                                    BlocBuilder<MasterDataBloc,
-                                        MasterDataState>(
-                                      builder: (context, state) {
-                                        return AppRoundTextField(
-                                          controller:
-                                              _stakeholderSubTypeTextController,
-                                          onChange: (p0) {
-                                            setState(() {});
-                                          },
-                                          errorText: Validators
-                                              .validateStakeholderSubType(
-                                                  _stakeholderSubTypeTextController
-                                                      .text),
-                                          validators: Validators
-                                              .validateStakeholderSubType,
-                                          inputType: TextInputType.text,
-                                          onTap: () {
-                                            context.read<MasterDataBloc>().add(
-                                                    GetStakeholderSubTypeWithLookupCode(
-                                                        payload: const {
-                                                      "lookup_det_code_list1":
-                                                          const [
-                                                        {
-                                                          "lookup_det_code":
-                                                              "SUY"
-                                                        }
-                                                      ]
-                                                    }));
-                                          },
-                                          readOnly: true,
-                                          label: RichText(
-                                            text: const TextSpan(
-                                                text: 'Stakeholder Sub Type',
-                                                style: TextStyle(
-                                                    color: kHintColor,
-                                                    fontFamily: Montserrat),
-                                                children: [
-                                                  TextSpan(
-                                                      text: "*",
-                                                      style: TextStyle(
-                                                          color: Colors.red))
-                                                ]),
-                                          ),
-                                          hint: "",
-                                          suffix: state
-                                                  .getStakeholderSubTypeStatus
-                                                  .isInProgress
-                                              ? SizedBox(
-                                                  height: responsiveHeight(20),
-                                                  width: responsiveHeight(20),
-                                                  child: const Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  ),
-                                                )
-                                              : SizedBox(
-                                                  height: responsiveHeight(20),
-                                                  width: responsiveHeight(20),
-                                                  child: Center(
-                                                    child: Image.asset(
-                                                      icArrowDownOrange,
-                                                      height:
-                                                          responsiveHeight(20),
-                                                      width:
-                                                          responsiveHeight(20),
-                                                    ),
-                                                  ),
-                                                ),
-                                        );
-                                      },
-                                    ),
-
-                                    SizedBox(
-                                      height: responsiveHeight(20),
-                                    ),
-                                    GetBuilder(
-                                        init: DoctorDeskController(),
-                                        builder: (controller) =>
-                                            AppRoundTextField(
-                                              controller:
-                                                  _referToTextController,
-                                              inputType: TextInputType.text,
-                                              onChange: (p0) {},
-                                              onTap: () async {
-                                                if (_stakeholderSubTypeTextController
-                                                    .text.isNotEmpty) {
-                                                  await stakeHolderNameBottomSheet(
-                                                      context,
-                                                      (p0) => {
-                                                            controller
-                                                                    .selectedStakeHVal =
-                                                                p0.lookupDetHierDescEn,
-                                                            controller
-                                                                .selectedStakeH
-                                                                .addIfNotExist(
-                                                                    p0),
-                                                            _referToTextController
-                                                                    .text =
-                                                                controller
-                                                                    .selectedStakeH
-                                                                    .displayText(),
-                                                            controller.update()
-                                                          },
-                                                      "Refer To",
-                                                      controller.referToModel
-                                                              ?.details ??
-                                                          [],
-                                                      true);
-                                                }
-                                              },
-                                              // maxLength: 12,
-                                              readOnly: true,
-                                              label: RichText(
-                                                text: const TextSpan(
-                                                    text: 'Refer To',
-                                                    style: TextStyle(
-                                                        color: kHintColor,
-                                                        fontFamily: Montserrat),
-                                                    children: [
-                                                      TextSpan(
-                                                          text: "*",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.red))
-                                                    ]),
-                                              ),
-                                              hint: "",
-                                              suffix: SizedBox(
-                                                height:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                                width:
-                                                    getProportionateScreenHeight(
-                                                        20),
-                                                child: Center(
-                                                  child: Image.asset(
-                                                    icArrowDownOrange,
-                                                    height:
-                                                        getProportionateScreenHeight(
-                                                            20),
-                                                    width:
-                                                        getProportionateScreenHeight(
-                                                            20),
-                                                  ),
-                                                ),
-                                              ),
-                                            )),
+                                    // BlocBuilder<MasterDataBloc,
+                                    //     MasterDataState>(
+                                    //   builder: (context, state) {
+                                    //     return AppRoundTextField(
+                                    //       controller:
+                                    //           _stakeholderSubTypeTextController,
+                                    //       onChange: (p0) {
+                                    //         setState(() {});
+                                    //       },
+                                    //       errorText: Validators
+                                    //           .validateStakeholderSubType(
+                                    //               _stakeholderSubTypeTextController
+                                    //                   .text),
+                                    //       validators: Validators
+                                    //           .validateStakeholderSubType,
+                                    //       inputType: TextInputType.text,
+                                    //       onTap: () {
+                                    //         context.read<MasterDataBloc>().add(
+                                    //                 GetStakeholderSubTypeWithLookupCode(
+                                    //                     payload: const {
+                                    //                   "lookup_det_code_list1":
+                                    //                       const [
+                                    //                     {
+                                    //                       "lookup_det_code":
+                                    //                           "SUY"
+                                    //                     }
+                                    //                   ]
+                                    //                 }));
+                                    //       },
+                                    //       readOnly: true,
+                                    //       label: RichText(
+                                    //         text: const TextSpan(
+                                    //             text: 'Stakeholder Sub Type',
+                                    //             style: TextStyle(
+                                    //                 color: kHintColor,
+                                    //                 fontFamily: Montserrat),
+                                    //             children: [
+                                    //               TextSpan(
+                                    //                   text: "*",
+                                    //                   style: TextStyle(
+                                    //                       color: Colors.red))
+                                    //             ]),
+                                    //       ),
+                                    //       hint: "",
+                                    //       suffix: state
+                                    //               .getStakeholderSubTypeStatus
+                                    //               .isInProgress
+                                    //           ? SizedBox(
+                                    //               height: responsiveHeight(20),
+                                    //               width: responsiveHeight(20),
+                                    //               child: const Center(
+                                    //                 child:
+                                    //                     CircularProgressIndicator(),
+                                    //               ),
+                                    //             )
+                                    //           : SizedBox(
+                                    //               height: responsiveHeight(20),
+                                    //               width: responsiveHeight(20),
+                                    //               child: Center(
+                                    //                 child: Image.asset(
+                                    //                   icArrowDownOrange,
+                                    //                   height:
+                                    //                       responsiveHeight(20),
+                                    //                   width:
+                                    //                       responsiveHeight(20),
+                                    //                 ),
+                                    //               ),
+                                    //             ),
+                                    //     );
+                                    //   },
+                                    // ),
+                                    //
+                                    // SizedBox(
+                                    //   height: responsiveHeight(20),
+                                    // ),
+                                    //
+                                    // GetBuilder(
+                                    //     init: DoctorDeskController(),
+                                    //     builder: (controller) =>
+                                    //         AppRoundTextField(
+                                    //           controller:
+                                    //               _referToTextController,
+                                    //           inputType: TextInputType.text,
+                                    //           onChange: (p0) {},
+                                    //           onTap: () async {
+                                    //             if (_stakeholderSubTypeTextController
+                                    //                 .text.isNotEmpty) {
+                                    //               await stakeHolderNameBottomSheet(
+                                    //                   context,
+                                    //                   (p0) => {
+                                    //                         controller
+                                    //                                 .selectedStakeHVal =
+                                    //                             p0.lookupDetHierDescEn,
+                                    //                         controller
+                                    //                             .selectedStakeH
+                                    //                             .addIfNotExist(
+                                    //                                 p0),
+                                    //                         _referToTextController
+                                    //                                 .text =
+                                    //                             controller
+                                    //                                 .selectedStakeH
+                                    //                                 .displayText(),
+                                    //                         controller.update()
+                                    //                       },
+                                    //                   "Refer To",
+                                    //                   controller.referToModel
+                                    //                           ?.details ??
+                                    //                       [],
+                                    //                   true);
+                                    //             }
+                                    //           },
+                                    //           // maxLength: 12,
+                                    //           readOnly: true,
+                                    //           label: RichText(
+                                    //             text: const TextSpan(
+                                    //                 text: 'Refer To',
+                                    //                 style: TextStyle(
+                                    //                     color: kHintColor,
+                                    //                     fontFamily: Montserrat),
+                                    //                 children: [
+                                    //                   TextSpan(
+                                    //                       text: "*",
+                                    //                       style: TextStyle(
+                                    //                           color:
+                                    //                               Colors.red))
+                                    //                 ]),
+                                    //           ),
+                                    //           hint: "",
+                                    //           suffix: SizedBox(
+                                    //             height:
+                                    //                 getProportionateScreenHeight(
+                                    //                     20),
+                                    //             width:
+                                    //                 getProportionateScreenHeight(
+                                    //                     20),
+                                    //             child: Center(
+                                    //               child: Image.asset(
+                                    //                 icArrowDownOrange,
+                                    //                 height:
+                                    //                     getProportionateScreenHeight(
+                                    //                         20),
+                                    //                 width:
+                                    //                     getProportionateScreenHeight(
+                                    //                         20),
+                                    //               ),
+                                    //             ),
+                                    //           ),
+                                    //         )),
 
                                     SizedBox(
                                       height: responsiveHeight(20),
@@ -1479,6 +1491,23 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                         false) {
                                       return;
                                     }
+
+                                    List<ReferToReqModel> referTo = [];
+                                    for (int i = 0;
+                                        i < selectedStakeH.length;
+                                        i++) {
+                                      referTo.add(ReferToReqModel(
+                                          patientId: null,
+                                          patientReferId: null,
+                                          stakeholderMasterId: selectedStakeH[i]
+                                              .stakeholderMasterId,
+                                          // stakeholderMasterId: 1,
+                                          lookupDetHierIdStakeholderSubType2:
+                                              null,
+                                          lookupDetIdRefDepartment: null,
+                                          orgId: 1,
+                                          status: 1));
+                                    }
                                     var payload = {
                                       "tt_patient_details": {
                                         "patient_id": null,
@@ -1487,8 +1516,10 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                                 ? 1
                                                 : _selectedCamp
                                                     ?.campCreateRequestId,
-                                        "camp_date": DateFormat('yyyy-MM-dd')
-                                            .format(_selectedCampDate!),
+                                        // "camp_date": DateFormat('yyyy-MM-dd')
+                                        //     .format(_selectedCampDate!),
+                                        "camp_date":
+                                            _campDateTextController.text,
                                         "user_id_register_by": DataProvider()
                                             .getParsedUserData()!
                                             .details!
@@ -1523,25 +1554,33 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                                 ?.lookupDetId,
                                         "address1": _addressTextController.text,
                                         "address2": _addressTextController.text,
+                                        "investigation":
+                                            _investigationTextController.text,
+                                        "provisional_diagnosis":
+                                            _provisionTextController.text,
                                       },
-                                      "tt_patient_ref_list": [
-                                        {
-                                          "patient_refer_id": null,
-                                          "patient_id": null,
-                                          "stakeholder_master_id": 1,
-                                          "lookup_det_id_ref_department": null,
-                                          "lookup_det_hier_id_stakeholder_sub_type2":
-                                              null,
-                                          "org_id": 1,
-                                          "status": 1,
-                                          "is_inactive": null
-                                        }
-                                      ],
+                                      "tt_patient_ref_list": referTo,
+                                      // "tt_patient_ref_list": [
+                                      //   {
+                                      //     "patient_refer_id": null,
+                                      //     "patient_id": null,
+                                      //     "stakeholder_master_id":
+                                      //         selectedStakeH[0]
+                                      //             .stakeholderMasterId,
+                                      //     "lookup_det_id_ref_department": null,
+                                      //     "lookup_det_hier_id_stakeholder_sub_type2":
+                                      //         null,
+                                      //     "org_id": 1,
+                                      //     "status": 1,
+                                      //     "is_inactive": null
+                                      //   }
+                                      // ],
                                       "tt_patient_disease_list": [
                                         {
                                           "patient_disease_types_id": null,
                                           "patient_id": null,
-                                          "lookup_det_id_disease_types": null,
+                                          "lookup_det_id_disease_types":
+                                              _selectedDiseaseType?.lookupDetId,
                                           "org_id": 1,
                                           "status": 1,
                                           "is_inactive": null

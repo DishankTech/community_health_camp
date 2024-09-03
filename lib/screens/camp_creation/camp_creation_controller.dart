@@ -117,7 +117,6 @@ class CampCreationController extends GetxController {
       isLoading = false;
       CustomMessage.toast("Save Successfully");
       Get.back();
-
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
