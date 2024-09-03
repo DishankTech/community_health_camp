@@ -43,11 +43,11 @@ class CampsReferredPatientsRespModel {
 class ReferredPatientList {
   String patientName;
   String contactNumber;
-  dynamic age;
-  dynamic genderEn;
-  dynamic genderRg;
-  dynamic stakeholderSubTypeEn;
-  dynamic stakeholderSubTypeRg;
+  int? age;
+  String? genderEn;
+  String? genderRg;
+  String stakeholderSubTypeEn;
+  String stakeholderSubTypeRg;
   String stakeholderNamesEn;
   String stakeholderNamesRg;
 
@@ -66,9 +66,9 @@ class ReferredPatientList {
   factory ReferredPatientList.fromJson(Map<String, dynamic> json) => ReferredPatientList(
     patientName: json["patient_name"],
     contactNumber: json["contact_number"],
-    age: json["age"],
-    genderEn: json["gender_en"],
-    genderRg: json["gender_rg"],
+    age: json["age"]??"",
+    genderEn: json["gender_en"]??"",
+    genderRg: json["gender_rg"]??"",
     stakeholderSubTypeEn: json["stakeholder_sub_type_en"],
     stakeholderSubTypeRg: json["stakeholder_sub_type_rg"],
     stakeholderNamesEn: json["stakeholder_names_en"],
@@ -78,9 +78,9 @@ class ReferredPatientList {
   Map<String, dynamic> toJson() => {
     "patient_name": patientName,
     "contact_number": contactNumber,
-    "age": age,
-    "gender_en": genderEn,
-    "gender_rg": genderRg,
+    "age": age??"",
+    "gender_en": genderEn??"",
+    "gender_rg": genderRg??"",
     "stakeholder_sub_type_en": stakeholderSubTypeEn,
     "stakeholder_sub_type_rg": stakeholderSubTypeRg,
     "stakeholder_names_en": stakeholderNamesEn,

@@ -21,7 +21,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../core/common_widgets/app_bar_v1.dart';
 import '../../core/common_widgets/app_button.dart';
 import '../../core/common_widgets/app_round_textfield.dart';
@@ -72,7 +71,10 @@ class _DashboardPatientRegistrationScreenState
   List<List<ChartData>> totalPatientsTreatmentsTillDateList = [];
   List<List<ChartData>> totalPatientsReferredTillDateList = [];
   List<List<ChartData>> totalPatientsSubReferredTillDateList = [];
+  DashboardFilterCountResponse? dashboardFilterCountResponse;
+
   int touchedIndex = -1;
+  int pieChartTouchedIndex = -1;
   int totalRegPatTouchedIndex = -1;
   int referredPatTouchedIndex = -1;
   int treatedPatTouchedIndex = -1;
@@ -557,23 +559,23 @@ class _DashboardPatientRegistrationScreenState
     campConductedDistrictWiseList = chartDataFinalList;
   }
 
-  List<BarSeries<ChartData, String>> _getBarCampConductedDistrictWiseSeries() {
-    return List<BarSeries<ChartData, String>>.generate(
-      campConductedDistrictWiseList.length,
-      (index) {
-        return BarSeries<ChartData, String>(
-          dataSource: campConductedDistrictWiseList[index],
-          animationDuration: 0,
-          animationDelay: 0,
-          xValueMapper: (ChartData data, _) => data.category,
-          yValueMapper: (ChartData data, _) => data.value,
-          color: campConductedDistrictWiseBarChartcolor,
-          width: 0.8, // Width of the bars
-          // spacing: 0.1, // Spacing between the bars
-        );
-      },
-    );
-  }
+  // List<BarSeries<ChartData, String>> _getBarCampConductedDistrictWiseSeries() {
+  //   return List<BarSeries<ChartData, String>>.generate(
+  //     campConductedDistrictWiseList.length,
+  //     (index) {
+  //       return BarSeries<ChartData, String>(
+  //         dataSource: campConductedDistrictWiseList[index],
+  //         animationDuration: 0,
+  //         animationDelay: 0,
+  //         xValueMapper: (ChartData data, _) => data.category,
+  //         yValueMapper: (ChartData data, _) => data.value,
+  //         color: campConductedDistrictWiseBarChartcolor,
+  //         width: 0.8, // Width of the bars
+  //         // spacing: 0.1, // Spacing between the bars
+  //       );
+  //     },
+  //   );
+  // }
 
   getTotalPatientsRegisteredTillDateBarChartData() {
     List<ChartData> chartDataList = [];
@@ -586,22 +588,22 @@ class _DashboardPatientRegistrationScreenState
     totalPatientsRegisteredTillDateList = chartDataFinalList;
   }
 
-  List<BarSeries<ChartData, String>>
-      _getBarTotalPatientsRegisteredTillDateSeries() {
-    return List<BarSeries<ChartData, String>>.generate(
-      totalPatientsRegisteredTillDateList.length,
-      (index) {
-        return BarSeries<ChartData, String>(
-          dataSource: totalPatientsRegisteredTillDateList[index],
-          animationDuration: 0,
-          animationDelay: 0,
-          xValueMapper: (ChartData data, _) => data.category,
-          yValueMapper: (ChartData data, _) => data.value,
-          color: totlPaitentRegisterdPieChartColor,
-        );
-      },
-    );
-  }
+  // List<BarSeries<ChartData, String>>
+  //     _getBarTotalPatientsRegisteredTillDateSeries() {
+  //   return List<BarSeries<ChartData, String>>.generate(
+  //     totalPatientsRegisteredTillDateList.length,
+  //     (index) {
+  //       return BarSeries<ChartData, String>(
+  //         dataSource: totalPatientsRegisteredTillDateList[index],
+  //         animationDuration: 0,
+  //         animationDelay: 0,
+  //         xValueMapper: (ChartData data, _) => data.category,
+  //         yValueMapper: (ChartData data, _) => data.value,
+  //         color: totlPaitentRegisterdPieChartColor,
+  //       );
+  //     },
+  //   );
+  // }
 
   getTotalPatientsTreatmentsTillDateBarChartData() {
     List<ChartData> chartDataList = [];
@@ -614,22 +616,22 @@ class _DashboardPatientRegistrationScreenState
     totalPatientsTreatmentsTillDateList = chartDataFinalList;
   }
 
-  List<BarSeries<ChartData, String>>
-      _getBarTotalPatientsTreatmentsTillDateSeries() {
-    return List<BarSeries<ChartData, String>>.generate(
-      totalPatientsTreatmentsTillDateList.length,
-      (index) {
-        return BarSeries<ChartData, String>(
-          dataSource: totalPatientsTreatmentsTillDateList[index],
-          animationDuration: 0,
-          animationDelay: 0,
-          xValueMapper: (ChartData data, _) => data.category,
-          yValueMapper: (ChartData data, _) => data.value,
-          color: totlPaitentTreatementPieChartColor,
-        );
-      },
-    );
-  }
+  // List<BarSeries<ChartData, String>>
+  //     _getBarTotalPatientsTreatmentsTillDateSeries() {
+  //   return List<BarSeries<ChartData, String>>.generate(
+  //     totalPatientsTreatmentsTillDateList.length,
+  //     (index) {
+  //       return BarSeries<ChartData, String>(
+  //         dataSource: totalPatientsTreatmentsTillDateList[index],
+  //         animationDuration: 0,
+  //         animationDelay: 0,
+  //         xValueMapper: (ChartData data, _) => data.category,
+  //         yValueMapper: (ChartData data, _) => data.value,
+  //         color: totlPaitentTreatementPieChartColor,
+  //       );
+  //     },
+  //   );
+  // }
 
   getTotalPatientsReferredTillDateBarChartData() {
     List<ChartData> chartDataList = [];
@@ -642,28 +644,28 @@ class _DashboardPatientRegistrationScreenState
     totalPatientsReferredTillDateList = chartDataFinalList;
   }
 
-  List<BarSeries<ChartData, String>>
-      _getBarTotalPatientsReferredTillDateSeries() {
-    return List<BarSeries<ChartData, String>>.generate(
-      totalPatientsReferredTillDateList.length,
-      (index) {
-        return BarSeries<ChartData, String>(
-          dataSource: totalPatientsReferredTillDateList[index],
-          animationDuration: 0,
-          animationDelay: 0,
-          xValueMapper: (ChartData data, _) => data.category,
-          yValueMapper: (ChartData data, _) => data.value,
-          color: totlPaitentReferredPieChartColor,
-          onPointTap: (pointInteractionDetails) {
-            print("object");
-            barSteps = 2;
-            isShowPatientsSubReferred = true;
-            setState(() {});
-          },
-        );
-      },
-    );
-  }
+  // List<BarSeries<ChartData, String>>
+  //     _getBarTotalPatientsReferredTillDateSeries() {
+  //   return List<BarSeries<ChartData, String>>.generate(
+  //     totalPatientsReferredTillDateList.length,
+  //     (index) {
+  //       return BarSeries<ChartData, String>(
+  //         dataSource: totalPatientsReferredTillDateList[index],
+  //         animationDuration: 0,
+  //         animationDelay: 0,
+  //         xValueMapper: (ChartData data, _) => data.category,
+  //         yValueMapper: (ChartData data, _) => data.value,
+  //         color: totlPaitentReferredPieChartColor,
+  //         onPointTap: (pointInteractionDetails) {
+  //           print("object");
+  //           barSteps = 2;
+  //           isShowPatientsSubReferred = true;
+  //           setState(() {});
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
 
   getTotalPatientsSubReferredTillDateBarChartData() {
     List<ChartData> chartDataList = [];
@@ -676,35 +678,35 @@ class _DashboardPatientRegistrationScreenState
     totalPatientsSubReferredTillDateList = chartDataFinalList;
   }
 
-  List<BarSeries<ChartData, String>>
-      _getBarTotalPatientsSubReferredTillDateSeries() {
-    return List<BarSeries<ChartData, String>>.generate(
-      totalPatientsSubReferredTillDateList.length,
-      (index) {
-        return BarSeries<ChartData, String>(
-          dataSource: totalPatientsSubReferredTillDateList[index],
-          animationDuration: 0,
-          animationDelay: 0,
-          xValueMapper: (ChartData data, _) => data.category,
-          yValueMapper: (ChartData data, _) => data.value,
-          color: totlPaitentSubReferredPieChartColor,
-        );
-      },
-    );
-  }
+  // List<BarSeries<ChartData, String>>
+  //     _getBarTotalPatientsSubReferredTillDateSeries() {
+  //   return List<BarSeries<ChartData, String>>.generate(
+  //     totalPatientsSubReferredTillDateList.length,
+  //     (index) {
+  //       return BarSeries<ChartData, String>(
+  //         dataSource: totalPatientsSubReferredTillDateList[index],
+  //         animationDuration: 0,
+  //         animationDelay: 0,
+  //         xValueMapper: (ChartData data, _) => data.category,
+  //         yValueMapper: (ChartData data, _) => data.value,
+  //         color: totlPaitentSubReferredPieChartColor,
+  //       );
+  //     },
+  //   );
+  // }
 
   getBarTitleName() {
     if (_selectedIndex == -1) {
       return "Patients Summary";
     } else if (_selectedIndex == 0) {
-      return "Total Patients Registered - Till Date";
-    } else if (_selectedIndex == 1) {
-      return "Total Patients Treated - Till Date";
+      return "Total Patients Registered";
     } else if (_selectedIndex == 2) {
+      return "Total Patients Referred";
+    } else if (_selectedIndex == 1) {
       if (isShowPatientsReferred && isShowPatientsSubReferred == false) {
         return "Total Patients Treated - Till Date";
       }
-      return "Total Patients Treated - Till Date - Pune";
+      return "Total Patients Treated";
     }
     return "Total Patients Referred - Till Date";
   }
@@ -836,66 +838,239 @@ class _DashboardPatientRegistrationScreenState
   //     },
   //   );
   // }
+
+  List<PieChartSectionData> showingSections() {
+    return List.generate(3, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 20.0 : 16.0;
+      final radius = isTouched ? 110.0 : 100.0;
+      final widgetSize = isTouched ? 55.0 : 40.0;
+      const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
+
+      switch (i) {
+        case 0:
+          return PieChartSectionData(
+            color: totlPaitentRegisterdPieChartColor,
+            value: double.parse(dashboardFilterCountResponse!
+                .details!.totalPatients!
+                .toString()),
+            title: '${dashboardFilterCountResponse!.details!.totalPatients!}',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+          );
+        case 1:
+          return PieChartSectionData(
+            color: totlPaitentTreatementPieChartColor,
+            value: double.parse(dashboardFilterCountResponse!
+                .details!.totalTreatedPatients!
+                .toString()),
+            title:
+                '${dashboardFilterCountResponse!.details!.totalTreatedPatients!}',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+          );
+        case 2:
+          return PieChartSectionData(
+            color: totlPaitentReferredPieChartColor,
+            value: double.parse(dashboardFilterCountResponse!
+                .details!.totalReferredPatients!
+                .toString()),
+            title:
+                '${dashboardFilterCountResponse!.details!.totalReferredPatients!}',
+            radius: radius,
+            titleStyle: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: const Color(0xffffffff),
+              shadows: shadows,
+            ),
+          );
+
+        default:
+          throw Exception('Oh no');
+      }
+    });
+  }
+
   Widget getPieOrBarChartLayout() {
     if (isShowPatientsSummary) {
-      return SfCircularChart(
-        legend: const Legend(
-          isVisible: true,
-          position: LegendPosition.bottom,
-          alignment: ChartAlignment.center,
-          orientation: LegendItemOrientation.horizontal,
-          overflowMode: LegendItemOverflowMode.wrap,
-          itemPadding: 8,
-          textStyle: TextStyle(
-            fontSize: 12,
-            color: Colors.black,
-          ),
-        ),
-        series: <PieSeries<ChartData, String>>[
-          PieSeries<ChartData, String>(
-            dataSource: patientsSummaryPieData,
-            animationDuration: 0,
-            animationDelay: 0,
-            pointColorMapper: (ChartData data, _) => data.color,
-            xValueMapper: (ChartData data, _) => data.category,
-            yValueMapper: (ChartData data, _) => data.value,
-            dataLabelSettings: const DataLabelSettings(
-              isVisible: true,
-              textStyle: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontStyle: FontStyle.normal,
-              ),
-            ),
-            explode: false,
-            explodeIndex: _selectedIndex,
-            onPointTap: (ChartPointDetails details) {
-              setState(() {
-                _selectedIndex = details.pointIndex!;
+      // return SfCircularChart(
+      //   legend: const Legend(
+      //     isVisible: true,
+      //     position: LegendPosition.bottom,
+      //     alignment: ChartAlignment.center,
+      //     orientation: LegendItemOrientation.horizontal,
+      //     overflowMode: LegendItemOverflowMode.wrap,
+      //     itemPadding: 8,
+      //     textStyle: TextStyle(
+      //       fontSize: 12,
+      //       color: Colors.black,
+      //     ),
+      //   ),
+      //   series: <PieSeries<ChartData, String>>[
+      //     PieSeries<ChartData, String>(
+      //       dataSource: patientsSummaryPieData,
+      //       animationDuration: 0,
+      //       animationDelay: 0,
+      //       pointColorMapper: (ChartData data, _) => data.color,
+      //       xValueMapper: (ChartData data, _) => data.category,
+      //       yValueMapper: (ChartData data, _) => data.value,
+      //       dataLabelSettings: const DataLabelSettings(
+      //         isVisible: true,
+      //         textStyle: TextStyle(
+      //           fontSize: 14,
+      //           fontWeight: FontWeight.bold,
+      //           color: Colors.white,
+      //           fontStyle: FontStyle.normal,
+      //         ),
+      //       ),
+      //       explode: false,
+      //       explodeIndex: _selectedIndex,
+      //       onPointTap: (ChartPointDetails details) {
+      //         setState(() {
+      //           _selectedIndex = details.pointIndex!;
 
-                if (_selectedIndex == 0) {
-                  isShowPatientsSummary = false;
-                  isShowPatientsRegistered = true;
-                  isShowPatientsTreatments = false;
-                  isShowPatientsReferred = false;
-                  barSteps = 1;
-                } else if (_selectedIndex == 1) {
-                  isShowPatientsSummary = false;
-                  isShowPatientsRegistered = false;
-                  isShowPatientsTreatments = true;
-                  isShowPatientsReferred = false;
-                  barSteps = 1;
-                } else if (_selectedIndex == 2) {
-                  isShowPatientsSummary = false;
-                  isShowPatientsRegistered = false;
-                  isShowPatientsTreatments = false;
-                  isShowPatientsReferred = true;
-                  barSteps = 1;
-                }
-                print(_selectedIndex);
-              });
-            },
+      //           if (_selectedIndex == 0) {
+      //             isShowPatientsSummary = false;
+      //             isShowPatientsRegistered = true;
+      //             isShowPatientsTreatments = false;
+      //             isShowPatientsReferred = false;
+      //             barSteps = 1;
+      //           } else if (_selectedIndex == 1) {
+      //             isShowPatientsSummary = false;
+      //             isShowPatientsRegistered = false;
+      //             isShowPatientsTreatments = true;
+      //             isShowPatientsReferred = false;
+      //             barSteps = 1;
+      //           } else if (_selectedIndex == 2) {
+      //             isShowPatientsSummary = false;
+      //             isShowPatientsRegistered = false;
+      //             isShowPatientsTreatments = false;
+      //             isShowPatientsReferred = true;
+      //             barSteps = 1;
+      //           }
+      //           print(_selectedIndex);
+      //         });
+      //       },
+      //     ),
+      //   ],
+      // );
+
+      return Column(
+        children: [
+          AspectRatio(
+            aspectRatio: 1,
+            child: PieChart(
+              PieChartData(
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          pieChartTouchedIndex = -1;
+                          return;
+                        }
+                        pieChartTouchedIndex = pieTouchResponse
+                            .touchedSection!.touchedSectionIndex;
+                        _selectedIndex = pieChartTouchedIndex;
+
+                        if (_selectedIndex == 0) {
+                          isShowPatientsSummary = false;
+                          isShowPatientsRegistered = true;
+                          isShowPatientsTreatments = false;
+                          isShowPatientsReferred = false;
+                          barSteps = 1;
+                        } else if (_selectedIndex == 1) {
+                          isShowPatientsSummary = false;
+                          isShowPatientsRegistered = false;
+                          isShowPatientsTreatments = true;
+                          isShowPatientsReferred = false;
+                          barSteps = 1;
+                        } else if (_selectedIndex == 2) {
+                          isShowPatientsSummary = false;
+                          isShowPatientsRegistered = false;
+                          isShowPatientsTreatments = false;
+                          isShowPatientsReferred = true;
+                          barSteps = 1;
+                        }
+                      });
+                    },
+                  ),
+                  sectionsSpace: 2,
+                  centerSpaceRadius: 0,
+                  sections: showingSections()),
+              swapAnimationDuration:
+                  const Duration(milliseconds: 150), // Optional
+              swapAnimationCurve: Curves.linear, // Optional
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    height: responsiveHeight(20),
+                    width: responsiveWidth(20),
+                    decoration: BoxDecoration(
+                        color: totlPaitentRegisterdPieChartColor,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  SizedBox(
+                    width: responsiveWidth(5),
+                  ),
+                  const Text("Total Registered")
+                ],
+              ),
+              SizedBox(
+                width: responsiveWidth(10),
+              ),
+              Row(
+                children: [
+                  Container(
+                    height: responsiveHeight(20),
+                    width: responsiveWidth(20),
+                    decoration: BoxDecoration(
+                        color: totlPaitentTreatementPieChartColor,
+                        borderRadius: BorderRadius.circular(10)),
+                  ),
+                  SizedBox(
+                    width: responsiveWidth(5),
+                  ),
+                  const Text("Total Treated")
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: responsiveHeight(10),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                height: responsiveHeight(20),
+                width: responsiveWidth(20),
+                decoration: BoxDecoration(
+                    color: totlPaitentReferredPieChartColor,
+                    borderRadius: BorderRadius.circular(10)),
+              ),
+              SizedBox(
+                width: responsiveWidth(5),
+              ),
+              const Text("Total Referred")
+            ],
           ),
         ],
       );
@@ -1350,29 +1525,30 @@ class _DashboardPatientRegistrationScreenState
         },
       );
     } else if (isShowPatientsReferred && isShowPatientsSubReferred) {
-      return Padding(
-        padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
-        child: SfCartesianChart(
-          isTransposed: true,
-          primaryXAxis: CategoryAxis(
-            axisLine: const AxisLine(color: Colors.grey),
-            labelStyle: TextStyle(fontSize: responsiveFont(7)),
-            labelRotation: -30,
-            autoScrollingDelta: 5,
-            autoScrollingMode: AutoScrollingMode.start,
-          ),
-          primaryYAxis: const NumericAxis(
-            minimum: 0,
-            // maximum: 40,
-            interval: 10,
-            axisLine: AxisLine(color: Colors.grey),
-          ),
-          zoomPanBehavior: ZoomPanBehavior(
-            enablePanning: true,
-          ),
-          series: _getBarTotalPatientsSubReferredTillDateSeries(),
-        ),
-      );
+      // return Padding(
+      //   padding: const EdgeInsets.fromLTRB(8, 30, 8, 8),
+      //   child: SfCartesianChart(
+      //     isTransposed: true,
+      //     primaryXAxis: CategoryAxis(
+      //       axisLine: const AxisLine(color: Colors.grey),
+      //       labelStyle: TextStyle(fontSize: responsiveFont(7)),
+      //       labelRotation: -30,
+      //       autoScrollingDelta: 5,
+      //       autoScrollingMode: AutoScrollingMode.start,
+      //     ),
+      //     primaryYAxis: const NumericAxis(
+      //       minimum: 0,
+      //       // maximum: 40,
+      //       interval: 10,
+      //       axisLine: AxisLine(color: Colors.grey),
+      //     ),
+      //     zoomPanBehavior: ZoomPanBehavior(
+      //       enablePanning: true,
+      //     ),
+      //     // series: _getBarTotalPatientsSubReferredTillDateSeries(),
+      //   ),
+      // );
+      return Container();
     } else {
       return Container();
     }
@@ -1672,7 +1848,6 @@ class _DashboardPatientRegistrationScreenState
               child: SingleChildScrollView(
                 child: BlocBuilder<DashboardBloc, DashboardState>(
                   builder: (context, state) {
-                    DashboardFilterCountResponse? dashboardFilterCountResponse;
                     bool noData = false;
                     if (state.getCountStatus.isSuccess) {
                       dashboardFilterCountResponse =
@@ -1748,7 +1923,7 @@ class _DashboardPatientRegistrationScreenState
                                                       dashboardFilterCountResponse!
                                                               .details !=
                                                           null
-                                                  ? dashboardFilterCountResponse
+                                                  ? dashboardFilterCountResponse!
                                                       .details!.totalCampConduct
                                                       .toString()
                                                   : '',
@@ -1767,7 +1942,7 @@ class _DashboardPatientRegistrationScreenState
                                                       dashboardFilterCountResponse!
                                                               .details !=
                                                           null
-                                                  ? dashboardFilterCountResponse
+                                                  ? dashboardFilterCountResponse!
                                                       .details!.totalPatients
                                                       .toString()
                                                   : '',
@@ -1797,7 +1972,7 @@ class _DashboardPatientRegistrationScreenState
                                                       dashboardFilterCountResponse!
                                                               .details !=
                                                           null
-                                                  ? dashboardFilterCountResponse
+                                                  ? dashboardFilterCountResponse!
                                                       .details!
                                                       .totalTreatedPatients
                                                       .toString()
@@ -1817,7 +1992,7 @@ class _DashboardPatientRegistrationScreenState
                                                       dashboardFilterCountResponse!
                                                               .details !=
                                                           null
-                                                  ? dashboardFilterCountResponse
+                                                  ? dashboardFilterCountResponse!
                                                       .details!
                                                       .totalReferredPatients
                                                       .toString()

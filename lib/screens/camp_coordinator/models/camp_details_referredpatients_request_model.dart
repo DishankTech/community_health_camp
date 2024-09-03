@@ -50,7 +50,7 @@ class TtCampDashboardRefPatients {
   Map<String, dynamic> toJson() {
     return {
       'dashboard_ref_patients_id': dashboardRefPatientsId,
-      'camp_dashboard_id': campDashboardId,
+      'camp_dashboard_id': null,
       'patient_id': patientId,
       'patient_name': patientName,
       'age': age,

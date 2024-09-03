@@ -24,7 +24,7 @@ class AppRoundTextField extends StatelessWidget {
       this.errorText,
       this.onChange,
       this.isFloatingLabelEnable,
-      this.borderRaius,
+      this.borderRadius,
       this.inputFormatter,
       this.width,
       this.height});
@@ -47,7 +47,7 @@ class AppRoundTextField extends StatelessWidget {
   final String? Function(String?)? validators;
   final String? errorText;
   final Function(String)? onChange;
-  final double? borderRaius;
+  final double? borderRadius;
   final TextInputFormatter? inputFormatter;
   double? height;
   double? width;
@@ -63,7 +63,7 @@ class AppRoundTextField extends StatelessWidget {
           decoration: BoxDecoration(
               border: Border.all(color: kTextFieldBorder, width: 1),
               borderRadius:
-                  BorderRadius.circular(borderRaius ?? responsiveHeight(60))),
+                  BorderRadius.circular(borderRadius ?? responsiveHeight(60))),
           child: Padding(
             padding: EdgeInsets.all(responsiveHeight(2)),
             child: TextFormField(
