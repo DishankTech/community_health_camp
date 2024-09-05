@@ -21,8 +21,10 @@ import 'package:community_health_app/screens/camp_creation/camp_creation_control
 import 'package:community_health_app/screens/camp_creation/model/location/location_name_details.dart';
 import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
+import 'package:community_health_app/screens/doctor_desk/model/disease/disease_lookup_det.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
 import 'package:community_health_app/screens/patient_registration/bloc/patient_registration_bloc.dart';
+import 'package:community_health_app/screens/patient_registration/models/diseases_type_model.dart';
 import 'package:community_health_app/screens/patient_registration/models/refer_to_req_model.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -138,6 +140,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
     if (doctorDeskController.hasInternet) {
       doctorDeskController.getStakHolder();
       doctorDeskController.getUserList();
+      doctorDeskController.getDisease();
     }
 
     doctorDeskController.update();
@@ -146,8 +149,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   @override
   void initState() {
     checkInternetAndLoadData();
-
-    super.initState();
     _campIDTextController = TextEditingController();
     _campDateTextController = TextEditingController();
     _genderTextController = TextEditingController();
@@ -171,6 +172,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
     _investigationTextController = TextEditingController();
     _provisionTextController = TextEditingController();
     _mobileNoCountryCodeTextController.text = "+91";
+    super.initState();
   }
 
   @override
@@ -213,14 +215,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                 backgroundColor: Colors.green,
                 duration: const Duration(seconds: 2),
               ));
-            // context.read<PatientRegistrationBloc>().add(GetPatientListRequest(
-            //         payload: const {
-            //           "total_pages": 1,
-            //           "page": 1,
-            //           "total_count": 1,
-            //           "per_page": 100,
-            //           "data": ""
-            //         }));
 
             Navigator.pop(context, "refresh");
           } else {
@@ -255,15 +249,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
               context.read<MasterDataBloc>().add(ResetMasterState());
             });
           }
-          if (state.getDiseaseTypeStatus.isSuccess) {
-            diseaseTypeBottomSheet(context, (p0) {
-              setState(() {
-                _selectedDiseaseType = p0;
-                _diseaseTypeTextController.text = p0.lookupDetDescEn!;
-              });
-              context.read<MasterDataBloc>().add(ResetMasterState());
-            });
-          }
+
           if (state.getReferToDepartmentStatus.isSuccess) {
             referToDepartmentBottomSheet(context, (p0) {
               setState(() {
@@ -301,12 +287,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
 
                 DateTime dateTime = DateTime.parse(p0.propCampDate ?? "");
 
-                // Format the DateTime object to the desired format
-                // String formattedDate =
-                //     DateFormat('dd-MM-yyyy').format(dateTime);
 
                 String formattedDate =
-                DateFormat('yyyy-MM-dd').format(dateTime);
+                    DateFormat('yyyy-MM-dd').format(dateTime);
                 _campDateTextController.text = formattedDate;
               });
               context.read<MasterDataBloc>().add(ResetMasterState());
@@ -321,7 +304,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
               context.read<MasterDataBloc>().add(ResetMasterState());
             });
           }
-
           if (state.getDistrictListStatus.isSuccess) {
             districtBottomSheet(context, (p0) {
               setState(() {
@@ -669,13 +651,21 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       inputType: TextInputType.number,
                                       onChange: (p0) {},
                                       maxLength: 2,
+                                      validators: Validators.validateAge,
+                                      errorText: Validators.validateAge(
+                                          _locationNameController.text),
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Age',
                                             style: TextStyle(
                                                 color: kHintColor,
                                                 fontFamily: Montserrat),
-                                            children: []),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
                                       ),
                                       hint: "",
                                     ),
@@ -696,14 +686,22 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       },
                                       onChange: (p0) {},
                                       readOnly: true,
-                                      maxLength: 12,
+                                      // maxLength: 12,
+                                      validators: Validators.validateGender,
+                                      errorText: Validators.validateGender(
+                                          _locationNameController.text),
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Gender',
                                             style: TextStyle(
                                                 color: kHintColor,
                                                 fontFamily: Montserrat),
-                                            children: []),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
                                       ),
                                       hint: "",
                                       suffix: BlocBuilder<MasterDataBloc,
@@ -813,13 +811,23 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       textCapitalization:
                                           TextCapitalization.words,
                                       onChange: (p0) {},
+                                      validators:
+                                          Validators.validateInvestigation,
+                                      errorText:
+                                          Validators.validateInvestigation(
+                                              _locationNameController.text),
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Investigation',
                                             style: TextStyle(
                                                 color: kHintColor,
                                                 fontFamily: Montserrat),
-                                            children: []),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
                                       ),
                                       hint: "",
                                     ),
@@ -833,6 +841,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       borderRadius: responsiveHeight(20),
                                       textCapitalization:
                                           TextCapitalization.words,
+                                      validators: Validators.validateProvisionD,
+                                      errorText: Validators.validateProvisionD(
+                                          _locationNameController.text),
                                       onChange: (p0) {},
                                       label: RichText(
                                         text: const TextSpan(
@@ -840,7 +851,12 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                             style: TextStyle(
                                                 color: kHintColor,
                                                 fontFamily: Montserrat),
-                                            children: []),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
                                       ),
                                       hint: "",
                                     ),
@@ -848,114 +864,117 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       height: responsiveHeight(20),
                                     ),
 
-                                    AppRoundTextField(
-                                      controller: _diseaseTypeTextController,
-                                      inputType: TextInputType.text,
-                                      onTap: () {
-                                        context.read<MasterDataBloc>().add(
-                                                GetDiseaseTypes(payload: const {
-                                              "lookup_code_list1": [
-                                                {"lookup_code": "DIS"}
-                                              ]
-                                            }));
-                                      },
-                                      onChange: (p0) {},
-                                      readOnly: true,
-                                      // maxLength: 12,
-                                      label: RichText(
-                                        text: const TextSpan(
-                                            text: 'Disease Type',
-                                            style: TextStyle(
-                                                color: kHintColor,
-                                                fontFamily: Montserrat),
-                                            children: []),
-                                      ),
-                                      hint: "",
-                                      suffix: BlocBuilder<MasterDataBloc,
-                                          MasterDataState>(
-                                        builder: (context, state) {
-                                          return state.getDiseaseTypeStatus
-                                                  .isInProgress
-                                              ? SizedBox(
-                                                  height: responsiveHeight(20),
-                                                  width: responsiveHeight(20),
-                                                  child: const Center(
-                                                      child:
-                                                          CircularProgressIndicator()),
-                                                )
-                                              : SizedBox(
-                                                  height: responsiveHeight(20),
-                                                  width: responsiveHeight(20),
-                                                  child: Center(
-                                                    child: Image.asset(
-                                                      icArrowDownOrange,
-                                                      height:
-                                                          responsiveHeight(20),
-                                                      width:
-                                                          responsiveHeight(20),
-                                                    ),
-                                                  ),
-                                                );
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: responsiveHeight(20),
-                                    ),
-                                    // BlocBuilder<MasterDataBloc,
-                                    //     MasterDataState>(
-                                    //   builder: (context, state) {
-                                    //     return AppRoundTextField(
-                                    //       controller:
-                                    //           _stakeholderSubTypeTextController,
-                                    //       onChange: (p0) {
-                                    //         setState(() {});
-                                    //       },
-                                    //       errorText: Validators
-                                    //           .validateStakeholderSubType(
-                                    //               _stakeholderSubTypeTextController
-                                    //                   .text),
-                                    //       validators: Validators
-                                    //           .validateStakeholderSubType,
-                                    //       inputType: TextInputType.text,
-                                    //       onTap: () {
-                                    //         context.read<MasterDataBloc>().add(
-                                    //                 GetStakeholderSubTypeWithLookupCode(
-                                    //                     payload: const {
-                                    //                   "lookup_det_code_list1":
-                                    //                       const [
-                                    //                     {
-                                    //                       "lookup_det_code":
-                                    //                           "SUY"
-                                    //                     }
-                                    //                   ]
-                                    //                 }));
-                                    //       },
-                                    //       readOnly: true,
-                                    //       label: RichText(
-                                    //         text: const TextSpan(
-                                    //             text: 'Stakeholder Sub Type',
-                                    //             style: TextStyle(
-                                    //                 color: kHintColor,
-                                    //                 fontFamily: Montserrat),
-                                    //             children: [
-                                    //               TextSpan(
-                                    //                   text: "*",
-                                    //                   style: TextStyle(
-                                    //                       color: Colors.red))
-                                    //             ]),
-                                    //       ),
-                                    //       hint: "",
-                                    //       suffix: state
-                                    //               .getStakeholderSubTypeStatus
+                                    GetBuilder<DoctorDeskController>(
+                                        init: DoctorDeskController(),
+                                        builder: (controller) {
+                                          return AppRoundTextField(
+                                            controller: controller
+                                                .diseasesTypeController,
+                                            inputType: TextInputType.text,
+                                            validators:
+                                                Validators.validateDiseases,
+                                            errorText:
+                                                Validators.validateDiseases(
+                                                    _locationNameController
+                                                        .text),
+                                            onChange: (p0) {},
+                                            onTap: () async {
+                                              diseasesBottomSheet(
+                                                  context,
+                                                  (p0) => {
+                                                        controller
+                                                                .selectedDiseasesVal =
+                                                            p0.lookupDetDescEn,
+                                                        selectedDisease
+                                                            .addIfNotExistD(p0),
+                                                        controller
+                                                                .diseasesTypeController
+                                                                .text =
+                                                            selectedDisease
+                                                                .displayTextD(),
+                                                        controller.update()
+                                                      },
+                                                  "Diseases Type",
+                                                  controller
+                                                          .diseaseLookupDetHierarchical
+                                                          ?.details
+                                                          ?.first
+                                                          .lookupDet ??
+                                                      [],
+                                                  true);
+                                            },
+                                            // maxLength: 12,
+                                            readOnly: true,
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Diseases Type"',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                            suffix: SizedBox(
+                                              height:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              width:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  icArrowDownOrange,
+                                                  height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                  width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+
+                                    // AppRoundTextField(
+                                    //   controller: _diseaseTypeTextController,
+                                    //   inputType: TextInputType.text,
+                                    //   onTap: () {
+                                    //     context.read<MasterDataBloc>().add(
+                                    //             GetDiseaseTypes(payload: const {
+                                    //           "lookup_code_list1": [
+                                    //             {"lookup_code": "DIS"}
+                                    //           ]
+                                    //         }));
+                                    //   },
+                                    //   onChange: (p0) {},
+                                    //   readOnly: true,
+                                    //   // maxLength: 12,
+                                    //   label: RichText(
+                                    //     text: const TextSpan(
+                                    //         text: 'Disease Type',
+                                    //         style: TextStyle(
+                                    //             color: kHintColor,
+                                    //             fontFamily: Montserrat),
+                                    //         children: []),
+                                    //   ),
+                                    //   hint: "",
+                                    //   suffix: BlocBuilder<MasterDataBloc,
+                                    //       MasterDataState>(
+                                    //     builder: (context, state) {
+                                    //       return state.getDiseaseTypeStatus
                                     //               .isInProgress
                                     //           ? SizedBox(
                                     //               height: responsiveHeight(20),
                                     //               width: responsiveHeight(20),
                                     //               child: const Center(
-                                    //                 child:
-                                    //                     CircularProgressIndicator(),
-                                    //               ),
+                                    //                   child:
+                                    //                       CircularProgressIndicator()),
                                     //             )
                                     //           : SizedBox(
                                     //               height: responsiveHeight(20),
@@ -969,87 +988,13 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     //                       responsiveHeight(20),
                                     //                 ),
                                     //               ),
-                                    //             ),
-                                    //     );
-                                    //   },
+                                    //             );
+                                    //     },
+                                    //   ),
                                     // ),
-                                    //
-                                    // SizedBox(
-                                    //   height: responsiveHeight(20),
-                                    // ),
-                                    //
-                                    // GetBuilder(
-                                    //     init: DoctorDeskController(),
-                                    //     builder: (controller) =>
-                                    //         AppRoundTextField(
-                                    //           controller:
-                                    //               _referToTextController,
-                                    //           inputType: TextInputType.text,
-                                    //           onChange: (p0) {},
-                                    //           onTap: () async {
-                                    //             if (_stakeholderSubTypeTextController
-                                    //                 .text.isNotEmpty) {
-                                    //               await stakeHolderNameBottomSheet(
-                                    //                   context,
-                                    //                   (p0) => {
-                                    //                         controller
-                                    //                                 .selectedStakeHVal =
-                                    //                             p0.lookupDetHierDescEn,
-                                    //                         controller
-                                    //                             .selectedStakeH
-                                    //                             .addIfNotExist(
-                                    //                                 p0),
-                                    //                         _referToTextController
-                                    //                                 .text =
-                                    //                             controller
-                                    //                                 .selectedStakeH
-                                    //                                 .displayText(),
-                                    //                         controller.update()
-                                    //                       },
-                                    //                   "Refer To",
-                                    //                   controller.referToModel
-                                    //                           ?.details ??
-                                    //                       [],
-                                    //                   true);
-                                    //             }
-                                    //           },
-                                    //           // maxLength: 12,
-                                    //           readOnly: true,
-                                    //           label: RichText(
-                                    //             text: const TextSpan(
-                                    //                 text: 'Refer To',
-                                    //                 style: TextStyle(
-                                    //                     color: kHintColor,
-                                    //                     fontFamily: Montserrat),
-                                    //                 children: [
-                                    //                   TextSpan(
-                                    //                       text: "*",
-                                    //                       style: TextStyle(
-                                    //                           color:
-                                    //                               Colors.red))
-                                    //                 ]),
-                                    //           ),
-                                    //           hint: "",
-                                    //           suffix: SizedBox(
-                                    //             height:
-                                    //                 getProportionateScreenHeight(
-                                    //                     20),
-                                    //             width:
-                                    //                 getProportionateScreenHeight(
-                                    //                     20),
-                                    //             child: Center(
-                                    //               child: Image.asset(
-                                    //                 icArrowDownOrange,
-                                    //                 height:
-                                    //                     getProportionateScreenHeight(
-                                    //                         20),
-                                    //                 width:
-                                    //                     getProportionateScreenHeight(
-                                    //                         20),
-                                    //               ),
-                                    //             ),
-                                    //           ),
-                                    //         )),
+                                    SizedBox(
+                                      height: responsiveHeight(20),
+                                    ),
 
                                     SizedBox(
                                       height: responsiveHeight(20),
@@ -1263,16 +1208,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                                   .read<MasterDataBloc>()
                                                   .add(GetDistrictList(
                                                       payload: payload));
-                                              // } else {
-                                              //   ScaffoldMessenger.of(context)
-                                              //     ..clearSnackBars()
-                                              //     ..showSnackBar(const SnackBar(
-                                              //       content: Text(
-                                              //           "Please select division first!"),
-                                              //       backgroundColor: Colors.amber,
-                                              //       duration: Duration(seconds: 2),
-                                              //     ));
-                                              // }
                                             },
                                             suffix: BlocBuilder<MasterDataBloc,
                                                 MasterDataState>(
@@ -1493,6 +1428,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     }
 
                                     List<ReferToReqModel> referTo = [];
+                                    List<DiseasesTypeModel> diseasesT = [];
                                     for (int i = 0;
                                         i < selectedStakeH.length;
                                         i++) {
@@ -1503,10 +1439,25 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                               .stakeholderMasterId,
                                           // stakeholderMasterId: 1,
                                           lookupDetHierIdStakeholderSubType2:
-                                              null,
-                                          lookupDetIdRefDepartment: null,
+                                              _selectedStakeholderSubType
+                                                  ?.lookupDetHierId,
+                                          lookupDetIdRefDepartment:
+                                              _selectedReferToDepartmentType
+                                                  ?.lookupDetId,
                                           orgId: 1,
                                           status: 1));
+                                    }
+                                    for (int i = 0;
+                                        i < selectedDisease.length;
+                                        i++) {
+                                      diseasesT.add(DiseasesTypeModel(
+                                          patientDiseaseTypesId: null,
+                                          patientId: null,
+                                          lookupDetIdDiseaseTypes:
+                                              selectedDisease[i].lookupDetId,
+                                          orgId: 1,
+                                          status: 1,
+                                          isInactive: null));
                                     }
                                     var payload = {
                                       "tt_patient_details": {
@@ -1560,37 +1511,23 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                             _provisionTextController.text,
                                       },
                                       "tt_patient_ref_list": referTo,
-                                      // "tt_patient_ref_list": [
+                                      "tt_patient_disease_list": diseasesT
+                                      // "tt_patient_disease_list": [
                                       //   {
-                                      //     "patient_refer_id": null,
+                                      //     "patient_disease_types_id": null,
                                       //     "patient_id": null,
-                                      //     "stakeholder_master_id":
-                                      //         selectedStakeH[0]
-                                      //             .stakeholderMasterId,
-                                      //     "lookup_det_id_ref_department": null,
-                                      //     "lookup_det_hier_id_stakeholder_sub_type2":
-                                      //         null,
+                                      //     "lookup_det_id_disease_types": 0,
                                       //     "org_id": 1,
                                       //     "status": 1,
                                       //     "is_inactive": null
                                       //   }
-                                      // ],
-                                      "tt_patient_disease_list": [
-                                        {
-                                          "patient_disease_types_id": null,
-                                          "patient_id": null,
-                                          "lookup_det_id_disease_types":
-                                              _selectedDiseaseType?.lookupDetId,
-                                          "org_id": 1,
-                                          "status": 1,
-                                          "is_inactive": null
-                                        }
-                                      ]
+                                      // ]
                                     };
                                     print(jsonEncode(payload));
-                                    context.read<PatientRegistrationBloc>().add(
-                                        PatientRegistrationRequest(
-                                            payload: payload));
+
+                                    // context.read<PatientRegistrationBloc>().add(
+                                    //     PatientRegistrationRequest(
+                                    //         payload: payload));
                                   },
                                 );
                         },
@@ -1610,6 +1547,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   }
 
   List<ReferToDetails> selectedStakeH = [];
+  List<DiseaseLookupDet> selectedDisease = [];
 
   Padding multiSelection(BuildContext context) {
     GlobalKey<FormState> _key = GlobalKey();
@@ -1633,9 +1571,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                       onChange: (p0) {
                         setState(() {});
                       },
-                      errorText: Validators.validateStakeholderSubType(
-                          _stakeholderSubTypeTextController.text),
-                      validators: Validators.validateStakeholderSubType,
+                      // errorText: Validators.validateStakeholderSubType(
+                      //     _stakeholderSubTypeTextController.text),
+                      // validators: Validators.validateStakeholderSubType,
                       inputType: TextInputType.text,
                       onTap: () {
                         context.read<MasterDataBloc>().add(
@@ -1653,9 +1591,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                             style: TextStyle(
                                 color: kHintColor, fontFamily: Montserrat),
                             children: [
-                              TextSpan(
-                                  text: "*",
-                                  style: TextStyle(color: Colors.red))
+                              // TextSpan(
+                              //     text: "*",
+                              //     style: TextStyle(color: Colors.red))
                             ]),
                       ),
                       hint: "",
@@ -1692,9 +1630,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           onChange: (p0) {
                             setState(() {});
                           },
-                          errorText: Validators.validateStakeholderSubType(
-                              _referToTextController.text),
-                          validators: Validators.validateStakeholderSubType,
+                          // errorText: Validators.validateStakeholderSubType(
+                          //     _referToTextController.text),
+                          // validators: Validators.validateStakeholderSubType,
                           onTap: () async {
                             if (_stakeholderSubTypeTextController
                                 .text.isNotEmpty) {
@@ -1721,9 +1659,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                 style: TextStyle(
                                     color: kHintColor, fontFamily: Montserrat),
                                 children: [
-                                  TextSpan(
-                                      text: "*",
-                                      style: TextStyle(color: Colors.red))
+                                  // TextSpan(
+                                  //     text: "*",
+                                  //     style: TextStyle(color: Colors.red))
                                 ]),
                           ),
                           hint: "",
@@ -1749,9 +1687,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                       onChange: (p0) {
                         setState(() {});
                       },
-                      errorText: Validators.validateStakeholderSubType(
-                          _referToDepartmentTextController.text),
-                      validators: Validators.validateStakeholderSubType,
+                      // errorText: Validators.validateStakeholderSubType(
+                      //     _referToDepartmentTextController.text),
+                      // validators: Validators.validateStakeholderSubType,
                       inputType: TextInputType.text,
                       onTap: () {
                         context
@@ -1769,9 +1707,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                             style: TextStyle(
                                 color: kHintColor, fontFamily: Montserrat),
                             children: [
-                              TextSpan(
-                                  text: "*",
-                                  style: TextStyle(color: Colors.red))
+                              // TextSpan(
+                              //     text: "*",
+                              //     style: TextStyle(color: Colors.red))
                             ]),
                       ),
                       hint: "",
@@ -1829,6 +1767,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           selectedStakeH.clear();
                           _referToDepartmentTextController.clear();
                           _referToTextController.clear();
+                          _diseaseTypeTextController.clear();
                           _stakeholderSubTypeTextController.clear();
                           scrollController.animateTo(
                               scrollController.position.maxScrollExtent,

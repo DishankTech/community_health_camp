@@ -6,6 +6,7 @@ import 'package:community_health_app/screens/doctor_desk/model/add_treatment_det
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/doctor_desk_ref_service_list.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/tt_patient_doctor_desk_ref.dart';
+import 'package:community_health_app/screens/doctor_desk/model/disease/disease_lookup_det.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
 import 'package:community_health_app/screens/doctor_desk/model/referral/referral_lookup_det.dart';
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
@@ -1423,6 +1424,31 @@ extension ListExtensionsReferral on List {
   String displayReferralText() {
     return where(
             (item) => item.lookupDetDescEn != null) // Filter out null values
+        .map((item) => item.lookupDetDescEn!)
+        .join(', '); // Joins with a comma and space separator
+  }
+}
+
+
+extension ListExtensionsDiseases on List {
+  void addIfNotExistD(DiseaseLookupDet element,
+      {bool Function(DiseaseLookupDet item)? condition}) {
+    bool exists;
+
+    if (condition != null) {
+      exists = any((item) => condition(item));
+    } else {
+      exists = contains(element);
+    }
+
+    if (!exists) {
+      add(element);
+    }
+  }
+
+  String displayTextD() {
+    return where((item) =>
+    item.lookupDetDescEn != null) // Filter out null values
         .map((item) => item.lookupDetDescEn!)
         .join(', '); // Joins with a comma and space separator
   }

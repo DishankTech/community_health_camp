@@ -1,12 +1,12 @@
 import 'lookup_det.dart';
 
-class Details {
-  Details({
+class DivisionDetails {
+  DivisionDetails({
       this.lookupId, 
       this.lookupCode, 
       this.lookupDet,});
 
-  Details.fromJson(dynamic json) {
+  DivisionDetails.fromJson(dynamic json) {
     lookupId = json['lookup_id'];
     lookupCode = json['lookup_code'];
     if (json['lookup_det'] != null) {

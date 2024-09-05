@@ -4,6 +4,7 @@ import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/add_treatment_details_model.dart';
+import 'package:community_health_app/screens/doctor_desk/model/disease/disease_lookup_det.dart';
 import 'package:community_health_app/screens/doctor_desk/model/disease/disease_model.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_data.dart';
 import 'package:community_health_app/screens/doctor_desk/model/doctor_desk_details/doc_desk_data.dart';
@@ -14,6 +15,8 @@ import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_t
 import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_model.dart';
 import 'package:community_health_app/screens/doctor_desk/model/search/search__doc_desk_data_model.dart';
 import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
+import 'package:community_health_app/screens/patient_registration/models/patient_details_by_id_model.dart';
+import 'package:community_health_app/screens/patient_registration/ui/registered_patients.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -31,6 +34,8 @@ class DoctorDeskController extends GetxController {
 
   DoctorDeskListModel? doctorDeskModel;
   DocDeskDetailsListModel? doctorDetailsDeskListModel;
+  List<ReferToDetails> selectedStakeH = [];
+  List<DiseaseLookupDet> selectedDiseaseList = [];
 
   // CountryModel? stakeHolderModel;
   ReferToModel? referToModel;
@@ -43,10 +48,10 @@ class DoctorDeskController extends GetxController {
   TextEditingController diseasesTypeController = TextEditingController();
   TextEditingController referralService = TextEditingController();
   int? selectedUserId;
-  List<ReferToDetails> selectedStakeH = [];
+
   LookupDetHierarchical? selectedStakeHType;
   LookupDetHierarchical? selectedDiseases;
-  List<ReferralLookupDet> selectedReferralSer =[];
+  List<ReferralLookupDet> selectedReferralSer = [];
   String? selectedStakeHVal;
   String? selectedStakeHTypeVal;
   String? selectedDiseasesVal;
@@ -78,6 +83,20 @@ class DoctorDeskController extends GetxController {
   bool isSearch = false;
 
   SearchDocDeskDataModel? searchedDataModel;
+
+  DiseaseModel? refToDep;
+
+  ReferToDetails? refTo;
+
+  LookupDetHierarchical? stake;
+
+  DiseaseLookupDet? disease;
+
+  DiseaseLookupDet? refToDe;
+
+  String? pincode;
+
+  PatientDetailsByIdModel? patientDataById;
 
   fetchPage(int pageKey) async {
     try {
@@ -296,6 +315,48 @@ class DoctorDeskController extends GetxController {
     update();
   }
 
+
+  updatePatient(body) async {
+    isLoading = true;
+    final uri =
+    Uri.parse(ApiConstants.baseUrl + ApiConstants.updatePatient);
+
+    String jsonbody = json.encode(body);
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+    // debugPrint(body.toString());
+
+    final response = await http.post(uri, headers: headers, body: jsonbody);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      // addlocationMasterResp = AddLocationMasterResp.fromJson(data);
+
+      // if (addlocationMasterResp!.statusCode == 200) {
+      isLoading = false;
+      CustomMessage.toast("Save Successfully");
+      Get.to(const RegisteredPatientsScreen());
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+      CustomMessage.toast("Save Failed");
+      Get.back();
+    } else {
+      isLoading = false;
+      CustomMessage.toast("Save Failed");
+      Get.back();
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
   getStakHolder() async {
     isLoading = true;
     final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.getAllAddress);
@@ -365,7 +426,71 @@ class DoctorDeskController extends GetxController {
     } else {
       isLoading = false;
 
-      throw Exception('Failed search');
+      throw Exception('Failed refer to');
+    }
+    update();
+  }
+
+  getPatientDetailsById(id) async {
+    isLoading = true;
+    final uri =
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getPatientById}/$id');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+
+       patientDataById =
+          PatientDetailsByIdModel.fromJson(data);
+
+      if (stakeHolderTypeModel != null) {
+        stake = stakeHolderTypeModel?.details?.first.lookupDetHierarchical
+            ?.firstWhere((e) =>
+                e.lookupDetHierId ==
+                patientDataById?.details?.ttPatientRefList?.first
+                    .lookupDetHierIdStakeholderSubType2);
+
+        await getReferTo(stake?.lookupDetHierId);
+      }
+      if (diseaseLookupDetHierarchical != null) {
+        disease = diseaseLookupDetHierarchical?.details?.first.lookupDet
+            ?.firstWhere((e) =>
+                e.lookupDetId ==
+                patientDataById?.details?.ttPatientDiseaseList?.first
+                    .lookupDetIdDiseaseTypes);
+      }
+      if (refToDep != null) {
+        refToDe = refToDep?.details?.first.lookupDet?.firstWhere((e) =>
+            e.lookupDetId ==
+            patientDataById
+                ?.details?.ttPatientRefList?.first.lookupDetIdRefDepartment);
+
+      pincode =  patientDataById?.details?.ttPatientDetails?.pinCode ?? "";
+      }
+      if (referToModel != null) {
+        refTo = referToModel?.details?.firstWhere((e) =>
+            e.stakeholderMasterId ==
+            patientDataById
+                ?.details?.ttPatientRefList?.first.stakeholderMasterId);
+      }
+
+      update();
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed getting patient data');
     }
     update();
   }
@@ -405,13 +530,10 @@ class DoctorDeskController extends GetxController {
 
   getDisease() async {
     isLoading = true;
-    final uri =
-        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getDivision}');
+    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getDivision}');
     final Map<String, dynamic> body = {
       "lookup_code_list1": [
-        {
-          "lookup_code": "DIS"
-        }
+        {"lookup_code": "DIS"}
       ]
     };
     Map<String, String> headers = {
@@ -432,6 +554,44 @@ class DoctorDeskController extends GetxController {
       // if (data['status'] == 'Success') {
       isLoading = false;
       diseaseLookupDetHierarchical = DiseaseModel.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+  getRefToDep() async {
+    isLoading = true;
+    final uri = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getDivision}');
+    final Map<String, dynamic> body = {
+      "lookup_code_list1": [
+        {"lookup_code": "DRF"}
+      ]
+    };
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response =
+        await http.post(uri, headers: headers, body: json.encode(body));
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      refToDep = DiseaseModel.fromJson(data);
 
       update();
     } else if (response.statusCode == 401) {

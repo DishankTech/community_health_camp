@@ -157,6 +157,47 @@ class Validators {
     return null;
   }
 
+  static String? validateAge(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter age';
+    }
+
+    return null;
+  }
+
+  static String? validateGender(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select gender';
+    }
+
+    return null;
+  }
+
+  static String? validateDiseases(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select disease';
+    }
+
+    return null;
+  }
+
+
+  static String? validateInvestigation(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select investigation';
+    }
+
+    return null;
+  }
+
+  static String? validateProvisionD(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select provision diagnosis';
+    }
+
+    return null;
+  }
+
   static String? validateCampId(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please select camp Id';

@@ -101,6 +101,7 @@ class PatientData {
   String? talukaDescRg;
   String? cityDescEn;
   String? cityDescRg;
+  String? pincode;
 
   PatientData(
       {this.patientId,
@@ -135,7 +136,7 @@ class PatientData {
       this.talukaDescEn,
       this.talukaDescRg,
       this.cityDescEn,
-      this.cityDescRg});
+      this.cityDescRg,this.pincode});
 
   PatientData.fromJson(Map<String, dynamic> json) {
     patientId = json['patient_id'];
@@ -171,6 +172,7 @@ class PatientData {
     talukaDescRg = json['taluka_desc_rg'];
     cityDescEn = json['city_desc_en'];
     cityDescRg = json['city_desc_rg'];
+    pincode = json['pin_code'];
   }
 
   Map<String, dynamic> toJson() {
@@ -208,6 +210,7 @@ class PatientData {
     data['taluka_desc_rg'] = talukaDescRg;
     data['city_desc_en'] = cityDescEn;
     data['city_desc_rg'] = cityDescRg;
+    data['pin_code'] = pincode;
     return data;
   }
 }

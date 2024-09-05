@@ -1,30 +1,25 @@
-import 'division_details.dart';
+import 'patient_details_model.dart';
 
-class DivisionModel {
-  DivisionModel({
+class PatientDetailsByIdModel {
+  PatientDetailsByIdModel({
       this.statusCode, 
       this.message, 
       this.path, 
       this.dateTime, 
       this.details,});
 
-  DivisionModel.fromJson(dynamic json) {
+  PatientDetailsByIdModel.fromJson(dynamic json) {
     statusCode = json['status_code'];
     message = json['message'];
     path = json['path'];
     dateTime = json['dateTime'];
-    if (json['details'] != null) {
-      details = [];
-      json['details'].forEach((v) {
-        details?.add(DivisionDetails.fromJson(v));
-      });
-    }
+    details = json['details'] != null ? Details.fromJson(json['details']) : null;
   }
   int? statusCode;
   String? message;
   String? path;
   String? dateTime;
-  List<DivisionDetails>? details;
+  Details? details;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -33,7 +28,7 @@ class DivisionModel {
     map['path'] = path;
     map['dateTime'] = dateTime;
     if (details != null) {
-      map['details'] = details?.map((v) => v.toJson()).toList();
+      map['details'] = details?.toJson();
     }
     return map;
   }
