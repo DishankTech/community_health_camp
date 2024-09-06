@@ -1403,6 +1403,13 @@ extension ListExtensions on List {
         .map((item) => item.stakeholderNameEn!)
         .join(', '); // Joins with a comma and space separator
   }
+
+  String displayTextRefTo() {
+    return where((item) =>
+    item.stakeholderNameEn != null) // Filter out null values
+        .map((item) => item.stakeholderNameEn!)
+        .join(', '); // Joins with a comma and space separator
+  }
 }
 
 extension ListExtensionsReferral on List {
@@ -1452,4 +1459,8 @@ extension ListExtensionsDiseases on List {
         .map((item) => item.lookupDetDescEn!)
         .join(', '); // Joins with a comma and space separator
   }
+
+
 }
+
+

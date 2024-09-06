@@ -10,6 +10,8 @@ import 'package:community_health_app/screens/camp_creation/model/stakeholder_nam
 import 'package:community_health_app/screens/camp_creation/model/stakeholder_name/stakeholder_details.dart';
 import 'package:community_health_app/screens/camp_creation/model/user_list_model/user_details.dart';
 import 'package:community_health_app/screens/camp_creation/model/user_list_model/user_list_model.dart';
+import 'package:community_health_app/screens/dashboard/dashboard.dart';
+import 'package:community_health_app/screens/dashboard/ui/dashboard_view.dart';
 import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
 import 'package:community_health_app/screens/location_master/model/sub_location_model/sub_location_details.dart';
 import 'package:flutter/material.dart';
@@ -116,18 +118,20 @@ class CampCreationController extends GetxController {
 
       isLoading = false;
       CustomMessage.toast("Save Successfully");
-      Get.back();
+      Get.off(const DashboardScreen());
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
       CustomMessage.toast("Save Failed");
-      Get.back();
+      Get.off(const DashboardScreen());
+
 
       status = "Something went wrong";
     } else {
       isLoading = false;
       CustomMessage.toast("Save Failed");
-      Get.back();
+      Get.off(const DashboardScreen());
+
 
       throw Exception('Failed search');
     }

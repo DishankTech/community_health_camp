@@ -14,6 +14,7 @@ import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
+import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/core/utilities/validators.dart';
@@ -22,7 +23,6 @@ import 'package:community_health_app/screens/camp_creation/model/location/locati
 import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
 import 'package:community_health_app/screens/doctor_desk/model/disease/disease_lookup_det.dart';
-import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_to_details.dart';
 import 'package:community_health_app/screens/patient_registration/bloc/patient_registration_bloc.dart';
 import 'package:community_health_app/screens/patient_registration/models/diseases_type_model.dart';
 import 'package:community_health_app/screens/patient_registration/models/refer_to_req_model.dart';
@@ -48,7 +48,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   GlobalKey<FormState> _formKey = GlobalKey();
   ScrollController scrollController = ScrollController();
   List<Widget> multiSelectionWidgets = [];
-  List<Map> multiSelectedItem = [];
+  List<ReferToReqModel> multiSelectedItem = [];
   final CampCreationController campCreationController =
       Get.put(CampCreationController());
   late TextEditingController _campIDTextController;
@@ -85,6 +85,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   LookupDetHierarchical? _selectedStakeholderSubType;
 
   // DateTime? _selectedCampDate;
+
+  List<ReferToReqModel> referTo = [];
+  List<DiseasesTypeModel> diseasesT = [];
 
   late TextEditingController _locationNameController;
 
@@ -141,6 +144,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
       doctorDeskController.getStakHolder();
       doctorDeskController.getUserList();
       doctorDeskController.getDisease();
+      doctorDeskController.getRefToDep();
     }
 
     doctorDeskController.update();
@@ -148,6 +152,21 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
 
   @override
   void initState() {
+    multiSelectedItem.add(ReferToReqModel(
+        patientReferId: null,
+        patientId: null,
+        stakeholderMasterId: null,
+        lookupDetIdRefDepartment: null,
+        lookupDetHierIdStakeholderSubType2: null,
+        stakeholderSubTypeTitle: "",
+        referToTitle: "",
+        referToDeptTitle: "",
+        orgId: 1,
+        status: 1,
+        isInactive: null));
+    doctorDeskController
+        .diseasesTypeController
+        .text ="";
     checkInternetAndLoadData();
     _campIDTextController = TextEditingController();
     _campDateTextController = TextEditingController();
@@ -286,7 +305,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                 _campIDTextController.text = p0.campCreateRequestId.toString()!;
 
                 DateTime dateTime = DateTime.parse(p0.propCampDate ?? "");
-
 
                 String formattedDate =
                     DateFormat('yyyy-MM-dd').format(dateTime);
@@ -875,7 +893,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                                 Validators.validateDiseases,
                                             errorText:
                                                 Validators.validateDiseases(
-                                                    _locationNameController
+                                                    doctorDeskController
+                                                        .diseasesTypeController
                                                         .text),
                                             onChange: (p0) {},
                                             onTap: () async {
@@ -941,57 +960,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                           );
                                         }),
 
-                                    // AppRoundTextField(
-                                    //   controller: _diseaseTypeTextController,
-                                    //   inputType: TextInputType.text,
-                                    //   onTap: () {
-                                    //     context.read<MasterDataBloc>().add(
-                                    //             GetDiseaseTypes(payload: const {
-                                    //           "lookup_code_list1": [
-                                    //             {"lookup_code": "DIS"}
-                                    //           ]
-                                    //         }));
-                                    //   },
-                                    //   onChange: (p0) {},
-                                    //   readOnly: true,
-                                    //   // maxLength: 12,
-                                    //   label: RichText(
-                                    //     text: const TextSpan(
-                                    //         text: 'Disease Type',
-                                    //         style: TextStyle(
-                                    //             color: kHintColor,
-                                    //             fontFamily: Montserrat),
-                                    //         children: []),
-                                    //   ),
-                                    //   hint: "",
-                                    //   suffix: BlocBuilder<MasterDataBloc,
-                                    //       MasterDataState>(
-                                    //     builder: (context, state) {
-                                    //       return state.getDiseaseTypeStatus
-                                    //               .isInProgress
-                                    //           ? SizedBox(
-                                    //               height: responsiveHeight(20),
-                                    //               width: responsiveHeight(20),
-                                    //               child: const Center(
-                                    //                   child:
-                                    //                       CircularProgressIndicator()),
-                                    //             )
-                                    //           : SizedBox(
-                                    //               height: responsiveHeight(20),
-                                    //               width: responsiveHeight(20),
-                                    //               child: Center(
-                                    //                 child: Image.asset(
-                                    //                   icArrowDownOrange,
-                                    //                   height:
-                                    //                       responsiveHeight(20),
-                                    //                   width:
-                                    //                       responsiveHeight(20),
-                                    //                 ),
-                                    //               ),
-                                    //             );
-                                    //     },
-                                    //   ),
-                                    // ),
                                     SizedBox(
                                       height: responsiveHeight(20),
                                     ),
@@ -1405,7 +1373,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           physics: const NeverScrollableScrollPhysics(),
                           itemCount: multiSelectedItem.length,
                           itemBuilder: (c, i) => selectedList(context, i)),
-                      multiSelection(context),
                       SizedBox(
                         height: responsiveHeight(30),
                       ),
@@ -1424,29 +1391,40 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                   onTap: () {
                                     if (_formKey.currentState!.validate() ==
                                         false) {
+                                      CustomMessage.toast(
+                                          "Fill all mandatory fields");
                                       return;
                                     }
 
-                                    List<ReferToReqModel> referTo = [];
-                                    List<DiseasesTypeModel> diseasesT = [];
                                     for (int i = 0;
-                                        i < selectedStakeH.length;
+                                        i < multiSelectedItem.length;
                                         i++) {
-                                      referTo.add(ReferToReqModel(
-                                          patientId: null,
-                                          patientReferId: null,
-                                          stakeholderMasterId: selectedStakeH[i]
-                                              .stakeholderMasterId,
-                                          // stakeholderMasterId: 1,
-                                          lookupDetHierIdStakeholderSubType2:
-                                              _selectedStakeholderSubType
-                                                  ?.lookupDetHierId,
-                                          lookupDetIdRefDepartment:
-                                              _selectedReferToDepartmentType
-                                                  ?.lookupDetId,
-                                          orgId: 1,
-                                          status: 1));
+                                      for (int j = 0;
+                                          j <
+                                              multiSelectedItem[i]
+                                                  .selectedStakeH
+                                                  .length;
+                                          j++) {
+                                        referTo.add(ReferToReqModel(
+                                            patientId: null,
+                                            patientReferId: null,
+                                            stakeholderMasterId:
+                                                multiSelectedItem[i]
+                                                    .selectedStakeH[j]
+                                                    .stakeholderMasterId,
+                                            // stakeholderMasterId: 1,
+
+                                            lookupDetHierIdStakeholderSubType2:
+                                                multiSelectedItem[i]
+                                                    ?.lookupDetHierIdStakeholderSubType2,
+                                            lookupDetIdRefDepartment:
+                                                multiSelectedItem[i]
+                                                    .lookupDetIdRefDepartment,
+                                            orgId: 1,
+                                            status: 1));
+                                      }
                                     }
+
                                     for (int i = 0;
                                         i < selectedDisease.length;
                                         i++) {
@@ -1525,9 +1503,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     };
                                     print(jsonEncode(payload));
 
-                                    // context.read<PatientRegistrationBloc>().add(
-                                    //     PatientRegistrationRequest(
-                                    //         payload: payload));
+                                    context.read<PatientRegistrationBloc>().add(
+                                        PatientRegistrationRequest(
+                                            payload: payload));
                                   },
                                 );
                         },
@@ -1546,11 +1524,18 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
     );
   }
 
-  List<ReferToDetails> selectedStakeH = [];
   List<DiseaseLookupDet> selectedDisease = [];
 
-  Padding multiSelection(BuildContext context) {
+  Padding selectedList(BuildContext context, int index) {
+    // TextEditingController subStakeholderController = TextEditingController();
+    // TextEditingController referToController = TextEditingController();
+    // TextEditingController referToDeptController = TextEditingController();
+    // subStakeholderController.text =
+    //     multiSelectedItem[index].stakeholderSubTypeTitle ?? "";
+    // referToController.text = multiSelectedItem[index].referToTitle ?? "";
+    // referToDeptController.text = multiSelectedItem[index].referToTitle ?? "";
     GlobalKey<FormState> _key = GlobalKey();
+
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -1564,60 +1549,59 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
             key: _key,
             child: Column(
               children: [
-                BlocBuilder<MasterDataBloc, MasterDataState>(
-                  builder: (context, state) {
-                    return AppRoundTextField(
-                      controller: _stakeholderSubTypeTextController,
-                      onChange: (p0) {
-                        setState(() {});
-                      },
-                      // errorText: Validators.validateStakeholderSubType(
-                      //     _stakeholderSubTypeTextController.text),
-                      // validators: Validators.validateStakeholderSubType,
-                      inputType: TextInputType.text,
-                      onTap: () {
-                        context.read<MasterDataBloc>().add(
-                                GetStakeholderSubTypeWithLookupCode(
-                                    payload: const {
-                                  "lookup_det_code_list1": const [
-                                    {"lookup_det_code": "SUY"}
-                                  ]
-                                }));
-                      },
-                      readOnly: true,
-                      label: RichText(
-                        text: const TextSpan(
-                            text: 'Stakeholder Sub Type',
-                            style: TextStyle(
-                                color: kHintColor, fontFamily: Montserrat),
-                            children: [
-                              // TextSpan(
-                              //     text: "*",
-                              //     style: TextStyle(color: Colors.red))
-                            ]),
-                      ),
-                      hint: "",
-                      suffix: state.getStakeholderSubTypeStatus.isInProgress
-                          ? SizedBox(
-                              height: responsiveHeight(20),
-                              width: responsiveHeight(20),
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
-                          : SizedBox(
-                              height: responsiveHeight(20),
-                              width: responsiveHeight(20),
-                              child: Center(
-                                child: Image.asset(
-                                  icArrowDownOrange,
-                                  height: responsiveHeight(20),
-                                  width: responsiveHeight(20),
-                                ),
-                              ),
-                            ),
-                    );
+                AppRoundTextField(
+                  // key: UniqueKey(),
+                  initialValue:
+                      multiSelectedItem[index].stakeholderSubTypeTitle ?? "",
+                  inputType: TextInputType.text,
+                  onChange: (p0) {},
+                  onTap: () async {
+                    await commonBottomSheet(
+                        context,
+                        (p0) async => {
+                              doctorDeskController.selectedStakeHTypeVal =
+                                  p0.lookupDetHierDescEn,
+                              multiSelectedItem[index].stakeholderSubTypeTitle =
+                                  p0.lookupDetHierDescEn ?? "",
+                              multiSelectedItem[index]
+                                      .lookupDetHierIdStakeholderSubType2 =
+                                  p0.lookupDetHierId,
+                              doctorDeskController.update(),
+                              await doctorDeskController
+                                  .getReferTo(p0.lookupDetHierId),
+                              doctorDeskController.selectedStakeHType = p0,
+                              doctorDeskController.update()
+                            },
+                        "Stakeholder Subtype",
+                        doctorDeskController.stakeHolderTypeModel?.details
+                                ?.first.lookupDetHierarchical ??
+                            [],
+                        isVisible: true);
                   },
+                  // maxLength: 12,
+                  readOnly: true,
+                  label: RichText(
+                    text: const TextSpan(
+                        text: 'Stakeholder Subtype',
+                        style: TextStyle(
+                            color: kHintColor, fontFamily: Montserrat),
+                        children: [
+                          TextSpan(
+                              text: "*", style: TextStyle(color: Colors.red))
+                        ]),
+                  ),
+                  hint: "",
+                  suffix: SizedBox(
+                    height: getProportionateScreenHeight(20),
+                    width: getProportionateScreenHeight(20),
+                    child: Center(
+                      child: Image.asset(
+                        icArrowDownOrange,
+                        height: getProportionateScreenHeight(20),
+                        width: getProportionateScreenHeight(20),
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: responsiveHeight(20),
@@ -1625,7 +1609,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                 GetBuilder(
                     init: DoctorDeskController(),
                     builder: (controller) => AppRoundTextField(
-                          controller: _referToTextController,
+                          // key: UniqueKey(),
+                          initialValue:
+                              multiSelectedItem[index].referToTitle ?? "",
                           inputType: TextInputType.text,
                           onChange: (p0) {
                             setState(() {});
@@ -1634,22 +1620,23 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           //     _referToTextController.text),
                           // validators: Validators.validateStakeholderSubType,
                           onTap: () async {
-                            if (_stakeholderSubTypeTextController
-                                .text.isNotEmpty) {
-                              await stakeHolderNameBottomSheet(
-                                  context,
-                                  (p0) => {
-                                        controller.selectedStakeHVal =
-                                            p0.lookupDetHierDescEn,
-                                        selectedStakeH.addIfNotExist(p0),
-                                        _referToTextController.text =
-                                            selectedStakeH.displayText(),
-                                        controller.update()
-                                      },
-                                  "Refer To",
-                                  controller.referToModel?.details ?? [],
-                                  true);
-                            }
+                            await stakeHolderNameBottomSheet(
+                                context,
+                                (p0) => {
+                                      controller.selectedStakeHVal =
+                                          p0.lookupDetHierDescEn,
+                                      multiSelectedItem[index]
+                                          .selectedStakeH
+                                          .addIfNotExist(p0),
+                                      multiSelectedItem[index].referToTitle =
+                                          multiSelectedItem[index]
+                                              .selectedStakeH
+                                              .displayText(),
+                                      controller.update()
+                                    },
+                                "Refer To",
+                                controller.referToModel?.details ?? [],
+                                true);
                           },
                           // maxLength: 12,
                           readOnly: true,
@@ -1680,61 +1667,126 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                 SizedBox(
                   height: responsiveHeight(20),
                 ),
-                BlocBuilder<MasterDataBloc, MasterDataState>(
-                  builder: (context, state) {
-                    return AppRoundTextField(
-                      controller: _referToDepartmentTextController,
-                      onChange: (p0) {
-                        setState(() {});
-                      },
-                      // errorText: Validators.validateStakeholderSubType(
-                      //     _referToDepartmentTextController.text),
-                      // validators: Validators.validateStakeholderSubType,
-                      inputType: TextInputType.text,
-                      onTap: () {
-                        context
-                            .read<MasterDataBloc>()
-                            .add(GetReferToDepartment(payload: const {
-                              "lookup_code_list1": [
-                                {"lookup_code": "DRF"}
-                              ]
-                            }));
-                      },
-                      readOnly: true,
-                      label: RichText(
-                        text: const TextSpan(
-                            text: 'Refer To Department',
-                            style: TextStyle(
-                                color: kHintColor, fontFamily: Montserrat),
-                            children: [
-                              // TextSpan(
-                              //     text: "*",
-                              //     style: TextStyle(color: Colors.red))
-                            ]),
-                      ),
-                      hint: "",
-                      suffix: state.getStakeholderSubTypeStatus.isInProgress
-                          ? SizedBox(
-                              height: responsiveHeight(20),
-                              width: responsiveHeight(20),
-                              child: const Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            )
-                          : SizedBox(
-                              height: responsiveHeight(20),
-                              width: responsiveHeight(20),
-                              child: Center(
-                                child: Image.asset(
-                                  icArrowDownOrange,
-                                  height: responsiveHeight(20),
-                                  width: responsiveHeight(20),
-                                ),
-                              ),
+                GetBuilder<DoctorDeskController>(
+                    init: DoctorDeskController(),
+                    builder: (controller) {
+                      return AppRoundTextField(
+                        // controller: controller
+                        //     .diseasesTypeController,
+                        initialValue: multiSelectedItem[index].referToDeptTitle,
+                        inputType: TextInputType.text,
+                        // validators:
+                        // Validators.validateDiseases,
+                        // errorText:
+                        // Validators.validateDiseases(
+                        //     _locationNameController
+                        //         .text),
+                        onChange: (p0) {},
+                        onTap: () async {
+                          diseasesBottomSheet(
+                              context,
+                              (p0) => {
+                                    controller.selectedRefDep =
+                                        p0.lookupDetDescEn,
+                                    controller.selectedRefDepObj = p0,
+                                    multiSelectedItem[index].referToDeptTitle =
+                                        controller
+                                            .selectedRefDepObj?.lookupDetDescEn,
+                                    multiSelectedItem[index]
+                                            .lookupDetIdRefDepartment =
+                                        controller
+                                            .selectedRefDepObj?.lookupDetId,
+                                    controller.update()
+                                  },
+                              "Refer To Department",
+                              controller.refToDep?.details?.first.lookupDet ??
+                                  [],
+                              true);
+                        },
+                        // maxLength: 12,
+                        readOnly: true,
+                        label: RichText(
+                          text: const TextSpan(
+                              text: 'Refer To Department',
+                              style: TextStyle(
+                                  color: kHintColor, fontFamily: Montserrat),
+                              children: [
+                                // TextSpan(
+                                //     text: "*",
+                                //     style: TextStyle(
+                                //         color: Colors.red))
+                              ]),
+                        ),
+                        hint: "",
+                        suffix: SizedBox(
+                          height: getProportionateScreenHeight(20),
+                          width: getProportionateScreenHeight(20),
+                          child: Center(
+                            child: Image.asset(
+                              icArrowDownOrange,
+                              height: getProportionateScreenHeight(20),
+                              width: getProportionateScreenHeight(20),
                             ),
-                    );
-                  },
-                ),
+                          ),
+                        ),
+                      );
+                    }),
+                // BlocBuilder<MasterDataBloc, MasterDataState>(
+                //   builder: (context, state) {
+                //     return AppRoundTextField(
+                //       initialValue: multiSelectedItem[index].referToDeptTitle,
+                //       // controller: _referToDepartmentTextController,
+                //       onChange: (p0) {
+                //         setState(() {});
+                //       },
+                //       // errorText: Validators.validateStakeholderSubType(
+                //       //     _referToDepartmentTextController.text),
+                //       // validators: Validators.validateStakeholderSubType,
+                //       inputType: TextInputType.text,
+                //       onTap: () {
+                //         context
+                //             .read<MasterDataBloc>()
+                //             .add(GetReferToDepartment(payload: const {
+                //               "lookup_code_list1": [
+                //                 {"lookup_code": "DRF"}
+                //               ]
+                //             }));
+                //       },
+                //       readOnly: true,
+                //       label: RichText(
+                //         text: const TextSpan(
+                //             text: 'Refer To Department',
+                //             style: TextStyle(
+                //                 color: kHintColor, fontFamily: Montserrat),
+                //             children: [
+                //               // TextSpan(
+                //               //     text: "*",
+                //               //     style: TextStyle(color: Colors.red))
+                //             ]),
+                //       ),
+                //       hint: "",
+                //       suffix: state.getStakeholderSubTypeStatus.isInProgress
+                //           ? SizedBox(
+                //               height: responsiveHeight(20),
+                //               width: responsiveHeight(20),
+                //               child: const Center(
+                //                 child: CircularProgressIndicator(),
+                //               ),
+                //             )
+                //           : SizedBox(
+                //               height: responsiveHeight(20),
+                //               width: responsiveHeight(20),
+                //               child: Center(
+                //                 child: Image.asset(
+                //                   icArrowDownOrange,
+                //                   height: responsiveHeight(20),
+                //                   width: responsiveHeight(20),
+                //                 ),
+                //               ),
+                //             ),
+                //     );
+                //   },
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -1743,32 +1795,31 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           if (_key.currentState!.validate() == false) {
                             return;
                           }
-                          multiSelectedItem.add({
-                            "patient_refer_id": null,
-                            "patient_id": null,
-                            "stakeholder_master_id":
-                                _selectedStakeholderSubType?.lookupDetHierId,
-                            "lookup_det_id_ref_department":
-                                _selectedReferToDepartmentType?.lookupDetId,
-                            "lookup_det_hier_id_stakeholder_sub_type2":
-                                _selectedStakeholderSubType?.lookupDetHierId,
-                            "stakeholderSubTypeTitle":
-                                _selectedStakeholderSubType
-                                    ?.lookupDetHierDescEn,
-                            "referToTitle": _referToTextController.text,
-                            "referToDeptTitle":
-                                _selectedReferToDepartmentType?.lookupDetDescEn,
-                            "org_id": 1,
-                            "status": 1,
-                            "is_inactive": null
-                          });
-                          _selectedReferToDepartmentType = null;
-                          _selectedStakeholderSubType = null;
-                          selectedStakeH.clear();
-                          _referToDepartmentTextController.clear();
-                          _referToTextController.clear();
-                          _diseaseTypeTextController.clear();
-                          _stakeholderSubTypeTextController.clear();
+                          multiSelectedItem.add(ReferToReqModel(
+                              patientReferId: null,
+                              patientId: null,
+                              stakeholderMasterId:
+                                  _selectedStakeholderSubType?.lookupDetHierId,
+                              lookupDetIdRefDepartment:
+                                  _selectedReferToDepartmentType?.lookupDetId,
+                              lookupDetHierIdStakeholderSubType2:
+                                  _selectedStakeholderSubType?.lookupDetHierId,
+                              stakeholderSubTypeTitle:
+                                  _selectedStakeholderSubType
+                                      ?.lookupDetHierDescEn,
+                              referToTitle: _referToTextController.text,
+                              referToDeptTitle: _selectedReferToDepartmentType
+                                  ?.lookupDetDescEn,
+                              orgId: 1,
+                              status: 1,
+                              isInactive: null));
+                          // _selectedReferToDepartmentType = null;
+                          // _selectedStakeholderSubType = null;
+                          // selectedStakeH.clear();
+                          // _referToDepartmentTextController.clear();
+                          // _referToTextController.clear();
+                          // _diseaseTypeTextController.clear();
+                          // _stakeholderSubTypeTextController.clear();
                           scrollController.animateTo(
                               scrollController.position.maxScrollExtent,
                               duration: const Duration(milliseconds: 500),
@@ -1781,119 +1832,21 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           color: kPrimaryColor,
                           height: responsiveHeight(30),
                         )),
+                    IconButton(
+                        onPressed: () {
+                          multiSelectedItem.removeAt(index);
+                          setState(() {});
+                        },
+                        icon: Image.asset(
+                          "assets/icons/remove.png",
+                          fit: BoxFit.cover,
+                          color: kPrimaryColor,
+                          height: responsiveHeight(30),
+                        )),
                   ],
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Padding selectedList(BuildContext context, int index) {
-    TextEditingController subStakeholderController = TextEditingController();
-    TextEditingController referToController = TextEditingController();
-    TextEditingController referToDeptController = TextEditingController();
-    subStakeholderController.text =
-        multiSelectedItem[index]['stakeholderSubTypeTitle'];
-    referToController.text = multiSelectedItem[index]['referToTitle'];
-    referToDeptController.text = multiSelectedItem[index]['referToDeptTitle'];
-
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey, width: 0.5),
-            borderRadius: BorderRadius.circular(responsiveHeight(25))),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              BlocBuilder<MasterDataBloc, MasterDataState>(
-                builder: (context, state) {
-                  return AppRoundTextField(
-                    controller: subStakeholderController,
-                    inputType: TextInputType.text,
-                    onTap: () {},
-                    readOnly: true,
-                    label: RichText(
-                      text: const TextSpan(
-                          text: 'Stakeholder Sub Type',
-                          style: TextStyle(
-                              color: kHintColor, fontFamily: Montserrat),
-                          children: [
-                            TextSpan(
-                                text: "*", style: TextStyle(color: Colors.red))
-                          ]),
-                    ),
-                    hint: "",
-                  );
-                },
-              ),
-              SizedBox(
-                height: responsiveHeight(20),
-              ),
-              GetBuilder(
-                  init: DoctorDeskController(),
-                  builder: (controller) => AppRoundTextField(
-                        controller: referToController,
-                        inputType: TextInputType.text,
-                        readOnly: true,
-                        label: RichText(
-                          text: const TextSpan(
-                              text: 'Refer To',
-                              style: TextStyle(
-                                  color: kHintColor, fontFamily: Montserrat),
-                              children: [
-                                TextSpan(
-                                    text: "*",
-                                    style: TextStyle(color: Colors.red))
-                              ]),
-                        ),
-                        hint: "",
-                      )),
-              SizedBox(
-                height: responsiveHeight(20),
-              ),
-              BlocBuilder<MasterDataBloc, MasterDataState>(
-                builder: (context, state) {
-                  return AppRoundTextField(
-                    controller: referToDeptController,
-                    inputType: TextInputType.text,
-                    readOnly: true,
-                    label: RichText(
-                      text: const TextSpan(
-                          text: 'Refer To Department',
-                          style: TextStyle(
-                              color: kHintColor, fontFamily: Montserrat),
-                          children: [
-                            TextSpan(
-                                text: "*", style: TextStyle(color: Colors.red))
-                          ]),
-                    ),
-                    hint: "",
-                  );
-                },
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        multiSelectedItem.removeAt(index);
-                        setState(() {});
-                      },
-                      icon: Image.asset(
-                        "assets/icons/remove.png",
-                        fit: BoxFit.cover,
-                        color: kPrimaryColor,
-                        height: responsiveHeight(30),
-                      )),
-                ],
-              ),
-            ],
           ),
         ),
       ),

@@ -157,6 +157,81 @@ class Validators {
     return null;
   }
 
+
+  static String? validateContact(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter contact no';
+    }
+
+    return null;
+  }
+
+
+  static String? validateContactPerson(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter contact person name';
+    }
+
+    return null;
+  }
+
+  static String? validateCountry(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select country';
+    }
+
+    return null;
+  }
+
+  static String? validateState(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select state';
+    }
+
+    return null;
+  }
+
+  static String? validateDistrict(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select district';
+    }
+
+    return null;
+  }
+
+
+  static String? validateAddress1(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter address1';
+    }
+
+    return null;
+  }
+
+  static String? validateLocation(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter location name';
+    }
+
+    return null;
+  }
+
+  static String? validateTaluka(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select taluka';
+    }
+
+    return null;
+  }
+
+  static String? validateCity(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select city';
+    }
+
+    return null;
+  }
+
   static String? validateAge(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter age';

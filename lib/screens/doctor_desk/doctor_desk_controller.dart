@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
+import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/add_treatment_details_model.dart';
 import 'package:community_health_app/screens/doctor_desk/model/disease/disease_lookup_det.dart';
@@ -16,6 +17,8 @@ import 'package:community_health_app/screens/doctor_desk/model/refred_to/refer_t
 import 'package:community_health_app/screens/doctor_desk/model/search/search__doc_desk_data_model.dart';
 import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
 import 'package:community_health_app/screens/patient_registration/models/patient_details_by_id_model.dart';
+import 'package:community_health_app/screens/patient_registration/models/refer_to_req_model.dart';
+import 'package:community_health_app/screens/patient_registration/models/tt_patient_ref_list.dart';
 import 'package:community_health_app/screens/patient_registration/ui/registered_patients.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
@@ -40,7 +43,8 @@ class DoctorDeskController extends GetxController {
   // CountryModel? stakeHolderModel;
   ReferToModel? referToModel;
   CountryModel? stakeHolderTypeModel;
-
+  List<ReferToReqModel> multiSelectedItem = [];
+  String? selectedDiseasesVal;
   TextEditingController userController = TextEditingController();
   TextEditingController patientId = TextEditingController();
   TextEditingController stakeHolderController = TextEditingController();
@@ -54,12 +58,16 @@ class DoctorDeskController extends GetxController {
   List<ReferralLookupDet> selectedReferralSer = [];
   String? selectedStakeHVal;
   String? selectedStakeHTypeVal;
-  String? selectedDiseasesVal;
+
+  // String? selectedDiseasesVal;
+  String? selectedRefDep;
+  DiseaseLookupDet? selectedRefDepObj;
   String? selectedReferralSerVal;
   TextEditingController symptomController = TextEditingController();
   TextEditingController provisionalDiaController = TextEditingController();
   TextEditingController investigationController = TextEditingController();
   TextEditingController treatmentGivenController = TextEditingController();
+  TextEditingController refToDepController = TextEditingController();
   AddTreatmentDetailsModel addTreatmentDetailsModel =
       AddTreatmentDetailsModel();
   UserListModel? userList;
@@ -70,6 +78,7 @@ class DoctorDeskController extends GetxController {
   late PagingController<int, DocDeskData> docPagingController;
   List<DoctorDeskData> doctorDesk = [];
   List<DocDeskData> doctorDetailsDesk = [];
+  List<DiseaseLookupDet> selectedDisease = [];
 
   int? campId;
 
@@ -90,13 +99,13 @@ class DoctorDeskController extends GetxController {
 
   LookupDetHierarchical? stake;
 
-  DiseaseLookupDet? disease;
-
   DiseaseLookupDet? refToDe;
 
   String? pincode;
 
   PatientDetailsByIdModel? patientDataById;
+
+  DiseaseLookupDet? disease;
 
   fetchPage(int pageKey) async {
     try {
@@ -315,11 +324,9 @@ class DoctorDeskController extends GetxController {
     update();
   }
 
-
   updatePatient(body) async {
     isLoading = true;
-    final uri =
-    Uri.parse(ApiConstants.baseUrl + ApiConstants.updatePatient);
+    final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.updatePatient);
 
     String jsonbody = json.encode(body);
     Map<String, String> headers = {
@@ -419,7 +426,6 @@ class DoctorDeskController extends GetxController {
       // if (data['status'] == 'Success') {
       isLoading = false;
       referToModel = ReferToModel.fromJson(data);
-
       update();
     } else if (response.statusCode == 401) {
       isLoading = false;
@@ -452,38 +458,40 @@ class DoctorDeskController extends GetxController {
       final data = json.decode(response.body);
       // if (data['status'] == 'Success') {
 
-       patientDataById =
-          PatientDetailsByIdModel.fromJson(data);
+      patientDataById = PatientDetailsByIdModel.fromJson(data);
 
-      if (stakeHolderTypeModel != null) {
-        stake = stakeHolderTypeModel?.details?.first.lookupDetHierarchical
-            ?.firstWhere((e) =>
-                e.lookupDetHierId ==
-                patientDataById?.details?.ttPatientRefList?.first
-                    .lookupDetHierIdStakeholderSubType2);
-
-        await getReferTo(stake?.lookupDetHierId);
+      for (int i = 0;
+          i < patientDataById!.details!.ttPatientRefList!.length;
+          i++) {
+        await checkAndAdd(
+            multiSelectedItem, patientDataById!.details!.ttPatientRefList![i]);
       }
+
+
+
+
+      for (int i = 0; i < multiSelectedItem.length; i++) {
+        multiSelectedItem[i].referToTitle =
+            multiSelectedItem[i].selectedStakeH.displayTextRefTo();
+        // for (int j = 0; j < multiSelectedItem[i].selectedStakeH.length; j++) {
+        //   multiSelectedItem[i].referToTitle
+        // }
+      }
+
       if (diseaseLookupDetHierarchical != null) {
-        disease = diseaseLookupDetHierarchical?.details?.first.lookupDet
-            ?.firstWhere((e) =>
-                e.lookupDetId ==
-                patientDataById?.details?.ttPatientDiseaseList?.first
-                    .lookupDetIdDiseaseTypes);
-      }
-      if (refToDep != null) {
-        refToDe = refToDep?.details?.first.lookupDet?.firstWhere((e) =>
-            e.lookupDetId ==
-            patientDataById
-                ?.details?.ttPatientRefList?.first.lookupDetIdRefDepartment);
+        for (int i = 0;
+            i < patientDataById!.details!.ttPatientDiseaseList!.length;
+            i++) {
+           disease = diseaseLookupDetHierarchical
+              ?.details?.first.lookupDet
+              ?.firstWhere((e) =>
+                  e.lookupDetId ==
+                  patientDataById?.details?.ttPatientDiseaseList?[i]
+                      .lookupDetIdDiseaseTypes);
 
-      pincode =  patientDataById?.details?.ttPatientDetails?.pinCode ?? "";
-      }
-      if (referToModel != null) {
-        refTo = referToModel?.details?.firstWhere((e) =>
-            e.stakeholderMasterId ==
-            patientDataById
-                ?.details?.ttPatientRefList?.first.stakeholderMasterId);
+          selectedDisease.add(disease!);
+          diseasesTypeController.text = selectedDisease.displayTextD();
+        }
       }
 
       update();
@@ -493,6 +501,64 @@ class DoctorDeskController extends GetxController {
       throw Exception('Failed getting patient data');
     }
     update();
+  }
+
+  Future<void> checkAndAdd(
+      List<ReferToReqModel> list, TtPatientRefList newObj) async {
+    // Check if the object already exists
+
+    int index = list.indexWhere((obj) =>
+        obj.lookupDetHierIdStakeholderSubType2 ==
+            newObj.lookupDetHierIdStakeholderSubType2 &&
+        obj.lookupDetIdRefDepartment == newObj.lookupDetIdRefDepartment);
+
+    var stake = stakeHolderTypeModel?.details?.first.lookupDetHierarchical
+        ?.firstWhere((e) =>
+            e.lookupDetHierId == newObj.lookupDetHierIdStakeholderSubType2);
+
+    var refToDeprt = refToDep?.details?.first.lookupDet
+        ?.firstWhere((e) => e.lookupDetId == newObj.lookupDetIdRefDepartment);
+
+    await getReferTo(stake?.lookupDetHierId);
+
+    ReferToDetails? refT = referToModel?.details?.firstWhere(
+        (e) => e.stakeholderMasterId == newObj.stakeholderMasterId);
+
+    if (index != -1) {
+      list[index].lookupDetHierIdStakeholderSubType2 = stake?.lookupDetHierId;
+      list[index].lookupDetIdRefDepartment = refToDeprt?.lookupDetId;
+      list[index].referToDeptTitle = refToDeprt?.lookupDetDescEn;
+      list[index].stakeholderSubTypeTitle = stake?.lookupDetHierDescEn;
+      list[index].selectedStakeH.add(ReferToDetails(
+            stakeholderMasterId: newObj.stakeholderMasterId,
+            stakeholderNameEn: refT?.stakeholderNameEn,
+          ));
+
+    } else {
+      // Object doesn't exist, add to the list
+      list.add(ReferToReqModel(
+          patientId: null,
+          patientReferId: null,
+          stakeholderMasterId: newObj.stakeholderMasterId,
+          lookupDetIdRefDepartment: newObj.lookupDetIdRefDepartment,
+          lookupDetHierIdStakeholderSubType2:
+              newObj.lookupDetHierIdStakeholderSubType2,
+          stakeholderSubTypeTitle: stake?.lookupDetHierDescEn,
+          // referToTitle: refT?.stakeholderNameEn,
+          referToDeptTitle: refToDeprt?.lookupDetDescEn,
+          orgId: 1,
+          status: 1,
+          isInactive: null));
+      list.last.selectedStakeH = [];
+      list.last.selectedStakeH.add(ReferToDetails(
+        stakeholderMasterId: newObj.stakeholderMasterId,
+        stakeholderNameEn: refT?.stakeholderNameEn,
+      ));
+
+
+      debugPrint('dd');
+      // list[index].referToTitle = list[index].selectedStakeH.displayText();
+    }
   }
 
   getUserList() async {
