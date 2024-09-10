@@ -15,6 +15,7 @@ class ApiConstants {
   static const String locationList = "/administrator/masters/all-location-master-pagination";
   static const String updateLocation = "/administrator/masters/update/location-master";
   static const String getLocationName = "/administrator/masters/dropdown/location-list";
+  static const String getLocationList = "/profile/account/user-id-wise/dist-taluka-city/location-camp";
   static const String useList = "/profile/account/dropdown/user-list";
   static const String saveCampCreation = "/administrator/camp/add/camp-details";
   static const String userCreation = "/profile/account/new/";

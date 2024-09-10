@@ -5,11 +5,13 @@ import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
+import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
 import 'package:community_health_app/screens/camp_creation/model/member_type/member_lookup_det.dart';
 import 'package:community_health_app/screens/camp_creation/model/save_camp_req/tt_camp_create.dart';
+import 'package:community_health_app/screens/dashboard/dashboard.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -365,8 +367,8 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                               if (value == null ||
                                                   value.isEmpty) {
                                                 campCreationController
-                                                    .errorCampId =
-                                                'Please enter campID';
+                                                        .errorCampId =
+                                                    'Please enter campID';
                                                 campCreationController.update();
                                                 return '';
                                               } else {
@@ -636,7 +638,8 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                                       },
                                                   "Designation/Member Type",
                                                   campCreationController
-                                                      .memberTypeList,false);
+                                                      .memberTypeList,
+                                                  false);
                                             },
                                             errorText: campCreationController
                                                 .errorDesignation,
@@ -972,10 +975,23 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                         flex: 1,
                                         child: AppButton(
                                           title: "Save",
-                                          onTap: () {
+                                          onTap: () async {
                                             if (_formKey.currentState
                                                     ?.validate() ==
                                                 true) {
+                                              await campCreationController
+                                                  .userCreation(
+                                                      controller.username,
+                                                      campCreationController
+                                                          .userNameController
+                                                          .text,
+                                                      campCreationController
+                                                          .mobileController
+                                                          .text,
+                                                      campCreationController
+                                                          .memberTypeList[0]
+                                                          ?.lookupDetId);
+
                                               campCreationController
                                                       .saveCampReqModel
                                                       .ttCampCreate =
@@ -1022,14 +1038,15 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                                   ?.status = 1;
 
                                               campCreationController
-                                                  .saveCampReqModel
-                                                  .ttCampCreate
-                                                  ?.campNumber = controller.campId;
+                                                      .saveCampReqModel
+                                                      .ttCampCreate
+                                                      ?.campNumber =
+                                                  "C${controller.campId}";
 
                                               campCreationController
                                                   .saveCampReqModel
                                                   .ttCampCreate
-                                                  ?.requestOrCreateFlag = "c";
+                                                  ?.requestOrCreateFlag = "C";
 
                                               campCreationController
                                                   .saveCampReqModel
@@ -1046,12 +1063,11 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                                           campCreationController
                                                               .memberTypeList[0]
                                                               ?.lookupDetId,
-                                                      userId: controller
-                                                          .campCreationCardList[
-                                                              0]
-                                                          .userId,
+                                                      userId: controller.userId,
                                                       userName:
-                                                          controller.username,
+                                                          campCreationController
+                                                              .userNameController
+                                                              .text,
                                                       userLogin:
                                                           controller.username,
                                                       userMobileNumber:
@@ -1060,21 +1076,116 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                                               .text,
                                                       status: 1,
                                                       isInactive: null));
-                                              campCreationController
-                                                  .userCreation(
-                                                      "${controller.locationNameController.text}"
-                                                      "${controller.campNumber}",
-                                                      campCreationController
-                                                          .userNameController
-                                                          .text,
-                                                      campCreationController
-                                                          .mobileController
-                                                          .text,
-                                                      campCreationController
-                                                          .memberTypeList[0]
-                                                          ?.lookupDetId);
-                                              campCreationController
-                                                  .saveCampCreation();
+
+                                              var isCamp =
+                                                  await campCreationController
+                                                      .saveCampCreation();
+                                              if (isCamp) {
+                                                showDialog(
+                                                    context: context,
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return PopScope(
+                                                        canPop: false,
+                                                        child: Dialog(
+                                                          child: Container(
+                                                            height: 300,
+                                                            decoration:
+                                                                const BoxDecoration(
+                                                              color:
+                                                                  Colors.white,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .all(
+                                                                Radius.circular(
+                                                                    20),
+                                                              ),
+                                                            ),
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text("Camp ID ${controller.campId} Created Successfully")
+                                                                    .paddingOnly(
+                                                                        top: 4,
+                                                                        bottom:
+                                                                            2),
+                                                                Text("Location : ${controller.selectedLocationVal}")
+                                                                    .paddingOnly(
+                                                                        top: 4,
+                                                                        bottom:
+                                                                            2),
+                                                                const Text(
+                                                                        "Proposed Date and Time :")
+                                                                    .paddingOnly(
+                                                                        top: 4,
+                                                                        bottom:
+                                                                            2),
+                                                                Text(controller
+                                                                    .dateTimeController
+                                                                    .text).paddingOnly(bottom: 4),
+                                                                Text("Stakeholder Name : ${controller.selectedStakeHVal}")
+                                                                    .paddingOnly(
+                                                                        top: 4,
+                                                                        bottom:
+                                                                            2),
+                                                                const Text(
+                                                                  "Note down user Id and password",
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .red),
+                                                                ).paddingOnly(
+                                                                    top: 6,
+                                                                    bottom: 2),
+                                                                Text(
+                                                                    "User Id :C${controller.campId}",
+                                                                    style: const TextStyle(
+                                                                        color: Colors
+                                                                            .red)),
+                                                                const Text(
+                                                                    "Password : Pass@123",
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .red)),
+                                                                InkWell(
+                                                                  onTap: () {
+                                                                    Get.off(
+                                                                        const DashboardScreen());
+                                                                  },
+                                                                  child:
+                                                                      Container(
+                                                                    width: 50,
+                                                                    decoration:
+                                                                        const BoxDecoration(
+                                                                            color:
+                                                                                Colors.blue),
+                                                                    child:
+                                                                        const Text(
+                                                                      "OK",
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.white),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                    ),
+                                                                  ),
+                                                                ).paddingOnly(
+                                                                    top: 6,
+                                                                    bottom: 2)
+                                                              ],
+                                                            ).paddingSymmetric(
+                                                                vertical: 4,
+                                                                horizontal: 4),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    });
+                                              } else {
+                                                CustomMessage.toast(
+                                                    "Save Failed");
+                                              }
                                             }
                                           },
                                           iconData: Icon(
@@ -1092,18 +1203,31 @@ class _CampCreationNewState extends State<CampCreationNew> {
                                         child: AppButton(
                                           title: "Clear",
                                           onTap: () {
-                                            campCreationController.locationNameController.text = '';
-                                            campCreationController.dateTimeController.text = "";
-                                            campCreationController.distNameController.text = "";
+                                            campCreationController
+                                                .locationNameController
+                                                .text = '';
+                                            campCreationController
+                                                .dateTimeController.text = "";
+                                            campCreationController
+                                                .distNameController.text = "";
 
-                                            campCreationController.designationType.text = "";
-                                            campCreationController.talukaController.text = "";
+                                            campCreationController
+                                                .designationType.text = "";
+                                            campCreationController
+                                                .talukaController.text = "";
 
-                                            campCreationController.stakeHolderController.text = '';
-                                            campCreationController.userNameController.text = '';
-                                            campCreationController.mobileController.text = '';
-                                            campCreationController.username = '';
-                                            campCreationController.campCreationCardList.clear();
+                                            campCreationController
+                                                .stakeHolderController
+                                                .text = '';
+                                            campCreationController
+                                                .userNameController.text = '';
+                                            campCreationController
+                                                .mobileController.text = '';
+                                            campCreationController.username =
+                                                '';
+                                            campCreationController
+                                                .campCreationCardList
+                                                .clear();
                                           },
                                           buttonColor: Colors.grey,
                                           iconData: Icon(

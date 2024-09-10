@@ -134,8 +134,13 @@ class _PatientRegistrationEditScreenState
     _campDateTextController.text = doctorDeskController
             .patientDataById?.details?.ttPatientDetails?.campDate ??
         '';
-    _pincodeTextController.text = doctorDeskController.pincode ?? "";
+    _pincodeTextController.text = doctorDeskController
+            .patientDataById?.details?.ttPatientDetails?.pinCode ??
+        "";
 
+    _addressTextController.text = doctorDeskController
+            .patientDataById?.details?.ttPatientDetails?.address1 ??
+        "";
     _investigationTextController.text = doctorDeskController
             .patientDataById?.details?.ttPatientDetails?.investigation ??
         "";
@@ -178,9 +183,9 @@ class _PatientRegistrationEditScreenState
           _mobileNoTextController.text = patientDetails?.contactNumber ?? "";
           _aadhaarNoTextController.text = patientDetails?.addharCard ?? "";
           _abhaIDTextController.text = patientDetails?.abhaCard ?? "";
-          _addressTextController.text = ((patientDetails?.address1 != null)
-              ? patientDetails?.address1
-              : patientDetails?.address2)!;
+          // _addressTextController.text = ((patientDetails?.address1 != null)
+          //     ? patientDetails?.address1
+          //     : patientDetails?.address2)!;
           _ageTextController.text =
               patientDetails!.age != null ? patientDetails!.age.toString() : '';
           _districtTextController.text = patientDetails?.districtDescEn ?? "";
@@ -979,161 +984,7 @@ class _PatientRegistrationEditScreenState
                                             SizedBox(
                                               height: responsiveHeight(20),
                                             ),
-                                            GetBuilder<DoctorDeskController>(
-                                                init: DoctorDeskController(),
-                                                builder: (controller) {
-                                                  return AppRoundTextField(
-                                                    controller: controller
-                                                        .diseasesTypeController,
-                                                    inputType:
-                                                        TextInputType.text,
-                                                    validators: Validators
-                                                        .validateDiseases,
-                                                    errorText: Validators
-                                                        .validateDiseases(
-                                                            _locationNameController
-                                                                .text),
-                                                    onChange: (p0) {},
-                                                    onTap: () async {
-                                                      diseasesBottomSheet(
-                                                          context,
-                                                          (p0) => {
-                                                                // controller
-                                                                //         .selectedDiseasesVal =
-                                                                //     p0.lookupDetDescEn,
-                                                                doctorDeskController
-                                                                    .selectedDisease
-                                                                    .addIfNotExistD(
-                                                                        p0),
-                                                                controller
-                                                                        .diseasesTypeController
-                                                                        .text =
-                                                                    doctorDeskController
-                                                                        .selectedDisease
-                                                                        .displayTextD(),
-                                                                controller
-                                                                    .update()
-                                                              },
-                                                          "Diseases Type",
-                                                          controller
-                                                                  .diseaseLookupDetHierarchical
-                                                                  ?.details
-                                                                  ?.first
-                                                                  .lookupDet ??
-                                                              [],
-                                                          true);
-                                                    },
-                                                    // maxLength: 12,
-                                                    readOnly: true,
-                                                    label: RichText(
-                                                      text: const TextSpan(
-                                                          text:
-                                                              'Diseases Type"',
-                                                          style: TextStyle(
-                                                              color: kHintColor,
-                                                              fontFamily:
-                                                                  Montserrat),
-                                                          children: [
-                                                            TextSpan(
-                                                                text: "*",
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .red))
-                                                          ]),
-                                                    ),
-                                                    hint: "",
-                                                    suffix: SizedBox(
-                                                      height:
-                                                          getProportionateScreenHeight(
-                                                              20),
-                                                      width:
-                                                          getProportionateScreenHeight(
-                                                              20),
-                                                      child: Center(
-                                                        child: Image.asset(
-                                                          icArrowDownOrange,
-                                                          height:
-                                                              getProportionateScreenHeight(
-                                                                  20),
-                                                          width:
-                                                              getProportionateScreenHeight(
-                                                                  20),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  );
-                                                }),
-                                            SizedBox(
-                                              height: responsiveHeight(20),
-                                            ),
-                                            AppRoundTextField(
-                                              controller:
-                                                  _investigationTextController,
-                                              inputType: TextInputType.name,
-                                              textCapitalization:
-                                                  TextCapitalization.words,
-                                              onChange: (p0) {},
-                                              validators: Validators
-                                                  .validateInvestigation,
-                                              errorText: Validators
-                                                  .validateInvestigation(
-                                                      _locationNameController
-                                                          .text),
-                                              label: RichText(
-                                                text: const TextSpan(
-                                                    text: 'Investigation',
-                                                    style: TextStyle(
-                                                        color: kHintColor,
-                                                        fontFamily: Montserrat),
-                                                    children: [
-                                                      TextSpan(
-                                                          text: "*",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.red))
-                                                    ]),
-                                              ),
-                                              hint: "",
-                                            ),
-                                            SizedBox(
-                                              height: responsiveHeight(20),
-                                            ),
-                                            AppRoundTextField(
-                                              controller:
-                                                  _provisionTextController,
-                                              inputType: TextInputType.name,
-                                              maxLines: 4,
-                                              borderRadius:
-                                                  responsiveHeight(20),
-                                              textCapitalization:
-                                                  TextCapitalization.words,
-                                              validators:
-                                                  Validators.validateProvisionD,
-                                              errorText:
-                                                  Validators.validateProvisionD(
-                                                      _locationNameController
-                                                          .text),
-                                              onChange: (p0) {},
-                                              label: RichText(
-                                                text: const TextSpan(
-                                                    text: 'Provision Diagnosis',
-                                                    style: TextStyle(
-                                                        color: kHintColor,
-                                                        fontFamily: Montserrat),
-                                                    children: [
-                                                      TextSpan(
-                                                          text: "*",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  Colors.red))
-                                                    ]),
-                                              ),
-                                              hint: "",
-                                            ),
 
-                                            SizedBox(
-                                              height: responsiveHeight(20),
-                                            ),
                                             Row(
                                               children: [
                                                 Flexible(
@@ -1259,53 +1110,7 @@ class _PatientRegistrationEditScreenState
                                               ),
                                               hint: "",
                                             ),
-                                            // SizedBox(
-                                            //   height: responsiveHeight(20),
-                                            // ),
-                                            // AppRoundTextField(
-                                            //     controller: _divisionTextController,
-                                            //     textCapitalization: TextCapitalization.none,
-                                            //     inputType: TextInputType.datetime,
-                                            //     readOnly: true,
-                                            //     label: RichText(
-                                            //       text: const TextSpan(
-                                            //           text: 'Division',
-                                            //           style: TextStyle(
-                                            //               color: kHintColor,
-                                            //               fontFamily: Montserrat),
-                                            //           children: []),
-                                            //     ),
-                                            //     hint: "",
-                                            //     onTap: () {
-                                            //       Map<String, dynamic> payload = {};
-                                            //       context
-                                            //           .read<MasterDataBloc>()
-                                            //           .add(GetDivisionList(payload: const {
-                                            //             "lookup_code_list1": [
-                                            //               {"lookup_code": "DIV"}
-                                            //             ]
-                                            //           }));
-                                            //     },
-                                            //     suffix: BlocBuilder<MasterDataBloc,
-                                            //         MasterDataState>(
-                                            //       builder: (context, state) {
-                                            //         return state
-                                            //                 .getDivisionListStatus.isInProgress
-                                            //             ? const Center(
-                                            //                 child: CircularProgressIndicator())
-                                            //             : SizedBox(
-                                            //                 height: responsiveHeight(20),
-                                            //                 width: responsiveHeight(20),
-                                            //                 child: Center(
-                                            //                   child: Image.asset(
-                                            //                     icArrowDownOrange,
-                                            //                     height: responsiveHeight(20),
-                                            //                     width: responsiveHeight(20),
-                                            //                   ),
-                                            //                 ),
-                                            //               );
-                                            //       },
-                                            //     )),
+
                                             SizedBox(
                                               height: responsiveHeight(20),
                                             ),
@@ -1601,6 +1406,161 @@ class _PatientRegistrationEditScreenState
                                             ),
                                             SizedBox(
                                               height: responsiveHeight(10),
+                                            ),
+                                            GetBuilder<DoctorDeskController>(
+                                                init: DoctorDeskController(),
+                                                builder: (controller) {
+                                                  return AppRoundTextField(
+                                                    controller: controller
+                                                        .diseasesTypeController,
+                                                    inputType:
+                                                    TextInputType.text,
+                                                    validators: Validators
+                                                        .validateDiseases,
+                                                    errorText: Validators
+                                                        .validateDiseases(
+                                                        _locationNameController
+                                                            .text),
+                                                    onChange: (p0) {},
+                                                    onTap: () async {
+                                                      diseasesBottomSheet(
+                                                          context,
+                                                              (p0) => {
+                                                            // controller
+                                                            //         .selectedDiseasesVal =
+                                                            //     p0.lookupDetDescEn,
+                                                            doctorDeskController
+                                                                .selectedDisease
+                                                                .addIfNotExistD(
+                                                                p0),
+                                                            controller
+                                                                .diseasesTypeController
+                                                                .text =
+                                                                doctorDeskController
+                                                                    .selectedDisease
+                                                                    .displayTextD(),
+                                                            controller
+                                                                .update()
+                                                          },
+                                                          "Diseases Type",
+                                                          controller
+                                                              .diseaseLookupDetHierarchical
+                                                              ?.details
+                                                              ?.first
+                                                              .lookupDet ??
+                                                              [],
+                                                          true);
+                                                    },
+                                                    // maxLength: 12,
+                                                    readOnly: true,
+                                                    label: RichText(
+                                                      text: const TextSpan(
+                                                          text:
+                                                          'Diseases Type"',
+                                                          style: TextStyle(
+                                                              color: kHintColor,
+                                                              fontFamily:
+                                                              Montserrat),
+                                                          children: [
+                                                            TextSpan(
+                                                                text: "*",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .red))
+                                                          ]),
+                                                    ),
+                                                    hint: "",
+                                                    suffix: SizedBox(
+                                                      height:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                      width:
+                                                      getProportionateScreenHeight(
+                                                          20),
+                                                      child: Center(
+                                                        child: Image.asset(
+                                                          icArrowDownOrange,
+                                                          height:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                          width:
+                                                          getProportionateScreenHeight(
+                                                              20),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
+                                            SizedBox(
+                                              height: responsiveHeight(20),
+                                            ),
+                                            AppRoundTextField(
+                                              controller:
+                                              _investigationTextController,
+                                              inputType: TextInputType.name,
+                                              textCapitalization:
+                                              TextCapitalization.words,
+                                              onChange: (p0) {},
+                                              validators: Validators
+                                                  .validateInvestigation,
+                                              errorText: Validators
+                                                  .validateInvestigation(
+                                                  _locationNameController
+                                                      .text),
+                                              label: RichText(
+                                                text: const TextSpan(
+                                                    text: 'Investigation',
+                                                    style: TextStyle(
+                                                        color: kHintColor,
+                                                        fontFamily: Montserrat),
+                                                    children: [
+                                                      TextSpan(
+                                                          text: "*",
+                                                          style: TextStyle(
+                                                              color:
+                                                              Colors.red))
+                                                    ]),
+                                              ),
+                                              hint: "",
+                                            ),
+                                            SizedBox(
+                                              height: responsiveHeight(20),
+                                            ),
+                                            AppRoundTextField(
+                                              controller:
+                                              _provisionTextController,
+                                              inputType: TextInputType.name,
+                                              maxLines: 4,
+                                              borderRadius:
+                                              responsiveHeight(20),
+                                              textCapitalization:
+                                              TextCapitalization.words,
+                                              validators:
+                                              Validators.validateProvisionD,
+                                              errorText:
+                                              Validators.validateProvisionD(
+                                                  _locationNameController
+                                                      .text),
+                                              onChange: (p0) {},
+                                              label: RichText(
+                                                text: const TextSpan(
+                                                    text: 'Provision Diagnosis',
+                                                    style: TextStyle(
+                                                        color: kHintColor,
+                                                        fontFamily: Montserrat),
+                                                    children: [
+                                                      TextSpan(
+                                                          text: "*",
+                                                          style: TextStyle(
+                                                              color:
+                                                              Colors.red))
+                                                    ]),
+                                              ),
+                                              hint: "",
+                                            ),
+
+                                            SizedBox(
+                                              height: responsiveHeight(20),
                                             ),
                                           ],
                                         ),

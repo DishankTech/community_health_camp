@@ -9,18 +9,11 @@ import 'package:community_health_app/core/constants/network_constant.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/permission_service.dart';
-import 'package:community_health_app/core/utilities/permission_service.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
-import 'package:community_health_app/screens/user_auths/forgotpassword_view.dart';
 import 'package:community_health_app/screens/user_auths/models/login_response_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:http/http.dart' as http;
-import 'package:permission_handler/permission_handler.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/common_widgets/app_round_textfield.dart';
@@ -342,27 +335,25 @@ class _LoginPageState extends State<LoginPage> {
           var userId = usersList.userId;
           var firstLogin = usersList.firstLoginPassReset;
           print(userId);
-          DataProvider().storeUserCredential(userId!);
-          if (firstLogin.toString() == "Y") {
-            Navigator.of(context).pushNamedAndRemoveUntil(
-                AppRoutes.resetPassword, (route) => false);
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'Login Successfull',
-                ),
-                backgroundColor: Colors.green,
+          await DataProvider().storeUserCredential(userId!);
+          // if (firstLogin.toString() == "Y") {
+          //   Navigator.of(context).pushNamedAndRemoveUntil(
+          //       AppRoutes.resetPassword, (route) => false);
+          // } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Login Successfull',
               ),
-            );
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
-            Navigator.of(context)
-                .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
-          }
+              backgroundColor: Colors.green,
+            ),
+          );
 
-          /*  Navigator.of(context)
-              .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);*/
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
+          // Navigator.of(context)
+          //     .pushNamedAndRemoveUntil(AppRoutes.dashboard, (route) => false);
+          // }
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

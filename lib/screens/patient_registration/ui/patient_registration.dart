@@ -14,6 +14,7 @@ import 'package:community_health_app/core/common_widgets/drop_down.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
 import 'package:community_health_app/core/constants/images.dart';
+import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
@@ -23,8 +24,10 @@ import 'package:community_health_app/screens/camp_creation/model/location/locati
 import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
 import 'package:community_health_app/screens/doctor_desk/model/disease/disease_lookup_det.dart';
+import 'package:community_health_app/screens/location_master/model/sub_location_model/sub_location_details.dart';
 import 'package:community_health_app/screens/patient_registration/bloc/patient_registration_bloc.dart';
 import 'package:community_health_app/screens/patient_registration/models/diseases_type_model.dart';
+import 'package:community_health_app/screens/patient_registration/models/district/district_model.dart';
 import 'package:community_health_app/screens/patient_registration/models/refer_to_req_model.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -32,8 +35,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+
+import '../../location_master/model/sub_location_model/sub_location_model.dart';
 
 class PatientRegistrationScreen extends StatefulWidget {
   const PatientRegistrationScreen({super.key});
@@ -91,6 +97,20 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
 
   late TextEditingController _locationNameController;
 
+  SubLocationModel? distModel;
+
+  DistrictModel? getAllAddreaa;
+
+  SubLocationModel? dist;
+  SubLocationModel? tal;
+  SubLocationModel? city;
+
+  SubLocationDetails? selectedD;
+
+  SubLocationDetails? selectedT;
+
+  SubLocationDetails? selectedC;
+
   Future<XFile?> captureImage() async {
     final ImagePicker picker = ImagePicker();
 
@@ -133,7 +153,10 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
             connectivityResult.contains(ConnectivityResult.wifi));
 
     if (campCreationController.hasInternet) {
-      campCreationController.getLocationName();
+      // campCreationController.getLocationName();
+      int? userId = DataProvider().getUserCredentials();
+
+      campCreationController.getLocation(userId);
       campCreationController.getStakHolder();
       campCreationController.getMemberType();
       campCreationController.getUserList();
@@ -164,9 +187,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
         orgId: 1,
         status: 1,
         isInactive: null));
-    doctorDeskController
-        .diseasesTypeController
-        .text ="";
+    doctorDeskController.diseasesTypeController.text = "";
     checkInternetAndLoadData();
     _campIDTextController = TextEditingController();
     _campDateTextController = TextEditingController();
@@ -464,21 +485,21 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                                                 .selectedLocationVal =
                                                             p0.locationName,
                                                         controller
-                                                            .selectedLocation = p0,
+                                                            .selectedLocationN = p0,
                                                         _locationNameController
                                                             .text = controller
                                                                 .selectedLocationVal ??
                                                             "",
-                                                        await controller.getDist(
+                                                        await getDist(
+                                                            "2",
                                                             controller
-                                                                .selectedLocation
-                                                                ?.lookupDetHierIdDistrict
-                                                                .toString(),
-                                                            false),
-                                                        controller.update()
+                                                                .selectedLocationN
+                                                                ?.lookupDetHierIdDistrict),
+                                                        controller.update(),
+                                                        setState(() {})
                                                       },
                                                   "Location name",
-                                                  controller.locationNameModel
+                                                  controller.locationModel
                                                           ?.details ??
                                                       [],
                                                   true);
@@ -538,7 +559,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                             GetCampListDropdown(
                                                 locationId:
                                                     campCreationController
-                                                        .selectedLocation!
+                                                        .selectedLocationN!
                                                         .locationMasterId!));
                                       },
                                       maxLength: 12,
@@ -753,220 +774,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     SizedBox(
                                       height: responsiveHeight(20),
                                     ),
-                                    // BlocBuilder<MasterDataBloc,
-                                    //     MasterDataState>(
-                                    //   builder: (context, state) {
-                                    //     return AppRoundTextField(
-                                    //       controller:
-                                    //           _referToDepartmentTextController,
-                                    //       onChange: (p0) {
-                                    //         setState(() {});
-                                    //       },
-                                    //       errorText: Validators
-                                    //           .validateStakeholderSubType(
-                                    //               _referToDepartmentTextController
-                                    //                   .text),
-                                    //       validators: Validators
-                                    //           .validateStakeholderSubType,
-                                    //       inputType: TextInputType.text,
-                                    //       onTap: () {
-                                    //         context.read<MasterDataBloc>().add(
-                                    //                 GetReferToDepartment(
-                                    //                     payload: const {
-                                    //                   "lookup_code_list1": [
-                                    //                     {"lookup_code": "DRF"}
-                                    //                   ]
-                                    //                 }));
-                                    //       },
-                                    //       readOnly: true,
-                                    //       label: RichText(
-                                    //         text: const TextSpan(
-                                    //             text: 'Refer To Department',
-                                    //             style: TextStyle(
-                                    //                 color: kHintColor,
-                                    //                 fontFamily: Montserrat),
-                                    //             children: [
-                                    //               TextSpan(
-                                    //                   text: "*",
-                                    //                   style: TextStyle(
-                                    //                       color: Colors.red))
-                                    //             ]),
-                                    //       ),
-                                    //       hint: "",
-                                    //       suffix: state
-                                    //               .getStakeholderSubTypeStatus
-                                    //               .isInProgress
-                                    //           ? SizedBox(
-                                    //               height: responsiveHeight(20),
-                                    //               width: responsiveHeight(20),
-                                    //               child: const Center(
-                                    //                 child:
-                                    //                     CircularProgressIndicator(),
-                                    //               ),
-                                    //             )
-                                    //           : SizedBox(
-                                    //               height: responsiveHeight(20),
-                                    //               width: responsiveHeight(20),
-                                    //               child: Center(
-                                    //                 child: Image.asset(
-                                    //                   icArrowDownOrange,
-                                    //                   height:
-                                    //                       responsiveHeight(20),
-                                    //                   width:
-                                    //                       responsiveHeight(20),
-                                    //                 ),
-                                    //               ),
-                                    //             ),
-                                    //     );
-                                    //   },
-                                    // ),
-                                    // SizedBox(
-                                    //   height: responsiveHeight(20),
-                                    // ),
-                                    AppRoundTextField(
-                                      controller: _investigationTextController,
-                                      inputType: TextInputType.name,
-                                      textCapitalization:
-                                          TextCapitalization.words,
-                                      onChange: (p0) {},
-                                      validators:
-                                          Validators.validateInvestigation,
-                                      errorText:
-                                          Validators.validateInvestigation(
-                                              _locationNameController.text),
-                                      label: RichText(
-                                        text: const TextSpan(
-                                            text: 'Investigation',
-                                            style: TextStyle(
-                                                color: kHintColor,
-                                                fontFamily: Montserrat),
-                                            children: [
-                                              TextSpan(
-                                                  text: "*",
-                                                  style: TextStyle(
-                                                      color: Colors.red))
-                                            ]),
-                                      ),
-                                      hint: "",
-                                    ),
-                                    SizedBox(
-                                      height: responsiveHeight(20),
-                                    ),
-                                    AppRoundTextField(
-                                      controller: _provisionTextController,
-                                      inputType: TextInputType.name,
-                                      maxLines: 4,
-                                      borderRadius: responsiveHeight(20),
-                                      textCapitalization:
-                                          TextCapitalization.words,
-                                      validators: Validators.validateProvisionD,
-                                      errorText: Validators.validateProvisionD(
-                                          _locationNameController.text),
-                                      onChange: (p0) {},
-                                      label: RichText(
-                                        text: const TextSpan(
-                                            text: 'Provision Diagnosis',
-                                            style: TextStyle(
-                                                color: kHintColor,
-                                                fontFamily: Montserrat),
-                                            children: [
-                                              TextSpan(
-                                                  text: "*",
-                                                  style: TextStyle(
-                                                      color: Colors.red))
-                                            ]),
-                                      ),
-                                      hint: "",
-                                    ),
-                                    SizedBox(
-                                      height: responsiveHeight(20),
-                                    ),
 
-                                    GetBuilder<DoctorDeskController>(
-                                        init: DoctorDeskController(),
-                                        builder: (controller) {
-                                          return AppRoundTextField(
-                                            controller: controller
-                                                .diseasesTypeController,
-                                            inputType: TextInputType.text,
-                                            validators:
-                                                Validators.validateDiseases,
-                                            errorText:
-                                                Validators.validateDiseases(
-                                                    doctorDeskController
-                                                        .diseasesTypeController
-                                                        .text),
-                                            onChange: (p0) {},
-                                            onTap: () async {
-                                              diseasesBottomSheet(
-                                                  context,
-                                                  (p0) => {
-                                                        controller
-                                                                .selectedDiseasesVal =
-                                                            p0.lookupDetDescEn,
-                                                        selectedDisease
-                                                            .addIfNotExistD(p0),
-                                                        controller
-                                                                .diseasesTypeController
-                                                                .text =
-                                                            selectedDisease
-                                                                .displayTextD(),
-                                                        controller.update()
-                                                      },
-                                                  "Diseases Type",
-                                                  controller
-                                                          .diseaseLookupDetHierarchical
-                                                          ?.details
-                                                          ?.first
-                                                          .lookupDet ??
-                                                      [],
-                                                  true);
-                                            },
-                                            // maxLength: 12,
-                                            readOnly: true,
-                                            label: RichText(
-                                              text: const TextSpan(
-                                                  text: 'Diseases Type"',
-                                                  style: TextStyle(
-                                                      color: kHintColor,
-                                                      fontFamily: Montserrat),
-                                                  children: [
-                                                    TextSpan(
-                                                        text: "*",
-                                                        style: TextStyle(
-                                                            color: Colors.red))
-                                                  ]),
-                                            ),
-                                            hint: "",
-                                            suffix: SizedBox(
-                                              height:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                              width:
-                                                  getProportionateScreenHeight(
-                                                      20),
-                                              child: Center(
-                                                child: Image.asset(
-                                                  icArrowDownOrange,
-                                                  height:
-                                                      getProportionateScreenHeight(
-                                                          20),
-                                                  width:
-                                                      getProportionateScreenHeight(
-                                                          20),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-
-                                    SizedBox(
-                                      height: responsiveHeight(20),
-                                    ),
-
-                                    SizedBox(
-                                      height: responsiveHeight(20),
-                                    ),
                                     Row(
                                       children: [
                                         Flexible(
@@ -1075,53 +883,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       ),
                                       hint: "",
                                     ),
-                                    // SizedBox(
-                                    //   height: responsiveHeight(20),
-                                    // ),
-                                    // AppRoundTextField(
-                                    //     controller: _divisionTextController,
-                                    //     textCapitalization: TextCapitalization.none,
-                                    //     inputType: TextInputType.datetime,
-                                    //     readOnly: true,
-                                    //     label: RichText(
-                                    //       text: const TextSpan(
-                                    //           text: 'Division',
-                                    //           style: TextStyle(
-                                    //               color: kHintColor,
-                                    //               fontFamily: Montserrat),
-                                    //           children: []),
-                                    //     ),
-                                    //     hint: "",
-                                    //     onTap: () {
-                                    //       Map<String, dynamic> payload = {};
-                                    //       context
-                                    //           .read<MasterDataBloc>()
-                                    //           .add(GetDivisionList(payload: const {
-                                    //             "lookup_code_list1": [
-                                    //               {"lookup_code": "DIV"}
-                                    //             ]
-                                    //           }));
-                                    //     },
-                                    //     suffix: BlocBuilder<MasterDataBloc,
-                                    //         MasterDataState>(
-                                    //       builder: (context, state) {
-                                    //         return state
-                                    //                 .getDivisionListStatus.isInProgress
-                                    //             ? const Center(
-                                    //                 child: CircularProgressIndicator())
-                                    //             : SizedBox(
-                                    //                 height: responsiveHeight(20),
-                                    //                 width: responsiveHeight(20),
-                                    //                 child: Center(
-                                    //                   child: Image.asset(
-                                    //                     icArrowDownOrange,
-                                    //                     height: responsiveHeight(20),
-                                    //                     width: responsiveHeight(20),
-                                    //                   ),
-                                    //                 ),
-                                    //               );
-                                    //       },
-                                    //     )),
+
                                     SizedBox(
                                       height: responsiveHeight(20),
                                     ),
@@ -1247,8 +1009,11 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                               context
                                                   .read<MasterDataBloc>()
                                                   .add(GetTalukaList(
-                                                      payload: _selectedDistrict!
-                                                          .lookupDetHierId!));
+                                                      payload: _selectedTaluka
+                                                              ?.lookupDetHierId ??
+                                                          campCreationController
+                                                              .selectedLocationN!
+                                                              .lookupDetHierIdTaluka!));
                                             },
                                             suffix: BlocBuilder<MasterDataBloc,
                                                 MasterDataState>(
@@ -1316,8 +1081,11 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                               context
                                                   .read<MasterDataBloc>()
                                                   .add(GetTownList(
-                                                      payload: _selectedTaluka!
-                                                          .lookupDetHierId!));
+                                                      payload: _selectedCity
+                                                              ?.lookupDetHierId ??
+                                                          campCreationController
+                                                              .selectedLocationN!
+                                                              .lookupDetHierIdCity!));
                                             },
                                             suffix: BlocBuilder<MasterDataBloc,
                                                 MasterDataState>(
@@ -1358,6 +1126,152 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                         ),
                                       ],
                                     ),
+                                    SizedBox(
+                                      height: responsiveHeight(20),
+                                    ),
+                                    GetBuilder<DoctorDeskController>(
+                                        init: DoctorDeskController(),
+                                        builder: (controller) {
+                                          return AppRoundTextField(
+                                            controller: controller
+                                                .diseasesTypeController,
+                                            inputType: TextInputType.text,
+                                            validators:
+                                            Validators.validateDiseases,
+                                            errorText:
+                                            Validators.validateDiseases(
+                                                doctorDeskController
+                                                    .diseasesTypeController
+                                                    .text),
+                                            onChange: (p0) {},
+                                            onTap: () async {
+                                              diseasesBottomSheet(
+                                                  context,
+                                                      (p0) => {
+                                                    controller
+                                                        .selectedDiseasesVal =
+                                                        p0.lookupDetDescEn,
+                                                    selectedDisease
+                                                        .addIfNotExistD(p0),
+                                                    controller
+                                                        .diseasesTypeController
+                                                        .text =
+                                                        selectedDisease
+                                                            .displayTextD(),
+                                                    controller.update()
+                                                  },
+                                                  "Diseases Type",
+                                                  controller
+                                                      .diseaseLookupDetHierarchical
+                                                      ?.details
+                                                      ?.first
+                                                      .lookupDet ??
+                                                      [],
+                                                  true);
+                                            },
+                                            // maxLength: 12,
+                                            readOnly: true,
+                                            label: RichText(
+                                              text: const TextSpan(
+                                                  text: 'Diseases Type"',
+                                                  style: TextStyle(
+                                                      color: kHintColor,
+                                                      fontFamily: Montserrat),
+                                                  children: [
+                                                    TextSpan(
+                                                        text: "*",
+                                                        style: TextStyle(
+                                                            color: Colors.red))
+                                                  ]),
+                                            ),
+                                            hint: "",
+                                            suffix: SizedBox(
+                                              height:
+                                              getProportionateScreenHeight(
+                                                  20),
+                                              width:
+                                              getProportionateScreenHeight(
+                                                  20),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  icArrowDownOrange,
+                                                  height:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                                  width:
+                                                  getProportionateScreenHeight(
+                                                      20),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+
+                                    SizedBox(
+                                      height: responsiveHeight(20),
+                                    ),
+                                    AppRoundTextField(
+                                      controller: _investigationTextController,
+                                      inputType: TextInputType.name,
+                                      textCapitalization:
+                                      TextCapitalization.words,
+                                      onChange: (p0) {},
+                                      validators:
+                                      Validators.validateInvestigation,
+                                      errorText:
+                                      Validators.validateInvestigation(
+                                          _locationNameController.text),
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Investigation',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
+                                    ),
+                                    SizedBox(
+                                      height: responsiveHeight(20),
+                                    ),
+                                    AppRoundTextField(
+                                      controller: _provisionTextController,
+                                      inputType: TextInputType.name,
+                                      maxLines: 4,
+                                      borderRadius: responsiveHeight(20),
+                                      textCapitalization:
+                                      TextCapitalization.words,
+                                      validators: Validators.validateProvisionD,
+                                      errorText: Validators.validateProvisionD(
+                                          _locationNameController.text),
+                                      onChange: (p0) {},
+                                      label: RichText(
+                                        text: const TextSpan(
+                                            text: 'Provision Diagnosis',
+                                            style: TextStyle(
+                                                color: kHintColor,
+                                                fontFamily: Montserrat),
+                                            children: [
+                                              TextSpan(
+                                                  text: "*",
+                                                  style: TextStyle(
+                                                      color: Colors.red))
+                                            ]),
+                                      ),
+                                      hint: "",
+                                    ),
+                                    SizedBox(
+                                      height: responsiveHeight(20),
+                                    ),
+
+
+
+
                                   ],
                                 ),
                               ],
@@ -1416,7 +1330,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
 
                                             lookupDetHierIdStakeholderSubType2:
                                                 multiSelectedItem[i]
-                                                    ?.lookupDetHierIdStakeholderSubType2,
+                                                    .lookupDetHierIdStakeholderSubType2,
                                             lookupDetIdRefDepartment:
                                                 multiSelectedItem[i]
                                                     .lookupDetIdRefDepartment,
@@ -1469,11 +1383,15 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                         "lookup_det_hier_id_country": 1,
                                         "lookup_det_hier_id_state": 2,
                                         "lookup_det_hier_id_district":
-                                            _selectedDistrict?.lookupDetHierId,
+                                            _selectedDistrict
+                                                    ?.lookupDetHierId ??
+                                                selectedD?.lookupDetHierId,
                                         "lookup_det_hier_id_taluka":
-                                            _selectedTaluka?.lookupDetHierId,
+                                            _selectedTaluka?.lookupDetHierId ??
+                                                selectedT?.lookupDetHierId,
                                         "lookup_det_hier_id_city":
-                                            _selectedCity?.lookupDetHierId,
+                                            _selectedCity?.lookupDetHierId ??
+                                                selectedC?.lookupDetHierId,
                                         "lookup_det_id_division": null,
                                         "pin_code": _pincodeTextController.text,
                                         "org_id": 1,
@@ -1586,8 +1504,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                         style: TextStyle(
                             color: kHintColor, fontFamily: Montserrat),
                         children: [
-                          TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                          // TextSpan(
+                          //     text: "*", style: TextStyle(color: Colors.red))
                         ]),
                   ),
                   hint: "",
@@ -1851,5 +1769,120 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
         ),
       ),
     );
+  }
+
+  getDist(id, districtId) async {
+    // isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      // isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      // isLoading = false;
+      dist = SubLocationModel.fromJson(data);
+      selectedD =
+          dist?.details?.firstWhere((e) => e.lookupDetHierId == districtId);
+
+      _districtTextController.text = selectedD?.lookupDetHierDescEn ?? "";
+
+      setState(() {});
+      await getTaluka(selectedD?.lookupDetHierId,
+          campCreationController.selectedLocationN?.lookupDetHierIdTaluka);
+      // update();
+    } else {
+      // isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    // update();
+  }
+
+  getTaluka(id, districtId) async {
+    // isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      // isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      // isLoading = false;
+      tal = SubLocationModel.fromJson(data);
+      selectedT =
+          tal?.details?.firstWhere((e) => e.lookupDetHierId == districtId);
+
+      _talukaTextController.text = selectedD?.lookupDetHierDescEn ?? "";
+
+      setState(() {});
+      await getCity(selectedT?.lookupDetHierId,
+          campCreationController.selectedLocationN?.lookupDetHierIdCity);
+      // update();
+    } else {
+      // isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    // update();
+  }
+
+  getCity(id, districtId) async {
+    // isLoading = true;
+    final uri = Uri.parse(
+        '${ApiConstants.baseUrl}${ApiConstants.getAllSubLocation}/$id');
+
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      // isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      // isLoading = false;
+      city = SubLocationModel.fromJson(data);
+      selectedC =
+          city?.details?.firstWhere((e) => e.lookupDetHierId == districtId);
+
+      _cityTextController.text = selectedC?.lookupDetHierDescEn ?? "";
+
+      setState(() {});
+      // update();
+    } else {
+      // isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    // update();
   }
 }

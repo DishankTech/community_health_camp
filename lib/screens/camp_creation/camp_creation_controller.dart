@@ -11,9 +11,9 @@ import 'package:community_health_app/screens/camp_creation/model/stakeholder_nam
 import 'package:community_health_app/screens/camp_creation/model/user_list_model/user_details.dart';
 import 'package:community_health_app/screens/camp_creation/model/user_list_model/user_list_model.dart';
 import 'package:community_health_app/screens/dashboard/dashboard.dart';
-import 'package:community_health_app/screens/dashboard/ui/dashboard_view.dart';
 import 'package:community_health_app/screens/location_master/model/country/lookup_det_hierarchical.dart';
 import 'package:community_health_app/screens/location_master/model/sub_location_model/sub_location_details.dart';
+import 'package:community_health_app/screens/patient_registration/models/location_list_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -64,12 +64,14 @@ class CampCreationController extends GetxController {
   String? status;
 
   LocationNameModel? locationNameModel;
+  LocationListModel? locationModel;
 
   bool hasInternet = true;
 
   String? selectedLocationVal;
 
   LocationNameDetails? selectedLocation;
+  LocationDetails? selectedLocationN;
 
   SubLocationModel? distModel;
 
@@ -97,8 +99,11 @@ class CampCreationController extends GetxController {
   String? username;
   String? campId;
 
+  int? userId;
+
   saveCampCreation() async {
     isLoading = true;
+
     final uri = Uri.parse(ApiConstants.baseUrl + ApiConstants.saveCampCreation);
 
     String jsonbody = json.encode(saveCampReqModel);
@@ -117,21 +122,17 @@ class CampCreationController extends GetxController {
       final data = json.decode(response.body);
 
       isLoading = false;
-      CustomMessage.toast("Save Successfully");
-      Get.off(const DashboardScreen());
-      update();
+      return true;
+      // update();
     } else if (response.statusCode == 401) {
       isLoading = false;
-      CustomMessage.toast("Save Failed");
       Get.off(const DashboardScreen());
-
 
       status = "Something went wrong";
     } else {
       isLoading = false;
       CustomMessage.toast("Save Failed");
       Get.off(const DashboardScreen());
-
 
       throw Exception('Failed search');
     }
@@ -173,11 +174,12 @@ class CampCreationController extends GetxController {
     if (response.statusCode == 201) {
       final data = json.decode(response.body);
       if (data['status_code'] == 200) {
+        userId = data['uniquerId'];
         isLoading = false;
-        CustomMessage.toast("Save Successfully");
-        Get.back();
+        // CustomMessage.toast("Save Successfully");
+        // Get.back();
 
-        await getUserList();
+        // await getUserList();
 
         update();
       }
@@ -225,6 +227,53 @@ class CampCreationController extends GetxController {
       // if (data['status'] == 'Success') {
       isLoading = false;
       locationNameModel = LocationNameModel.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      isLoading = false;
+
+      status = "Something went wrong";
+    } else {
+      isLoading = false;
+
+      throw Exception('Failed search');
+    }
+    update();
+  }
+
+
+
+
+  getLocation(id) async {
+    isLoading = true;
+    final uri =
+        Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getLocationList}/$id');
+
+    // final Map<String, dynamic> body = {
+    //   "lookup_det_code_list1": [
+    //     {"lookup_det_code": "CRY"}
+    //   ]
+    // };
+    //
+    // String jsonbody = json.encode(body);
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    debugPrint(uri.path);
+    // debugPrint(body.toString());
+
+    final response = await http.post(uri, headers: headers, body: null);
+    debugPrint(response.statusCode.toString());
+    debugPrint("response.body : ${response.body}");
+
+    if (response.statusCode == 200) {
+      isLoading = false;
+
+      final data = json.decode(response.body);
+      // if (data['status'] == 'Success') {
+      isLoading = false;
+      locationModel = LocationListModel.fromJson(data);
 
       update();
     } else if (response.statusCode == 401) {

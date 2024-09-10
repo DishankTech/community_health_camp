@@ -4,8 +4,6 @@ import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
 
 import '../../core/constants/network_constant.dart';
@@ -20,6 +18,7 @@ class ResetPasswordPage extends StatefulWidget {
 }
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
+  TextEditingController oldPsw = TextEditingController();
   TextEditingController _newpasswordController = TextEditingController();
   TextEditingController _confirmpasswordController = TextEditingController();
 
@@ -29,12 +28,14 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       r'^(?=.*[A-Za-z])(?=.*[\d@!#$_])[A-Za-z\d@!#$_]{8,}$'; //special character not necessary
 
   bool _obscureText_new = true;
+  bool _obscureText_old = true;
   bool _obscureText_confirm = true;
   bool _isLoading = false;
   String errorMessage = "";
 
   @override
   void initState() {
+    oldPsw.text = '';
     _newpasswordController.text = '';
     _confirmpasswordController.text = '';
     super.initState();
@@ -62,10 +63,10 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 100,
                     ),
-                    Text(
+                    const Text(
                       "Reset Password ",
                       style: TextStyle(
                         color: Colors.black,
@@ -73,12 +74,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         fontSize: 20,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Container(
                       width: MediaQuery.sizeOf(context).width * 0.9,
-                      child: Text(
+                      child: const Text(
                         "Set the password to your account so you can login and access all the features",
                         style: TextStyle(
                             color: Colors.black54,
@@ -87,13 +88,50 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         textAlign: TextAlign.center,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 30, right: 30),
+                      margin: const EdgeInsets.only(left: 30, right: 30),
                       child: AppRoundTextField(
-                        label: Text('New password'),
+                        label: const Text('Old password'),
+                        hint: "Enter old password",
+                        obscureText: _obscureText_old,
+                        controller: oldPsw,
+                        suffix: IconButton(
+                          icon: Icon(
+                            _obscureText_old
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscureText_old =
+                                  !_obscureText_old; // Toggle password visibility
+                            });
+                          },
+                        ),
+
+                        validators: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'New Password is required';
+                          }
+                          final regex = RegExp(passwordPattern);
+                          if (!regex.hasMatch(value)) {
+                            return 'The password must be at least 8 characters long, contain at least one alphabet, one number or one special character (@, !, #, \$, _).';
+                          }
+                          return null; // Validation passed
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 30,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(left: 30, right: 30),
+                      child: AppRoundTextField(
+                        label: const Text('New password'),
                         hint: "Enter new password",
                         obscureText: _obscureText_new,
                         controller: _newpasswordController,
@@ -122,15 +160,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 30, right: 30),
+                      margin: const EdgeInsets.only(left: 30, right: 30),
                       child: AppRoundTextField(
                         controller: _confirmpasswordController,
                         obscureText: _obscureText_confirm,
-                        label: Text("Confirm Password"),
+                        label: const Text("Confirm Password"),
                         hint: "Enter Confirm Password",
                         errorText: errorMessage,
                         validators: (value) {
@@ -160,7 +198,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     Row(
@@ -169,7 +207,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         AppButton(
                           mWidth: SizeConfig.screenWidth * 0.4,
                           title: 'Submit',
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.arrow_right_alt_rounded,
                             color: Colors.white,
                           ),
@@ -184,7 +222,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                 resetPasswordApiCall();
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                     content: Text('Passwords does not match'),
                                     backgroundColor: Colors.red,
                                   ),
@@ -193,14 +231,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             }
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         AppButton(
                           title: 'Cancel',
                           mWidth: SizeConfig.screenWidth * 0.4,
                           onTap: () {
-                            Navigator.pushNamed(context, AppRoutes.loginScreen);
+                            // Navigator.pushNamed(context, AppRoutes.loginScreen);
+                            Navigator.pushNamed(context, AppRoutes.dashboard);
                           },
                         ),
                       ],
@@ -226,6 +265,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     var request = http.Request('POST', Uri.parse(kBaseUrl + userResetPassword));
     request.body = json.encode({
       "user_id": userId,
+      "old_password": oldPsw.text.trim(),
       "password": _confirmpasswordController.text.toString().trim()
     });
     request.headers.addAll(headers);
@@ -255,9 +295,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         // print(detailsList);
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+           SnackBar(
             content: Text(
-              'Password Updated',
+              responseBody['message'],
             ),
             backgroundColor: Colors.green,
           ),
@@ -266,9 +306,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             .pushNamedAndRemoveUntil(AppRoutes.loginScreen, (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+           SnackBar(
             content: Text(
-              'Login Failed',
+              responseBody['message'],
             ),
             backgroundColor: Colors.red,
           ),
