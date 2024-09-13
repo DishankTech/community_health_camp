@@ -16,6 +16,7 @@ class StakeholderMasterState extends Equatable {
   final FormzSubmissionStatus getStakeholderNameStatus;
   final String getStakeholderNameResponse;
 
+
   StakeholderMasterState copyWith({
     FormzSubmissionStatus? getAllStakeholderStatus,
     String? getAllStakeholderResponse,

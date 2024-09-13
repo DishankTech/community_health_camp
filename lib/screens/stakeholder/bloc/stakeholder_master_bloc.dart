@@ -22,7 +22,7 @@ class StakeholderMasterBloc
             registerStakeholderResponse: '',
             registerStakeholderStatus: FormzSubmissionStatus.initial,
             getStakeholderNameResponse: '',
-            getStakeholderNameStatus: FormzSubmissionStatus.initial)) {
+            getStakeholderNameStatus: FormzSubmissionStatus.initial,)) {
     on<GetAllStakeholder>(_onGetAllStakeholder);
     on<RegisterStakeholder>(_onRegisterStakeholder);
     on<GetStakeholderName>(_onGetStakeholderName);
@@ -87,6 +87,8 @@ class StakeholderMasterBloc
           registerStakeholderStatus: FormzSubmissionStatus.failure));
     }
   }
+
+
 
   FutureOr<void> _onGetStakeholderName(
       GetStakeholderName event, Emitter<StakeholderMasterState> emit) async {

@@ -401,51 +401,51 @@ class _RegisteredPatientsScreenState extends State<RegisteredPatientsScreen> {
                                       ),
                                     ),
                                   ),
-                                  Positioned(
-                                    top: 20,
-                                    right: 20,
-                                    child: Row(
-                                      children: [
-                                        Material(
-                                          color: Colors.transparent,
-                                          child: InkWell(
-                                            borderRadius:
-                                                BorderRadius.circular(5),
-                                            onTap: () {
-                                              Navigator.pushNamed(
-                                                  context,
-                                                  AppRoutes
-                                                      .patientRegEditScreen,
-                                                  arguments: _list[i]);
-                                            },
-                                            child: Ink(
-                                              child: Image.asset(
-                                                icEdit,
-                                                height: responsiveHeight(24),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        // SizedBox(
-                                        //   width: responsiveHeight(10),
-                                        // ),
-                                        // Material(
-                                        //   color: Colors.transparent,
-                                        //   child: InkWell(
-                                        //     borderRadius:
-                                        //         BorderRadius.circular(5),
-                                        //     onTap: () {},
-                                        //     child: Ink(
-                                        //       child: Image.asset(
-                                        //         icEye,
-                                        //         height: responsiveHeight(24),
-                                        //       ),
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                      ],
-                                    ),
-                                  ),
+                                  // Positioned(
+                                  //   top: 20,
+                                  //   right: 20,
+                                  //   child: Row(
+                                  //     children: [
+                                  //       Material(
+                                  //         color: Colors.transparent,
+                                  //         child: InkWell(
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(5),
+                                  //           onTap: () {
+                                  //             Navigator.pushNamed(
+                                  //                 context,
+                                  //                 AppRoutes
+                                  //                     .patientRegEditScreen,
+                                  //                 arguments: _list[i]);
+                                  //           },
+                                  //           child: Ink(
+                                  //             child: Image.asset(
+                                  //               icEdit,
+                                  //               height: responsiveHeight(24),
+                                  //             ),
+                                  //           ),
+                                  //         ),
+                                  //       ),
+                                  //       // SizedBox(
+                                  //       //   width: responsiveHeight(10),
+                                  //       // ),
+                                  //       // Material(
+                                  //       //   color: Colors.transparent,
+                                  //       //   child: InkWell(
+                                  //       //     borderRadius:
+                                  //       //         BorderRadius.circular(5),
+                                  //       //     onTap: () {},
+                                  //       //     child: Ink(
+                                  //       //       child: Image.asset(
+                                  //       //         icEye,
+                                  //       //         height: responsiveHeight(24),
+                                  //       //       ),
+                                  //       //     ),
+                                  //       //   ),
+                                  //       // ),
+                                  //     ],
+                                  //   ),
+                                  // ),
                                 ]);
                               }),
                         ),

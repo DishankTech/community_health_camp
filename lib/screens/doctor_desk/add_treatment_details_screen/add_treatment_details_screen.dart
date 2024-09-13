@@ -1,4 +1,5 @@
 import 'package:community_health_app/core/common_widgets/drop_down.dart';
+import 'package:community_health_app/core/utilities/list_util.dart';
 import 'package:community_health_app/core/utilities/no_internet_connectivity.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_controller.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
@@ -1078,10 +1079,8 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
                                                               controller
                                                                       .selectedStakeHVal =
                                                                   p0.stakeholderNameEn,
-                                                              controller
-                                                                  .selectedStakeH
-                                                                  .addIfNotExist(
-                                                                      p0),
+                                                              ListUtil.addIfReferToNotExist(controller
+                                                                  .selectedStakeH, p0),
                                                               controller
                                                                       .stakeHolderController
                                                                       .text =
@@ -1382,20 +1381,6 @@ class _AddTreatmentDetailsScreenState extends State<AddTreatmentDetailsScreen> {
 }
 
 extension ListExtensions on List {
-  void addIfNotExist(ReferToDetails element,
-      {bool Function(ReferToDetails item)? condition}) {
-    bool exists;
-
-    if (condition != null) {
-      exists = any((item) => condition(item));
-    } else {
-      exists = contains(element);
-    }
-
-    if (!exists) {
-      add(element);
-    }
-  }
 
   String displayText() {
     return where((item) =>

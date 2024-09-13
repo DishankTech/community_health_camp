@@ -3,26 +3,31 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:community_health_app/screens/user_master/repository/user_master_repository.dart';
+import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
-import 'package:dio/dio.dart';
-
+import 'package:get/get.dart' as getP;
 import 'package:http/http.dart' as http;
+
 part 'user_master_event.dart';
 part 'user_master_state.dart';
 
 class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
   final UserMasterRepository userMasterRepository;
+
   UserMasterBloc({required this.userMasterRepository})
       : super(const UserMasterState(
             createUserResponse: '',
             createUserStatus: FormzSubmissionStatus.initial,
+            updateUserResp: '',
+            updateUserStatus: FormzSubmissionStatus.initial,
             getUserResponse: '',
             getUserStatus: FormzSubmissionStatus.initial,
             loginNameCheckResponse: '',
             loginNameCheckStatus: FormzSubmissionStatus.initial)) {
     on<CreateUserRequest>(_onCreateUserRequest);
+    on<UpdateUserReq>(_onUpdateUserRequest);
     on<GetUserRequest>(_onGetUserRequest);
     on<ResetUserMasterState>(_onResetUserMasterState);
     on<CheckLoginNameRequest>(_onCheckLoginNameRequest);
@@ -54,6 +59,37 @@ class UserMasterBloc extends Bloc<UserMasterEvent, UserMasterState> {
       emit(state.copyWith(
           createUserResponse: e.toString(),
           createUserStatus: FormzSubmissionStatus.failure));
+    }
+  }
+
+  FutureOr<void> _onUpdateUserRequest(
+      UpdateUserReq event, Emitter<UserMasterState> emit) async {
+    try {
+      emit(state.copyWith(
+          updateUserResp: '',
+          updateUserStatus: FormzSubmissionStatus.inProgress));
+      Response res = await userMasterRepository.updateUser(event.payload);
+
+      // http.Response res = await userMasterRepository.createUser(event.payload);
+
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            updateUserResp: jsonEncode(res.data),
+            updateUserStatus: FormzSubmissionStatus.success));
+
+
+      } else {
+        emit(state.copyWith(
+            updateUserResp: res.statusMessage,
+            updateUserStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(state.copyWith(
+          updateUserResp: e.toString(),
+          updateUserStatus: FormzSubmissionStatus.failure));
     }
   }
 

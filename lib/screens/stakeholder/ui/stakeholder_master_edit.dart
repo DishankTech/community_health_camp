@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:community_health_app/core/common_bloc/bloc/master_data_bloc.dart';
 import 'package:community_health_app/core/common_bloc/models/get_master_response_model_with_hier.dart';
 import 'package:community_health_app/core/common_bloc/models/master_lookup_det_hier_response_model.dart';
@@ -13,9 +15,9 @@ import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/core/utilities/validators.dart';
 import 'package:community_health_app/screens/stakeholder/bloc/stakeholder_master_bloc.dart';
+import 'package:community_health_app/screens/stakeholder/models/sector_model.dart';
 import 'package:community_health_app/screens/stakeholder/models/stakeholder_name_response_model.dart';
 import 'package:community_health_app/screens/stakeholder/models/stakeholder_response_model.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
@@ -66,9 +68,19 @@ class _StakeHolderMasterEditScreenState
   LookupDetHierDetails? _selectedTaluka;
   LookupDetHierDetails? _selectedCity;
   StakeholderNameDetails? stakeholderNameDetails;
-  LookupDet? _selectedSectorType;
+  LookupDet _selectedSectorType = LookupDet();
 
   StakeholderMasterData? stakeholderMasterData;
+
+  SectorModel? res;
+
+  bool? isBotomSheet;
+
+  bool? isBoottomDiv;
+
+  SectorModel? divRes;
+
+  bool? isUpdate;
 
   void _toggleObscure() {
     setState(() {
@@ -172,6 +184,20 @@ class _StakeHolderMasterEditScreenState
       //         {"lookup_det_code": "CTV"}
       //       ]
       //     }));
+      context.read<MasterDataBloc>().add(GetStakeHolderDetails(
+          payload: stakeholderMasterData?.stakeholderMasterId ?? 0));
+
+      context.read<MasterDataBloc>().add(GetSectorType(payload: const {
+            "lookup_code_list1": [
+              {"lookup_code": "SEC"}
+            ]
+          }));
+
+      context.read<MasterDataBloc>().add(GetDivisionList(payload: const {
+            "lookup_code_list1": [
+              {"lookup_code": "DIV"}
+            ]
+          }));
 
       setState(() {});
     });
@@ -179,6 +205,7 @@ class _StakeHolderMasterEditScreenState
 
   @override
   void dispose() {
+    _sectorTypeTextController.dispose();
     _stakeholderTypeTextController.dispose();
     _stakeholderSubTypeTextController.dispose();
     _stakeholderNameTextController.dispose();
@@ -264,24 +291,86 @@ class _StakeHolderMasterEditScreenState
           });
         }
         if (state.getSectorTypeStatus.isSuccess) {
-          sectorTypeBottomSheet(context, (p0) {
-            setState(() {
+          res = SectorModel.fromJson(jsonDecode(state.getSectorTypeResponse));
+          if (isBotomSheet == true) {
+            sectorTypeBottomSheet(context, (p0) {
               _selectedSectorType = p0;
               _sectorTypeTextController.text = p0.lookupDetDescEn!;
-            });
+              setState(() {});
 
-            context.read<MasterDataBloc>().add(ResetMasterState());
-          });
+              context.read<MasterDataBloc>().add(ResetMasterState());
+            });
+          }
         }
 
         if (state.getDivisionListStatus.isSuccess) {
-          divisionBottomSheet(context, (p0) {
-            setState(() {
-              _selectedDivision = p0;
-              _divisionTextController.text = p0.lookupDetDescEn!;
+          divRes =
+              SectorModel.fromJson(jsonDecode(state.getDivisionListResponse));
+          if (isBoottomDiv == true) {
+            divisionBottomSheet(context, (p0) {
+              setState(() {
+                _selectedDivision = p0;
+                _divisionTextController.text = p0.lookupDetDescEn!;
+              });
+              context.read<MasterDataBloc>().add(ResetMasterState());
             });
-            context.read<MasterDataBloc>().add(ResetMasterState());
-          });
+          }
+        }
+
+        if (state.getStakeByIdStatus.isSuccess) {
+          if (state.getSectorTypeStatus.isSuccess &&
+              state.getDivisionListStatus.isSuccess) {
+            var stakeRes = jsonDecode(state.getStakeByIdResp);
+            var division = divRes?.details?.first.lookupDet?.firstWhere(
+                (e) =>
+                    e.lookupDetId ==
+                    stakeRes['details']['lookup_det_id_division'],
+                orElse: () => SectorLookupDet());
+            _divisionTextController.text = division?.lookupDetDescEn ?? "";
+
+            var sector = res?.details?.first.lookupDet?.firstWhere(
+                (e) =>
+                    e.lookupDetId ==
+                    stakeRes['details']['lookup_det_id_sec_type_gov_pvt'],
+                orElse: () => SectorLookupDet());
+            _selectedSectorType.lookupDetDescEn = sector?.lookupDetDescEn ?? "";
+            _selectedSectorType.lookupDetId = sector?.lookupDetId;
+            _selectedSectorType.status = sector?.status;
+            _selectedSectorType.lookupDetOthers = sector?.lookupDetOthers;
+            _selectedSectorType.lookupDetValue = sector?.lookupDetValue;
+            _sectorTypeTextController.text = sector?.lookupDetDescEn ?? "";
+            setState(() {});
+          }
+        }
+        if (state.getStakeUpdateStatus.isSuccess) {
+          var res = jsonDecode(state.getStakeUpdateResp);
+          if (res['status_code'] == 200) {
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(SnackBar(
+                content: Text(res['message']),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ));
+            context.read<StakeholderMasterBloc>().add(GetAllStakeholder(payload: const {
+              "total_pages": 1,
+              "page": 1,
+              "total_count": 1,
+              "per_page": 10,
+              "data": ""
+            }));
+            if (isUpdate == true) {
+              Navigator.pop(context);
+            }
+          } else {
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(SnackBar(
+                content: Text(res['exception']),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 2),
+              ));
+          }
         }
 
         if (state.getDistrictListStatus.isSuccess) {
@@ -570,6 +659,7 @@ class _StakeHolderMasterEditScreenState
                                               {"lookup_code": "SEC"}
                                             ]
                                           }));
+                                      isBotomSheet = true;
                                     },
                                     readOnly: true,
                                     label: RichText(
@@ -912,6 +1002,8 @@ class _StakeHolderMasterEditScreenState
                                                         {"lookup_code": "DIV"}
                                                       ]
                                                     }));
+                                            isBoottomDiv = true;
+                                            setState(() {});
                                           },
                                           suffix: BlocBuilder<MasterDataBloc,
                                               MasterDataState>(
@@ -1227,6 +1319,8 @@ class _StakeHolderMasterEditScreenState
                                                       false) {
                                                     return;
                                                   }
+                                                  isUpdate = true;
+
                                                   var payload = {
                                                     "stakeholder_master_id":
                                                         stakeholderMasterData
@@ -1305,20 +1399,19 @@ class _StakeHolderMasterEditScreenState
                                                     "stakeholder_name_rg":
                                                         _stakeholderNameRegTextController
                                                             .text,
-                                                    "org_id": 0,
+                                                    "org_id": 1,
                                                     "lookup_det_id_sec_type_gov_pvt":
                                                         _selectedSectorType
                                                             ?.lookupDetId!,
                                                     "status": 1
                                                   };
 
-                                                  if (kDebugMode) {
-                                                    print(payload);
-                                                  }
+                                                  debugPrint(
+                                                      jsonEncode(payload));
+
                                                   context
-                                                      .read<
-                                                          StakeholderMasterBloc>()
-                                                      .add(RegisterStakeholder(
+                                                      .read<MasterDataBloc>()
+                                                      .add(UpdateStakeHolder(
                                                           payload: payload));
                                                 },
                                                 title: "Save",

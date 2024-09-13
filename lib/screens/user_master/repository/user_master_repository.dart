@@ -38,6 +38,20 @@ class UserMasterRepository {
     );
   }
 
+  Future<Response> updateUser(Map<String, dynamic> payload) async {
+    print(payload);
+    return await dio.post(
+      '$kBaseUrl$kUpdateUser', // Your API endpoint
+      data: jsonEncode(payload), // JSON data
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json', // Set the content type to JSON
+          // Add other headers if necessary
+        },
+      ),
+    );
+  }
+
   Future<http.Response> getAll(Map payload) async {
     var headers = {'Content-Type': 'application/json'};
     return await http.post(Uri.parse('$kBaseUrl$kGetAllUsers'),

@@ -40,9 +40,9 @@ class Validators {
     if (value == null || value.isEmpty) {
       return 'Please enter your mobile number';
     }
-    if (!isValidMobileNo(value)) {
-      return 'Please enter a valid 10-digit Indian mobile number';
-    }
+    // if (!isValidMobileNo(value)) {
+    //   return 'Please enter a valid 10-digit Indian mobile number';
+    // }
     return null; // Validation passed
   }
 

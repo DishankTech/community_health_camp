@@ -43,7 +43,7 @@ class DoctorDeskController extends GetxController {
   // CountryModel? stakeHolderModel;
   ReferToModel? referToModel;
   CountryModel? stakeHolderTypeModel;
-  List<ReferToReqModel> multiSelectedItem = [];
+  List<ReferToReqModel> cardDataList = [];
   String? selectedDiseasesVal;
   TextEditingController userController = TextEditingController();
   TextEditingController patientId = TextEditingController();
@@ -106,6 +106,8 @@ class DoctorDeskController extends GetxController {
   PatientDetailsByIdModel? patientDataById;
 
   DiseaseLookupDet? disease;
+
+  List<int> removedIds = [];
 
   fetchPage(int pageKey) async {
     try {
@@ -406,7 +408,7 @@ class DoctorDeskController extends GetxController {
   }
 
   getReferTo(id) async {
-    isLoading = true;
+    // isLoading = true;
     final uri = Uri.parse("${ApiConstants.baseUrl}${ApiConstants.referTo}/$id");
 
     Map<String, String> headers = {
@@ -420,17 +422,16 @@ class DoctorDeskController extends GetxController {
     debugPrint("response.body : ${response.body}");
 
     if (response.statusCode == 200) {
-      isLoading = false;
+      // isLoading = false;
 
       final data = json.decode(response.body);
       // if (data['status'] == 'Success') {
       isLoading = false;
       referToModel = ReferToModel.fromJson(data);
-      update();
     } else if (response.statusCode == 401) {
-      isLoading = false;
+      // isLoading = false;
     } else {
-      isLoading = false;
+      // isLoading = false;
 
       throw Exception('Failed refer to');
     }
@@ -438,6 +439,7 @@ class DoctorDeskController extends GetxController {
   }
 
   getPatientDetailsById(id) async {
+    selectedDisease.clear();
     isLoading = true;
     final uri =
         Uri.parse('${ApiConstants.baseUrl}${ApiConstants.getPatientById}/$id');
@@ -460,36 +462,48 @@ class DoctorDeskController extends GetxController {
 
       patientDataById = PatientDetailsByIdModel.fromJson(data);
 
+      // Create cards logic to display
       for (int i = 0;
           i < patientDataById!.details!.ttPatientRefList!.length;
           i++) {
         await checkAndAdd(
-            multiSelectedItem, patientDataById!.details!.ttPatientRefList![i]);
+            cardDataList, patientDataById!.details!.ttPatientRefList![i]);
       }
 
-
-
-
-      for (int i = 0; i < multiSelectedItem.length; i++) {
-        multiSelectedItem[i].referToTitle =
-            multiSelectedItem[i].selectedStakeH.displayTextRefTo();
-        // for (int j = 0; j < multiSelectedItem[i].selectedStakeH.length; j++) {
-        //   multiSelectedItem[i].referToTitle
-        // }
+      // Display refer to dropdown text logic
+      for (int i = 0; i < cardDataList.length; i++) {
+        cardDataList[i].referToTitle =
+            cardDataList[i].selectedStakeH.displayTextRefTo();
       }
 
+      // Create Disease dropdown to display
       if (diseaseLookupDetHierarchical != null) {
         for (int i = 0;
             i < patientDataById!.details!.ttPatientDiseaseList!.length;
             i++) {
-           disease = diseaseLookupDetHierarchical
-              ?.details?.first.lookupDet
+          disease = diseaseLookupDetHierarchical?.details?.first.lookupDet
               ?.firstWhere((e) =>
                   e.lookupDetId ==
                   patientDataById?.details?.ttPatientDiseaseList?[i]
                       .lookupDetIdDiseaseTypes);
 
-          selectedDisease.add(disease!);
+          // Avoid duplicate
+          if (!selectedDisease
+                  .any((e) => e.lookupDetId == disease!.lookupDetId)) {
+            selectedDisease.add(DiseaseLookupDet(
+              lookupDetDescEn: disease?.lookupDetDescEn,
+              lookupDetDescRg: disease?.lookupDetDescRg,
+              patientId:
+                  patientDataById?.details?.ttPatientDiseaseList?[i].patientId,
+              patientDiseasetypesId: patientDataById
+                  ?.details?.ttPatientDiseaseList?[i].patientDiseaseTypesId,
+              lookupDetId: disease?.lookupDetId,
+              lookupDetOthers: disease?.lookupDetOthers,
+              lookupDetValue: disease?.lookupDetValue,
+              status: 1,
+              existing: true
+            ));
+          }
           diseasesTypeController.text = selectedDisease.displayTextD();
         }
       }
@@ -513,32 +527,41 @@ class DoctorDeskController extends GetxController {
         obj.lookupDetIdRefDepartment == newObj.lookupDetIdRefDepartment);
 
     var stake = stakeHolderTypeModel?.details?.first.lookupDetHierarchical
-        ?.firstWhere((e) =>
-            e.lookupDetHierId == newObj.lookupDetHierIdStakeholderSubType2);
+        ?.firstWhere(
+            (e) =>
+                e.lookupDetHierId == newObj.lookupDetHierIdStakeholderSubType2,
+            orElse: () => LookupDetHierarchical());
 
-    var refToDeprt = refToDep?.details?.first.lookupDet
-        ?.firstWhere((e) => e.lookupDetId == newObj.lookupDetIdRefDepartment);
+    var refToDeprt = refToDep?.details?.first.lookupDet?.firstWhere(
+        (e) => e.lookupDetId == newObj.lookupDetIdRefDepartment,
+        orElse: () => DiseaseLookupDet(existing: true));
 
     await getReferTo(stake?.lookupDetHierId);
 
     ReferToDetails? refT = referToModel?.details?.firstWhere(
-        (e) => e.stakeholderMasterId == newObj.stakeholderMasterId);
+        (e) => e.stakeholderMasterId == newObj.stakeholderMasterId,
+        orElse: () => ReferToDetails(existing: true));
 
     if (index != -1) {
+      // update refer to master list
+      list[index].stakeHolderMasterList = referToModel?.details ?? [];
+
+      // Object exist, update existing object
       list[index].lookupDetHierIdStakeholderSubType2 = stake?.lookupDetHierId;
       list[index].lookupDetIdRefDepartment = refToDeprt?.lookupDetId;
       list[index].referToDeptTitle = refToDeprt?.lookupDetDescEn;
       list[index].stakeholderSubTypeTitle = stake?.lookupDetHierDescEn;
+      list[index].patientId = newObj.patientId;
+      // list[index].patientReferId = newObj.patientReferId;
       list[index].selectedStakeH.add(ReferToDetails(
-            stakeholderMasterId: newObj.stakeholderMasterId,
-            stakeholderNameEn: refT?.stakeholderNameEn,
-          ));
-
+          stakeholderMasterId: newObj.stakeholderMasterId,
+          stakeholderNameEn: refT?.stakeholderNameEn,
+          patientReferId: newObj.patientReferId, existing: true));
     } else {
       // Object doesn't exist, add to the list
       list.add(ReferToReqModel(
-          patientId: null,
-          patientReferId: null,
+          patientId: newObj.patientId,
+          // patientReferId: newObj.patientReferId,
           stakeholderMasterId: newObj.stakeholderMasterId,
           lookupDetIdRefDepartment: newObj.lookupDetIdRefDepartment,
           lookupDetHierIdStakeholderSubType2:
@@ -548,13 +571,15 @@ class DoctorDeskController extends GetxController {
           referToDeptTitle: refToDeprt?.lookupDetDescEn,
           orgId: 1,
           status: 1,
-          isInactive: null));
+          isInactive: []));
       list.last.selectedStakeH = [];
       list.last.selectedStakeH.add(ReferToDetails(
-        stakeholderMasterId: newObj.stakeholderMasterId,
-        stakeholderNameEn: refT?.stakeholderNameEn,
-      ));
+          stakeholderMasterId: newObj.stakeholderMasterId,
+          stakeholderNameEn: refT?.stakeholderNameEn,
+          patientReferId: newObj.patientReferId,
+          patientId: newObj.patientId, existing: true));
 
+      list.last.stakeHolderMasterList = referToModel?.details ?? [];
 
       debugPrint('dd');
       // list[index].referToTitle = list[index].selectedStakeH.displayText();

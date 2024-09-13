@@ -1,17 +1,18 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:community_health_app/core/common_bloc/repository/master_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:formz/formz.dart';
 import 'package:http/http.dart' as http;
-import 'package:community_health_app/core/common_bloc/repository/master_repository.dart';
 
 part 'master_data_event.dart';
 part 'master_data_state.dart';
 
 class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
   MasterDataRepository masterDataRepository;
+
   MasterDataBloc({required this.masterDataRepository})
       : super(
           const MasterDataState(
@@ -27,7 +28,10 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
             schemeAdoptedStatus: FormzSubmissionStatus.initial,
             prefixResponse: '',
             prefixStatus: FormzSubmissionStatus.initial,
-            getMaritalStatusResponse: '',
+            getStakeByIdStatus: FormzSubmissionStatus.initial,
+            getStakeByIdResp: "",
+            getStakeUpdateStatus: FormzSubmissionStatus.initial,
+            getStakeUpdateResp: '',
             getMaritalStatusStatus: FormzSubmissionStatus.initial,
             getRelationResponse: '',
             getRelationStatus: FormzSubmissionStatus.initial,
@@ -70,9 +74,11 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
             getDiseaseTypeStatus: FormzSubmissionStatus.initial,
             getReferToDepartmentResponse: '',
             getReferToDepartmentStatus: FormzSubmissionStatus.initial,
+            getMaritalStatusResponse: '',
           ),
         ) {
     on<GetUnitList>(_onGetUnitList);
+    on<UpdateStakeHolder>(_onUpdateStakeholder);
     on<GetViralLoadStatus>(_onGetViralLoadStatus);
     on<GetIDProofList>(_onGetIDProofList);
     on<SchemeAdopted>(_onSchemeAdopted);
@@ -82,6 +88,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
     on<GetRelation>(_onGetRelation);
     on<GetDivisionList>(_onGetDivisionList);
     on<GetDistrictList>(_onGetDistrictList);
+    on<GetStakeHolderDetails>(_onGetStakeHolderByID);
     on<GetStateList>(_onGetStateList);
     on<GetTownList>(_onGetTownList);
     on<GetTalukaList>(_onGetTalukaList);
@@ -104,10 +111,59 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
     on<GetReferToDepartment>(_onGetReferToDepartment);
   }
 
+  FutureOr<void> _onUpdateStakeholder(
+      UpdateStakeHolder event, Emitter<dynamic> emit) async {
+    emit(state.copyWith(
+        prefixStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateResp: '',
+        getStakeUpdateStatus: FormzSubmissionStatus.inProgress,
+        getMaritalStatusStatus: FormzSubmissionStatus.initial,
+        getUnitListStatus: FormzSubmissionStatus.initial,
+        getIDProofListStatus: FormzSubmissionStatus.initial,
+        getDiseaseTypeStatus: FormzSubmissionStatus.initial,
+        getSlotListStatus: FormzSubmissionStatus.initial,
+        getViralLoadStatusStatus: FormzSubmissionStatus.initial,
+        schemeAdoptedStatus: FormzSubmissionStatus.initial,
+        getRelationStatus: FormzSubmissionStatus.initial,
+        getTalukaListStatus: FormzSubmissionStatus.initial,
+        getTownListStatus: FormzSubmissionStatus.initial,
+        getStateListStatus: FormzSubmissionStatus.initial,
+        getStakeholderSubTypeWithLookupCodeStatus:
+            FormzSubmissionStatus.initial,
+        getDistrictListStatus: FormzSubmissionStatus.initial,
+        getDivisionListStatus: FormzSubmissionStatus.initial,
+        getSchemAdoptedListStatus: FormzSubmissionStatus.initial,
+        getBloodGroupStatus: FormzSubmissionStatus.initial,
+        getDialysisModeListStatus: FormzSubmissionStatus.initial,
+        getRefferedByStatus: FormzSubmissionStatus.initial,
+        getAddressByPincodeStatus: FormzSubmissionStatus.initial));
+    try {
+      http.Response res = await masterDataRepository.update(event.payload);
+
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            getStakeUpdateStatus: FormzSubmissionStatus.success,
+            getStakeUpdateResp: res.body));
+      } else {
+        emit(state.copyWith(
+            getStakeUpdateStatus: FormzSubmissionStatus.failure,
+            getStakeUpdateResp: res.reasonPhrase));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(state.copyWith(
+          getStakeUpdateStatus: FormzSubmissionStatus.failure,
+          getStakeUpdateResp: e.toString()));
+    }
+  }
+
   FutureOr<void> _onGetPrefix(GetPrefix event, Emitter<dynamic> emit) async {
     emit(state.copyWith(
         prefixStatus: FormzSubmissionStatus.inProgress,
         prefixResponse: "",
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getMaritalStatusStatus: FormzSubmissionStatus.initial,
         getUnitListStatus: FormzSubmissionStatus.initial,
         getIDProofListStatus: FormzSubmissionStatus.initial,
@@ -156,6 +212,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
       emit(state.copyWith(
           getUnitListResponse: "",
           getUnitListStatus: FormzSubmissionStatus.inProgress,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           prefixStatus: FormzSubmissionStatus.initial,
           getMaritalStatusStatus: FormzSubmissionStatus.initial,
           getIDProofListStatus: FormzSubmissionStatus.initial,
@@ -203,6 +260,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
       emit(state.copyWith(
           getViralLoadStatusResponse: "",
           getViralLoadStatusStatus: FormzSubmissionStatus.inProgress,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           getUnitListStatus: FormzSubmissionStatus.initial,
           prefixStatus: FormzSubmissionStatus.initial,
           getMaritalStatusStatus: FormzSubmissionStatus.initial,
@@ -251,6 +309,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
           getIDProofListResponse: "",
           getIDProofListStatus: FormzSubmissionStatus.inProgress,
           prefixStatus: FormzSubmissionStatus.initial,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           getMaritalStatusStatus: FormzSubmissionStatus.initial,
           getUnitListStatus: FormzSubmissionStatus.initial,
           getSlotListStatus: FormzSubmissionStatus.initial,
@@ -298,6 +357,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
           schemeAdoptedResponse: "",
           schemeAdoptedStatus: FormzSubmissionStatus.inProgress,
           prefixStatus: FormzSubmissionStatus.initial,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           getMaritalStatusStatus: FormzSubmissionStatus.initial,
           getUnitListStatus: FormzSubmissionStatus.initial,
           getIDProofListStatus: FormzSubmissionStatus.initial,
@@ -343,6 +403,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
           getSlotListResponse: "",
           getSlotListStatus: FormzSubmissionStatus.inProgress,
           getUnitListStatus: FormzSubmissionStatus.initial,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           prefixStatus: FormzSubmissionStatus.initial,
           getMaritalStatusStatus: FormzSubmissionStatus.initial,
           getIDProofListStatus: FormzSubmissionStatus.initial,
@@ -388,6 +449,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
           getMaritalStatusResponse: '',
           getMaritalStatusStatus: FormzSubmissionStatus.inProgress,
           getUnitListStatus: FormzSubmissionStatus.initial,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           getIDProofListStatus: FormzSubmissionStatus.initial,
           getSlotListStatus: FormzSubmissionStatus.initial,
           getViralLoadStatusStatus: FormzSubmissionStatus.initial,
@@ -437,6 +499,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
           getRelationResponse: '',
           getRelationStatus: FormzSubmissionStatus.inProgress,
           getUnitListStatus: FormzSubmissionStatus.initial,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           getIDProofListStatus: FormzSubmissionStatus.initial,
           getSlotListStatus: FormzSubmissionStatus.initial,
           getStakeholderSubTypeWithLookupCodeStatus:
@@ -484,6 +547,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getDivisionListResponse: '',
         getDivisionListStatus: FormzSubmissionStatus.inProgress,
         getSlotListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getUnitListStatus: FormzSubmissionStatus.initial,
         getIDProofListStatus: FormzSubmissionStatus.initial,
         getViralLoadStatusStatus: FormzSubmissionStatus.initial,
@@ -534,6 +598,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getDistrictListResponse: '',
         getDistrictListStatus: FormzSubmissionStatus.inProgress,
         getDivisionListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getSlotListStatus: FormzSubmissionStatus.initial,
         getUnitListStatus: FormzSubmissionStatus.initial,
         getIDProofListStatus: FormzSubmissionStatus.initial,
@@ -578,6 +643,60 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
     }
   }
 
+  FutureOr<void> _onGetStakeHolderByID(
+      GetStakeHolderDetails event, Emitter<MasterDataState> emit) async {
+    try {
+      emit(state.copyWith(
+        getDistrictListStatus: FormzSubmissionStatus.initial,
+        getDivisionListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
+        getSlotListStatus: FormzSubmissionStatus.initial,
+        getUnitListStatus: FormzSubmissionStatus.initial,
+        getIDProofListStatus: FormzSubmissionStatus.initial,
+        getViralLoadStatusStatus: FormzSubmissionStatus.initial,
+        schemeAdoptedStatus: FormzSubmissionStatus.initial,
+        prefixStatus: FormzSubmissionStatus.initial,
+        getMaritalStatusStatus: FormzSubmissionStatus.initial,
+        getStakeByIdStatus: FormzSubmissionStatus.inProgress,
+        getStakeByIdResp: '',
+        getRelationStatus: FormzSubmissionStatus.initial,
+        getStateListStatus: FormzSubmissionStatus.initial,
+        getTalukaListStatus: FormzSubmissionStatus.initial,
+        getDiseaseTypeStatus: FormzSubmissionStatus.initial,
+        getTownListStatus: FormzSubmissionStatus.initial,
+        getSchemAdoptedListStatus: FormzSubmissionStatus.initial,
+        getBloodGroupStatus: FormzSubmissionStatus.initial,
+        getStakeholderSubTypeWithLookupCodeStatus:
+            FormzSubmissionStatus.initial,
+        getDialysisModeListStatus: FormzSubmissionStatus.initial,
+        getRefferedByStatus: FormzSubmissionStatus.initial,
+        getAddressByPincodeStatus: FormzSubmissionStatus.initial,
+        getGenderStatus: FormzSubmissionStatus.initial,
+        getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
+        getCampDropdownListStatus: FormzSubmissionStatus.initial,
+        getMasterStatus: FormzSubmissionStatus.initial,
+      ));
+      http.Response res =
+          await masterDataRepository.getStakeHolderById(event.payload);
+      if (res.statusCode == 200) {
+        emit(state.copyWith(
+            getStakeByIdResp: res.body,
+            getStakeByIdStatus: FormzSubmissionStatus.success));
+      } else {
+        emit(state.copyWith(
+            getStakeByIdResp: res.body,
+            getStakeByIdStatus: FormzSubmissionStatus.failure));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(state.copyWith(
+          getStakeByIdResp: e.toString(),
+          getStakeByIdStatus: FormzSubmissionStatus.failure));
+    }
+  }
+
   FutureOr<void> _onGetDistrictOnDivision(
       GetDistrictOnDivision event, Emitter<MasterDataState> emit) async {
     try {
@@ -585,6 +704,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getDistrictListResponse: '',
         getDistrictListStatus: FormzSubmissionStatus.inProgress,
         getDivisionListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getSlotListStatus: FormzSubmissionStatus.initial,
         getUnitListStatus: FormzSubmissionStatus.initial,
         getIDProofListStatus: FormzSubmissionStatus.initial,
@@ -637,6 +757,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getStateListResponse: '',
         getStateListStatus: FormzSubmissionStatus.inProgress,
         getDistrictListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getDivisionListStatus: FormzSubmissionStatus.initial,
         getDiseaseTypeStatus: FormzSubmissionStatus.initial,
         getSlotListStatus: FormzSubmissionStatus.initial,
@@ -685,6 +806,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getTownListResponse: '',
         getTownListStatus: FormzSubmissionStatus.inProgress,
         getStateListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getDistrictListStatus: FormzSubmissionStatus.initial,
         getDivisionListStatus: FormzSubmissionStatus.initial,
         getSlotListStatus: FormzSubmissionStatus.initial,
@@ -736,6 +858,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getTalukaListResponse: '',
         getTalukaListStatus: FormzSubmissionStatus.inProgress,
         getMasterStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getTownListStatus: FormzSubmissionStatus.initial,
         getStateListStatus: FormzSubmissionStatus.initial,
         getDistrictListStatus: FormzSubmissionStatus.initial,
@@ -787,6 +910,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
           getSchemAdoptedListResponse: '',
           getSchemAdoptedListStatus: FormzSubmissionStatus.inProgress,
           getTalukaListStatus: FormzSubmissionStatus.initial,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           getTownListStatus: FormzSubmissionStatus.initial,
           getStateListStatus: FormzSubmissionStatus.initial,
           getDistrictListStatus: FormzSubmissionStatus.initial,
@@ -833,6 +957,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
           getBloodGroupStatus: FormzSubmissionStatus.inProgress,
           getTalukaListStatus: FormzSubmissionStatus.initial,
           getTownListStatus: FormzSubmissionStatus.initial,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           getStateListStatus: FormzSubmissionStatus.initial,
           getStakeholderSubTypeWithLookupCodeStatus:
               FormzSubmissionStatus.initial,
@@ -877,6 +1002,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getDialysisModeListStatus: FormzSubmissionStatus.inProgress,
         getTalukaListStatus: FormzSubmissionStatus.initial,
         getTownListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getStateListStatus: FormzSubmissionStatus.initial,
         getDistrictListStatus: FormzSubmissionStatus.initial,
         getDivisionListStatus: FormzSubmissionStatus.initial,
@@ -925,6 +1051,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getStakeholderSubTypeWithLookupCodeStatus:
             FormzSubmissionStatus.initial,
         getTownListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getStateListStatus: FormzSubmissionStatus.initial,
         getDistrictListStatus: FormzSubmissionStatus.initial,
         getDivisionListStatus: FormzSubmissionStatus.initial,
@@ -971,6 +1098,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getTalukaListStatus: FormzSubmissionStatus.initial,
         getGenderStatus: FormzSubmissionStatus.initial,
         getTownListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getStateListStatus: FormzSubmissionStatus.initial,
         getDistrictListStatus: FormzSubmissionStatus.initial,
         getStakeholderSubTypeWithLookupCodeStatus:
@@ -1022,6 +1150,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getMasterDesignationTypeStatus: FormzSubmissionStatus.initial,
         getAddressByPincodeStatus: FormzSubmissionStatus.initial,
         getTalukaListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getTownListStatus: FormzSubmissionStatus.initial,
         getStateListStatus: FormzSubmissionStatus.initial,
         getDistrictListStatus: FormzSubmissionStatus.initial,
@@ -1073,6 +1202,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getAddressByPincodeStatus: FormzSubmissionStatus.initial,
         getTalukaListStatus: FormzSubmissionStatus.initial,
         getTownListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getStateListStatus: FormzSubmissionStatus.initial,
         getDistrictListStatus: FormzSubmissionStatus.initial,
         getDivisionListStatus: FormzSubmissionStatus.initial,
@@ -1125,6 +1255,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getMasterStatus: FormzSubmissionStatus.initial,
         getAddressByPincodeStatus: FormzSubmissionStatus.initial,
         getTalukaListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getTownListStatus: FormzSubmissionStatus.initial,
         getStateListStatus: FormzSubmissionStatus.initial,
         getDistrictListStatus: FormzSubmissionStatus.initial,
@@ -1178,6 +1309,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getMasterStatus: FormzSubmissionStatus.initial,
         getAddressByPincodeStatus: FormzSubmissionStatus.initial,
         getTalukaListStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getDiseaseTypeStatus: FormzSubmissionStatus.initial,
         getTownListStatus: FormzSubmissionStatus.initial,
         getStateListStatus: FormzSubmissionStatus.initial,
@@ -1228,6 +1360,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getCampDropdownListStatus: FormzSubmissionStatus.inProgress,
         getStakeholderSubTypeStatus: FormzSubmissionStatus.initial,
         getGenderStatus: FormzSubmissionStatus.initial,
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getMasterDesignationTypeStatus: FormzSubmissionStatus.initial,
         getMasterStatus: FormzSubmissionStatus.initial,
         getAddressByPincodeStatus: FormzSubmissionStatus.initial,
@@ -1284,6 +1417,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
           getSlotListStatus: FormzSubmissionStatus.initial,
           getDiseaseTypeStatus: FormzSubmissionStatus.initial,
           getViralLoadStatusStatus: FormzSubmissionStatus.initial,
+          getStakeUpdateStatus: FormzSubmissionStatus.initial,
           schemeAdoptedStatus: FormzSubmissionStatus.initial,
           prefixStatus: FormzSubmissionStatus.initial,
           getMaritalStatusStatus: FormzSubmissionStatus.initial,
@@ -1317,6 +1451,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getUnitListStatus: FormzSubmissionStatus.initial,
         getUnitListResponse: '',
         getIDProofListResponse: '',
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getIDProofListStatus: FormzSubmissionStatus.initial,
         getSlotListResponse: '',
         getSlotListStatus: FormzSubmissionStatus.initial,
@@ -1394,6 +1529,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getUnitListStatus: FormzSubmissionStatus.initial,
         getUnitListResponse: '',
         getIDProofListResponse: '',
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getIDProofListStatus: FormzSubmissionStatus.initial,
         getSlotListResponse: '',
         getSlotListStatus: FormzSubmissionStatus.initial,
@@ -1472,6 +1608,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
       emit(state.copyWith(
         getUnitListStatus: FormzSubmissionStatus.initial,
         getUnitListResponse: '',
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getIDProofListResponse: '',
         getIDProofListStatus: FormzSubmissionStatus.initial,
         getSlotListResponse: '',
@@ -1553,6 +1690,7 @@ class MasterDataBloc extends Bloc<MasterDataEvent, MasterDataState> {
         getIDProofListResponse: '',
         getIDProofListStatus: FormzSubmissionStatus.initial,
         getSlotListResponse: '',
+        getStakeUpdateStatus: FormzSubmissionStatus.initial,
         getSlotListStatus: FormzSubmissionStatus.initial,
         getViralLoadStatusResponse: '',
         getViralLoadStatusStatus: FormzSubmissionStatus.initial,
