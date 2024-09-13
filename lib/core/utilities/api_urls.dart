@@ -3,7 +3,7 @@ class ApiConstants {
   // static String baseUrl = "http://210.89.42.117:8085/api";
 
   /// replica url
-  static String baseUrl = "http://210.89.42.117:8084";
+  static String baseUrl = "http://210.89.42.117:8084/api";
 
   ///Prod url
   // static String baseUrl = "https://api.communityhealthcamp.in/api";
