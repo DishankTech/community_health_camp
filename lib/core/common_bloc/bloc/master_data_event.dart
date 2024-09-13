@@ -38,9 +38,27 @@ class GetDivisionList extends MasterDataEvent {
   List<Object> get props => [payload];
 }
 
+class UpdateStakeHolder extends MasterDataEvent {
+  final Map payload;
+ const UpdateStakeHolder({required this.payload});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
+
 class GetDistrictList extends MasterDataEvent {
   Map payload;
   GetDistrictList({required this.payload});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [payload];
+}
+
+class GetStakeHolderDetails extends MasterDataEvent {
+  final int payload;
+ const GetStakeHolderDetails({required this.payload});
 
   @override
   // TODO: implement props

@@ -35,6 +35,7 @@ class ReferToReqModel {
   String? stakeholderSubTypeTitle;
   String? referToTitle;
   List<ReferToDetails> selectedStakeH = [];
+  List<ReferToDetails> stakeHolderMasterList = [];
   String? referToDeptTitle;
   int? orgId;
   int? status;

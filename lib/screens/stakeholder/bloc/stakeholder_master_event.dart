@@ -23,6 +23,9 @@ class RegisterStakeholder extends StakeholderMasterEvent {
   List<Object> get props => [payload];
 }
 
+
+
+
 class GetStakeholderName extends StakeholderMasterEvent {
   int payload;
   GetStakeholderName({required this.payload});

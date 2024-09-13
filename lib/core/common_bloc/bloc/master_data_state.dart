@@ -14,6 +14,10 @@ class MasterDataState extends Equatable {
     required this.getSlotListResponse,
     required this.prefixResponse,
     required this.prefixStatus,
+    required this.getStakeByIdStatus,
+    required this.getStakeByIdResp,
+    required this.getStakeUpdateStatus,
+    required this.getStakeUpdateResp,
     required this.getMaritalStatusResponse,
     required this.getMaritalStatusStatus,
     required this.getRelationStatus,
@@ -60,6 +64,12 @@ class MasterDataState extends Equatable {
 
   final FormzSubmissionStatus prefixStatus;
   final String prefixResponse;
+
+  final FormzSubmissionStatus getStakeByIdStatus;
+  final String getStakeByIdResp;
+
+  final FormzSubmissionStatus getStakeUpdateStatus;
+  final String getStakeUpdateResp;
 
   final FormzSubmissionStatus getUnitListStatus;
   final String getUnitListResponse;
@@ -152,6 +162,10 @@ class MasterDataState extends Equatable {
     String? getSlotListResponse,
     FormzSubmissionStatus? prefixStatus,
     String? prefixResponse,
+    FormzSubmissionStatus? getStakeByIdStatus,
+    String? getStakeByIdResp,
+    FormzSubmissionStatus? getStakeUpdateStatus,
+    String? getStakeUpdateResp,
     FormzSubmissionStatus? getMaritalStatusStatus,
     String? getMaritalStatusResponse,
     FormzSubmissionStatus? getRelationStatus,
@@ -198,6 +212,10 @@ class MasterDataState extends Equatable {
     return MasterDataState(
       prefixResponse: prefixResponse ?? this.prefixResponse,
       prefixStatus: prefixStatus ?? this.prefixStatus,
+      getStakeByIdStatus: getStakeByIdStatus ?? this.getStakeByIdStatus,
+      getStakeByIdResp: getStakeByIdResp ?? this.getStakeByIdResp,
+      getStakeUpdateStatus: getStakeUpdateStatus ?? this.getStakeUpdateStatus,
+      getStakeUpdateResp: getStakeUpdateResp ?? this.getStakeUpdateResp,
       getUnitListStatus: getUnitListStatus ?? this.getUnitListStatus,
       getUnitListResponse: getUnitListResponse ?? this.getUnitListResponse,
       getViralLoadStatusStatus:
@@ -300,6 +318,10 @@ class MasterDataState extends Equatable {
         schemeAdoptedResponse,
         prefixResponse,
         prefixStatus,
+        getStakeByIdStatus,
+        getStakeByIdResp,
+        getStakeUpdateStatus,
+        getStakeUpdateResp,
         getMaritalStatusResponse,
         getMaritalStatusStatus,
         getRelationResponse,

@@ -17,6 +17,7 @@ import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
+import 'package:community_health_app/core/utilities/list_util.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/core/utilities/validators.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
@@ -54,7 +55,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   GlobalKey<FormState> _formKey = GlobalKey();
   ScrollController scrollController = ScrollController();
   List<Widget> multiSelectionWidgets = [];
-  List<ReferToReqModel> multiSelectedItem = [];
+  List<ReferToReqModel> cardDataList = [];
   final CampCreationController campCreationController =
       Get.put(CampCreationController());
   late TextEditingController _campIDTextController;
@@ -175,8 +176,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
 
   @override
   void initState() {
-    multiSelectedItem.add(ReferToReqModel(
-        patientReferId: null,
+    cardDataList.add(ReferToReqModel(
         patientId: null,
         stakeholderMasterId: null,
         lookupDetIdRefDepartment: null,
@@ -187,7 +187,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
         orgId: 1,
         status: 1,
         isInactive: null));
-    doctorDeskController.diseasesTypeController.text = "";
+    doctorDeskController.diseasesTypeController.clear();
     checkInternetAndLoadData();
     _campIDTextController = TextEditingController();
     _campDateTextController = TextEditingController();
@@ -774,7 +774,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     SizedBox(
                                       height: responsiveHeight(20),
                                     ),
-
                                     Row(
                                       children: [
                                         Flexible(
@@ -883,7 +882,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       ),
                                       hint: "",
                                     ),
-
                                     SizedBox(
                                       height: responsiveHeight(20),
                                     ),
@@ -1137,35 +1135,37 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                                 .diseasesTypeController,
                                             inputType: TextInputType.text,
                                             validators:
-                                            Validators.validateDiseases,
+                                                Validators.validateDiseases,
                                             errorText:
-                                            Validators.validateDiseases(
-                                                doctorDeskController
-                                                    .diseasesTypeController
-                                                    .text),
+                                                Validators.validateDiseases(
+                                                    doctorDeskController
+                                                        .diseasesTypeController
+                                                        .text),
                                             onChange: (p0) {},
                                             onTap: () async {
                                               diseasesBottomSheet(
                                                   context,
-                                                      (p0) => {
-                                                    controller
-                                                        .selectedDiseasesVal =
-                                                        p0.lookupDetDescEn,
-                                                    selectedDisease
-                                                        .addIfNotExistD(p0),
-                                                    controller
-                                                        .diseasesTypeController
-                                                        .text =
-                                                        selectedDisease
-                                                            .displayTextD(),
-                                                    controller.update()
-                                                  },
+                                                  (p0) => {
+                                                        controller
+                                                                .selectedDiseasesVal =
+                                                            p0.lookupDetDescEn,
+                                                        ListUtil
+                                                            .addIfDiseaseNotExist(
+                                                                selectedDisease,
+                                                                p0),
+                                                        controller
+                                                                .diseasesTypeController
+                                                                .text =
+                                                            selectedDisease
+                                                                .displayTextD(),
+                                                        controller.update()
+                                                      },
                                                   "Diseases Type",
                                                   controller
-                                                      .diseaseLookupDetHierarchical
-                                                      ?.details
-                                                      ?.first
-                                                      .lookupDet ??
+                                                          .diseaseLookupDetHierarchical
+                                                          ?.details
+                                                          ?.first
+                                                          .lookupDet ??
                                                       [],
                                                   true);
                                             },
@@ -1187,26 +1187,25 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                             hint: "",
                                             suffix: SizedBox(
                                               height:
-                                              getProportionateScreenHeight(
-                                                  20),
+                                                  getProportionateScreenHeight(
+                                                      20),
                                               width:
-                                              getProportionateScreenHeight(
-                                                  20),
+                                                  getProportionateScreenHeight(
+                                                      20),
                                               child: Center(
                                                 child: Image.asset(
                                                   icArrowDownOrange,
                                                   height:
-                                                  getProportionateScreenHeight(
-                                                      20),
+                                                      getProportionateScreenHeight(
+                                                          20),
                                                   width:
-                                                  getProportionateScreenHeight(
-                                                      20),
+                                                      getProportionateScreenHeight(
+                                                          20),
                                                 ),
                                               ),
                                             ),
                                           );
                                         }),
-
                                     SizedBox(
                                       height: responsiveHeight(20),
                                     ),
@@ -1214,13 +1213,13 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       controller: _investigationTextController,
                                       inputType: TextInputType.name,
                                       textCapitalization:
-                                      TextCapitalization.words,
+                                          TextCapitalization.words,
                                       onChange: (p0) {},
                                       validators:
-                                      Validators.validateInvestigation,
+                                          Validators.validateInvestigation,
                                       errorText:
-                                      Validators.validateInvestigation(
-                                          _locationNameController.text),
+                                          Validators.validateInvestigation(
+                                              _locationNameController.text),
                                       label: RichText(
                                         text: const TextSpan(
                                             text: 'Investigation',
@@ -1245,7 +1244,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       maxLines: 4,
                                       borderRadius: responsiveHeight(20),
                                       textCapitalization:
-                                      TextCapitalization.words,
+                                          TextCapitalization.words,
                                       validators: Validators.validateProvisionD,
                                       errorText: Validators.validateProvisionD(
                                           _locationNameController.text),
@@ -1268,10 +1267,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     SizedBox(
                                       height: responsiveHeight(20),
                                     ),
-
-
-
-
                                   ],
                                 ),
                               ],
@@ -1285,7 +1280,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                       ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
-                          itemCount: multiSelectedItem.length,
+                          itemCount: cardDataList.length,
                           itemBuilder: (c, i) => selectedList(context, i)),
                       SizedBox(
                         height: responsiveHeight(30),
@@ -1311,28 +1306,26 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     }
 
                                     for (int i = 0;
-                                        i < multiSelectedItem.length;
+                                        i < cardDataList.length;
                                         i++) {
                                       for (int j = 0;
                                           j <
-                                              multiSelectedItem[i]
+                                              cardDataList[i]
                                                   .selectedStakeH
                                                   .length;
                                           j++) {
                                         referTo.add(ReferToReqModel(
                                             patientId: null,
-                                            patientReferId: null,
-                                            stakeholderMasterId:
-                                                multiSelectedItem[i]
-                                                    .selectedStakeH[j]
-                                                    .stakeholderMasterId,
+                                            stakeholderMasterId: cardDataList[i]
+                                                .selectedStakeH[j]
+                                                .stakeholderMasterId,
                                             // stakeholderMasterId: 1,
 
                                             lookupDetHierIdStakeholderSubType2:
-                                                multiSelectedItem[i]
+                                                cardDataList[i]
                                                     .lookupDetHierIdStakeholderSubType2,
                                             lookupDetIdRefDepartment:
-                                                multiSelectedItem[i]
+                                                cardDataList[i]
                                                     .lookupDetIdRefDepartment,
                                             orgId: 1,
                                             status: 1));
@@ -1445,13 +1438,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   List<DiseaseLookupDet> selectedDisease = [];
 
   Padding selectedList(BuildContext context, int index) {
-    // TextEditingController subStakeholderController = TextEditingController();
-    // TextEditingController referToController = TextEditingController();
-    // TextEditingController referToDeptController = TextEditingController();
-    // subStakeholderController.text =
-    //     multiSelectedItem[index].stakeholderSubTypeTitle ?? "";
-    // referToController.text = multiSelectedItem[index].referToTitle ?? "";
-    // referToDeptController.text = multiSelectedItem[index].referToTitle ?? "";
     GlobalKey<FormState> _key = GlobalKey();
 
     return Padding(
@@ -1470,25 +1456,35 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                 AppRoundTextField(
                   // key: UniqueKey(),
                   initialValue:
-                      multiSelectedItem[index].stakeholderSubTypeTitle ?? "",
+                      cardDataList[index].stakeholderSubTypeTitle ?? "",
                   inputType: TextInputType.text,
                   onChange: (p0) {},
                   onTap: () async {
                     await commonBottomSheet(
                         context,
                         (p0) async => {
-                              doctorDeskController.selectedStakeHTypeVal =
-                                  p0.lookupDetHierDescEn,
-                              multiSelectedItem[index].stakeholderSubTypeTitle =
-                                  p0.lookupDetHierDescEn ?? "",
-                              multiSelectedItem[index]
-                                      .lookupDetHierIdStakeholderSubType2 =
-                                  p0.lookupDetHierId,
-                              doctorDeskController.update(),
-                              await doctorDeskController
-                                  .getReferTo(p0.lookupDetHierId),
-                              doctorDeskController.selectedStakeHType = p0,
-                              doctorDeskController.update()
+                              if (p0.lookupDetHierId !=
+                                  cardDataList[index]
+                                      .lookupDetHierIdStakeholderSubType2)
+                                {
+                                  doctorDeskController.selectedStakeHTypeVal =
+                                      p0.lookupDetHierDescEn,
+                                  cardDataList[index].stakeholderSubTypeTitle =
+                                      p0.lookupDetHierDescEn ?? "",
+                                  cardDataList[index]
+                                          .lookupDetHierIdStakeholderSubType2 =
+                                      p0.lookupDetHierId,
+                                  await doctorDeskController
+                                      .getReferTo(p0.lookupDetHierId),
+                                  cardDataList[index].stakeHolderMasterList =
+                                      doctorDeskController
+                                              .referToModel?.details ??
+                                          [],
+                                  cardDataList[index].selectedStakeH
+                                      .clear(),
+                                  doctorDeskController.selectedStakeHType = p0,
+                                  doctorDeskController.update()
+                                }
                             },
                         "Stakeholder Subtype",
                         doctorDeskController.stakeHolderTypeModel?.details
@@ -1528,8 +1524,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                     init: DoctorDeskController(),
                     builder: (controller) => AppRoundTextField(
                           // key: UniqueKey(),
-                          initialValue:
-                              multiSelectedItem[index].referToTitle ?? "",
+                          initialValue: cardDataList[index].referToTitle ?? "",
                           inputType: TextInputType.text,
                           onChange: (p0) {
                             setState(() {});
@@ -1543,17 +1538,17 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                 (p0) => {
                                       controller.selectedStakeHVal =
                                           p0.lookupDetHierDescEn,
-                                      multiSelectedItem[index]
-                                          .selectedStakeH
-                                          .addIfNotExist(p0),
-                                      multiSelectedItem[index].referToTitle =
-                                          multiSelectedItem[index]
+                                      ListUtil.addIfReferToNotExist(
+                                          cardDataList[index].selectedStakeH,
+                                          p0),
+                                      cardDataList[index].referToTitle =
+                                          cardDataList[index]
                                               .selectedStakeH
                                               .displayText(),
                                       controller.update()
                                     },
                                 "Refer To",
-                                controller.referToModel?.details ?? [],
+                                cardDataList[index].stakeHolderMasterList,
                                 true);
                           },
                           // maxLength: 12,
@@ -1591,7 +1586,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                       return AppRoundTextField(
                         // controller: controller
                         //     .diseasesTypeController,
-                        initialValue: multiSelectedItem[index].referToDeptTitle,
+                        initialValue: cardDataList[index].referToDeptTitle,
                         inputType: TextInputType.text,
                         // validators:
                         // Validators.validateDiseases,
@@ -1607,10 +1602,10 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                     controller.selectedRefDep =
                                         p0.lookupDetDescEn,
                                     controller.selectedRefDepObj = p0,
-                                    multiSelectedItem[index].referToDeptTitle =
+                                    cardDataList[index].referToDeptTitle =
                                         controller
                                             .selectedRefDepObj?.lookupDetDescEn,
-                                    multiSelectedItem[index]
+                                    cardDataList[index]
                                             .lookupDetIdRefDepartment =
                                         controller
                                             .selectedRefDepObj?.lookupDetId,
@@ -1649,62 +1644,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                         ),
                       );
                     }),
-                // BlocBuilder<MasterDataBloc, MasterDataState>(
-                //   builder: (context, state) {
-                //     return AppRoundTextField(
-                //       initialValue: multiSelectedItem[index].referToDeptTitle,
-                //       // controller: _referToDepartmentTextController,
-                //       onChange: (p0) {
-                //         setState(() {});
-                //       },
-                //       // errorText: Validators.validateStakeholderSubType(
-                //       //     _referToDepartmentTextController.text),
-                //       // validators: Validators.validateStakeholderSubType,
-                //       inputType: TextInputType.text,
-                //       onTap: () {
-                //         context
-                //             .read<MasterDataBloc>()
-                //             .add(GetReferToDepartment(payload: const {
-                //               "lookup_code_list1": [
-                //                 {"lookup_code": "DRF"}
-                //               ]
-                //             }));
-                //       },
-                //       readOnly: true,
-                //       label: RichText(
-                //         text: const TextSpan(
-                //             text: 'Refer To Department',
-                //             style: TextStyle(
-                //                 color: kHintColor, fontFamily: Montserrat),
-                //             children: [
-                //               // TextSpan(
-                //               //     text: "*",
-                //               //     style: TextStyle(color: Colors.red))
-                //             ]),
-                //       ),
-                //       hint: "",
-                //       suffix: state.getStakeholderSubTypeStatus.isInProgress
-                //           ? SizedBox(
-                //               height: responsiveHeight(20),
-                //               width: responsiveHeight(20),
-                //               child: const Center(
-                //                 child: CircularProgressIndicator(),
-                //               ),
-                //             )
-                //           : SizedBox(
-                //               height: responsiveHeight(20),
-                //               width: responsiveHeight(20),
-                //               child: Center(
-                //                 child: Image.asset(
-                //                   icArrowDownOrange,
-                //                   height: responsiveHeight(20),
-                //                   width: responsiveHeight(20),
-                //                 ),
-                //               ),
-                //             ),
-                //     );
-                //   },
-                // ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -1713,8 +1653,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                           if (_key.currentState!.validate() == false) {
                             return;
                           }
-                          multiSelectedItem.add(ReferToReqModel(
-                              patientReferId: null,
+                          cardDataList.add(ReferToReqModel(
                               patientId: null,
                               stakeholderMasterId:
                                   _selectedStakeholderSubType?.lookupDetHierId,
@@ -1752,7 +1691,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                         )),
                     IconButton(
                         onPressed: () {
-                          multiSelectedItem.removeAt(index);
+                          cardDataList.removeAt(index);
                           setState(() {});
                         },
                         icon: Image.asset(

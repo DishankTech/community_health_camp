@@ -14,8 +14,22 @@ class MasterDataRepository {
     return await http.get(Uri.parse('$kBaseUrl$kGetUnitNameList'));
   }
 
+
+
   Future<http.Response> getViralLoadStatus() async {
     return await http.get(Uri.parse('$kBaseUrl$kGetViralLoadStatus'));
+  }
+
+  Future<http.Response> getStakeHolderById(int payload) async {
+    return await http.post(
+      Uri.parse('$kBaseUrl$kGetStakeholdrBId/$payload'),
+    );
+  }
+
+  Future<http.Response> update(Map payload) async {
+    var headers = {'Content-Type': 'application/json'};
+    return await http.post(Uri.parse('$kBaseUrl$kupdateStake'),
+        body: jsonEncode(payload), headers: headers);
   }
 
   Future<http.Response> getIDProofList() async {

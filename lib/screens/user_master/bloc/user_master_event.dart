@@ -15,6 +15,13 @@ class CreateUserRequest extends UserMasterEvent {
   List<Object> get props => [payload];
 }
 
+class UpdateUserReq extends UserMasterEvent {
+  final Map<String, dynamic> payload;
+  const UpdateUserReq({required this.payload});
+  @override
+  List<Object> get props => [payload];
+}
+
 class GetUserRequest extends UserMasterEvent {
   Map payload;
   GetUserRequest({required this.payload});
