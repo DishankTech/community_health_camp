@@ -1,14 +1,12 @@
-
 // dev url
-const String kDomain = "http://210.89.42.117:8085/";
-const String kBaseUrl = 'http://210.89.42.117:8085/api/';
-const String kBaseUrl1 = 'http://210.89.42.117:8085/api/';
+// const String kDomain = "http://210.89.42.117:8085/";
+// const String kBaseUrl = 'http://210.89.42.117:8085/api/';
+// const String kBaseUrl1 = 'http://210.89.42.117:8085/api/';
 
 // replica url
-// const String kDomain = "http://210.89.42.117:8084/";
-// const String kBaseUrl = 'http://210.89.42.117:8084/api/';
-// const String kBaseUrl1 = 'http://210.89.42.117:8084/api/';
-
+const String kDomain = "http://210.89.42.117:8084/";
+const String kBaseUrl = 'http://210.89.42.117:8084/api/';
+const String kBaseUrl1 = 'http://210.89.42.117:8084/api/';
 
 const String kSaveUser = "saveUser";
 const String kCheckPatIdorMobileOrAbha = "checkPatIdorMobileOrAbha";
@@ -37,7 +35,8 @@ const String kSavePatientRegDetails = "savePatientRegDetails";
 const String kGetPatDtailsByUserId = "dropdown/getpatdetailsbyuserid";
 const String kBookBedApi = "bookBedApi";
 const String kGetMyAppointments = "getAutoSuggetionDetails";
-const String kGetStakeholdrBId = "administrator/masters/get-stake-holder-master-by-id";
+const String kGetStakeholdrBId =
+    "administrator/masters/get-stake-holder-master-by-id";
 
 const String userLogin = "public/account/login";
 const String userResetPassword = "profile/account/update/user-password-reset";
