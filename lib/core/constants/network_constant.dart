@@ -1,13 +1,13 @@
 
 // dev url
-const String kDomain = "http://210.89.42.117:8085/";
-const String kBaseUrl = 'http://210.89.42.117:8085/api/';
-const String kBaseUrl1 = 'http://210.89.42.117:8085/api/';
+// const String kDomain = "http://210.89.42.117:8085/";
+// const String kBaseUrl = 'http://210.89.42.117:8085/api/';
+// const String kBaseUrl1 = 'http://210.89.42.117:8085/api/';
 
 // replica url
-// const String kDomain = "http://210.89.42.117:8084/";
-// const String kBaseUrl = 'http://210.89.42.117:8084/api/';
-// const String kBaseUrl1 = 'http://210.89.42.117:8084/api/';
+const String kDomain = "http://210.89.42.117:8084/";
+const String kBaseUrl = 'http://210.89.42.117:8084/api/';
+const String kBaseUrl1 = 'http://210.89.42.117:8084/api/';
 
 
 const String kSaveUser = "saveUser";
