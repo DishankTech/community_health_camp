@@ -3,10 +3,10 @@ class ApiConstants {
   // static String baseUrl = "http://210.89.42.117:8085/api";
 
   /// replica url
-  static String baseUrl = "http://210.89.42.117:8084/api";
+  // static String baseUrl = "http://210.89.42.117:8084/api";
 
   ///Prod url
-  // static String baseUrl = "https://api.communityhealthcamp.in/api";
+  static String baseUrl = "https://api.communityhealthcamp.in/api";
 
   static const String getDivision = "/common/lookup/lookupCode";
   static const String getAllAddress = "/common/lookup/lookupDetCode";

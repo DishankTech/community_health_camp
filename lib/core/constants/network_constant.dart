@@ -1,12 +1,17 @@
 // dev url
-// const String kDomain = "http://210.89.42.117:8085/";
-// const String kBaseUrl = 'http://210.89.42.117:8085/api/';
-// const String kBaseUrl1 = 'http://210.89.42.117:8085/api/';
+const String kDomain = "http://210.89.42.117:8085/";
+const String kBaseUrl = 'http://210.89.42.117:8085/api/';
+const String kBaseUrl1 = 'http://210.89.42.117:8085/api/';
 
 // replica url
-const String kDomain = "http://210.89.42.117:8084/";
-const String kBaseUrl = 'http://210.89.42.117:8084/api/';
-const String kBaseUrl1 = 'http://210.89.42.117:8084/api/';
+// const String kDomain = "http://210.89.42.117:8084/";
+// const String kBaseUrl = 'http://210.89.42.117:8084/api/';
+// const String kBaseUrl1 = 'http://210.89.42.117:8084/api/';
+
+// prod url
+// const String kDomain = "https://api.communityhealthcamp.in/";
+// const String kBaseUrl = 'https://api.communityhealthcamp.in/api/';
+// const String kBaseUrl1 = 'https://api.communityhealthcamp.in/api';
 
 const String kSaveUser = "saveUser";
 const String kCheckPatIdorMobileOrAbha = "checkPatIdorMobileOrAbha";
