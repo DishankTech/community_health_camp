@@ -5,15 +5,16 @@ import 'dart:io';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/constants/constants.dart';
 import 'package:community_health_app/core/constants/fonts.dart';
-import 'package:community_health_app/core/constants/network_constant.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
+import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
+import 'package:community_health_app/core/utilities/network_call.dart';
 import 'package:community_health_app/core/utilities/permission_service.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/screens/user_auths/models/login_response_model.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../core/common_widgets/app_round_textfield.dart';
@@ -299,18 +300,28 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = true; // Show loader
     });
+    IOClient ioClient = IOClient(ByPassCert().httpClient);
 
     try {
       var headers = {'Content-Type': 'application/json'};
-      var request = http.Request('POST', Uri.parse(kBaseUrl + userLogin));
-      request.body = json.encode({
+      var body = {
         "username": _usernameController.text.toString().trim(),
         "password": _passwordController.text.toString().trim()
-      });
-      request.headers.addAll(headers);
+      };
 
-      http.StreamedResponse response = await request.send();
-      http.Response finalResponse = await http.Response.fromStream(response);
+      var response = await ioClient.post(
+          Uri.parse("${ApiConstants.baseUrl}${ApiConstants.userLogin}"),
+          body: jsonEncode(body),
+          headers: headers);
+
+      // request.body = json.encode({
+      //   "username": _usernameController.text.toString().trim(),
+      //   "password": _passwordController.text.toString().trim()
+      // });
+      // request.headers.addAll(headers);
+
+      // http.StreamedResponse response = await request.send();
+      // http.Response finalResponse = await http.Response.fromStream(response);
 
       if (response.statusCode == 200) {
         setState(() {
@@ -319,11 +330,11 @@ class _LoginPageState extends State<LoginPage> {
           // Hide loader
         });
         userDetailsList.clear();
-        var responseBody = json.decode(finalResponse.body);
+        var responseBody = json.decode(response.body);
         // Get the status code as a string
         String statusCode = responseBody['status_code'].toString();
         if (statusCode == "200") {
-          DataProvider().storeUserData(finalResponse.body);
+          DataProvider().storeUserData(response.body);
 
           LoginResponseModel loginResponseModel =
               LoginResponseModel.fromJson(responseBody);

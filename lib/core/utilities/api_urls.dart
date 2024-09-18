@@ -7,6 +7,7 @@ class ApiConstants {
 
   ///Prod url
   static String baseUrl = "https://api.communityhealthcamp.in/api";
+  // static String baseUrl = "http://103.251.94.7/api";
 
   static const String getDivision = "/common/lookup/lookupCode";
   static const String getAllAddress = "/common/lookup/lookupDetCode";
@@ -60,4 +61,63 @@ class ApiConstants {
       "/administrator/masters/dropdown/stake-holder-by-sub-type-list";
   static const String updatePatient =
       "/administrator/masters/update/patient-master";
+
+
+
+
+  static const String kGetPrefix = "/getallpatienttitles";
+  static const String kGetUnitNameList = "/getUnitNameList";
+  static const String kGetViralLoadStatus = "/getHaemodialysisProcedureTypeList";
+  static const String kGetIDProofList = "/getLookupDetList";
+  static const String kGetSchemeAdoted = "/getPatientTypeList";
+  static const String kGetSlotList = "/getSlotList";
+  static const String kGetMaritalStatus = "/getMaritalStatus";
+  static const String kGetRelation = "/getRelation";
+  static const String kGetDivision = "/getDivisionList";
+  static const String kGetDistrict = "/getDistrictList";
+  static const String kGetState = "/getStateList";
+  static const String kGetTaluka = "/getTalukaList";
+  static const String kGetTown = "/getTownList";
+  static const String kGetBloodGroup = "/getBloodGroup";
+  static const String kGetRefferedBy = "/getRefferedBy";
+  static const String kGetDialysisModeList = "/getDialysisModeList";
+  static const String kGetAddressByPincode = "/dropdown/getdetailsUsingPincode";
+  static const String kGetStakeholdrBId =
+      "/administrator/masters/get-stake-holder-master-by-id";
+
+  static const String userLogin = "/public/account/login";
+  static const String userResetPassword = "/profile/account/update/user-password-reset";
+  static const String kCreateUser = "/profile/account/new/";
+  static const String kUpdateUser = "/profile/account/update/user-account-details";
+  static const String kLoginNameValidation =
+      "/profile/account/get/login-name-validation/";
+  static const String kGetAllUsers = "/profile/account/all-user-details-pagination";
+  static const String kPatientRegistration = "/administrator/masters/add/patient-master";
+  static const String kGetAllPatients =
+      "/administrator/masters/all-patient-master-pagination";
+  static const String kGetMasters = "/common/lookup/lookupCode";
+  static const String kGetMastersDetCode = "/common/lookup/lookupDetCode";
+  static const String kGetMastersLookupDetId = "/common/lookup/lookupDetHier/parent-id/";
+  static const String kGetDistrictOnDivision = "/common/get/district-by-division/";
+  static const String kGetCampListDropdown =
+      "/administrator/camp/dropdown/camp-date-list/";
+  static const String kSearchPatient =
+      "/administrator/masters/patient-master-search-details";
+
+// Stakeholder
+  static const String kAddStakeholder = "/administrator/masters/add/stake-holder-master";
+  static const String kupdateStake = "/administrator/masters/update/stake-holder-master";
+  static const String kGetAllStakeholders =
+      "/administrator/masters/all-stake-holder-master-pagination";
+  static const String kGetStakeholderName =
+      "/administrator/masters/dropdown/stake-holder-list/";
+//Dashboard
+  static const String kGetCount = "/administrator/masters/get/filter/count";
+  static const String kGetDateWiseDistrictCount =
+      "/administrator/masters/get/district-wise-camp-by-date/count";
+
+  static const String kGetExcelData = "/administrator/masters/download-excel/";
+  static const String kDistrictWisePatientCount =
+      "/administrator/masters/get/district-wise-patient/count";
+
 }

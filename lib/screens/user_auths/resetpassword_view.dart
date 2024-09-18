@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:community_health_app/core/common_widgets/app_button.dart';
 import 'package:community_health_app/core/common_widgets/app_round_textfield.dart';
 import 'package:community_health_app/core/routes/app_routes.dart';
+import 'package:community_health_app/core/utilities/api_urls.dart';
+import 'package:community_health_app/core/utilities/network_call.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 
-import '../../core/constants/network_constant.dart';
 import '../../core/utilities/data_provider.dart';
 import '../../core/utilities/size_config.dart';
 
@@ -111,7 +113,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                             });
                           },
                         ),
-
                         validators: (value) {
                           if (value == null || value.isEmpty) {
                             return 'New Password is required';
@@ -124,7 +125,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         },
                       ),
                     ),
-
                     const SizedBox(
                       height: 30,
                     ),
@@ -259,22 +259,34 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     setState(() {
       _isLoading = true; // Show loader
     });
+    IOClient ioClient = IOClient(ByPassCert().httpClient);
 
     int? userId = DataProvider().getUserCredentials();
     var headers = {'Content-Type': 'application/json'};
-    var request = http.Request('POST', Uri.parse(kBaseUrl + userResetPassword));
-    request.body = json.encode({
+
+    var body = {
       "user_id": userId,
       "old_password": oldPsw.text.trim(),
       "password": _confirmpasswordController.text.toString().trim()
-    });
-    request.headers.addAll(headers);
+    };
 
-    print(request.body);
-    print(request);
+    var response = await ioClient.post(
+        Uri.parse("${ApiConstants.baseUrl}${ApiConstants.userResetPassword}"),
+        body: jsonEncode(body),
+        headers: headers);
 
-    http.StreamedResponse response = await request.send();
-    http.Response finalResponse = await http.Response.fromStream(response);
+    // request.body = json.encode({
+    //   "user_id": userId,
+    //   "old_password": oldPsw.text.trim(),
+    //   "password": _confirmpasswordController.text.toString().trim()
+    // });
+    // request.headers.addAll(headers);
+
+
+    print(response);
+
+    // http.StreamedResponse response = await request.send();
+    // http.Response finalResponse = await http.Response.fromStream(response);
 
     if (response.statusCode == 200) {
       setState(() {
@@ -283,11 +295,11 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         // Hide loader
       });
 
-      var responseBody = json.decode(finalResponse.body);
+      var responseBody = json.decode(response.body);
       // Get the status code as a string
       String statusCode = responseBody['status_code'].toString();
       if (statusCode == "200") {
-        DataProvider().storeUserData(finalResponse.body);
+        DataProvider().storeUserData(response.body);
 
         // LoginResponseModel loginResponseModel =
         //     LoginResponseModel.fromJson(responseBody);
@@ -295,7 +307,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         // print(detailsList);
 
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(
+          SnackBar(
             content: Text(
               responseBody['message'],
             ),
@@ -306,7 +318,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             .pushNamedAndRemoveUntil(AppRoutes.loginScreen, (route) => false);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(
+          SnackBar(
             content: Text(
               responseBody['message'],
             ),

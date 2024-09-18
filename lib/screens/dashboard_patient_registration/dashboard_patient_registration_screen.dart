@@ -1,10 +1,8 @@
 // ignore_for_file: use_build_context_synchronously, unused_element
-import 'dart:io';
+import 'dart:convert';
 
-import 'package:community_health_app/core/utilities/permission_service.dart';
-import 'dart:io';
-
-import 'package:community_health_app/core/utilities/permission_service.dart';
+import 'package:community_health_app/core/constants/constants.dart';
+import 'package:community_health_app/core/constants/images.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/bloc/dashboard_bloc.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/dashboard_card_view/dashboard_card_view.dart';
 import 'package:community_health_app/screens/dashboard_patient_registration/models/dashboard_filter_count_response.dart';
@@ -17,20 +15,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
+
 import '../../core/common_widgets/app_bar_v1.dart';
 import '../../core/common_widgets/app_button.dart';
 import '../../core/common_widgets/app_round_textfield.dart';
 import '../../core/constants/fonts.dart';
-import '../../core/constants/network_constant.dart';
 import '../../core/utilities/size_config.dart';
-import 'package:community_health_app/core/constants/images.dart';
-import 'package:community_health_app/core/constants/constants.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class DashboardPatientRegistrationScreen extends StatefulWidget {
   const DashboardPatientRegistrationScreen({super.key});
@@ -710,6 +700,7 @@ class _DashboardPatientRegistrationScreenState
     }
     return "Total Patients Referred - Till Date";
   }
+
   // filterCountDashboard() async {
   //   setState(() {
   //     isLoading = true; // Show loader
@@ -1424,7 +1415,7 @@ class _DashboardPatientRegistrationScreenState
                                 true, // Keep the tooltip inside vertically
                             getTooltipItem: (group, groupIndex, rod, rodIndex) {
                               return BarTooltipItem(
-                                  '${districtWisePatientResponseModel!.details![totalRegPatTouchedIndex].lookupDetHierDescEn}: ',
+                                  '${districtWisePatientResponseModel?.details?[totalRegPatTouchedIndex].lookupDetHierDescEn}: ',
                                   TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -1455,7 +1446,7 @@ class _DashboardPatientRegistrationScreenState
                               return;
                             }
                             final rodIndex =
-                                barTouchResponse.spot!.touchedRodDataIndex;
+                                barTouchResponse.spot?.touchedRodDataIndex ?? 0;
                             if (isShadowBar(rodIndex)) {
                               setState(() {
                                 totalRegPatTouchedIndex = -1;
@@ -1464,7 +1455,7 @@ class _DashboardPatientRegistrationScreenState
                             }
                             setState(() {
                               totalRegPatTouchedIndex =
-                                  barTouchResponse.spot!.touchedBarGroupIndex;
+                                  barTouchResponse.spot?.touchedBarGroupIndex ?? 0;
                             });
                           },
                         ),
@@ -2343,9 +2334,11 @@ class _DashboardPatientRegistrationScreenState
                                                                   touchTooltipData:
                                                                       BarTouchTooltipData(
                                                                     fitInsideHorizontally:
-                                                                        true, // Keep the tooltip inside horizontally
+                                                                        true,
+                                                                    // Keep the tooltip inside horizontally
                                                                     fitInsideVertically:
-                                                                        true, // Keep the tooltip inside vertically
+                                                                        true,
+                                                                    // Keep the tooltip inside vertically
                                                                     getTooltipItem: (group,
                                                                         groupIndex,
                                                                         rod,
@@ -2684,9 +2677,9 @@ class _DashboardPatientRegistrationScreenState
           barRods: [
             BarChartRodData(
               color: totlPaitentReferredPieChartColor,
-              toY: double.parse(districtWisePatientResponseModel!
-                  .details![i].referredPatients
-                  .toString()),
+              toY: double.tryParse(
+                  districtWisePatientResponseModel?.details?[i].referredPatients?.toString() ?? '0'
+              ) ?? 0.0,
               borderRadius: BorderRadius.zero,
               width: barsWidth,
             ),
@@ -2728,10 +2721,8 @@ class _DashboardPatientRegistrationScreenState
   List<BarChartGroupData> getDataForTotalPatientTreated(
       double barsWidth, double barsSpace) {
     List<BarChartGroupData> barData = [];
-
-    for (var i = 0;
-        i < districtWisePatientResponseModel!.details!.length;
-        i++) {
+    int distLength = districtWisePatientResponseModel?.details?.length ?? 0;
+    for (var i = 0; i < distLength; i++) {
       barData.add(
         BarChartGroupData(
           x: i,

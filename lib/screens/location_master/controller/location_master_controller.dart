@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
+import 'package:community_health_app/core/utilities/network_call.dart';
 import 'package:community_health_app/screens/location_master/location_master_list.dart';
 import 'package:community_health_app/screens/location_master/model/add_location_mast_resp/add_location_master_resp.dart';
 import 'package:community_health_app/screens/location_master/model/country/country_model.dart';
@@ -14,7 +16,7 @@ import 'package:community_health_app/screens/location_master/model/sub_location_
 import 'package:community_health_app/screens/location_master/model/sub_location_model/sub_location_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../model/division/division_model.dart';
@@ -56,6 +58,7 @@ class LocationMasterController extends GetxController {
   TextEditingController searchController = TextEditingController();
 
   TextEditingController contactNo = TextEditingController();
+  IOClient ioClient = IOClient(ByPassCert().httpClient);
 
   String? status;
 
@@ -98,7 +101,7 @@ class LocationMasterController extends GetxController {
   fetchLocation(pageKey, pageSize) async {
     isLoading = true;
 
-    // Make the API call here
+
 
     var url = (ApiConstants.baseUrl + ApiConstants.locationList);
     // var requestBody = {"page": currentPage, "per_page": 4};
@@ -110,7 +113,7 @@ class LocationMasterController extends GetxController {
       "data": ""
     };
 
-    var response = await http.post(
+    var response = await ioClient.post(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
       body: json.encode(requestBody),
@@ -132,6 +135,8 @@ class LocationMasterController extends GetxController {
   }
 
   getLocationDetails(id) async {
+
+
     isLoading = true;
     final uri = Uri.parse(
         '${ApiConstants.baseUrl}${ApiConstants.getLocationDetails}/$id');
@@ -142,7 +147,7 @@ class LocationMasterController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -203,7 +208,7 @@ class LocationMasterController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -258,7 +263,7 @@ class LocationMasterController extends GetxController {
     debugPrint(uri.path);
     debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -325,7 +330,7 @@ class LocationMasterController extends GetxController {
     debugPrint(uri.path);
     debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -378,7 +383,7 @@ class LocationMasterController extends GetxController {
     debugPrint(uri.path);
     debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -425,7 +430,7 @@ class LocationMasterController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -467,7 +472,7 @@ class LocationMasterController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -512,7 +517,7 @@ class LocationMasterController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -557,7 +562,7 @@ class LocationMasterController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 

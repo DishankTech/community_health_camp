@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
+import 'package:community_health_app/core/utilities/network_call.dart';
 import 'package:community_health_app/screens/doctor_desk/add_treatment_details_screen/add_treatment_details_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/doctor_desk_patients_screen/doctor_desk_patients_screen.dart';
 import 'package:community_health_app/screens/doctor_desk/model/add_treatment_details/add_treatment_details_model.dart';
@@ -24,6 +25,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:intl/intl.dart';
 
@@ -79,6 +81,7 @@ class DoctorDeskController extends GetxController {
   List<DoctorDeskData> doctorDesk = [];
   List<DocDeskData> doctorDetailsDesk = [];
   List<DiseaseLookupDet> selectedDisease = [];
+  IOClient ioClient = IOClient(ByPassCert().httpClient);
 
   int? campId;
 
@@ -142,7 +145,7 @@ class DoctorDeskController extends GetxController {
       "data": ""
     };
 
-    var response = await http.post(
+    var response = await ioClient.post(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
       body: json.encode(requestBody),
@@ -204,7 +207,7 @@ class DoctorDeskController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -244,7 +247,7 @@ class DoctorDeskController extends GetxController {
       "data": ""
     };
 
-    var response = await http.post(
+    var response = await ioClient.post(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
       body: json.encode(requestBody),
@@ -298,7 +301,7 @@ class DoctorDeskController extends GetxController {
     debugPrint(uri.path);
     // debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -338,7 +341,7 @@ class DoctorDeskController extends GetxController {
     debugPrint(uri.path);
     // debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -383,7 +386,7 @@ class DoctorDeskController extends GetxController {
     debugPrint(uri.path);
     debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -417,7 +420,7 @@ class DoctorDeskController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -450,7 +453,7 @@ class DoctorDeskController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -596,7 +599,7 @@ class DoctorDeskController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -634,7 +637,7 @@ class DoctorDeskController extends GetxController {
     debugPrint(uri.path);
 
     final response =
-        await http.post(uri, headers: headers, body: json.encode(body));
+        await ioClient.post(uri, headers: headers, body: json.encode(body));
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -672,7 +675,7 @@ class DoctorDeskController extends GetxController {
     debugPrint(uri.path);
 
     final response =
-        await http.post(uri, headers: headers, body: json.encode(body));
+        await ioClient.post(uri, headers: headers, body: json.encode(body));
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -710,7 +713,7 @@ class DoctorDeskController extends GetxController {
     debugPrint(uri.path);
 
     final response =
-        await http.post(uri, headers: headers, body: json.encode(body));
+        await ioClient.post(uri, headers: headers, body: json.encode(body));
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
+import 'package:community_health_app/core/utilities/network_call.dart';
 import 'package:community_health_app/screens/camp_creation/model/location/location_name_details.dart';
 import 'package:community_health_app/screens/camp_creation/model/member_type/member_lookup_det.dart';
 import 'package:community_health_app/screens/camp_creation/model/member_type/member_type_model.dart';
@@ -17,6 +18,7 @@ import 'package:community_health_app/screens/patient_registration/models/locatio
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 
 import '../location_master/model/country/country_model.dart';
 import '../location_master/model/sub_location_model/sub_location_model.dart';
@@ -41,6 +43,7 @@ class CampCreationController extends GetxController {
 
   TextEditingController countryCodeController = TextEditingController();
   TextEditingController stakeholderSubTypeId = TextEditingController();
+  IOClient ioClient = IOClient(ByPassCert().httpClient);
 
   // Map<String, dynamic>? selectedCountryCode;
 
@@ -114,7 +117,7 @@ class CampCreationController extends GetxController {
     debugPrint(uri.path);
     // debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -167,7 +170,7 @@ class CampCreationController extends GetxController {
     debugPrint(uri.path);
     // debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -216,7 +219,7 @@ class CampCreationController extends GetxController {
     debugPrint(uri.path);
     debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -263,7 +266,7 @@ class CampCreationController extends GetxController {
     debugPrint(uri.path);
     // debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -299,7 +302,7 @@ class CampCreationController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -342,7 +345,7 @@ class CampCreationController extends GetxController {
     debugPrint(uri.path);
     debugPrint(body.toString());
     memberTypeList.clear();
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -381,7 +384,7 @@ class CampCreationController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -419,7 +422,7 @@ class CampCreationController extends GetxController {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -462,7 +465,7 @@ class CampCreationController extends GetxController {
     debugPrint(uri.path);
     debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -504,7 +507,7 @@ class CampCreationController extends GetxController {
     debugPrint(uri.path);
     debugPrint(body.toString());
 
-    final response = await http.post(uri, headers: headers, body: jsonbody);
+    final response = await ioClient.post(uri, headers: headers, body: jsonbody);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 

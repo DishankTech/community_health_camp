@@ -1,33 +1,31 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:community_health_app/core/constants/network_constant.dart';
+import 'package:community_health_app/core/utilities/api_urls.dart';
+import 'package:community_health_app/core/utilities/network_call.dart';
+import 'package:dio/io.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:http/io_client.dart';
 
 class UserMasterRepository {
   Dio dio = Dio();
-  // Future<http.StreamedResponse> createUser(Map<String, dynamic> payload) async {
-  //   print(payload);
-  //   var headers = {'Content-Type': 'application/json'};
-  //   var request = http.Request('POST', Uri.parse('$kBaseUrl$kCreateUser'));
-  //   request.body = json.encode(payload);
-  //   request.headers.addAll(headers);
-
-  //   http.StreamedResponse response = await request.send();
-
-  //   return response;
-  // }
-
-  // Future<http.Response> createUser(Map<String, dynamic> payload) async {
-  //   print(payload);
-  //   var headers = {'Content-Type': 'application/json'};
-  //   return await http.post(Uri.parse('$kBaseUrl$kCreateUser'),
-  //       body: jsonEncode(payload), headers: headers);
-  // }
+  UserMasterRepository() {
+    // Configure Dio to bypass SSL certificates
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return client;
+    };
+  }
   Future<Response> createUser(Map<String, dynamic> payload) async {
+    IOClient ioClient = IOClient(ByPassCert().httpClient);
+
     print(payload);
     return await dio.post(
-      '$kBaseUrl$kCreateUser', // Your API endpoint
+      '${ApiConstants.baseUrl}${ApiConstants.kCreateUser}', // Your API endpoint
       data: jsonEncode(payload), // JSON data
       options: Options(
         headers: {
@@ -41,7 +39,7 @@ class UserMasterRepository {
   Future<Response> updateUser(Map<String, dynamic> payload) async {
     print(payload);
     return await dio.post(
-      '$kBaseUrl$kUpdateUser', // Your API endpoint
+      '${ApiConstants.baseUrl}${ApiConstants.kUpdateUser}', // Your API endpoint
       data: jsonEncode(payload), // JSON data
       options: Options(
         headers: {
@@ -53,14 +51,18 @@ class UserMasterRepository {
   }
 
   Future<http.Response> getAll(Map payload) async {
+    IOClient ioClient = IOClient(ByPassCert().httpClient);
+
     var headers = {'Content-Type': 'application/json'};
-    return await http.post(Uri.parse('$kBaseUrl$kGetAllUsers'),
+    return await ioClient.post(Uri.parse('${ApiConstants.baseUrl}${ApiConstants.kGetAllUsers}'),
         body: jsonEncode(payload), headers: headers);
   }
 
   Future<http.Response> getLoginNameValidation(String payload) async {
+    IOClient ioClient = IOClient(ByPassCert().httpClient);
+
     var headers = {'Content-Type': 'application/json'};
-    return await http.post(Uri.parse('$kBaseUrl$kLoginNameValidation$payload'),
+    return await ioClient.post(Uri.parse('${ApiConstants.baseUrl}${ApiConstants.kLoginNameValidation}$payload'),
         body: jsonEncode(payload), headers: headers);
   }
 }

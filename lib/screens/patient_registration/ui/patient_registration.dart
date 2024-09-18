@@ -18,6 +18,7 @@ import 'package:community_health_app/core/utilities/api_urls.dart';
 import 'package:community_health_app/core/utilities/cust_toast.dart';
 import 'package:community_health_app/core/utilities/data_provider.dart';
 import 'package:community_health_app/core/utilities/list_util.dart';
+import 'package:community_health_app/core/utilities/network_call.dart';
 import 'package:community_health_app/core/utilities/size_config.dart';
 import 'package:community_health_app/core/utilities/validators.dart';
 import 'package:community_health_app/screens/camp_creation/camp_creation_controller.dart';
@@ -36,7 +37,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
+import 'package:http/io_client.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -92,6 +93,8 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
   LookupDetHierarchical? _selectedStakeholderSubType;
 
   // DateTime? _selectedCampDate;
+
+  IOClient ioClient = IOClient(ByPassCert().httpClient);
 
   List<ReferToReqModel> referTo = [];
   List<DiseasesTypeModel> diseasesT = [];
@@ -1010,8 +1013,9 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                                       payload: _selectedTaluka
                                                               ?.lookupDetHierId ??
                                                           campCreationController
-                                                              .selectedLocationN!
-                                                              .lookupDetHierIdTaluka!));
+                                                              .selectedLocationN
+                                                              ?.lookupDetHierIdTaluka ??
+                                                          0));
                                             },
                                             suffix: BlocBuilder<MasterDataBloc,
                                                 MasterDataState>(
@@ -1480,8 +1484,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                                       doctorDeskController
                                               .referToModel?.details ??
                                           [],
-                                  cardDataList[index].selectedStakeH
-                                      .clear(),
+                                  cardDataList[index].selectedStakeH.clear(),
                                   doctorDeskController.selectedStakeHType = p0,
                                   doctorDeskController.update()
                                 }
@@ -1644,7 +1647,6 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
                         ),
                       );
                     }),
-
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -1721,7 +1723,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -1760,7 +1762,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
@@ -1799,7 +1801,7 @@ class _PatientRegistrationScreenState extends State<PatientRegistrationScreen> {
 
     debugPrint(uri.path);
 
-    final response = await http.post(uri, headers: headers, body: null);
+    final response = await ioClient.post(uri, headers: headers, body: null);
     debugPrint(response.statusCode.toString());
     debugPrint("response.body : ${response.body}");
 
