@@ -18,7 +18,6 @@ class ApiConstants {
   static const String getSearchedDataDocDesk = "/administrator/masters/patient-master-search-details";
   static const String getPatientById = "/administrator/masters/get-patient-master-by-id";
   static const String getSearchedCampApprovalData = "/administrator/camp/camp-creation-master-search-details";
-
   static const String saveLocationMaster = "/administrator/masters/add/location-master";
   static const String locationList = "/administrator/masters/all-location-master-pagination";
   static const String updateLocation = "/administrator/masters/update/location-master";
